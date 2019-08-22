@@ -1,10 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val kotlin_version: String = "1.2.71"
+
+
+
 plugins {
+	val kotlinVersion = "1.2.71"
 	id("org.springframework.boot") version "2.1.7.RELEASE"
 	id("io.spring.dependency-management") version "1.0.8.RELEASE"
-	kotlin("jvm") version "1.2.71"
-	kotlin("plugin.spring") version "1.2.71"
+	id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
+	kotlin("jvm") version kotlinVersion
+	kotlin("plugin.spring") version kotlinVersion
 }
 
 group = "com.tollwood"
@@ -18,6 +24,13 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
+	compile("org.springframework.boot:spring-boot-starter-data-rest")
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile("com.h2database:h2")
+
+	compile("org.flywaydb:flyway-core")
+	//compile("org.postgresql:postgresql")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
