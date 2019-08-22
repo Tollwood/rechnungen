@@ -17,7 +17,7 @@ INSERT INTO ARTICLE_GROUP VALUES (8, 'Fahrtkosten' );
 create table article (
       id bigint not null,
       article_number varchar(255),
-      price double not null,
+      price float not null,
       title varchar(255),
       GROUP_ID bigint,
       primary key (id)
