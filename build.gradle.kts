@@ -29,8 +29,9 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile("com.h2database:h2")
 
+	compile ("org.postgresql:postgresql:9.4.1212")
+	compile ("com.zaxxer:HikariCP:2.6.0")
 	compile("org.flywaydb:flyway-core")
-	//compile("org.postgresql:postgresql")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
