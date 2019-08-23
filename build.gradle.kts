@@ -1,12 +1,12 @@
+import com.moowork.gradle.node.npm.NpmTask
+import org.jetbrains.kotlin.com.google.common.collect.Lists
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-val kotlin_version: String = "1.2.71"
-
 
 
 plugins {
 	val kotlinVersion = "1.2.71"
-	id("org.springframework.boot") version "2.1.7.RELEASE"
+    id("com.moowork.node") version "1.3.1"
+    id("org.springframework.boot") version "2.1.7.RELEASE"
 	id("io.spring.dependency-management") version "1.0.8.RELEASE"
 	id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
 	kotlin("jvm") version kotlinVersion
@@ -42,4 +42,40 @@ tasks.withType<KotlinCompile> {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
 		jvmTarget = "1.8"
 	}
+}
+
+// Read more about how to configure the plugin from
+// https://github.com/srs/gradle-node-plugin/blob/master/docs/node.md
+node {
+	download = true
+
+	// Set the work directory for unpacking node
+	workDir = file("${project.buildDir}/nodejs")
+
+	// Set the work directory for NPM
+	npmWorkDir = file("${project.buildDir}/npm")
+}
+
+
+tasks.create<NpmTask>("appNpmInstall"){
+	description = "Installs all dependencies from package.json"
+	setWorkingDir(file("${project.projectDir}/src/main/webapp"))
+	setArgs(Lists.newArrayList("install"))
+}
+
+tasks.create<NpmTask>("appNpmBuild"){
+	description = "Builds production version of the webapp"
+	setWorkingDir(file("${project.projectDir}/src/main/webapp"))
+	setArgs(Lists.newArrayList("run", "build"))
+	dependsOn("appNpmInstall")
+}
+
+tasks.create<Copy>("copywebapp") {
+	from("src/main/webapp/build")
+	into("build/resources/main/static/.")
+	dependsOn("appNpmBuild")
+}
+
+tasks.named("compileKotlin") {
+	dependsOn("copywebapp")
 }
