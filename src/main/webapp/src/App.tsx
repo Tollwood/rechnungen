@@ -1,6 +1,7 @@
 import './App.css';
 import {Component} from "react";
 import * as React from "react";
+import EmployeeOverview from "./employees/EmployeeOverview";
 
 interface Article {
   title: string
@@ -35,7 +36,7 @@ class App extends Component<{},AppProps> {
           <ul>
             {this.state.articles.map(article => <li>{article.title}</li>)}
           </ul>
-
+          <EmployeeOverview/>
         </div>
     );
 
