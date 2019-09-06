@@ -8,7 +8,7 @@ import {ContentType} from "./start/ContentType";
 import OrderSearch from "./order/OrderSearch";
 import AppHeader from "./Header";
 import OrderEdit from "./order/OrderEdit";
-import {Order} from "./order/Order";
+import Order from "./order/Order";
 import {Menu} from "./start/Menu";
 
 interface AppState {

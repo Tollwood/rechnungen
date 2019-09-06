@@ -5,7 +5,7 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
 
 
-@RepositoryRestResource(collectionResourceRel = "article", path = "article")
+@RepositoryRestResource(collectionResourceRel = "services", path = "services")
 interface ArticleRepository: PagingAndSortingRepository<Service, Long> {
 
 

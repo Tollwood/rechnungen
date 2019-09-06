@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Dropdown, DropdownOnSearchChangeData, DropdownProps} from "semantic-ui-react";
-import {Order} from "./Order";
+import Order from "./Order";
 
 interface OrderSearchProps {
     onSelected: (selectedOrder: Order)=> void;
@@ -27,7 +27,6 @@ export default class OrderSearch extends React.Component<OrderSearchProps,OrderS
                     selection
                     options={countryOptions}
                     noResultsMessage='Neuen Auftrag anlegen'
-                    loading={this.state.isFetching}
 
                     allowAdditions
                     onAddItem={this.handleAddition.bind(this)}
@@ -39,7 +38,7 @@ export default class OrderSearch extends React.Component<OrderSearchProps,OrderS
     }
 
     private handleAddition(event: React.KeyboardEvent<HTMLElement>, data: DropdownProps) {
-        this.props.onSelected({orderId: data.value as string});
+        this.props.onSelected({orderId: data.value as string, orderServices: []});
     }
 
     private handleSearchChange(event: React.SyntheticEvent<HTMLElement>, data: DropdownOnSearchChangeData,) {

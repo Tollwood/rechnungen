@@ -1,9 +1,11 @@
 import * as React from "react";
 import {ChangeEvent} from "react";
-import {Button, Dropdown, DropdownItemProps, DropdownProps, Form, FormProps, Grid, Icon} from 'semantic-ui-react'
+import {Button, ButtonProps, Dropdown, DropdownItemProps, DropdownProps, Form, FormProps, Grid, Icon} from 'semantic-ui-react'
 import API from "../API";
-import {Order} from "./Order";
+import Order from "./Order";
 import Employee from "../employees/Employee";
+import OrderService from "./OrderService";
+import ListOrderServices from "./ListOrderServices";
 
 interface OrderEditProps {
     onSave: ()=>void;
@@ -46,7 +48,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
         }
     }
 
-    save(event: React.FormEvent<HTMLFormElement>, data: FormProps){
+    save(event: React.MouseEvent<HTMLButtonElement>, data: ButtonProps){
         if(this.state.order._links === undefined){
             API.post("/order",this.state.order)
                 .then(()=> this.props.onSave());
@@ -60,7 +62,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
     render () {
             return (
                 <div>
-                    <Form onSubmit={this.save.bind(this)}>
+                    <Form>
                         <Grid >
                             <Grid.Row >
                                 {this.state.order._links === undefined? <h1>Neuen Auftrag anlegen</h1>: <h1>Auftrag bearbeiten</h1> }
@@ -69,7 +71,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                 <Grid.Column width={4}>
                                     <Form.Field>
                                         <label>Auftrags-ID</label>
-                                        <input id="orderId"
+                                        <Form.Input id="orderId"
                                                placeholder='Auftrags-ID'
                                                value={this.state.order.orderId}
                                                name='orderId'
@@ -80,7 +82,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                 <Grid.Column width={4}>
                                     <Form.Field>
                                     <label >Monteuer </label>
-                                    <Dropdown id="technician"
+                                    <Form.Dropdown id="technician"
                                               selection
                                               options={this.state.technicians}
                                               onChange={this.updateTechnician.bind(this)}
@@ -93,7 +95,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                 <Grid.Column width={3}>
                                     <Form.Field >
                                         <label>NE </label>
-                                        <input id="utilisationUnit"
+                                        <Form.Input id="utilisationUnit"
                                                placeholder='Nutzungseinheit'
                                                value={this.state.order.utilisationUnit}
                                                name='utilisationUnit'
@@ -104,7 +106,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                 <Grid.Column width={4}>
                                     <Form.Field >
                                         <label>Name </label>
-                                        <input id="name"
+                                        <Form.Input id="name"
                                                placeholder='Name'
                                                value={this.state.order.name}
                                                name='name'
@@ -117,7 +119,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                 <Grid.Column width={3} >
                                     <Form.Field>
                                         <label>Lage </label>
-                                        <input id="location"
+                                        <Form.Input id="location"
                                                placeholder='Lage'
                                                value={this.state.order.location}
                                                name='location'
@@ -128,7 +130,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                 <Grid.Column width={3}>
                                     <Form.Field>
                                         <label>Tel. Nummer</label>
-                                        <input
+                                        <Form.Input
                                                id="phoneNumber"
                                                placeholder='Telefonnummer'
                                                value={this.state.order.phoneNumber}
@@ -138,9 +140,19 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                     </Form.Field>
                                 </Grid.Column>
                             </Grid.Row>
+                            <Grid.Row >
+                                <Grid.Column width={8}>
+                                    <h2>Dienstleistungen</h2>
+                                </Grid.Column>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={14}>
+                                    <ListOrderServices orderServices={this.state.order.orderServices} onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
+                                </Grid.Column>
+                            </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={2}>
-                                    <Button type='submit' primary>speichern</Button>
+                                    <Form.Button primary onClick={this.save.bind(this)}>speichern</Form.Button>
                                 </Grid.Column>
                                 <Grid.Column width={2}>
                                     <Button onClick={this.props.onCancelEdit}>Abbrechen</Button>
@@ -177,5 +189,9 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
     private updateTechnician(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
         const newOrder = Object.assign(this.state.order, {technician: data.value});
         this.setState(Object.assign(this.state, {order: newOrder}))
+    }
+
+    private updateOrderServies(orderServices: OrderService[]) {
+        this.setState(Object.assign(this.state, {order: Object.assign(this.state.order,{ orderServices: orderServices} )}))
     }
 }
