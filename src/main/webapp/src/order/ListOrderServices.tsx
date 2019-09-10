@@ -37,8 +37,8 @@ export default class ListOrderServices extends React.Component<ListOrderServices
                         </Table.Row>
                         </Table.Header>
                         <tbody>
-                            <AddOrderService orderServices={this.props.orderServices} onOrderServicesAdded={this.props.onOrderServicesChanged} />
                             {this.props.orderServices.map(service => this.renderRow(service))}
+                            <AddOrderService orderServices={this.props.orderServices} onOrderServicesAdded={this.props.onOrderServicesChanged} />
                         </tbody>
                     </Table>
                 </div>

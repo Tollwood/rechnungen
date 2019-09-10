@@ -39,6 +39,7 @@ create table order_table_services (
 
 create table real_estate (
     id bigint not null,
+    name varchar(255),
     city varchar(255),
     house_number varchar(255),
     street varchar(255),
@@ -58,6 +59,7 @@ create table service_order (
     id bigint not null,
     amount integer not null,
     service_id bigint,
+    order_id bigint,
     primary key (id)
 );
 
@@ -147,3 +149,9 @@ INSERT INTO service VALUES (46, 'B C D', 0, 'Zuschlag (7,50/15,-/22,50€)');
 INSERT INTO EMPLOYEE VALUES (1, 'Rainer', 'Timm','13 187 00870', 'T82','Bokel','25364', 'Fasanenweg','30' );
 INSERT INTO EMPLOYEE VALUES (2, 'Rainer', 'Timm','13 187 00870', 'T85','Bokel','25364', 'Fasanenweg','30');
 INSERT INTO EMPLOYEE VALUES (3, 'Anna ', 'Timm','12 187 04307', 'T84', 'Kiel','24116', 'Spiechernstraße','4' );
+
+
+INSERT INTO real_estate VALUES (1, '122 / 12345', 'Hamburg','2', 'Geschwister-Scholl-Strasse', '25355' );
+INSERT INTO real_estate VALUES (2, '123 / 56789', 'Hamburg','5', 'Schützenstrasse', '25355' );
+INSERT INTO real_estate VALUES (3, '122 / 52904', 'Hamburg','3', 'Pilatus Pool', '25355' );
+

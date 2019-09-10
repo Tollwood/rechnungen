@@ -58,6 +58,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
                  </td>
                 <td>
                     <Dropdown
+                        fluid
                         selection
                         search
                         openOnFocus={false}
@@ -65,7 +66,6 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
                         options={this.state.availableServices}
                         onChange={this.selectService.bind(this)}
                         placeholder='Dienstleistung auswählen'
-                        style={{width: "400px"}}
                     />
                 </td>
                 <td>

@@ -1,5 +1,6 @@
 package com.tollwood.jpa
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -11,5 +12,9 @@ data class ServiceOrder (
     @NotNull
     val amount: Int,
     @ManyToOne
-    val service: Service
+    val service: Service,
+
+    @JsonBackReference
+    @ManyToOne
+    val order: Order
 )

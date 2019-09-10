@@ -23,6 +23,7 @@ export class Menu extends React.Component<MenuProps,MenuState> {
                 new Content(ContentType.BILL,"Rechnungen", "money bill alternate"),
                 new Content(ContentType.STATISTICS,"Statistiken", "chart line"),
                 new Content(ContentType.EMPLOYEE,"Mitarbeiterverwaltung", "address card"),
+                new Content(ContentType.REAL_ESTATE,"Liegenschaften Verwalten", "home"),
             ]}
     }
 

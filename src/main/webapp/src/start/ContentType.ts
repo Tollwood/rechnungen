@@ -4,6 +4,7 @@ export enum ContentType {
     BILL,
     EMPLOYEE,
     NONE,
-    STATISTICS
+    STATISTICS,
+    REAL_ESTATE
 
 }

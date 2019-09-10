@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent} from "react";
-import {Button, ButtonProps, Dropdown, DropdownItemProps, DropdownProps, Form, FormProps, Grid, Icon} from 'semantic-ui-react'
+import {Button, ButtonProps, DropdownItemProps, DropdownProps, Form, Grid, Icon} from 'semantic-ui-react'
 import API from "../API";
 import Order from "./Order";
 import Employee from "../employees/Employee";
@@ -147,7 +147,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={14}>
-                                    <ListOrderServices orderServices={this.state.order.orderServices} onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
+                                    <ListOrderServices orderServices={this.state.order.services? this.state.order.services: []} onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
@@ -192,6 +192,6 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
     }
 
     private updateOrderServies(orderServices: OrderService[]) {
-        this.setState(Object.assign(this.state, {order: Object.assign(this.state.order,{ orderServices: orderServices} )}))
+        this.setState(Object.assign(this.state, {order: Object.assign(this.state.order,{ services: orderServices} )}))
     }
 }

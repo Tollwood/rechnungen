@@ -1,5 +1,6 @@
 package com.tollwood.jpa
 
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.tollwood.OrderType
 import javax.persistence.*
 
@@ -14,7 +15,7 @@ data class Order(
 
         //@ManyToOne(optional =  false)
         //@JoinColumn(foreignKey=ForeignKey(name="ORDER_REAL_ESTATE_FK"))
-        //val realEstate: RealEstate,
+        //val orders: RealEstate,
 
         @Enumerated
         val type: OrderType,
@@ -29,9 +30,10 @@ data class Order(
         val utilisationUnit: String,
         val name: String,
         val location: String,
-        val phoneNumber: String
+        val phoneNumber: String,
 
-        //@OneToMany
-        //val services: List<ServiceOrder>
+        @OneToMany(cascade=[CascadeType.ALL])
+        @JsonManagedReference
+        val services: List<ServiceOrder>
 
         )

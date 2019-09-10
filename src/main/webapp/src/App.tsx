@@ -10,6 +10,8 @@ import AppHeader from "./Header";
 import OrderEdit from "./order/OrderEdit";
 import Order from "./order/Order";
 import {Menu} from "./start/Menu";
+import RealEstateOverview from "./realestate/RealEstateOverview";
+import OrderOverview from "./order/OrderOverview";
 
 interface AppState {
     activeOrder?: Order,
@@ -41,16 +43,17 @@ class App extends Component<AppProps,AppState> {
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
-                    <Grid.Column mobile={16} computer={6} tablet={12}>
+                    <Grid.Column mobile={16} computer={16} tablet={12}>
                         <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent}/>
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Column width={14}>
                     <div id={"content-container"}>
                         {this.state.activeContent === ContentType.EMPLOYEE? <EmployeeOverview/> : null}
-                        {this.state.activeContent === ContentType.ORDER? <h1>Aufträge</h1> : null}
+                        {this.state.activeContent === ContentType.ORDER? <OrderOverview/> : null}
                         {this.state.activeContent === ContentType.BILL? <h1>Rechnungen</h1> : null}
                         {this.state.activeContent === ContentType.STATISTICS? <h1>Statistiken</h1> : null}
+                        {this.state.activeContent === ContentType.REAL_ESTATE? <RealEstateOverview/>: null}
                         {this.state.activeContent === ContentType.ORDER_DETAILS? <OrderEdit onSave={this.closeOrder.bind(this)} onCancelEdit={this.closeOrder.bind(this)} order={this.state.activeOrder}/> : null}
                     </div>
                 </Grid.Column>
