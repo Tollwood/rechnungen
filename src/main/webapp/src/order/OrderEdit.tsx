@@ -6,7 +6,7 @@ import Order from "./Order";
 import Employee from "../employees/Employee";
 import OrderService from "./OrderService";
 import ListOrderServices from "./ListOrderServices";
-import RealEstate from "../realestate/RealEstate";
+import SelectRealEstate from "./SelectRealEstate";
 
 interface OrderEditProps {
     onSave: ()=>void;
@@ -18,8 +18,6 @@ interface OrderEditState {
     order:Order;
     technicians: {key: string, value: string, text: string}[];
     selectedTechnician?: string;
-    realestates: {key: string, value: string, text: string}[];
-    selectedRealestate?: string;
 }
 
 export default class OrderEdit extends React.Component<OrderEditProps,OrderEditState> {
@@ -28,8 +26,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
         super(props);
         this.state = {
             order: props.order ? props.order: new Order(),
-            technicians: [],
-            realestates: []
+            technicians: []
         }
     }
 
@@ -37,8 +34,6 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
         this.fetchTechnicians();
         this.fetchCurrentTechnician();
 
-        this.fetchRealEstates();
-        this.fetchCurrentRealEstate();
     }
 
     componentDidUpdate(prevProps: Readonly<OrderEditProps>, prevState: Readonly<OrderEditState>, snapshot?: any): void {
@@ -83,8 +78,9 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                     <label >Monteuer </label>
                                     <Form.Dropdown id="technician"
                                               selection
+                                              search
                                               options={this.state.technicians}
-                                               value={this.state.selectedTechnician}
+                                              value={this.state.selectedTechnician}
                                               onChange={this.updateTechnician.bind(this)}
                                     />
                                     </Form.Field>
@@ -92,17 +88,8 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
 
                             </Grid.Row>
                             <Grid.Row>
-                                <Grid.Column width={4}>
-                                    <Form.Field>
-                                        <label >Liegenschaft</label>
-                                        <Form.Dropdown id="realestate"
-                                                       selection
-                                                       options={this.state.realestates}
-                                                       value={this.state.selectedRealestate}
-                                                       onChange={this.updateRealEstate.bind(this)}
-                                        />
-                                    </Form.Field>
-                                </Grid.Column>
+
+                                    <SelectRealEstate order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
                         </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={3}>
@@ -227,32 +214,10 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
         this.setState(Object.assign(this.state, {order: newOrder, selectedTechnician: data.value}))
     }
 
-
-    private fetchCurrentRealEstate() {
-        if (this.props.order && this.props.order._links.realEstate) {
-            API.get(this.props!.order!._links!.realEstate.href)
-                .then(res => this.setState(Object.assign(this.state, {selectedRealestate: res.data._links.self.href})))
-        }
+    private updateRealEstate(realEstate: string) {
+        const newOrder = Object.assign(this.state.order, {realEstate: realEstate});
+        this.setState(Object.assign(this.state, {order: newOrder}))
     }
-
-    private fetchRealEstates() {
-        API.get(`/realestate`)
-            .then(res => res.data)
-            .then((data) => this.setState(Object.assign(this.state, {
-                realestates: this.mapRealestateToDropdownItems(data._embedded.realestate)
-            })));
-    }
-
-    private mapRealestateToDropdownItems(realEstates: RealEstate[]): DropdownItemProps[] {
-        return realEstates.map((realEstate: RealEstate)=>{ return {key: realEstate.name, value: realEstate._links.self!.href, text: realEstate.name}});
-    }
-
-    private updateRealEstate(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        const newOrder = Object.assign(this.state.order, {realEstate: data.value});
-        this.setState(Object.assign(this.state, {order: newOrder, selectedRealestate: data.value}))
-    }
-
-
 
     private updateOrderServies(orderServices: OrderService[]) {
         this.setState(Object.assign(this.state, {order: Object.assign(this.state.order,{ services: orderServices} )}))

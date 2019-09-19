@@ -11,7 +11,7 @@ export default class Order {
     location?: string;
     phoneNumber?: string;
     technician?: Employee;
-    realEstate?: RealEstate;
+    realEstate?: string;
     services: OrderService[] = [];
     _links: {self?: Link, technician?: Link, realEstate?: Link} = {};
 }
