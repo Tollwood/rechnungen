@@ -1,4 +1,4 @@
-import {Links} from "../common/Links";
+import Link from "../common/Links";
 import {Address} from "../common/Address";
 
 export default class Employee {
@@ -8,5 +8,5 @@ export default class Employee {
     taxIdent: string = "";
     technicianId: string = "";
     address: Address = new Address();
-    _links?: Links;
+    _links: {self?: Link} = {};
 }

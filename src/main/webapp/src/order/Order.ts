@@ -1,6 +1,7 @@
-import {Links} from "../common/Links";
 import OrderService from "./OrderService";
 import Employee from "../employees/Employee";
+import Link from "../common/Links";
+import RealEstate from "../realestate/RealEstate";
 
 export default class Order {
 
@@ -10,6 +11,7 @@ export default class Order {
     location?: string;
     phoneNumber?: string;
     technician?: Employee;
+    realEstate?: RealEstate;
     services: OrderService[] = [];
-    _links?: Links;
+    _links: {self?: Link, technician?: Link, realEstate?: Link} = {};
 }

@@ -100,7 +100,7 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
     }
 
     save(event: React.FormEvent<HTMLFormElement>, data: FormProps){
-        if(this.state.realEstate._links === undefined){
+        if(this.state.realEstate._links.self === undefined){
             API.post("/realestate",this.state.realEstate)
                 .then(()=> this.props.onSave());
         }

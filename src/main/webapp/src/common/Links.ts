@@ -1,7 +1,3 @@
-interface Link {
+export default interface Link {
     href: string;
-}
-
-export interface Links {
-    self: Link;
 }

@@ -6,6 +6,7 @@ import Order from "./Order";
 import Employee from "../employees/Employee";
 import OrderService from "./OrderService";
 import ListOrderServices from "./ListOrderServices";
+import RealEstate from "../realestate/RealEstate";
 
 interface OrderEditProps {
     onSave: ()=>void;
@@ -16,6 +17,9 @@ interface OrderEditProps {
 interface OrderEditState {
     order:Order;
     technicians: {key: string, value: string, text: string}[];
+    selectedTechnician?: string;
+    realestates: {key: string, value: string, text: string}[];
+    selectedRealestate?: string;
 }
 
 export default class OrderEdit extends React.Component<OrderEditProps,OrderEditState> {
@@ -24,18 +28,28 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
         super(props);
         this.state = {
             order: props.order ? props.order: new Order(),
-            technicians: []
+            technicians: [],
+            realestates: []
         }
     }
 
     componentDidMount(): void {
         API.get(`/employee`)
             .then(res => res.data)
-            .then((data) => this.setState(Object.assign(this.state, { technicians: this.mapToDropdownItems(data._embedded.employee)})));
+            .then((data) => this.setState(Object.assign(this.state, {
+                technicians: this.mapToDropdownItems(data._embedded.employee)
+            })));
+
+        if(this.props.order && this.props.order._links.technician){
+            API.get(this.props!.order!._links!.technician.href)
+                .then( res => this.setState(Object.assign(this.state,{selectedTechnician: res.data._links.self.href})))
+        }
+        this.fetchRealEstates();
+        this.fetchCurrentRealEstate();
     }
 
     private mapToDropdownItems(employees: Employee[]): DropdownItemProps[] {
-        return employees.map((emp: Employee)=>{ return {key: emp.technicianId, value: emp._links!.self.href, text: this.getDropDownText(emp)}});
+        return employees.map((emp: Employee)=>{ return {key: emp.technicianId, value: emp._links.self!.href, text: this.getDropDownText(emp)}});
     }
 
     private getDropDownText(emp: Employee) {
@@ -49,12 +63,12 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
     }
 
     save(event: React.MouseEvent<HTMLButtonElement>, data: ButtonProps){
-        if(this.state.order._links === undefined){
+        if(this.state.order._links.self === undefined){
             API.post("/order",this.state.order)
                 .then(()=> this.props.onSave());
         }
         else {
-            API.put(this.state.order._links.self.href,this.state.order)
+            API.put(this.state.order._links.self!.href,this.state.order)
                 .then(()=> this.props.onSave());
         }
     }
@@ -85,12 +99,26 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                     <Form.Dropdown id="technician"
                                               selection
                                               options={this.state.technicians}
+                                               value={this.state.selectedTechnician}
                                               onChange={this.updateTechnician.bind(this)}
                                     />
                                     </Form.Field>
                                 </Grid.Column>
 
                             </Grid.Row>
+                            <Grid.Row>
+                                <Grid.Column width={4}>
+                                    <Form.Field>
+                                        <label >Liegenschaft</label>
+                                        <Form.Dropdown id="realestate"
+                                                       selection
+                                                       options={this.state.realestates}
+                                                       value={this.state.selectedRealestate}
+                                                       onChange={this.updateRealEstate.bind(this)}
+                                        />
+                                    </Form.Field>
+                                </Grid.Column>
+                        </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={3}>
                                     <Form.Field >
@@ -188,7 +216,32 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
 
     private updateTechnician(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
         const newOrder = Object.assign(this.state.order, {technician: data.value});
-        this.setState(Object.assign(this.state, {order: newOrder}))
+        this.setState(Object.assign(this.state, {order: newOrder, selectedTechnician: data.value}))
+    }
+
+
+    private fetchCurrentRealEstate() {
+        if (this.props.order && this.props.order._links.realEstate) {
+            API.get(this.props!.order!._links!.realEstate.href)
+                .then(res => this.setState(Object.assign(this.state, {selectedRealestate: res.data._links.self.href})))
+        }
+    }
+
+    private fetchRealEstates() {
+        API.get(`/realestate`)
+            .then(res => res.data)
+            .then((data) => this.setState(Object.assign(this.state, {
+                realestates: this.mapRealestateToDropdownItems(data._embedded.realestate)
+            })));
+    }
+
+    private mapRealestateToDropdownItems(realEstates: RealEstate[]): DropdownItemProps[] {
+        return realEstates.map((realEstate: RealEstate)=>{ return {key: realEstate.name, value: realEstate._links.self!.href, text: realEstate.name}});
+    }
+
+    private updateRealEstate(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        const newOrder = Object.assign(this.state.order, {realEstate: data.value});
+        this.setState(Object.assign(this.state, {order: newOrder, selectedRealestate: data.value}))
     }
 
     private updateOrderServies(orderServices: OrderService[]) {

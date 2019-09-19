@@ -125,7 +125,7 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps,Empl
     }
 
     save(event: React.FormEvent<HTMLFormElement>, data: FormProps){
-        if(this.state.employee._links === undefined){
+        if(this.state.employee._links.self === undefined){
             API.post("/employee",this.state.employee)
                 .then(()=> this.props.onSave());
         }

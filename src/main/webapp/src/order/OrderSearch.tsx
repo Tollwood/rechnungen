@@ -38,7 +38,7 @@ export default class OrderSearch extends React.Component<OrderSearchProps,OrderS
     }
 
     private handleAddition(event: React.KeyboardEvent<HTMLElement>, data: DropdownProps) {
-        this.props.onSelected({orderId: data.value as string, services: []});
+        this.props.onSelected({orderId: data.value as string, services: [],_links: {}});
     }
 
     private handleSearchChange(event: React.SyntheticEvent<HTMLElement>, data: DropdownOnSearchChangeData,) {

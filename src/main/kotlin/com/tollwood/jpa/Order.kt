@@ -13,9 +13,9 @@ data class Order(
         @Column(unique = true)
         val orderId: String,
 
-        //@ManyToOne(optional =  false)
-        //@JoinColumn(foreignKey=ForeignKey(name="ORDER_REAL_ESTATE_FK"))
-        //val orders: RealEstate,
+        @ManyToOne
+        @JoinColumn(foreignKey=ForeignKey(name="ORDER_REAL_ESTATE_FK"))
+        val realEstate: RealEstate,
 
         @Enumerated
         val type: OrderType,
