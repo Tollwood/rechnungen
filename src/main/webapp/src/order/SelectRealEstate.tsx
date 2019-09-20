@@ -76,7 +76,8 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
         API.get(`/realestate`)
             .then(res => res.data)
             .then((data) => {
-                let currentRealestate = data._embedded.realestate.find((realEstates: RealEstate) => realEstates._links.self === this.state.selectedRealestate );
+                let realEstates: RealEstate[] = data._embedded.realestate;
+                let currentRealestate = realEstates.find((realEstate: RealEstate) => realEstate._links.self === this.state.selectedRealestate );
                 this.setState(Object.assign(this.state, {
                     realestatesOptions: this.mapRealestateToDropdownItems(data._embedded.realestate),
                     currentRealEstate: currentRealestate ? currentRealestate : this.state.currentRealEstate,

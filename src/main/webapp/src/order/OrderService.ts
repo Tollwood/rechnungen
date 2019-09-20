@@ -1,6 +1,7 @@
-import Service from "./Service";
+import Link from "../common/Links";
 
 export default interface OrderService {
     amount: number;
-    service: Service;
+    service: string;
+    _links: {service: Link}
 }

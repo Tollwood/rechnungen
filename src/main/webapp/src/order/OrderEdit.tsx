@@ -48,7 +48,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                 .then(()=> this.props.onSave());
         }
         else {
-            API.put(this.state.order._links.self!.href,this.state.order)
+            API.patch(this.state.order._links.self!.href,this.state.order)
                 .then(()=> this.props.onSave());
         }
     }
@@ -189,7 +189,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
     private fetchCurrentTechnician() {
         if (this.props.order && this.props.order._links.technician) {
             API.get(this.props!.order!._links!.technician.href)
-                .then(res => this.setState(Object.assign(this.state, {selectedTechnician: res.data._links.self.href})))
+                .then(res => this.setState(Object.assign(this.state, { selectedTechnician: res.data._links.self.href})))
         }
     }
 

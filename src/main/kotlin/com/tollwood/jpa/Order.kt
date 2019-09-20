@@ -15,22 +15,22 @@ data class Order(
 
         @ManyToOne
         @JoinColumn(foreignKey=ForeignKey(name="ORDER_REAL_ESTATE_FK"))
-        val realEstate: RealEstate,
+        val realEstate: RealEstate?,
 
         @Enumerated
-        val type: OrderType,
+        val type: OrderType?,
 
         @ManyToOne
         @JoinColumn(foreignKey=ForeignKey(name="ORDER_EMPLOYEE_FK"))
-        val technician: Employee,
+        val technician: Employee?,
 
         // val appointmentOne: Appointment,
         // val appointmentTwo: Appointment,
 
-        val utilisationUnit: String,
-        val name: String,
-        val location: String,
-        val phoneNumber: String,
+        val utilisationUnit: String?,
+        val name: String?,
+        val location: String?,
+        val phoneNumber: String?,
 
         @OneToMany(cascade=[CascadeType.ALL])
         @JsonManagedReference
