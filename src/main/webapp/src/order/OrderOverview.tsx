@@ -24,9 +24,10 @@ export default class OrderOverview extends React.Component<{},OrderOverviewState
     render () {
         return (
             <div>
+                {this.state.edit? null:
                 <OrderList orders={this.state.orders}
                            onAdd={this.handleAdd.bind(this)}
-                           onSelect={(order: Order) =>{this.handleSelection(order)}}/>
+                           onSelect={(order: Order) =>{this.handleSelection(order)}}/> }
                 {!this.state.edit? null:
                     <OrderEdit order={this.state.selectedItem}
                                     onCancelEdit={this.handleCancelEdit.bind(this)}
