@@ -5,22 +5,22 @@ import RealEstate from "../realestate/RealEstate";
 import Order from "./Order";
 
 interface SelectRealEstateProps {
-    order:Order;
-    onValueChanged: (value: string)=>void
+    order: Order;
+    onValueChanged: (value: string) => void
 }
 
 interface SelectRealEstateState {
-    realestatesOptions: {key: string, value: string, text: string}[];
+    realestatesOptions: { key: string, value: string, text: string }[];
     realestates: RealEstate[]
     selectedRealestate?: string;
     currentRealEstate?: RealEstate;
 }
 
-export default class SelectRealEstate extends React.Component<SelectRealEstateProps,SelectRealEstateState> {
+export default class SelectRealEstate extends React.Component<SelectRealEstateProps, SelectRealEstateState> {
 
     constructor(props: SelectRealEstateProps) {
         super(props);
-        this.state = {realestatesOptions:[], realestates: []}
+        this.state = {realestatesOptions: [], realestates: []}
     }
 
     componentDidMount(): void {
@@ -28,27 +28,29 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
         this.fetchCurrentRealEstate();
     }
 
-    render () {
-            return (
-                <Grid.Column width={4}>
-                <Form.Field>
-                    <label >Liegenschaft</label>
-                    <Form.Dropdown id="realestate"
-                                   search
-                                   selection
-                                   options={this.state.realestatesOptions}
-                                   value={this.state.selectedRealestate}
-                                   onChange={this.updateRealEstate.bind(this)}
-                    />
-                </Form.Field>
+    render() {
+        return (
+            <Grid.Row>
+                <Grid.Column computer={10} tablet={10} mobile={16}>
+                    <Form.Field>
+                        <label>Liegenschaft</label>
+                        <Form.Dropdown id="realestate"
+                                       search
+                                       selection
+                                       options={this.state.realestatesOptions}
+                                       value={this.state.selectedRealestate}
+                                       onChange={this.updateRealEstate.bind(this)}
+                        />
+                    </Form.Field>
                     {this.renderDetails()}
 
                 </Grid.Column>
-            );
+            </Grid.Row>
+        );
     }
 
     private renderDetails() {
-        if(!this.state.currentRealEstate){
+        if (!this.state.currentRealEstate) {
             return null;
         }
         return <Grid>
@@ -65,9 +67,11 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
         if (this.props.order && this.props.order._links.realEstate) {
             API.get(this.props!.order!._links!.realEstate.href)
                 .then(res => {
-                    let currentRealestate = this.state.realestates.find(realEstate => realEstate._links.self!.href=== res.data._links.self.href );
-                    this.setState(Object.assign(this.state, {selectedRealestate: res.data._links.self.href,
-                        currentRealEstate: currentRealestate ? currentRealestate : this.state.currentRealEstate}))
+                    let currentRealestate = this.state.realestates.find(realEstate => realEstate._links.self!.href === res.data._links.self.href);
+                    this.setState(Object.assign(this.state, {
+                        selectedRealestate: res.data._links.self.href,
+                        currentRealEstate: currentRealestate ? currentRealestate : this.state.currentRealEstate
+                    }))
                 })
         }
     }
@@ -77,7 +81,7 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
             .then(res => res.data)
             .then((data) => {
                 let realEstates: RealEstate[] = data._embedded.realestate;
-                let currentRealestate = realEstates.find((realEstate: RealEstate) => realEstate._links.self === this.state.selectedRealestate );
+                let currentRealestate = realEstates.find((realEstate: RealEstate) => realEstate._links.self === this.state.selectedRealestate);
                 this.setState(Object.assign(this.state, {
                     realestatesOptions: this.mapRealestateToDropdownItems(data._embedded.realestate),
                     currentRealEstate: currentRealestate ? currentRealestate : this.state.currentRealEstate,
@@ -87,7 +91,9 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
     }
 
     private mapRealestateToDropdownItems(realEstates: RealEstate[]): DropdownItemProps[] {
-        return realEstates.map((realEstate: RealEstate)=>{ return {key: realEstate.name, value: realEstate._links.self!.href, text: realEstate.name}});
+        return realEstates.map((realEstate: RealEstate) => {
+            return {key: realEstate.name, value: realEstate._links.self!.href, text: realEstate.name}
+        });
     }
 
     private updateRealEstate(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {

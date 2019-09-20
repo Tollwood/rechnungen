@@ -78,6 +78,7 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
                             </Form.Field>
                         </div>
 
+
                         <Button type='submit' primary>speichern</Button>
                         <Button onClick={this.props.onCancelEdit}>Abbrechen</Button>
                         {this.state.realEstate._links !== undefined?

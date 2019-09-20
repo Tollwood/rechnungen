@@ -31,23 +31,19 @@ class App extends Component<AppProps,AppState> {
 
   render() {
     return (
-            <Grid centered >
-                <Grid.Row>
+            <Grid centered padded>
+                <Grid.Row >
                     <Grid.Column  textAlign={'center'} >
                         <AppHeader/>
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
-                    <Grid.Column textAlign={'center'} mobile={16} computer={3} tablet={8}>
+                    <Grid.Column textAlign={'center'} computer={3} tablet={12} mobile={16}>
                         <OrderSearch onSelected={this.openOrder.bind(this)}/>
                     </Grid.Column>
                 </Grid.Row>
-                <Grid.Row>
-                    <Grid.Column mobile={16} computer={16} tablet={12}>
-                        <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent}/>
-                    </Grid.Column>
-                </Grid.Row>
-                <Grid.Column width={14}>
+                <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent}/>
+                <Grid.Column computer={8} tablet={12} mobile={16}>
                     <div id={"content-container"}>
                         {this.state.activeContent === ContentType.EMPLOYEE? <EmployeeOverview/> : null}
                         {this.state.activeContent === ContentType.ORDER? <OrderOverview/> : null}

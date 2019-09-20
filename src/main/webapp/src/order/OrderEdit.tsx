@@ -55,14 +55,13 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
 
     render () {
             return (
-                <div>
                     <Form>
-                        <Grid >
-                            <Grid.Row >
+                        <Grid>
+                            <Grid.Column width={16}>
                                 {this.state.order._links === undefined? <h1>Neuen Auftrag anlegen</h1>: <h1>Auftrag bearbeiten</h1> }
-                            </Grid.Row>
+                            </Grid.Column>
                             <Grid.Row>
-                                <Grid.Column width={4}>
+                                <Grid.Column computer={4} tablet={4} mobile={8}>
                                     <Form.Field>
                                         <label>Auftrags-ID</label>
                                         <Form.Input id="orderId"
@@ -73,7 +72,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                         />
                                     </Form.Field>
                                 </Grid.Column>
-                                <Grid.Column width={4}>
+                                <Grid.Column computer={6} tablet={6} mobile={8}>
                                     <Form.Field>
                                     <label >Monteuer </label>
                                     <Form.Dropdown id="technician"
@@ -85,14 +84,11 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                     />
                                     </Form.Field>
                                 </Grid.Column>
-
+                                <Grid.Column computer={6} tablet={6}/>
                             </Grid.Row>
+                            <SelectRealEstate order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
                             <Grid.Row>
-
-                                    <SelectRealEstate order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
-                        </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column width={3}>
+                                <Grid.Column computer={4} tablet={4} mobile={8}>
                                     <Form.Field >
                                         <label>NE </label>
                                         <Form.Input id="utilisationUnit"
@@ -103,7 +99,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                         />
                                     </Form.Field>
                                 </Grid.Column>
-                                <Grid.Column width={4}>
+                                <Grid.Column computer={6} tablet={6} mobile={8}>
                                     <Form.Field >
                                         <label>Name </label>
                                         <Form.Input id="name"
@@ -116,7 +112,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
-                                <Grid.Column width={3} >
+                                <Grid.Column computer={4} tablet={4} mobile={8} >
                                     <Form.Field>
                                         <label>Lage </label>
                                         <Form.Input id="location"
@@ -127,7 +123,7 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                         />
                                     </Form.Field>
                                 </Grid.Column>
-                                <Grid.Column width={3}>
+                                <Grid.Column computer={6} tablet={6} mobile={8}>
                                     <Form.Field>
                                         <label>Tel. Nummer</label>
                                         <Form.Input
@@ -141,31 +137,30 @@ export default class OrderEdit extends React.Component<OrderEditProps,OrderEditS
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row >
-                                <Grid.Column width={8}>
+                                <Grid.Column computer={8} tablet={8} mobile={16}>
                                     <h2>Dienstleistungen</h2>
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
-                                <Grid.Column width={14}>
+                                <Grid.Column width={16}>
                                     <ListOrderServices orderServices={this.state.order.services? this.state.order.services: []} onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
                                 </Grid.Column>
                             </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column width={2}>
-                                    <Form.Button primary onClick={this.save.bind(this)}>speichern</Form.Button>
+                            <Grid.Row centered>
+                                <Grid.Column width={5} floated='left'>
+                                    <Form.Button primary content='Speichern' icon='save' labelPosition='left' onClick={this.save.bind(this)}/>
                                 </Grid.Column>
-                                <Grid.Column width={2}>
-                                    <Button onClick={this.props.onCancelEdit}>Abbrechen</Button>
+                                <Grid.Column width={5}>
+                                    <Button content='Abbrechen' icon='cancel' labelPosition='left' onClick={this.props.onCancelEdit}/>
                                 </Grid.Column>
-                                <Grid.Column width={2}>
+                                <Grid.Column width={5} floated='right'>
                                     {this.state.order._links === undefined? null :
-                                        <Button onClick={this.delete.bind(this)}><Icon name={"delete"}/></Button> }
+                                        <Button floated={"right"} color={"red"} content={"Löschen"}  icon='trash'  labelPosition='left'onClick={this.delete.bind(this)}/>
+                                    }
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
-
                     </Form>
-                </div>
             );
     }
 

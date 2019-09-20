@@ -24,9 +24,10 @@ export default class RealEstateOverview extends React.Component<{},RealEstateOve
     render () {
         return (
             <div>
+                {this.state.edit? null:
                 <RealEstateList realEstates={this.state.realEstates}
                                 onAdd={this.handleAdd.bind(this)}
-                                onSelect={(realEstate: RealEstate) =>{this.handleSelection(realEstate)}}/>
+                                onSelect={(realEstate: RealEstate) =>{this.handleSelection(realEstate)}}/>}
                 {!this.state.edit? null:
                     <RealEstateEdit realEstate={this.state.selectedItem}
                                     onCancelEdit={this.handleCancelEdit.bind(this)}

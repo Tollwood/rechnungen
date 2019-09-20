@@ -5,6 +5,7 @@ import {ButtonProps, Dropdown, DropdownProps} from "semantic-ui-react";
 import Service from "./Service";
 import Input from "semantic-ui-react/dist/commonjs/elements/Input";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
+import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 
 interface AddOrderServiceProps {
     services: Service[]
@@ -32,7 +33,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
                 <td>
                     <Input style={{width: "80px"}}  value={this.state.amount} onChange={this.updateAmount.bind(this)} ref={this.inputRef}/>
                 </td>
-                 <td>
+                 <td style={{textAlign:"center"}}>
                      x
                  </td>
                 <td>
@@ -48,7 +49,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
                     />
                 </td>
                 <td>
-                    <Button icon="add" type="button" onClick={this.addService.bind(this)} />
+                    <Button color={"green"} onClick={this.addService.bind(this)}><Icon name={"add"}/></Button>
                 </td>
             </tr>
         );

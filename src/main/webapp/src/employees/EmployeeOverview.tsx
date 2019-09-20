@@ -24,9 +24,10 @@ export default class EmployeeOverview extends React.Component<{},EmployeeOvervie
     render () {
         return (
             <div>
+                {this.state.editEmployee? null:
                 <EmployeeList employees={this.state.employees}
                               onAddEmployee={this.handleAddEmployee.bind(this)}
-                              onSelectEmployee={(employee: Employee) =>{this.handleSelectedEmployee(employee)}}/>
+                              onSelectEmployee={(employee: Employee) =>{this.handleSelectedEmployee(employee)}}/>}
                 {!this.state.editEmployee? null:
                     <EmployeeEdit employee={this.state.selectedEmployee}
                                   onCancelEdit={this.handleCancelEdit.bind(this)}
