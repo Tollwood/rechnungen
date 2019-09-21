@@ -1,7 +1,7 @@
 import Employee from "./Employee";
 import * as React from "react";
 import {ChangeEvent} from "react";
-import {Form, FormProps} from 'semantic-ui-react'
+import {Form} from 'semantic-ui-react'
 import API from "../API";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";

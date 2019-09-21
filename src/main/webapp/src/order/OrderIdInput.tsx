@@ -46,7 +46,7 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
     }
 
     onBlur(event: ChangeEvent<HTMLInputElement>) {
-        if(!this.nullOrEmpty(event.target.value)){
+        if(!this.nullOrEmpty(event.target.value) && this.props.orderId !== event.target.value){
             this.checkUniqueOrderId(event.target.value);
         }
     }

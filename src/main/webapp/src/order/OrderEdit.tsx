@@ -29,10 +29,11 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     constructor(props: OrderEditProps) {
         super(props);
+        let order = props.order ? props.order : new Order();
         this.state = {
-            order: props.order ? props.order : new Order(),
+            order: order,
             technicians: [],
-            canSave: false
+            canSave: order._links.self !== undefined
         }
     }
 

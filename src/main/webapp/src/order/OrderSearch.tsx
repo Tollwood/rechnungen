@@ -8,17 +8,18 @@ interface OrderSearchProps {
 }
 
 interface OrderSearchState {
-    isFetching: boolean,
+    isFetching: boolean
     currentValue: string
     minSearchLength: number
     suggetions: DropdownItemProps[]
+    orders: Order[]
 }
 
 export default class OrderSearch extends React.Component<OrderSearchProps, OrderSearchState> {
 
     constructor(props: OrderSearchProps) {
         super(props);
-        this.state = {isFetching: false, currentValue: "", minSearchLength: 1, suggetions: []}
+        this.state = {isFetching: false, currentValue: "", minSearchLength: 1, suggetions: [], orders: []}
     }
 
     render() {
@@ -26,10 +27,13 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
                 <Dropdown icon='search'
                           placeholder='Auftrags-ID'
                           fluid
+                          selectOnNavigation={false}
                           search
                           selection
                           options={this.state.suggetions}
                           noResultsMessage='Neuen Auftrag anlegen'
+                          onChange={this.select.bind(this)}
+                          value={this.state.currentValue}
                           allowAdditions
                           loading={this.state.isFetching}
                           onAddItem={this.handleAddition.bind(this)}
@@ -39,6 +43,10 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
         );
     }
 
+    private select(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps){
+        this.setState({currentValue:""});
+        this.props.onSelected(this.state.orders.find(order => order.orderId === data.value)!);
+    }
     private handleAddition(event: React.KeyboardEvent<HTMLElement>, data: DropdownProps) {
         this.props.onSelected({orderId: data.value as string, services: [], _links: {}});
     }
@@ -53,7 +61,10 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
             .then(res => {
                 return res.data._embedded.order;
             })
-            .then ((orders: Order[]) => orders.map(order => { return {key: order.orderId, value: order.orderId, text: order.orderId}}))
-            .then(result => this.setState({ suggetions: result, isFetching:false}));
+            .then ((orders: Order[]) => {
+
+                 let suggetions = orders.map(order => { return {key: order.orderId, value: order.orderId, text: order.orderId}})
+                this.setState({ orders: orders, suggetions: suggetions, isFetching:false})
+            })
     }
 }
