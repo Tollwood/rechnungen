@@ -9,6 +9,7 @@ import ListOrderServices from "./ListOrderServices";
 import SelectRealEstate from "./SelectRealEstate";
 import CUDButtons from "../common/CUDButtons";
 import {DateInput} from "semantic-ui-calendar-react";
+import OrderIdInput from "./OrderIdInput";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -21,6 +22,7 @@ interface OrderEditState {
     order: Order;
     technicians: { key: string, value: string, text: string }[];
     selectedTechnician?: string;
+    canSave: boolean;
 }
 
 export default class OrderEdit extends React.Component<OrderEditProps, OrderEditState> {
@@ -29,7 +31,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         super(props);
         this.state = {
             order: props.order ? props.order : new Order(),
-            technicians: []
+            technicians: [],
+            canSave: false
         }
     }
 
@@ -57,7 +60,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     render() {
         return (
-            <Form>
+            <Form autoComplete={"off"}>
                 <Grid>
                     <Grid.Column width={16}>
                         {this.state.order._links === undefined ? <h1>Neuen Auftrag anlegen</h1> : <h1>Auftrag bearbeiten</h1>}
@@ -66,12 +69,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         <Grid.Column computer={4} tablet={4} mobile={8}>
                             <Form.Field>
                                 <label>Auftrags-ID</label>
-                                <Form.Input id="orderId"
-                                            placeholder='Auftrags-ID'
-                                            value={this.state.order.orderId}
-                                            name='orderId'
-                                            onChange={this.handleOrderChange.bind(this)}
-                                />
+                                <OrderIdInput orderId={this.state.order.orderId} onChange={this.handleOrderChange.bind(this)} isValid={this.setCanSave.bind(this)}/>
                             </Form.Field>
                         </Grid.Column>
                         <Grid.Column computer={6} tablet={6} mobile={8}>
@@ -175,7 +173,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                                onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
                         </Grid.Column>
                     </Grid.Row>
-                    <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)}
+                    <CUDButtons canSave={this.state.canSave} onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
+                                onDelete={this.delete.bind(this)}
                                 canDelete={this.state.order._links.self !== undefined}/>
                 </Grid>
             </Form>
@@ -198,10 +197,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         API.delete(this.state.order._links.self.href).then(() => {
         });
         this.props.onDelete();
-    }
-
-    private nullOrEmpty(value?: string) {
-        return value === undefined || value.length === 0;
     }
 
     private fetchCurrentTechnician() {
@@ -241,5 +236,9 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private updateOrderServies(orderServices: OrderService[]) {
         this.setState(Object.assign(this.state, {order: Object.assign(this.state.order, {services: orderServices})}))
+    }
+
+    private setCanSave(canSave: boolean) {
+        this.setState({canSave: canSave});
     }
 }

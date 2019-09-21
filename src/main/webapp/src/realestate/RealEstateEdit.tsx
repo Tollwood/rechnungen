@@ -49,7 +49,7 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
                             </Grid.Column>
                         </Grid.Row>
                         <AddressInput address={this.state.realEstate.address} handleAddressChange={this.handleAddressChange}/>
-                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete}
+                        <CUDButtons canSave={true} onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete}
                                     canDelete={this.state.realEstate._links !== undefined}/>
                     </Grid>
                 </Form>

@@ -91,7 +91,7 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                         </Grid.Row>
                         <AddressInput address={this.state.employee.address} handleAddressChange={this.handleAddressChange}/>
 
-                        <CUDButtons onSave={this.props.onSave} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)} canDelete={this.state.employee._links.self !== undefined}/>
+                        <CUDButtons canSave={true} onSave={this.props.onSave} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)} canDelete={this.state.employee._links.self !== undefined}/>
                     </Grid>
                 </Form>
             </div>
