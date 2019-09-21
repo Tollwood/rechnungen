@@ -33,7 +33,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.state = {
             order: order,
             technicians: [],
-            canSave: order._links.self !== undefined
+            canSave: false
         }
     }
 
@@ -70,7 +70,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         <Grid.Column computer={4} tablet={4} mobile={8}>
                             <Form.Field>
                                 <label>Auftrags-ID</label>
-                                <OrderIdInput orderId={this.state.order.orderId} onChange={this.handleOrderChange.bind(this)} isValid={this.setCanSave.bind(this)}/>
+                                <OrderIdInput existing={this.state.order._links.self !== undefined} orderId={this.state.order.orderId} onChange={this.handleOrderChange.bind(this)} isValid={this.setCanSave.bind(this)}/>
                             </Form.Field>
                         </Grid.Column>
                         <Grid.Column computer={6} tablet={6} mobile={8}>
