@@ -50,7 +50,7 @@ class App extends Component<AppProps,AppState> {
                         {this.state.activeContent === ContentType.BILL? <h1>Rechnungen</h1> : null}
                         {this.state.activeContent === ContentType.STATISTICS? <h1>Statistiken</h1> : null}
                         {this.state.activeContent === ContentType.REAL_ESTATE? <RealEstateOverview/>: null}
-                        {this.state.activeContent === ContentType.ORDER_DETAILS? <OrderEdit onSave={this.closeOrder.bind(this)} onCancelEdit={this.closeOrder.bind(this)} order={this.state.activeOrder}/> : null}
+                        {this.state.activeContent === ContentType.ORDER_DETAILS? <OrderEdit onSave={this.closeOrder.bind(this)} onCancelEdit={this.closeOrder.bind(this)} onDelete={this.closeOrder.bind(this)} order={this.state.activeOrder}/> : null}
                     </div>
                 </Grid.Column>
             </Grid>

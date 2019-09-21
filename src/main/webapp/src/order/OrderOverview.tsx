@@ -32,6 +32,7 @@ export default class OrderOverview extends React.Component<{},OrderOverviewState
                     <OrderEdit order={this.state.selectedItem}
                                     onCancelEdit={this.handleCancelEdit.bind(this)}
                                     onSave={this.handleSave.bind(this)}
+                                    onDelete={this.handleDelete.bind(this)}
                     /> }
             </div>
 
@@ -48,6 +49,11 @@ export default class OrderOverview extends React.Component<{},OrderOverviewState
 
     private handleCancelEdit(){
         this.setState(Object.assign(this.state, {edit:false, selectedItem: new Order()}))
+    }
+
+    private handleDelete(){
+        this.setState(Object.assign(this.state, {edit:false, selectedItem: new Order()}))
+        this.refresh();
     }
 
     private handleSave(){

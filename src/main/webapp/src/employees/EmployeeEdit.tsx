@@ -1,9 +1,11 @@
 import Employee from "./Employee";
 import * as React from "react";
 import {ChangeEvent} from "react";
-import {Button, Form, FormProps, Icon} from 'semantic-ui-react'
+import {Form, FormProps} from 'semantic-ui-react'
 import API from "../API";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
+import CUDButtons from "../common/CUDButtons";
+import AddressInput from "../common/AddressInput";
 
 interface EmployeeEditProps {
     onSave: () => void;
@@ -87,63 +89,9 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
-                        <Grid.Row>
-                            <Grid.Column width={12}>
-                                <Form.Field>
-                                    <label>Straße</label>
-                                    <input id="street"
-                                           placeholder='Straße'
-                                           value={this.state.employee.address.street}
-                                           name='street'
-                                           onChange={this.handleAddressChange.bind(this)}/>
-                                </Form.Field>
-                            </Grid.Column>
-                            <Grid.Column width={4}>
-                                <Form.Field>
-                                    <label>Hausnummer</label>
-                                    <input id="houseNumber"
-                                           placeholder='Hausnummer'
-                                           value={this.state.employee.address.houseNumber}
-                                           name='houseNumber'
-                                           onChange={this.handleAddressChange.bind(this)}/>
-                                </Form.Field>
-                            </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Grid.Column width={4}>
-                                <Form.Field>
-                                    <label>PLZ</label>
-                                    <input id="zipCode"
-                                           placeholder='PLZ'
-                                           value={this.state.employee.address.zipCode}
-                                           name='zipCode'
-                                           onChange={this.handleAddressChange.bind(this)}/>
-                                </Form.Field>
-                            </Grid.Column>
-                            <Grid.Column width={12}>
-                                <Form.Field>
-                                    <label>Stadt</label>
-                                    <input id="city"
-                                           placeholder='Stadt'
-                                           value={this.state.employee.address.city}
-                                           name='city'
-                                           onChange={this.handleAddressChange.bind(this)}/>
-                                </Form.Field>
-                            </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row centered>
-                            <Grid.Column width={5} floated='left'>
-                                <Form.Button primary content='Speichern' icon='save' labelPosition='left' onClick={this.save.bind(this)}/>
-                            </Grid.Column>
-                            <Grid.Column width={5}>
-                                <Button content='Abbrechen' icon='cancel' labelPosition='left' onClick={this.props.onCancelEdit}/>
-                            </Grid.Column>
-                            <Grid.Column width={5} floated='right'>
-                                {this.state.employee._links.self === undefined? null :
-                                    <Button floated={"right"} color={"red"} content={"Löschen"}  icon='trash'  labelPosition='left'onClick={this.delete.bind(this)}/>
-                                }
-                            </Grid.Column>
-                        </Grid.Row>
+                        <AddressInput address={this.state.employee.address} handleAddressChange={this.handleAddressChange}/>
+
+                        <CUDButtons onSave={this.props.onSave} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)} canDelete={this.state.employee._links.self !== undefined}/>
                     </Grid>
                 </Form>
             </div>

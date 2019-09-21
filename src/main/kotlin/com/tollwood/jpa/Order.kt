@@ -24,8 +24,8 @@ data class Order(
         @JoinColumn(foreignKey=ForeignKey(name="ORDER_EMPLOYEE_FK"))
         val technician: Employee?,
 
-        // val appointmentOne: Appointment,
-        // val appointmentTwo: Appointment,
+        val firstAppointment: String,
+        val secondAppointment: String,
 
         val utilisationUnit: String?,
         val name: String?,

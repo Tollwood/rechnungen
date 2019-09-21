@@ -10,6 +10,8 @@ export default class Order {
     phoneNumber?: string;
     technician?: string;
     realEstate?: string;
+    firstAppointment?: string;
+    secondAppointment?: string;
     services: OrderService[] = [];
     _links: {self?: Link, technician?: Link, realEstate?: Link} = {};
 }

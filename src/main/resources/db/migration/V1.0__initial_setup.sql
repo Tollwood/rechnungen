@@ -27,6 +27,8 @@ create table order_table (
     phone_number varchar(255),
     type integer,
     utilisation_unit varchar(255),
+    first_appointment varchar(255),
+    second_appointment varchar(255),
     real_estate_id bigint,
     technician_id bigint,
     primary key (id)
