@@ -24,7 +24,7 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
         super(props);
         let orderIdVerified: OrderIdValidationState = "unknown";
         if (!this.props.existing) {
-            this.checkUniqueOrderId(this.props.orderId)
+            this.checkUniqueOrderId(this.props.orderId, "")
         } else {
             orderIdVerified = "valid";
         }
@@ -56,11 +56,11 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
     }
 
     onBlur(event: ChangeEvent<HTMLInputElement>) {
-        this.checkUniqueOrderId(event.target.value);
+        this.checkUniqueOrderId(event.target.value, this.state.initialOrderId);
     }
 
-    private checkUniqueOrderId(orderId?: string) {
-        if (!this.nullOrEmpty(orderId) && this.state.initialOrderId !== orderId) {
+    private checkUniqueOrderId(orderId?: string, initialOrderId?: string) {
+        if (!this.nullOrEmpty(orderId) && initialOrderId !== orderId) {
             API.get('/order/search/findByOrderId?orderId=' + orderId)
                 .then(res => {
                     return res.data._embedded.order;
