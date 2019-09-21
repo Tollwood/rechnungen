@@ -48,9 +48,9 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
                                 </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
-                        <AddressInput address={this.state.realEstate.address} handleAddressChange={this.handleAddressChange}/>
+                        <AddressInput address={this.state.realEstate.address} handleAddressChange={this.handleAddressChange.bind(this)}/>
                         <CUDButtons canSave={true} onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete}
-                                    canDelete={this.state.realEstate._links !== undefined}/>
+                                    canDelete={this.state.realEstate._links.self !== undefined}/>
                     </Grid>
                 </Form>
             </div>

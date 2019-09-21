@@ -35,11 +35,10 @@ export default class EmployeeList extends React.Component<EmployeeListProps> {
                 </tfoot>
             </table>
         )
-
     }
 
     private renderRow(employee: Employee) {
-        return <tr onClick={()=>{this.props.onSelectEmployee(employee)}}>
+        return <tr onClick={()=>{this.props.onSelectEmployee(employee)} } key={employee.technicianId}>
             <td>{employee.technicianId}</td>
             <td>{employee.firstName}</td>
             <td>{employee.lastName}</td>

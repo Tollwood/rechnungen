@@ -89,9 +89,9 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
-                        <AddressInput address={this.state.employee.address} handleAddressChange={this.handleAddressChange}/>
+                        <AddressInput address={this.state.employee.address} handleAddressChange={this.handleAddressChange.bind(this)}/>
 
-                        <CUDButtons canSave={true} onSave={this.props.onSave} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)} canDelete={this.state.employee._links.self !== undefined}/>
+                        <CUDButtons canSave={true} onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)} canDelete={this.state.employee._links.self !== undefined}/>
                     </Grid>
                 </Form>
             </div>
@@ -108,7 +108,7 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
         this.setState({employee: Object.assign(this.state.employee, {address: newAddress})});
     }
 
-    save(event: React.FormEvent<HTMLButtonElement>, data: FormProps) {
+    save() {
         if (this.state.employee._links.self === undefined) {
             API.post("/employee", this.state.employee)
                 .then(() => this.props.onSave());
@@ -117,7 +117,6 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                 .then(() => this.props.onSave());
         }
     }
-
 
     private delete() {
         // @ts-ignore

@@ -25,9 +25,9 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                 </Grid.Column>
                 <Grid.Column width={4}>
                     <Form.Field>
-                        <label>Hausnummer</label>
+                        <label>Nr.</label>
                         <input id="houseNumber"
-                               placeholder='Hausnummer'
+                               placeholder='Nr.'
                                value={this.props.address.houseNumber}
                                name='houseNumber'
                                onChange={this.props.handleAddressChange}/>
