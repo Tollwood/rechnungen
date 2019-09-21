@@ -13,6 +13,7 @@ interface OrderIdInputProps {
 
 interface OrderIdInputState {
     orderIdVerified: OrderIdValidationState;
+    initialOrderId?: string
 }
 
 export default class OrderIdInput extends React.Component<OrderIdInputProps, OrderIdInputState> {
@@ -29,7 +30,8 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
         }
 
         this.state = {
-            orderIdVerified: orderIdVerified
+            orderIdVerified: orderIdVerified,
+            initialOrderId: this.props.orderId
         }
 
     }
@@ -37,7 +39,6 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
     render() {
         return (
             <Form.Input id="orderId"
-
                         placeholder='Auftrags-ID'
                         value={this.props.orderId}
                         name='orderId'
@@ -59,7 +60,7 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
     }
 
     private checkUniqueOrderId(orderId?: string) {
-        if (!this.nullOrEmpty(orderId) && this.props.orderId !== orderId) {
+        if (!this.nullOrEmpty(orderId) && this.state.initialOrderId !== orderId) {
             API.get('/order/search/findByOrderId?orderId=' + orderId)
                 .then(res => {
                     return res.data._embedded.order;
