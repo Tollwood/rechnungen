@@ -10,6 +10,12 @@ import SelectRealEstate from "./SelectRealEstate";
 import CUDButtons from "../common/CUDButtons";
 import {DateInput} from "semantic-ui-calendar-react";
 import OrderIdInput from "./OrderIdInput";
+import Billpdf from "../billing/Billpdf";
+import Bill from "../billing/Bill";
+import RealEstate from "../realestate/RealEstate";
+import {PDFViewer} from "@react-pdf/renderer";
+import BillItem from "../billing/BillItem";
+import Service from "./Service";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -22,6 +28,7 @@ interface OrderEditState {
     order: Order;
     technicians: { key: string, value: string, text: string }[];
     selectedTechnician?: string;
+    services: Service[]
     canSave: boolean;
 }
 
@@ -33,6 +40,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.state = {
             order: order,
             technicians: [],
+            services: [],
             canSave: false
         }
     }
@@ -40,7 +48,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     componentDidMount(): void {
         this.fetchTechnicians();
         this.fetchCurrentTechnician();
-
+        this.fetchServices();
     }
 
     componentDidUpdate(prevProps: Readonly<OrderEditProps>, prevState: Readonly<OrderEditState>, snapshot?: any): void {
@@ -70,7 +78,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         <Grid.Column computer={4} tablet={4} mobile={8}>
                             <Form.Field>
                                 <label>Auftrags-ID</label>
-                                <OrderIdInput existing={this.state.order._links.self !== undefined} orderId={this.state.order.orderId} onChange={this.handleOrderChange.bind(this)} isValid={this.setCanSave.bind(this)}/>
+                                <OrderIdInput existing={this.state.order._links.self !== undefined} orderId={this.state.order.orderId}
+                                              onChange={this.handleOrderChange.bind(this)} isValid={this.setCanSave.bind(this)}/>
                             </Form.Field>
                         </Grid.Column>
                         <Grid.Column computer={6} tablet={6} mobile={8}>
@@ -170,8 +179,16 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column width={16}>
-                            <ListOrderServices orderServices={this.state.order.services ? this.state.order.services : []}
+                            <ListOrderServices services={this.state.services}
+                                               orderServices={this.state.order.services ? this.state.order.services : []}
                                                onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column width={16}>
+                            <PDFViewer width={"100%"} height={"800px"}>
+                                <Billpdf bill={this.getBill()}/>
+                            </PDFViewer>
                         </Grid.Column>
                     </Grid.Row>
                     <CUDButtons canSave={this.state.canSave} onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
@@ -241,5 +258,50 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private setCanSave(canSave: boolean) {
         this.setState({canSave: canSave});
+    }
+
+    private getBill(): Bill {
+
+        let billItems: BillItem[] = this.state.order.services.map((orderServices: OrderService) => {
+            let service: Service | undefined= this.state.services.find((service: Service)=> service._links.self.href === orderServices._links.service.href);
+            return {
+                code: service ? service.articleNumber : "",
+                amount: orderServices.amount,
+                serviceName: service ? service.title : "",
+                price: service ? service.price : 0.00
+            }
+        });
+
+        return new Bill("Bill-1234", "12.12.1990",
+            this.state.order,
+            this.technician,
+            this.realEstate,
+            billItems);
+    }
+
+    private technician: Employee = {
+        technicianId: "81",
+        firstName: "Rainer",
+        lastName: "Timm",
+        taxIdent: "tax-12345",
+        address: {street: "Fasanenweg", houseNumber: "30", city: "Bokel", zipCode: "1234"},
+        _links: {}
+    };
+    private realEstate: RealEstate = {
+        name: "123/223451",
+        address: {street: "RealEstate Strasse", houseNumber: "2", city: "Hamburg", zipCode: "2005"},
+        _links: {}
+    };
+
+    private fetchServices() {
+        API.get(`/services`)
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+                return res.data;
+            })
+            .then(data => {
+                this.setState(Object.assign(this.state, {services: data._embedded.services}));
+            });
     }
 }

@@ -5,15 +5,14 @@ import Service from "./Service";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 import {Button, Table} from "semantic-ui-react";
 import AddOrderService from "./AddOrderService";
-import API from "../API";
 
 interface ListOrderServicesProps {
+    services: Service[]
     orderServices: OrderService[]
     onOrderServicesChanged: (orderServices: OrderService[]) => void
 }
 
 interface ListOrderServicesState {
-    services: Service[]
     amount: number
 }
 
@@ -21,21 +20,9 @@ export default class ListOrderServices extends React.Component<ListOrderServices
 
     constructor(props: ListOrderServicesProps) {
         super(props);
-        this.state = {services: [], amount: 0}
+        this.state = { amount: 0}
     }
 
-    componentDidMount(): void {
-
-        API.get(`/services`)
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-                return res.data;
-            })
-            .then(data => {
-                this.setState(Object.assign(this.state, {services: data._embedded.services}));
-            });
-    }
 
     render() {
         return (
@@ -51,7 +38,7 @@ export default class ListOrderServices extends React.Component<ListOrderServices
                     </Table.Header>
                     <tbody>
                     {this.props.orderServices.map(service => this.renderRow(service))}
-                    <AddOrderService services={this.state.services} orderServices={this.props.orderServices}
+                    <AddOrderService services={this.props.services} orderServices={this.props.orderServices}
                                      onOrderServicesAdded={this.props.onOrderServicesChanged}/>
                     </tbody>
                 </Table>
@@ -61,7 +48,7 @@ export default class ListOrderServices extends React.Component<ListOrderServices
 
     private renderRow(orderService: OrderService) {
 
-        let serviceData = this.state.services.find(service => service._links.self.href === orderService._links.service.href);
+        let serviceData = this.props.services.find(service => service._links.self.href === orderService._links.service.href);
         if (!serviceData) {
             return null;
         }
