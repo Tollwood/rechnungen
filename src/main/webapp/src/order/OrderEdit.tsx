@@ -26,7 +26,8 @@ interface OrderEditProps {
 
 interface OrderEditState {
     order: Order;
-    technicians: { key: string, value: string, text: string }[];
+    technicians: Employee[];
+    realEstates: RealEstate[];
     selectedTechnician?: string;
     services: Service[]
     canSave: boolean;
@@ -40,6 +41,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.state = {
             order: order,
             technicians: [],
+            realEstates: [],
             services: [],
             canSave: false
         }
@@ -49,6 +51,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.fetchTechnicians();
         this.fetchCurrentTechnician();
         this.fetchServices();
+        this.fetchRealEstates();
     }
 
     componentDidUpdate(prevProps: Readonly<OrderEditProps>, prevState: Readonly<OrderEditState>, snapshot?: any): void {
@@ -88,7 +91,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                 <Form.Dropdown id="technician"
                                                selection
                                                search
-                                               options={this.state.technicians}
+                                               options={this.mapTechnicianToDropdownItems(this.state.technicians)}
                                                value={this.state.selectedTechnician}
                                                onChange={this.updateTechnician.bind(this)}
                                 />
@@ -96,7 +99,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         </Grid.Column>
                         <Grid.Column computer={6} tablet={6}/>
                     </Grid.Row>
-                    <SelectRealEstate order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
+                    <SelectRealEstate realestates={this.state.realEstates} order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
                     <Grid.Row>
                         <Grid.Column computer={4} tablet={4} mobile={8}>
                             <Form.Field>
@@ -228,7 +231,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         API.get(`/employee`)
             .then(res => res.data)
             .then((data) => this.setState(Object.assign(this.state, {
-                technicians: this.mapTechnicianToDropdownItems(data._embedded.employee)
+                technicians: data._embedded.employee
             })));
     }
 
@@ -263,7 +266,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     private getBill(): Bill {
 
         let billItems: BillItem[] = this.state.order.services.map((orderServices: OrderService) => {
-            let service: Service | undefined= this.state.services.find((service: Service)=> service._links.self.href === orderServices._links.service.href);
+            let service: Service | undefined = this.state.services.find((service: Service) => service._links.self.href === orderServices._links.service.href);
             return {
                 code: service ? service.articleNumber : "",
                 amount: orderServices.amount,
@@ -274,24 +277,11 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
         return new Bill("Bill-1234", "12.12.1990",
             this.state.order,
-            this.technician,
-            this.realEstate,
-            billItems);
+            billItems,
+            this.state.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === this.state.order.realEstate),
+            this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.order.technician)
+        );
     }
-
-    private technician: Employee = {
-        technicianId: "81",
-        firstName: "Rainer",
-        lastName: "Timm",
-        taxIdent: "tax-12345",
-        address: {street: "Fasanenweg", houseNumber: "30", city: "Bokel", zipCode: "1234"},
-        _links: {}
-    };
-    private realEstate: RealEstate = {
-        name: "123/223451",
-        address: {street: "RealEstate Strasse", houseNumber: "2", city: "Hamburg", zipCode: "2005"},
-        _links: {}
-    };
 
     private fetchServices() {
         API.get(`/services`)
@@ -302,6 +292,15 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             })
             .then(data => {
                 this.setState(Object.assign(this.state, {services: data._embedded.services}));
+            });
+    }
+    private fetchRealEstates() {
+        API.get(`/realestate`)
+            .then(res => res.data)
+            .then((data) => {
+                this.setState(Object.assign(this.state, {
+                    realEstates: data._embedded.realestate
+                }))
             });
     }
 }

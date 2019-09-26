@@ -7,11 +7,11 @@ export default class Bill {
     billNumber: String;
     billDate: String;
     order: Order;
-    technician: Employee;
-    realEstate: RealEstate;
+    technician?: Employee;
+    realEstate?: RealEstate;
     billItems: BillItem[];
 
-    constructor(billNumber: String, billDate: String, order: Order, technician: Employee, realEstate: RealEstate, billItems: BillItem[]) {
+    constructor(billNumber: String, billDate: String, order: Order, billItems: BillItem[], realEstate?: RealEstate, technician?: Employee) {
         this.billNumber = billNumber;
         this.billDate = billDate;
         this.order = order;

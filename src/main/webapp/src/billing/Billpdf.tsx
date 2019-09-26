@@ -59,7 +59,7 @@ export default class Billpdf extends Component<{ bill: Bill }, {}> {
                 <Page size="A4" style={styles.body}>
                     <View style={styles.text}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>{this.props.bill.technician.firstName} {this.props.bill.technician.lastName}</Text>
+                            <Text>{this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""}</Text>
                             <Text>Bokel am, {this.props.bill.billDate}</Text>
                         </View>
                         <Text>Fasanenweg 30 </Text>
@@ -81,19 +81,21 @@ export default class Billpdf extends Component<{ bill: Bill }, {}> {
                             <Text style={styles.column2}>Art d. Auftrags: TODO-KA</Text>
                         </View>
                         <View style={styles.row}>
-                            <Text style={styles.column2}>LG. Nummer: {this.props.bill.realEstate.name}</Text>
+                            <Text style={styles.column2}>LG.
+                                Nummer: {this.props.bill.realEstate ? this.props.bill.realEstate.name : ""}</Text>
                             <Text style={styles.column2}>Kilometer: TODO-45</Text>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.column2}>Nutzeinheit: {this.props.bill.order.utilisationUnit}</Text>
-                            <Text style={styles.column2}>Kürzel: {this.props.bill.technician.technicianId}</Text>
+                            <Text
+                                style={styles.column2}>Kürzel: {this.props.bill.technician ? this.props.bill.technician.technicianId : ""}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.column2}>Name NE: {this.props.bill.order.name}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.column2}>Straße /
-                                Ort: {this.props.bill.realEstate.address.street} {this.props.bill.realEstate.address.houseNumber}, {this.props.bill.realEstate.address.zipCode} {this.props.bill.realEstate.address.city}</Text>
+                                Ort: {this.props.bill.realEstate ? this.props.bill.realEstate.address.street : ""} {this.props.bill.realEstate ? this.props.bill.realEstate.address.houseNumber : ""}, {this.props.bill.realEstate ? this.props.bill.realEstate.address.zipCode : ""} {this.props.bill.realEstate ? this.props.bill.realEstate.address.city : ""}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.column2}>Erster Termin: {this.props.bill.order.firstAppointment}</Text>
@@ -104,15 +106,19 @@ export default class Billpdf extends Component<{ bill: Bill }, {}> {
                     <View style={[styles.row]}>
                         <Text style={[styles.column2, {marginLeft: 270, marginTop: 12}]}>Nettobetrag</Text>
                         <Text
-                            style={[styles.column2, styles.sum, {marginTop: 12}]}>{this.props.bill.billItems.map(billItem => billItem.amount * billItem.price).reduce((a, b) => a + b)}</Text>
+                            style={[styles.column2, styles.sum, {marginTop: 12}]}>{this.sumBill(1)}</Text>
                     </View>
                     <View style={[styles.row]}>
                         <Text style={[styles.column2, {marginLeft: 270, marginTop: 2}]}>zzgl. 19% Mehrwertsteuer</Text>
-                        <Text style={[styles.column2, styles.sum]}>{this.props.bill.billItems.map(billItem => billItem.amount * billItem.price).reduce((a, b) => a + b) * 0.19} </Text>
+                        <Text
+                            style={[styles.column2, styles.sum]}>{this.sumBill(0.19)} </Text>
                     </View>
                     <View style={[styles.row]}>
                         <Text style={[styles.column2, {marginLeft: 270, marginTop: 2}]}>Total</Text>
-                        <Text style={[styles.column2, styles.sum, {textDecoration: "underline", fontWeight: "ultrabold"}]}>{this.props.bill.billItems.map(billItem => billItem.amount * billItem.price).reduce((a, b) => a + b) * 1.19}</Text>
+                        <Text style={[styles.column2, styles.sum, {
+                            textDecoration: "underline",
+                            fontWeight: "ultrabold"
+                        }]}>{this.sumBill(1.19)}</Text>
                     </View>
                     <View style={{marginTop: 10}}>
                         <Text style={{marginTop: 3}}>Zahlungsziel: 14 Tage</Text>
@@ -123,5 +129,12 @@ export default class Billpdf extends Component<{ bill: Bill }, {}> {
                 </Page>
             </Document>
         )
+    }
+
+    sumBill(factor: number): String {
+        return (this.props.bill.billItems.map(billItem => billItem.amount * billItem.price).reduce((a, b) => a + b) * factor).toLocaleString('de', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
     }
 }

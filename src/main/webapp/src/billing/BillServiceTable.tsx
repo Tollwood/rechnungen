@@ -11,7 +11,7 @@ export default class BillServiceTable extends Component<{ data: any }, {}> {
         return (
             <Table data={this.props.data}>
                 <TableHeader includeLeftBorder={false} includeRightBorder={false} includeTopBorder={false}>
-                    <TableCell styles={[this.tableStyle]} weighting={0.15} includeRightBorder={ false} includeLeftBorder={false}>
+                    <TableCell styles={[this.tableStyle]} weighting={0.15} includeRightBorder={false} includeLeftBorder={false}>
                         Codierung
                     </TableCell>
                     <TableCell styles={[this.tableStyle]} weighting={0.1}>
@@ -30,14 +30,20 @@ export default class BillServiceTable extends Component<{ data: any }, {}> {
 
                 <TableBody includeLeftBorder={false} includeRightBorder={false} includeTopBorder={false}>
                     <DataTableCell styles={[this.tableStyle]} weighting={0.15} getContent={(r) => r.code}/>
-                    <DataTableCell styles={[this.tableStyle, this.priceStyle]} weighting={0.1} getContent={(r) => r.amount + ""}/>
-                    <DataTableCell styles={ [this.tableStyle]} weighting={0.47} getContent={(r) => r.serviceName}/>
-                    <DataTableCell styles={ [this.tableStyle, this.priceStyle]} weighting={0.14} getContent={(r) => r.price +""}/>
+                    <DataTableCell styles={[this.tableStyle]} weighting={0.1} getContent={(r) => r.amount + ""}/>
+                    <DataTableCell styles={[this.tableStyle]} weighting={0.47} getContent={(r) => r.serviceName}/>
+                    <DataTableCell styles={[this.tableStyle, this.priceStyle]} weighting={0.14}
+                                   getContent={(r) => r.price.toLocaleString('de', {
+                                       minimumFractionDigits: 2,
+                                       maximumFractionDigits: 2
+                                   })}/>
                     <DataTableCell styles={[this.tableStyle, this.priceStyle]} weighting={0.14} getContent={(r) => {
                         let billItem: BillItem = r;
-                        let sum = billItem.price * billItem.amount ;
-                        return sum + "";
-                    } }/>
+                        return (billItem.price * billItem.amount).toLocaleString('de', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }}/>
                 </TableBody>
             </Table>
         )
