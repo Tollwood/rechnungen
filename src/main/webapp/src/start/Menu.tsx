@@ -19,11 +19,11 @@ export class Menu extends React.Component<MenuProps, MenuState> {
         super(props);
         this.state = {
             contents: [
-                new Content(ContentType.ORDER, "Auftragsübersicht", "unordered list"),
+                new Content(ContentType.ORDER, "Auftragsübersicht", "unordered list","orderOverviewCard"),
                 //new Content(ContentType.BILL, "Rechnungen", "money bill alternate"),
                 //new Content(ContentType.STATISTICS, "Statistiken", "chart line"),
-                new Content(ContentType.EMPLOYEE, "Mitarbeiterverwaltung", "address card"),
-                new Content(ContentType.REAL_ESTATE, "Liegenschaften Verwalten", "home"),
+                new Content(ContentType.EMPLOYEE, "Mitarbeiterverwaltung", "address card", "employeeOverviewCard"),
+                new Content(ContentType.REAL_ESTATE, "Liegenschaften Verwalten", "home","realEstateOverviewCard"),
             ]
         }
     }
@@ -49,8 +49,8 @@ export class Menu extends React.Component<MenuProps, MenuState> {
                     <Grid.Column computer={8} tablet={12} mobile={16}>
                         <h1>
                             <Icon name={this.getContent(this.props.activeContent).icon}/>
-                            {this.getContent(this.props.activeContent).title}
-                            <Icon  style={{float:"right" }} name={"close"} size={"small"} onClick={() => {
+                            <span className={"menu-title"}>{this.getContent(this.props.activeContent).title}</span>
+                            <Icon className={"close"} style={{float:"right" }} name={"close"} size={"small"} onClick={() => {
                                 this.props.onMenuChanges(ContentType.NONE)
                             }}/>
                         </h1>
