@@ -38,7 +38,8 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
 
     render() {
         return (
-            <Form.Input id="orderId"
+            <Form.Input className={"OrderIdInput"}
+                        id="orderId"
                         placeholder='Auftrags-ID'
                         value={this.props.orderId}
                         name='orderId'

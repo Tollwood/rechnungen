@@ -7,9 +7,17 @@ function assertOverviewCard(className, title) {
 }
 
 it('visits the app', () => {
-    cy.visit('http://localhost:8080');
+    cy.visit('http://localhost:3000');
     assertOverviewCard('.orderOverviewCard', 'Auftragsübersicht');
     assertOverviewCard('.employeeOverviewCard', 'Mitarbeiterverwaltung');
     assertOverviewCard('.realEstateOverviewCard', 'Liegenschaften Verwalten');
+});
+
+it('searchExistingOrders', ()=>{
+    cy.visit('http://localhost:3000');
+    cy.get('.orderSearch').children('input').type('1{enter}',{'force':true});
+    cy.get('.OrderIdInput').children('i').should('have.css','green');
+
+    //save button should be active
 
 });

@@ -24,7 +24,8 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
 
     render() {
         return (
-                <Dropdown icon='search'
+                <Dropdown className="orderSearch"
+                          icon='search'
                           placeholder='Auftrags-ID'
                           fluid
                           selectOnNavigation={false}
