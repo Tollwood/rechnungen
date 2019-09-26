@@ -194,7 +194,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                             </PDFViewer>
                         </Grid.Column>
                     </Grid.Row>
-                    <CUDButtons canSave={this.state.canSave} onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
+                    <CUDButtons canSave={this.state.canSave || this.props.order !== undefined && this.props.order._links.self !== undefined} onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
                                 onDelete={this.delete.bind(this)}
                                 canDelete={this.state.order._links.self !== undefined}/>
                 </Grid>
