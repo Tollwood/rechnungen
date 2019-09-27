@@ -1,29 +1,20 @@
 import * as React from "react";
 import {DropdownItemProps, DropdownProps, Form, Grid} from "semantic-ui-react";
-import API from "../API";
 import RealEstate from "../realestate/RealEstate";
 import Order from "./Order";
 
 interface SelectRealEstateProps {
     order: Order;
     realestates: RealEstate[];
+    selectedRealestate?: RealEstate;
     onValueChanged: (value: string) => void;
 }
 
-interface SelectRealEstateState {
-    selectedRealestate?: string;
-    currentRealEstate?: RealEstate;
-}
-
-export default class SelectRealEstate extends React.Component<SelectRealEstateProps, SelectRealEstateState> {
+export default class SelectRealEstate extends React.Component<SelectRealEstateProps, {}> {
 
     constructor(props: SelectRealEstateProps) {
         super(props);
         this.state = {}
-    }
-
-    componentDidMount(): void {
-        this.fetchCurrentRealEstate();
     }
 
     render() {
@@ -36,42 +27,29 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
                                        search
                                        selection
                                        options={this.mapRealestateToDropdownItems(this.props.realestates)}
-                                       value={this.state.selectedRealestate}
+                                       value={this.props.selectedRealestate?this.props.selectedRealestate._links.self!.href : undefined }
                                        onChange={this.updateRealEstate.bind(this)}
                         />
                     </Form.Field>
                     {this.renderDetails()}
-
                 </Grid.Column>
             </Grid.Row>
         );
     }
 
     private renderDetails() {
-        if (!this.state.currentRealEstate) {
+        let realEstate : RealEstate | undefined = this.props.selectedRealestate;
+        if (!realEstate) {
             return null;
         }
         return <Grid>
             <Grid.Column width={14}>
-                <label>{this.state.currentRealEstate.address.street} {this.state.currentRealEstate.address.houseNumber}</label>
+                <label>{realEstate.address.street} {realEstate.address.houseNumber}</label>
             </Grid.Column>
             <Grid.Column width={13}>
-                <label>{this.state.currentRealEstate.address.zipCode} {this.state.currentRealEstate.address.city}</label>
+                <label>{realEstate.address.zipCode} {realEstate.address.city}</label>
             </Grid.Column>
         </Grid>
-    }
-
-    private fetchCurrentRealEstate() {
-        if (this.props.order && this.props.order._links.realEstate) {
-            API.get(this.props!.order!._links!.realEstate.href)
-                .then(res => {
-                    let currentRealestate = this.props.realestates.find(realEstate => realEstate._links.self!.href === res.data._links.self.href);
-                    this.setState(Object.assign(this.state, {
-                        selectedRealestate: res.data._links.self.href,
-                        currentRealEstate: currentRealestate ? currentRealestate : this.state.currentRealEstate
-                    }))
-                })
-        }
     }
 
     private mapRealestateToDropdownItems(realEstates: RealEstate[]): DropdownItemProps[] {
@@ -81,8 +59,6 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
     }
 
     private updateRealEstate(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        let currentRealestate = this.props.realestates.find(options => options._links.self!.href === data.value);
-        this.setState(Object.assign(this.state, {selectedRealestate: data.value, currentRealEstate: currentRealestate}));
         this.props.onValueChanged(data.value as string);
     }
 }

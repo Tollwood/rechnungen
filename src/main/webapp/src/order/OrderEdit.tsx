@@ -27,8 +27,9 @@ interface OrderEditProps {
 interface OrderEditState {
     order: Order;
     technicians: Employee[];
-    realEstates: RealEstate[];
     selectedTechnician?: string;
+    realEstates: RealEstate[];
+    selectedRealEstate?: string;
     services: Service[]
     canSave: boolean;
 }
@@ -52,6 +53,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.fetchCurrentTechnician();
         this.fetchServices();
         this.fetchRealEstates();
+        this.fetchCurrentRealEstate();
     }
 
     componentDidUpdate(prevProps: Readonly<OrderEditProps>, prevState: Readonly<OrderEditState>, snapshot?: any): void {
@@ -99,7 +101,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         </Grid.Column>
                         <Grid.Column computer={6} tablet={6}/>
                     </Grid.Row>
-                    <SelectRealEstate realestates={this.state.realEstates} order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
+                    <SelectRealEstate selectedRealestate={this.getCurrentRealEstate()} realestates={this.state.realEstates} order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
                     <Grid.Row>
                         <Grid.Column computer={4} tablet={4} mobile={8}>
                             <Form.Field>
@@ -223,7 +225,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     private fetchCurrentTechnician() {
         if (this.props.order && this.props.order._links.technician) {
             API.get(this.props!.order!._links!.technician.href)
-                .then(res => this.setState(Object.assign(this.state, {selectedTechnician: res.data._links.self.href})))
+                .then(res => this.setState({selectedTechnician: res.data._links.self.href}))
         }
     }
 
@@ -278,8 +280,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         return new Bill("Bill-1234", "12.12.1990",
             this.state.order,
             billItems,
-            this.state.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === this.state.order.realEstate),
-            this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.order.technician)
+            this.getCurrentRealEstate(),
+            this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.selectedTechnician)
         );
     }
 
@@ -291,16 +293,31 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                 return res.data;
             })
             .then(data => {
-                this.setState(Object.assign(this.state, {services: data._embedded.services}));
+                this.setState( {services: data._embedded.services});
             });
     }
     private fetchRealEstates() {
         API.get(`/realestate`)
             .then(res => res.data)
             .then((data) => {
-                this.setState(Object.assign(this.state, {
+                this.setState({
                     realEstates: data._embedded.realestate
-                }))
+                })
             });
+    }
+
+    private fetchCurrentRealEstate() {
+        if (this.props.order && this.props.order._links.realEstate) {
+            API.get(this.props!.order!._links!.realEstate.href)
+                .then(res => {
+                    this.setState( {
+                        selectedRealEstate: res.data._links.self.href
+                    })
+                })
+        }
+    }
+
+    private getCurrentRealEstate() {
+        return this.state.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === this.state.selectedRealEstate);
     }
 }
