@@ -46,6 +46,7 @@ create table real_estate (
     house_number varchar(255),
     street varchar(255),
     zip_code varchar(255),
+    distance decimal not null,
     primary key (id)
 );
 
@@ -54,6 +55,7 @@ create table service (
     article_number varchar(255),
     price decimal,
     title varchar(255),
+    selectable boolean default true,
     primary key (id)
 );
 
@@ -96,56 +98,56 @@ alter table service_order
     foreign key (service_id)
       references service;
 
-INSERT INTO service VALUES (1, '1 A', 5, 'Grundgebühr bis 20 km' );
-INSERT INTO service VALUES (2, '1 F', 2, 'Zuschlag Kleinauftrag' );
-INSERT INTO service VALUES (3, '2 A', 1, 'abl. HKVK' );
-INSERT INTO service VALUES (4, '2 B', 1, 'Abl.  tPlus / tStar' );
-INSERT INTO service VALUES (5, '2 C', 1, 'Abl. Wasserzähler');
-INSERT INTO service VALUES (6, '2 D', 1, 'Abl. WMZ');
-INSERT INTO service VALUES (7, '2 E', 1, 'Auslesen Datensammler');
-INSERT INTO service VALUES (8, '3 A', 1, 'Prüfung Rauchmelder');
+INSERT INTO service VALUES (1, '1 A', 5, 'Grundgebühr bis 20 km', false );
+INSERT INTO service VALUES (46, '1 B C D', 0, 'Zuschlag (7,50/15,-/22,50€)', false );
+INSERT INTO service VALUES (2, '1 F', 2, 'Zuschlag Kleinauftrag', false );
+INSERT INTO service VALUES (3, '2 A', 1, 'abl. HKVK', true );
+INSERT INTO service VALUES (4, '2 B', 1, 'Abl.  tPlus / tStar', true );
+INSERT INTO service VALUES (5, '2 C', 1, 'Abl. Wasserzähler', true);
+INSERT INTO service VALUES (6, '2 D', 1, 'Abl. WMZ', true);
+INSERT INTO service VALUES (7, '2 E', 1, 'Auslesen Datensammler', true);
+INSERT INTO service VALUES (8, '3 A', 1, 'Prüfung Rauchmelder', true);
 
-INSERT INTO service VALUES (9, '4 A', 1, 'Montage tPlus / tStar');
-INSERT INTO service VALUES (10, '4 C', 1, 'Montage GenH / Ei650');
-INSERT INTO service VALUES (11, '4 D', 1, 'Montage Rmstar');
-INSERT INTO service VALUES (12, '4 E', 1, 'Montage WZ APZ');
-INSERT INTO service VALUES (13, '4 F', 1, 'Montage WZ MK');
-INSERT INTO service VALUES (14, '4 L', 1, 'Montage WMZ qn 0,6 -  qn 2,5');
-INSERT INTO service VALUES (15, '4 M', 1, 'Montage WMZ ab qn 3,5');
+INSERT INTO service VALUES (9, '4 A', 1, 'Montage tPlus / tStar', true);
+INSERT INTO service VALUES (10, '4 C', 1, 'Montage GenH / Ei650', true);
+INSERT INTO service VALUES (11, '4 D', 1, 'Montage Rmstar', true);
+INSERT INTO service VALUES (12, '4 E', 1, 'Montage WZ APZ', true);
+INSERT INTO service VALUES (13, '4 F', 1, 'Montage WZ MK', true);
+INSERT INTO service VALUES (14, '4 L', 1, 'Montage WMZ qn 0,6 -  qn 2,5', true);
+INSERT INTO service VALUES (15, '4 M', 1, 'Montage WMZ ab qn 3,5', true);
 
 
-INSERT INTO service VALUES (16, '5 A', 1, 'Austausch HKVK -->  tPlus/tStar');
-INSERT INTO service VALUES (17, '5 B', 1, 'Austausch tPlus --> tPlus');
-INSERT INTO service VALUES (18, '5 C', 1, 'Austausch Fremd --> tPlus/tStar');
-INSERT INTO service VALUES (19, '5 D', 1, 'Austausch RM gleiches Modell');
-INSERT INTO service VALUES (20, '5 E', 1, 'Austausch Fremd -->  RM GenH/Ei650');
-INSERT INTO service VALUES (21, '5 F', 1, 'Austausch auf Rmstar');
-INSERT INTO service VALUES (22, '5 H', 1, 'Austausch WZ APZ');
-INSERT INTO service VALUES (23, '5 I', 1, 'Austausch WZ MK');
-INSERT INTO service VALUES (24, '5 O', 1, 'AustauschWMZ qn 0,6 - qn 2,5');
-INSERT INTO service VALUES (25, '5 P', 1, 'Austausch WMZ ab qn 3,5');
+INSERT INTO service VALUES (16, '5 A', 1, 'Austausch HKVK -->  tPlus/tStar', true);
+INSERT INTO service VALUES (17, '5 B', 1, 'Austausch tPlus --> tPlus', true);
+INSERT INTO service VALUES (18, '5 C', 1, 'Austausch Fremd --> tPlus/tStar', true);
+INSERT INTO service VALUES (19, '5 D', 1, 'Austausch RM gleiches Modell', true);
+INSERT INTO service VALUES (20, '5 E', 1, 'Austausch Fremd -->  RM GenH/Ei650', true);
+INSERT INTO service VALUES (21, '5 F', 1, 'Austausch auf Rmstar', true);
+INSERT INTO service VALUES (22, '5 H', 1, 'Austausch WZ APZ', true);
+INSERT INTO service VALUES (23, '5 I', 1, 'Austausch WZ MK', true);
+INSERT INTO service VALUES (24, '5 O', 1, 'AustauschWMZ qn 0,6 - qn 2,5', true);
+INSERT INTO service VALUES (25, '5 P', 1, 'Austausch WMZ ab qn 3,5', true);
 
-INSERT INTO service VALUES (26, '6 A', 1, 'Neuaufnahme WMZ');
-INSERT INTO service VALUES (27, '6 B', 1, 'Neuaufnahme WZ');
-INSERT INTO service VALUES (28, '6 C', 1, 'Neuaufnahme RM');
-INSERT INTO service VALUES (29, '7 A', 1, 'FB Datensammler');
-INSERT INTO service VALUES (30, '7 B', 1, 'FB Rmstar');
-INSERT INTO service VALUES (31, '7 C', 1, 'FB HKV');
-INSERT INTO service VALUES (32, '7 D', 1, 'FB  WZ');
-INSERT INTO service VALUES (33, '7 E', 1, 'FB WMZ 0,6 - 2,5');
-INSERT INTO service VALUES (34, '7 F', 1, 'FB ab 3,5 mit M-Bus Montage');
-INSERT INTO service VALUES (35, '8 A', 1, 'Rauchmelder Eilauftrag / Tausch bei HA');
-INSERT INTO service VALUES (36, '10 C', 1, 'Reparaturzuschlag DS');
-INSERT INTO service VALUES (37, '10 D', 1, 'Foto Tauchhülse');
-INSERT INTO service VALUES (38, '10 E', 1, 'Foto Heizkörper');
-INSERT INTO service VALUES (39, '10 F', 1, 'tel. Bewertung');
-INSERT INTO service VALUES (40, '10 H', 1, 'Rosetten kürzen');
-INSERT INTO service VALUES (41, '10 I', 1, 'Arbeitszeit / Minute');
-INSERT INTO service VALUES (42, '10 J', 1, 'Montage Fernfühler');
-INSERT INTO service VALUES (43, '10 L', 1, 'Reparaturzuschlag HKV bei HA');
-INSERT INTO service VALUES (44, '10 M', 1, 'Reparaturzuschlag NM bei HA');
-INSERT INTO service VALUES (45, '10 P', 1, 'Aufmass HK');
-INSERT INTO service VALUES (46, 'B C D', 0, 'Zuschlag (7,50/15,-/22,50€)');
+INSERT INTO service VALUES (26, '6 A', 1, 'Neuaufnahme WMZ', true);
+INSERT INTO service VALUES (27, '6 B', 1, 'Neuaufnahme WZ', true);
+INSERT INTO service VALUES (28, '6 C', 1, 'Neuaufnahme RM', true);
+INSERT INTO service VALUES (29, '7 A', 1, 'FB Datensammler', true);
+INSERT INTO service VALUES (30, '7 B', 1, 'FB Rmstar', true);
+INSERT INTO service VALUES (31, '7 C', 1, 'FB HKV', true);
+INSERT INTO service VALUES (32, '7 D', 1, 'FB  WZ', true);
+INSERT INTO service VALUES (33, '7 E', 1, 'FB WMZ 0,6 - 2,5', true);
+INSERT INTO service VALUES (34, '7 F', 1, 'FB ab 3,5 mit M-Bus Montage', true);
+INSERT INTO service VALUES (35, '8 A', 1, 'Rauchmelder Eilauftrag / Tausch bei HA', true);
+INSERT INTO service VALUES (36, '10 C', 1, 'Reparaturzuschlag DS', true);
+INSERT INTO service VALUES (37, '10 D', 1, 'Foto Tauchhülse', true);
+INSERT INTO service VALUES (38, '10 E', 1, 'Foto Heizkörper', true);
+INSERT INTO service VALUES (39, '10 F', 1, 'tel. Bewertung', true);
+INSERT INTO service VALUES (40, '10 H', 1, 'Rosetten kürzen', true);
+INSERT INTO service VALUES (41, '10 I', 1, 'Arbeitszeit / Minute', true);
+INSERT INTO service VALUES (42, '10 J', 1, 'Montage Fernfühler', true);
+INSERT INTO service VALUES (43, '10 L', 1, 'Reparaturzuschlag HKV bei HA', true);
+INSERT INTO service VALUES (44, '10 M', 1, 'Reparaturzuschlag NM bei HA', true);
+INSERT INTO service VALUES (45, '10 P', 1, 'Aufmass HK', true);
 
 
 INSERT INTO EMPLOYEE VALUES (1, 'Rainer', 'Timm','13 187 00870', 'T82','Bokel','25364', 'Fasanenweg','30' );
@@ -153,7 +155,9 @@ INSERT INTO EMPLOYEE VALUES (2, 'Rainer', 'Timm','13 187 00870', 'T85','Bokel','
 INSERT INTO EMPLOYEE VALUES (3, 'Anna ', 'Timm','12 187 04307', 'T84', 'Kiel','24116', 'Spiechernstraße','4' );
 
 
-INSERT INTO real_estate VALUES (1, '122 / 12345', 'Hamburg','2', 'Geschwister-Scholl-Strasse', '25355' );
-INSERT INTO real_estate VALUES (2, '123 / 56789', 'Hamburg','5', 'Schützenstrasse', '25355' );
-INSERT INTO real_estate VALUES (3, '122 / 52904', 'Hamburg','3', 'Pilatus Pool', '25355' );
+INSERT INTO real_estate VALUES (1, '122 / 12320', 'Hamburg','2', 'Geschwister-Scholl-Strasse', '25355',20 );
+INSERT INTO real_estate VALUES (2, '123 / 56730', 'Hamburg','5', 'Schützenstrasse', '25355' ,30);
+INSERT INTO real_estate VALUES (3, '122 / 52940', 'Hamburg','3', 'Pilatus Pool', '25355', 40 );
+INSERT INTO real_estate VALUES (4, '122 / 52950', 'Hamburg','3', 'Pilatus Pool', '25355', 50 );
+INSERT INTO real_estate VALUES (5, '122 / 52960', 'Hamburg','3', 'Pilatus Pool', '25355', 60 );
 

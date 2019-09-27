@@ -60,6 +60,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
         const existingServices: string[] = this.props.orderServices.map((os:OrderService) => os._links.service.href);
         return this.props.services
             .filter((service: Service) => !existingServices.includes(service._links.self.href))
+            .filter((service: Service) => service.selectable)
             .map((s: Service) => { return {key: s.articleNumber, value: s.articleNumber, text: s.title}} );
     }
 

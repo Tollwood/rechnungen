@@ -11,11 +11,10 @@ import CUDButtons from "../common/CUDButtons";
 import {DateInput} from "semantic-ui-calendar-react";
 import OrderIdInput from "./OrderIdInput";
 import Billpdf from "../billing/Billpdf";
-import Bill from "../billing/Bill";
 import RealEstate from "../realestate/RealEstate";
 import {PDFViewer} from "@react-pdf/renderer";
-import BillItem from "../billing/BillItem";
 import Service from "./Service";
+import BillService from "../billing/BillService";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -192,11 +191,13 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     <Grid.Row>
                         <Grid.Column width={16}>
                             <PDFViewer width={"100%"} height={"800px"}>
-                                <Billpdf bill={this.getBill()}/>
+                                <Billpdf
+                                    bill={BillService.createNewBill(this.state.order, this.state.services, this.getCurrentRealEstate(), this.getCurrentTechnician())}/>
                             </PDFViewer>
                         </Grid.Column>
                     </Grid.Row>
-                    <CUDButtons canSave={this.state.canSave || this.props.order !== undefined && this.props.order._links.self !== undefined} onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
+                    <CUDButtons canSave={this.state.canSave || (this.props.order !== undefined && this.props.order._links.self !== undefined)}
+                                onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
                                 onDelete={this.delete.bind(this)}
                                 canDelete={this.state.order._links.self !== undefined}/>
                 </Grid>
@@ -254,7 +255,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private updateRealEstate(realEstate: string) {
         const newOrder = Object.assign(this.state.order, {realEstate: realEstate});
-        this.setState(Object.assign(this.state, {order: newOrder}))
+        this.setState({order: newOrder, selectedRealEstate: realEstate});
     }
 
     private updateOrderServies(orderServices: OrderService[]) {
@@ -265,26 +266,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.setState({canSave: canSave});
     }
 
-    private getBill(): Bill {
-
-        let billItems: BillItem[] = this.state.order.services.map((orderServices: OrderService) => {
-            let service: Service | undefined = this.state.services.find((service: Service) => service._links.self.href === orderServices._links.service.href);
-            return {
-                code: service ? service.articleNumber : "",
-                amount: orderServices.amount,
-                serviceName: service ? service.title : "",
-                price: service ? service.price : 0.00
-            }
-        });
-
-        return new Bill("Bill-1234", "12.12.1990",
-            this.state.order,
-            billItems,
-            this.getCurrentRealEstate(),
-            this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.selectedTechnician)
-        );
-    }
-
     private fetchServices() {
         API.get(`/services`)
             .then(res => {
@@ -293,9 +274,10 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                 return res.data;
             })
             .then(data => {
-                this.setState( {services: data._embedded.services});
+                this.setState({services: data._embedded.services});
             });
     }
+
     private fetchRealEstates() {
         API.get(`/realestate`)
             .then(res => res.data)
@@ -310,7 +292,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         if (this.props.order && this.props.order._links.realEstate) {
             API.get(this.props!.order!._links!.realEstate.href)
                 .then(res => {
-                    this.setState( {
+                    this.setState({
                         selectedRealEstate: res.data._links.self.href
                     })
                 })
@@ -319,5 +301,9 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private getCurrentRealEstate() {
         return this.state.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === this.state.selectedRealEstate);
+    }
+
+    private getCurrentTechnician() {
+        return this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.selectedTechnician);
     }
 }

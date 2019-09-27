@@ -14,4 +14,6 @@ data class Service(
         @NotNull
         val title: String ,
         @NotNull
-        val price: Double)
+        val price: Double,
+        @NotNull
+        val selectable: Boolean)
