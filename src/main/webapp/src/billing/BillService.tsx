@@ -22,7 +22,12 @@ export default class BillService {
 
 
         let allItems: BillItem[] = Array.of(...this.addBasePrice(services), ...this.addDistanceItem(services, realEstate), ...billItems);
-        return new Bill("Bill-1234", Date(),
+        let now = new Date();
+        var options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+
+        console.log(now.toLocaleDateString('de-DE', options));
+
+        return new Bill("Bill-1234", now.toLocaleDateString('de-DE', options),
             order,
             allItems,
             realEstate,
