@@ -31,7 +31,7 @@ export default class BillService {
     }
 
     static addBasePrice(services: Service[]): BillItem[] {
-        let service: Service | undefined = services.find((services: Service) => services.articleNumber === '1 A');
+        let service: Service | undefined = services.find((services: Service) => services.articleNumber === '1A');
         if (service !== undefined) {
             return [new BillItem(service.articleNumber, 1, service.title, service.price)];
         }
@@ -40,25 +40,32 @@ export default class BillService {
 
     static addDistanceItem(services: Service[], realEstate?: RealEstate): BillItem[] {
 
-        let service: Service | undefined = services.find((services: Service) => services.articleNumber === '1 B C D');
-        if (service === undefined || realEstate === undefined) {
+        if (realEstate === undefined) {
             return [];
         }
-        //=0+WENN(B21<21;0;7,5)+WENN(B21<31;0;7,5)+WENN(B21<41;0;7,5)+WENN(B21>50;(B21-50)*0,75;0)
+
         let distance = realEstate.distance;
         let price = 0;
-        if (distance < 21) {
-            price += 7.5;
+        if (distance > 20 && distance <= 30) {
+            return this.getDistanceItem(services, '1B');
         }
-        if (distance < 31) {
-            price += 7.5;
+        if (distance > 30 && distance <= 40) {
+            return this.getDistanceItem(services, '1C');
         }
-        if (distance < 41) {
-            price += 7.5;
+        if (distance > 40 && distance <= 50) {
+            return this.getDistanceItem(services, '1D');
         }
         if (distance > 50) {
-            price += (distance - 50) * 0.75;
+            return this.getDistanceItem(services, '1E', distance * 0.75);
         }
-        return [new BillItem(service.articleNumber, 1, service.title, price)];
+        return [];
+    }
+
+    private static getDistanceItem(services: Service[],  code: string, distance :number = 1) {
+        let service: Service | undefined = services.find((services: Service) => services.articleNumber === code);
+        if(service === undefined){
+            return [];
+        }
+        return [new BillItem(service.articleNumber, 1, service.title, service.price * distance)];
     }
 }

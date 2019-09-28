@@ -16,6 +16,7 @@ export default class RealEstateList extends React.Component<RealEstateListProps>
                     <tr>
                         <th>Bezeichnung</th>
                         <th>Adresse</th>
+                        <th>Entfernung</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,7 +45,9 @@ export default class RealEstateList extends React.Component<RealEstateListProps>
                     <div>{realEstate.address.zipCode} {realEstate.address.city}</div>
                 </div>
             </td>
-
+            <td>
+                {realEstate.distance}
+            </td>
         </tr>;
     }
 }

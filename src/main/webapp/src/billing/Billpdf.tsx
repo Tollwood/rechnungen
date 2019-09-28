@@ -83,7 +83,7 @@ export default class Billpdf extends Component<{ bill: Bill }, {}> {
                         <View style={styles.row}>
                             <Text style={styles.column2}>LG.
                                 Nummer: {this.props.bill.realEstate ? this.props.bill.realEstate.name : ""}</Text>
-                            <Text style={styles.column2}>Kilometer: TODO-45</Text>
+                            <Text style={styles.column2}>Kilometer: {this.props.bill.realEstate ? this.props.bill.realEstate.distance : ""}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text style={styles.column2}>Nutzeinheit: {this.props.bill.order.utilisationUnit}</Text>

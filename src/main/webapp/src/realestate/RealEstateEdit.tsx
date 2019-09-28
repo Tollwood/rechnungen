@@ -36,13 +36,24 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
                 <Form>
                     <Grid>
                         <Grid.Row>
-                            <Grid.Column>
+                            <Grid.Column width={8}>
                                 <Form.Field>
                                     <label>Bezeichnung</label>
                                     <input id="name"
                                            placeholder='Bezeichnung'
                                            value={this.state.realEstate.name}
                                            name='name'
+                                           onChange={this.handleRealestateChange.bind(this)}
+                                    />
+                                </Form.Field>
+                            </Grid.Column>
+                            <Grid.Column width={8}>
+                                <Form.Field>
+                                    <label>Entfernung</label>
+                                    <input id="distance"
+                                           placeholder='Entfernung'
+                                           value={this.state.realEstate.distance}
+                                           name='distance'
                                            onChange={this.handleRealestateChange.bind(this)}
                                     />
                                 </Form.Field>
@@ -72,7 +83,7 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
             API.post("/realestate", this.state.realEstate)
                 .then(() => this.props.onSave());
         } else {
-            API.put(this.state.realEstate._links.self.href, this.state.realEstate)
+            API.patch(this.state.realEstate._links.self.href, this.state.realEstate)
                 .then(() => this.props.onSave());
         }
     }

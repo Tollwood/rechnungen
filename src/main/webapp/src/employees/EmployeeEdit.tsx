@@ -113,7 +113,7 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
             API.post("/employee", this.state.employee)
                 .then(() => this.props.onSave());
         } else {
-            API.put(this.state.employee._links.self.href, this.state.employee)
+            API.patch(this.state.employee._links.self.href, this.state.employee)
                 .then(() => this.props.onSave());
         }
     }
