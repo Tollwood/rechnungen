@@ -29,7 +29,7 @@ interface OrderEditState {
     selectedTechnician?: string;
     realEstates: RealEstate[];
     selectedRealEstate?: string;
-    services: Service[]
+    services: Service[];
     canSave: boolean;
 }
 
@@ -100,7 +100,17 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         </Grid.Column>
                         <Grid.Column computer={6} tablet={6}/>
                     </Grid.Row>
-                    <SelectRealEstate selectedRealestate={this.getCurrentRealEstate()} realestates={this.state.realEstates} order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
+                    <Grid.Row>
+                        <Grid.Column computer={8} tablet={8} mobile={16}>
+                            <Checkbox toggle
+                                      name={"smallOrder"}
+                                      label={"Kleinauftrag"}
+                                      checked={this.state.order.smallOrder}
+                                      onChange={this.toggleSmallOrder.bind(this)}/>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <SelectRealEstate selectedRealestate={this.getCurrentRealEstate()} realestates={this.state.realEstates}
+                                      order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
                     <Grid.Row>
                         <Grid.Column computer={4} tablet={4} mobile={8}>
                             <Form.Field>
@@ -182,15 +192,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column computer={8} tablet={8} mobile={16}>
-                            <Checkbox toggle
-                                      name={"smallOrder"}
-                                      label={"Kleinauftrag"}
-                                      checked={this.state.order.smallOrder}
-                                      onChange={this.toggleSmallOrder.bind(this)}/>
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column computer={8} tablet={8} mobile={16}>
                             <h2>Dienstleistungen</h2>
                         </Grid.Column>
                     </Grid.Row>
@@ -202,17 +203,24 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <Grid.Column width={16}>
-                            <PDFViewer width={"100%"} height={"800px"}>
-                                <Billpdf
-                                    bill={BillService.createNewBill(this.state.order, this.state.services, this.getCurrentRealEstate(), this.getCurrentTechnician())}/>
-                            </PDFViewer>
+                        <Grid.Column computer={6} tablet={6} mobile={8}>
+                            <Form.Field>
+                                <label>Status </label>
+                                <Form.Dropdown id="status"
+                                               selection
+                                               options={this.getOrderStatusOptions()}
+                                               value={this.state.order.status}
+                                               onChange={this.updateStatus.bind(this)}
+                                />
+                            </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
-                    <CUDButtons canSave={this.state.canSave || (this.props.order !== undefined && this.props.order._links.self !== undefined)}
-                                onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
-                                onDelete={this.delete.bind(this)}
-                                canDelete={this.state.order._links.self !== undefined}/>
+                    {this.shouldRenderPdf() ? this.renderPdf() : null}
+                    <CUDButtons
+                        canSave={this.state.canSave || (this.props.order !== undefined && this.props.order._links.self !== undefined)}
+                        onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
+                        onDelete={this.delete.bind(this)}
+                        canDelete={this.state.order._links.self !== undefined}/>
                 </Grid>
             </Form>
         );
@@ -228,7 +236,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.setState({order: Object.assign(this.state.order, {[name]: value})});
     }
 
-    toggleSmallOrder(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps): void{
+    toggleSmallOrder(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps): void {
         this.setState({order: Object.assign(this.state.order, {smallOrder: !this.state.order.smallOrder})});
     }
 
@@ -262,6 +270,12 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private getDropDownText(emp: Employee) {
         return emp.technicianId + " " + emp.firstName + " " + emp.lastName;
+    }
+
+
+    private updateStatus(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        const newOrder = Object.assign(this.state.order, {status: data.value});
+        this.setState(Object.assign(this.state, {order: newOrder}))
     }
 
     private updateTechnician(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
@@ -321,5 +335,29 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private getCurrentTechnician() {
         return this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.selectedTechnician);
+    }
+
+    private getOrderStatusOptions(): { key: string, value: string, text: string }[] {
+        return [
+            {key: 'ORDER_EDIT', value: "ORDER_EDIT", text: "Auftrag erfassen"},
+            {key: 'ORDER_EXECUTE', value: "ORDER_EXECUTE", text: "Auftragsdurchführung"},
+            {key: 'ORDER_BILL', value: "ORDER_BILL", text: "Rechnung erfasst"},
+            {key: 'ORDER_BILL_RECIEVED', value: "ORDER_BILL_RECIEVED", text: "Rechnungsbetrag erhalten"}
+        ];
+    }
+
+    private renderPdf() {
+        return <Grid.Row>
+            <Grid.Column width={16}>
+                <PDFViewer width={"100%"} height={"800px"}>
+                    <Billpdf
+                        bill={BillService.createNewBill(this.state.order, this.state.services, this.getCurrentRealEstate(), this.getCurrentTechnician())}/>
+                </PDFViewer>
+            </Grid.Column>
+        </Grid.Row>;
+    }
+
+    private shouldRenderPdf() {
+        return this.state.order.status === 'ORDER_BILL';
     }
 }

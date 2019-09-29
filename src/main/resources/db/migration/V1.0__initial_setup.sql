@@ -32,6 +32,7 @@ create table order_table (
     real_estate_id bigint,
     technician_id bigint,
     small_order boolean,
+    status varchar(255),
     primary key (id)
 );
 

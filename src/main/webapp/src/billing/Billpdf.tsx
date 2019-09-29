@@ -140,7 +140,7 @@ export default class Billpdf extends Component<{ bill: Bill }, {}> {
         if(elements == null) return false;
 
         for (var i = 0; i < elements.length; i++) {
-            if (elements[i] === null || elements[i].length === 0) {
+            if (elements[i] === null || elements[i] === undefined || elements[i].length === 0) {
                 return false;
             }
         }

@@ -35,6 +35,8 @@ data class Order(
 
         @OneToMany(cascade=[CascadeType.ALL])
         @JsonManagedReference
-        val services: List<ServiceOrder>
+        val services: List<ServiceOrder>,
 
+        @Enumerated(EnumType.STRING)
+        val status: OrderState = OrderState.ORDER_EDIT
         )
