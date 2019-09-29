@@ -31,6 +31,7 @@ create table order_table (
     second_appointment varchar(255),
     real_estate_id bigint,
     technician_id bigint,
+    small_order boolean,
     primary key (id)
 );
 

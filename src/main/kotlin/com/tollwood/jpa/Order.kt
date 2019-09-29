@@ -31,6 +31,7 @@ data class Order(
         val name: String?,
         val location: String?,
         val phoneNumber: String?,
+        val smallOrder: Boolean = false,
 
         @OneToMany(cascade=[CascadeType.ALL])
         @JsonManagedReference

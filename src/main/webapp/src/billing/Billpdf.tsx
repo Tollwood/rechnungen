@@ -137,9 +137,10 @@ export default class Billpdf extends Component<{ bill: Bill }, {}> {
     }
 
     private shouldRender(...elements: any): boolean {
+        if(elements == null) return false;
+
         for (var i = 0; i < elements.length; i++) {
-            if (elements[i] === undefined || elements[i].length === 0) {
-                console.log(elements[i]);
+            if (elements[i] === null || elements[i].length === 0) {
                 return false;
             }
         }

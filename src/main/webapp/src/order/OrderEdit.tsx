@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent} from "react";
-import {DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
+import {Checkbox, CheckboxProps, DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
 import API from "../API";
 import Order from "./Order";
 import Employee from "../employees/Employee";
@@ -182,6 +182,15 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column computer={8} tablet={8} mobile={16}>
+                            <Checkbox toggle
+                                      name={"smallOrder"}
+                                      label={"Kleinauftrag"}
+                                      checked={this.state.order.smallOrder}
+                                      onChange={this.toggleSmallOrder.bind(this)}/>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column computer={8} tablet={8} mobile={16}>
                             <h2>Dienstleistungen</h2>
                         </Grid.Column>
                     </Grid.Row>
@@ -219,6 +228,9 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.setState({order: Object.assign(this.state.order, {[name]: value})});
     }
 
+    toggleSmallOrder(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps): void{
+        this.setState({order: Object.assign(this.state.order, {smallOrder: !this.state.order.smallOrder})});
+    }
 
     private delete() {
         // @ts-ignore

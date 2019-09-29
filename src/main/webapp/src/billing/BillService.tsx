@@ -20,14 +20,12 @@ export default class BillService {
             }
         });
 
+        let allItems: BillItem[] = Array.of(...this.addBasePrice(services),
+            ...this.addDistanceItem(services, realEstate),
+            ...this.addSmallOrder(services, order),
+            ...billItems);
 
-        let allItems: BillItem[] = Array.of(...this.addBasePrice(services), ...this.addDistanceItem(services, realEstate), ...billItems);
-        let now = new Date();
-        var options = { year: 'numeric', month: 'numeric', day: 'numeric' };
-
-        console.log(now.toLocaleDateString('de-DE', options));
-
-        return new Bill("Bill-1234", now.toLocaleDateString('de-DE', options),
+        return new Bill("Bill-1234", new Date().toLocaleDateString('de-DE', {year: 'numeric', month: 'numeric', day: 'numeric'}),
             order,
             allItems,
             realEstate,
@@ -43,6 +41,17 @@ export default class BillService {
         return [];
     }
 
+    static addSmallOrder(services: Service[], order: Order): BillItem[] {
+        if (!order.smallOrder) {
+            return [];
+        }
+        let service: Service | undefined = services.find((services: Service) => services.articleNumber === '1F');
+        if (service !== undefined) {
+            return [new BillItem(service.articleNumber, 1, service.title, service.price)];
+        }
+        return [];
+    }
+
     static addDistanceItem(services: Service[], realEstate?: RealEstate): BillItem[] {
 
         if (realEstate === undefined) {
@@ -50,7 +59,6 @@ export default class BillService {
         }
 
         let distance = realEstate.distance;
-        let price = 0;
         if (distance > 20 && distance <= 30) {
             return this.getDistanceItem(services, '1B');
         }
@@ -66,9 +74,9 @@ export default class BillService {
         return [];
     }
 
-    private static getDistanceItem(services: Service[],  code: string, distance :number = 1) {
+    private static getDistanceItem(services: Service[], code: string, distance: number = 1) {
         let service: Service | undefined = services.find((services: Service) => services.articleNumber === code);
-        if(service === undefined){
+        if (service === undefined) {
             return [];
         }
         return [new BillItem(service.articleNumber, 1, service.title, service.price * distance)];

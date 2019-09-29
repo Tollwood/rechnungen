@@ -12,6 +12,7 @@ export default class Order {
     realEstate?: string;
     firstAppointment?: string;
     secondAppointment?: string;
+    smallOrder: boolean = false;
     services: OrderService[] = [];
     _links: {self?: Link, technician?: Link, realEstate?: Link} = {};
 }
