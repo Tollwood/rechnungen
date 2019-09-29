@@ -155,6 +155,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                             <Form.Field>
                                 <label>Erster Termin</label>
                                 <DateInput
+                                    minDate={'01.01.1990'}
+                                    hideMobileKeyboard={true}
                                     name="firstAppointment"
                                     placeholder="Termin wählen"
                                     value={this.state.order.firstAppointment ? this.state.order.firstAppointment : ''}
@@ -167,6 +169,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                             <Form.Field>
                                 <label>Zweiter Termin</label>
                                 <DateInput
+                                    minDate={'01.01.1990'}
+                                    hideMobileKeyboard={true}
                                     name="secondAppointment"
                                     placeholder="Termin wählen"
                                     value={this.state.order.secondAppointment ? this.state.order.secondAppointment : ''}
