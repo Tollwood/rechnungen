@@ -7,6 +7,7 @@ import RealEstateDetails from "./RealEstateDetails";
 import {ChangeEvent} from "react";
 import OrderIdInput from "./OrderIdInput";
 import SelectRealEstate from "./SelectRealEstate";
+import Helper from "../common/Helper";
 
 interface OrderEditProps {
     order: Order;
@@ -178,13 +179,13 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                     <RealEstateDetails realEstate={this.props.selectedRealEstate!}/>
                 </Grid.Row>
                 <Grid.Row>
-                    {this.isEmpty(this.props.order.utilisationUnit) ? null :
+                    {Helper.isEmpty(this.props.order.utilisationUnit) ? null :
                         <Grid.Column computer={4} tablet={4} mobile={8}>
                         <label>NE </label>
                         <label>{this.props.order.utilisationUnit}</label>
                     </Grid.Column>
                     }
-                    {this.isEmpty(this.props.order.name )? null :
+                    {Helper.isEmpty(this.props.order.name )? null :
                         <Grid.Column computer={6} tablet={6} mobile={8}>
                             <label>Name </label>
                             <label>{this.props.order.name}</label>
@@ -192,13 +193,13 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                     }
                 </Grid.Row>
                 <Grid.Row>
-                    {this.isEmpty(this.props.order.location)? null :
+                    {Helper.isEmpty(this.props.order.location)? null :
                         <Grid.Column computer={4} tablet={4} mobile={8}>
                             <label>Lage </label>
                             <label>{this.props.order.location}</label>
                         </Grid.Column>
                     }
-                    {this.isEmpty(this.props.order.phoneNumber )? null :
+                    {Helper.isEmpty(this.props.order.phoneNumber )? null :
                     <Grid.Column computer={6} tablet={6} mobile={8}>
                         <label>Tel. Nummer</label>
                         <label>{this.props.order.phoneNumber}</label>
@@ -208,9 +209,6 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
         );
     }
 
-    private isEmpty(value?: string) {
-        return value === undefined || value.length > 0 ;
-    }
 }
 
 const PlaceholderExamplePlaceholder = () => (

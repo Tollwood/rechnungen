@@ -2,6 +2,7 @@ import * as React from "react";
 import {Form, Grid} from 'semantic-ui-react'
 import Order from "./Order";
 import {DateInput} from "semantic-ui-calendar-react";
+import Helper from "../common/Helper";
 
 interface OrderEditProps {
     handleOrderChange: (name: string, value: any) => void
@@ -64,12 +65,12 @@ export default class OrderAppointments extends React.Component<OrderEditProps, {
 
     private renderReadOnly() {
         return <Grid.Row>
-            {this.isEmpty(this.props.order.firstAppointment)? null :
+            {Helper.isEmpty(this.props.order.firstAppointment)? null :
             <Grid.Column computer={5} tablet={5} mobile={8}>
                 <label>Erster Termin</label>
                 <label>{this.props.order.firstAppointment}</label>
             </Grid.Column>}
-            {this.isEmpty(this.props.order.secondAppointment)? null :
+            {Helper.isEmpty(this.props.order.secondAppointment)? null :
             <Grid.Column computer={5} tablet={5} mobile={8}>
                 <label>Zweiter Termin</label>
                 <label>{this.props.order.secondAppointment}</label>
@@ -77,7 +78,5 @@ export default class OrderAppointments extends React.Component<OrderEditProps, {
         </Grid.Row>;
     }
 
-    private isEmpty(value?: string) {
-        return value === undefined || value.length > 0 ;
-    }
+
 }
