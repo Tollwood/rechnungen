@@ -33,6 +33,7 @@ create table order_table (
     technician_id bigint,
     small_order boolean,
     status varchar(255),
+    include_km_fee boolean,
     primary key (id)
 );
 

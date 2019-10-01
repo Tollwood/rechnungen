@@ -21,7 +21,7 @@ export default class BillService {
         });
 
         let allItems: BillItem[] = Array.of(...this.addBasePrice(services),
-            ...this.addDistanceItem(services, realEstate),
+            ...this.addDistanceItem(services, order, realEstate),
             ...this.addSmallOrder(services, order),
             ...billItems);
 
@@ -52,9 +52,9 @@ export default class BillService {
         return [];
     }
 
-    static addDistanceItem(services: Service[], realEstate?: RealEstate): BillItem[] {
+    static addDistanceItem(services: Service[], order: Order, realEstate?: RealEstate): BillItem[] {
 
-        if (realEstate === undefined) {
+        if (realEstate === undefined || !order.includeKmFee) {
             return [];
         }
 

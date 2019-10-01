@@ -14,6 +14,7 @@ export default class Order {
     firstAppointment?: string;
     secondAppointment?: string;
     smallOrder: boolean = false;
+    includeKmFee: boolean = true;
     status: OrderStatus = "ORDER_EDIT";
     services: OrderService[] = [];
     _links: {self?: Link, technician?: Link, realEstate?: Link} = {};

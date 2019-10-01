@@ -160,11 +160,11 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
             <React.Fragment>
                 <Grid.Row>
                     <Grid.Column computer={4} tablet={4} mobile={8}>
-                        <label>Auftrags-ID</label>
+                        <label style={{"fontWeight":"bold" }}>Auftrags-ID: </label>
                         <label>{this.props.order.orderId}</label>
                     </Grid.Column>
                     <Grid.Column computer={6} tablet={6} mobile={8}>
-                        <label>Monteuer </label>
+                        <label style={{"fontWeight":"bold" }}>Monteuer: </label>
                         <label>{this.props.selectedTechnician!.technicianId} {this.props.selectedTechnician!.firstName} {this.props.selectedTechnician!.lastName}</label>
                     </Grid.Column>
                     <Grid.Column computer={6} tablet={6}/>
@@ -172,7 +172,7 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                 <Grid.Row>
                     {this.props.order.smallOrder === true? null :
                     <Grid.Column computer={8} tablet={8} mobile={16}>
-                    <label>Kleinauftrag</label>
+                    <label >Kleinauftrag</label>
                     </Grid.Column>}
                 </Grid.Row>
                 <Grid.Row>

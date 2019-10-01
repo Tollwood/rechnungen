@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.tollwood.OrderType
 import javax.persistence.*
 
-@Entity(name="ORDER_TABLE")
+@Entity(name = "ORDER_TABLE")
 data class Order(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,18 +14,18 @@ data class Order(
         val orderId: String,
 
         @ManyToOne
-        @JoinColumn(foreignKey=ForeignKey(name="ORDER_REAL_ESTATE_FK"))
+        @JoinColumn(foreignKey = ForeignKey(name = "ORDER_REAL_ESTATE_FK"))
         val realEstate: RealEstate?,
 
         @Enumerated
         val type: OrderType?,
 
         @ManyToOne
-        @JoinColumn(foreignKey=ForeignKey(name="ORDER_EMPLOYEE_FK"))
+        @JoinColumn(foreignKey = ForeignKey(name = "ORDER_EMPLOYEE_FK"))
         val technician: Employee?,
 
-        val firstAppointment: String,
-        val secondAppointment: String,
+        val firstAppointment: String?,
+        val secondAppointment: String?,
 
         val utilisationUnit: String?,
         val name: String?,
@@ -33,10 +33,12 @@ data class Order(
         val phoneNumber: String?,
         val smallOrder: Boolean = false,
 
-        @OneToMany(cascade=[CascadeType.ALL])
+        @OneToMany(cascade = [CascadeType.ALL])
         @JsonManagedReference
         val services: List<ServiceOrder>,
 
         @Enumerated(EnumType.STRING)
-        val status: OrderState = OrderState.ORDER_EDIT
-        )
+        val status: OrderState = OrderState.ORDER_EDIT,
+
+        val includeKmFee: Boolean = true
+)

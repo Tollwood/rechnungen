@@ -1,5 +1,5 @@
 import * as React from "react";
-import {DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
+import {Checkbox, DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
 import API from "../API";
 import Order from "./Order";
 import Employee from "../employees/Employee";
@@ -110,6 +110,17 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                                onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
                         </Grid.Column>
                     </Grid.Row>
+
+                    {this.state.order.status === 'ORDER_EXECUTE' ?
+                        <Grid.Row>
+                            <Grid.Column computer={8} tablet={8} mobile={16}>
+                                <Checkbox toggle
+                                          name={"includeKmFee"}
+                                          label={"Km Pauschale anwenden"}
+                                          checked={this.state.order.includeKmFee}
+                                          onChange={()=>this.handleOrderChange('includeKmFee', !this.state.order.includeKmFee)}/>
+                            </Grid.Column>
+                        </Grid.Row> : null}
                     <Grid.Row>
                         <Grid.Column computer={6} tablet={6} mobile={8}>
                             <Form.Field>
@@ -251,7 +262,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
 
     private isValid() {
-        return this.isSet(this.state.order.realEstate) && this.isSet(this.state.order.technician) && this.state.validUserId;
+        return this.isSet(this.state.order.realEstate) && this.isSet(this.state.order.technician)
+            && (this.state.validUserId  || (this.props.order !== undefined && this.props.order._links.self !== undefined));
     }
 
     private isSet(value?: string ) {
