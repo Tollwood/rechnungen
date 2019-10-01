@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Checkbox, DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
+import {Button, Checkbox, Dropdown, DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
 import API from "../API";
 import Order from "./Order";
 import Employee from "../employees/Employee";
@@ -15,6 +15,7 @@ import OrderBaseProperties from "./OrderBaseProperties";
 import OrderAppointments from "./OrderAppointments";
 import OrderStatusSteps from "./OrderStatusSteps";
 import {OrderStatus} from "./OrderStatus";
+import Helper from "../common/Helper";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -67,11 +68,9 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             return;
         }
         if (this.state.order._links.self === undefined) {
-            API.post("/order", this.state.order)
-                .then(() => this.props.onSave());
+            API.post("/order", this.state.order);
         } else {
-            API.patch(this.state.order._links.self!.href, this.state.order)
-                .then(() => this.props.onSave());
+            API.patch(this.state.order._links.self!.href, this.state.order);
         }
     }
 
@@ -121,24 +120,34 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                           onChange={()=>this.handleOrderChange('includeKmFee', !this.state.order.includeKmFee)}/>
                             </Grid.Column>
                         </Grid.Row> : null}
-                    <Grid.Row>
-                        <Grid.Column computer={6} tablet={6} mobile={8}>
-                            <Form.Field>
-                                <label>Status </label>
-                                <Form.Dropdown id="status"
-                                               selection
-                                               options={this.getOrderStatusOptions()}
-                                               value={this.state.order.status}
-                                               onChange={this.updateStatus.bind(this)}
+                    {this.shouldRenderPdf() ? this.renderPdf() : null}
+
+                    <Grid.Row centered>
+                        <Grid.Column width={5} floated='left'>
+                            {this.state.order.status === Helper.nextStatus(this.state.order.status)? null:<Button.Group primary>
+                                <Button content='Speichern' />
+
+                                <Dropdown
+                                    className='button icon'
+                                    floating
+                                    value={''}
+                                    onChange={this.saveAndContinue.bind(this)}
+                                    options={this.getSaveOptions()}
+                                    trigger={<React.Fragment />}
                                 />
-                            </Form.Field>
+
+                            </Button.Group>}
+                        </Grid.Column>
+                        <Grid.Column width={5}>
+                            <Button content='Abbrechen' icon='cancel' labelPosition='left' onClick={this.props.onCancelEdit}/>
+                        </Grid.Column>
+                        <Grid.Column width={5} floated='right'>
+                            {this.state.order._links.self !== undefined ?
+                                <Button floated={"right"} color={"red"} content={"Löschen"} icon='trash' labelPosition='left'
+                                        onClick={this.props.onDelete}/> : null
+                            }
                         </Grid.Column>
                     </Grid.Row>
-                    {this.shouldRenderPdf() ? this.renderPdf() : null}
-                    <CUDButtons
-                        onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
-                        onDelete={this.delete.bind(this)}
-                        canDelete={this.state.order._links.self !== undefined}/>
                 </Grid>
             </Form>
         );
@@ -268,6 +277,16 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private isSet(value?: string ) {
         return value !== undefined && value.length > 0;
+    }
+
+    private saveAndContinue(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        this.handleOrderChange('status', Helper.nextStatus(this.state.order.status));
+        this.save();
+    }
+
+    private getSaveOptions() {
+        let icon =  Helper.getStatusIcon(Helper.nextStatus(this.state.order.status));
+        return  [{key:'Speicher',value:'Speichern', text:'Speichern und weiter', icon:icon}];
     }
 }
 

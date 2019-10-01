@@ -49,7 +49,7 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
                         onFocus={this.setUnknown.bind(this)}
                         loading={this.state.orderIdVerified === "checking"}
                         icon={this.state.orderIdVerified === "valid" ? this.validIcon : null}
-                        error={ this.props.shouldValidate && this.state.orderIdVerified === "invalid" ?
+                        error={ this.state.orderIdVerified === "invalid" ?
                             {
                                 content: 'Auftrags-ID bereits erfasst',
                             } : this.props.shouldValidate &&  (this.props.orderId === undefined || this.props.orderId.length <= 0) ?
