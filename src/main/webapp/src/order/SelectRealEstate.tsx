@@ -2,6 +2,7 @@ import * as React from "react";
 import {DropdownItemProps, DropdownProps, Form, Grid} from "semantic-ui-react";
 import RealEstate from "../realestate/RealEstate";
 import Order from "./Order";
+import RealEstateDetails from "./RealEstateDetails";
 
 interface SelectRealEstateProps {
     order: Order;
@@ -42,14 +43,7 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
         if (!realEstate) {
             return null;
         }
-        return <Grid>
-            <Grid.Column width={14}>
-                <label>{realEstate.address.street} {realEstate.address.houseNumber}</label>
-            </Grid.Column>
-            <Grid.Column width={13}>
-                <label>{realEstate.address.zipCode} {realEstate.address.city}</label>
-            </Grid.Column>
-        </Grid>
+        return <RealEstateDetails realEstate={realEstate}/>
     }
 
     private mapRealestateToDropdownItems(realEstates: RealEstate[]): DropdownItemProps[] {

@@ -1,20 +1,18 @@
 import * as React from "react";
-import {ChangeEvent} from "react";
-import {Checkbox, CheckboxProps, DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
+import {DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
 import API from "../API";
 import Order from "./Order";
 import Employee from "../employees/Employee";
 import OrderService from "./OrderService";
 import ListOrderServices from "./ListOrderServices";
-import SelectRealEstate from "./SelectRealEstate";
 import CUDButtons from "../common/CUDButtons";
-import {DateInput} from "semantic-ui-calendar-react";
-import OrderIdInput from "./OrderIdInput";
 import Billpdf from "../billing/Billpdf";
 import RealEstate from "../realestate/RealEstate";
 import {PDFViewer} from "@react-pdf/renderer";
 import Service from "./Service";
 import BillService from "../billing/BillService";
+import OrderBaseProperties from "./OrderBaseProperties";
+import OrderAppointments from "./OrderAppointments";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -26,9 +24,7 @@ interface OrderEditProps {
 interface OrderEditState {
     order: Order;
     technicians: Employee[];
-    selectedTechnician?: string;
     realEstates: RealEstate[];
-    selectedRealEstate?: string;
     services: Service[];
     canSave: boolean;
 }
@@ -78,118 +74,20 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     <Grid.Column width={16}>
                         {this.state.order._links === undefined ? <h1>Neuen Auftrag anlegen</h1> : <h1>Auftrag bearbeiten</h1>}
                     </Grid.Column>
-                    <Grid.Row>
-                        <Grid.Column computer={4} tablet={4} mobile={8}>
-                            <Form.Field>
-                                <label>Auftrags-ID</label>
-                                <OrderIdInput existing={this.state.order._links.self !== undefined} orderId={this.state.order.orderId}
-                                              onChange={this.handleOrderChange.bind(this)} isValid={this.setCanSave.bind(this)}/>
-                            </Form.Field>
-                        </Grid.Column>
-                        <Grid.Column computer={6} tablet={6} mobile={8}>
-                            <Form.Field>
-                                <label>Monteuer </label>
-                                <Form.Dropdown id="technician"
-                                               selection
-                                               search
-                                               options={this.mapTechnicianToDropdownItems(this.state.technicians)}
-                                               value={this.state.selectedTechnician}
-                                               onChange={this.updateTechnician.bind(this)}
-                                />
-                            </Form.Field>
-                        </Grid.Column>
-                        <Grid.Column computer={6} tablet={6}/>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column computer={8} tablet={8} mobile={16}>
-                            <Checkbox toggle
-                                      name={"smallOrder"}
-                                      label={"Kleinauftrag"}
-                                      checked={this.state.order.smallOrder}
-                                      onChange={this.toggleSmallOrder.bind(this)}/>
-                        </Grid.Column>
-                    </Grid.Row>
-                    <SelectRealEstate selectedRealestate={this.getCurrentRealEstate()} realestates={this.state.realEstates}
-                                      order={this.state.order} onValueChanged={this.updateRealEstate.bind(this)}/>
-                    <Grid.Row>
-                        <Grid.Column computer={4} tablet={4} mobile={8}>
-                            <Form.Field>
-                                <label>NE </label>
-                                <Form.Input id="utilisationUnit"
-                                            placeholder='Nutzungseinheit'
-                                            value={this.state.order.utilisationUnit}
-                                            name='utilisationUnit'
-                                            onChange={this.handleOrderChange.bind(this)}
-                                />
-                            </Form.Field>
-                        </Grid.Column>
-                        <Grid.Column computer={6} tablet={6} mobile={8}>
-                            <Form.Field>
-                                <label>Name </label>
-                                <Form.Input id="name"
-                                            placeholder='Name'
-                                            value={this.state.order.name}
-                                            name='name'
-                                            onChange={this.handleOrderChange.bind(this)}
-                                />
-                            </Form.Field>
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column computer={4} tablet={4} mobile={8}>
-                            <Form.Field>
-                                <label>Lage </label>
-                                <Form.Input id="location"
-                                            placeholder='Lage'
-                                            value={this.state.order.location}
-                                            name='location'
-                                            onChange={this.handleOrderChange.bind(this)}
-                                />
-                            </Form.Field>
-                        </Grid.Column>
-                        <Grid.Column computer={6} tablet={6} mobile={8}>
-                            <Form.Field>
-                                <label>Tel. Nummer</label>
-                                <Form.Input
-                                    id="phoneNumber"
-                                    placeholder='Telefonnummer'
-                                    value={this.state.order.phoneNumber}
-                                    name='phoneNumber'
-                                    onChange={this.handleOrderChange.bind(this)}
-                                />
-                            </Form.Field>
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column computer={5} tablet={5} mobile={8}>
-                            <Form.Field>
-                                <label>Erster Termin</label>
-                                <DateInput
-                                    minDate={'01.01.1990'}
-                                    hideMobileKeyboard={true}
-                                    name="firstAppointment"
-                                    placeholder="Termin wählen"
-                                    value={this.state.order.firstAppointment ? this.state.order.firstAppointment : ''}
-                                    iconPosition="left"
-                                    onChange={this.handleDateChange.bind(this)}
-                                />
-                            </Form.Field>
-                        </Grid.Column>
-                        <Grid.Column computer={5} tablet={5} mobile={8}>
-                            <Form.Field>
-                                <label>Zweiter Termin</label>
-                                <DateInput
-                                    minDate={'01.01.1990'}
-                                    hideMobileKeyboard={true}
-                                    name="secondAppointment"
-                                    placeholder="Termin wählen"
-                                    value={this.state.order.secondAppointment ? this.state.order.secondAppointment : ''}
-                                    iconPosition="left"
-                                    onChange={this.handleDateChange.bind(this)}
-                                />
-                            </Form.Field>
-                        </Grid.Column>
-                    </Grid.Row>
+
+                    <OrderBaseProperties order={this.state.order}
+                                         selectedTechnician={this.getCurrentTechnician()}
+                                         selectedRealEstate={this.getCurrentRealEstate()}
+                                         handleOrderChange={this.handleOrderChange.bind(this)}
+                                         realEstates={this.state.realEstates} technicians={this.state.technicians}
+                                         canSave={this.state.canSave}
+                                         handleCanSave={this.setCanSave.bind(this)}
+                                         readOnly={this.state.order.status !== 'ORDER_EDIT'}/>
+
+                    <OrderAppointments handleOrderChange={this.handleOrderChange.bind(this)}
+                                       order={this.state.order}
+                                       readonly={!(this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE')}
+                    />
                     <Grid.Row>
                         <Grid.Column computer={8} tablet={8} mobile={16}>
                             <h2>Dienstleistungen</h2>
@@ -226,31 +124,26 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         );
     }
 
-    handleOrderChange(event: ChangeEvent<HTMLInputElement>) {
-        const name: string = event.target.name;
-        this.setState({order: Object.assign(this.state.order, {[name]: event.target.value})});
+    handleOrderChange(name: string, value: any) {
+        this.setState({order: Object.assign(this.state.order, {[name]: value})});
     }
 
     // @ts-ignore
     handleDateChange(e: React.SyntheticEvent<HTMLElement>, {name, value}) {
-        this.setState({order: Object.assign(this.state.order, {[name]: value})});
-    }
-
-    toggleSmallOrder(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps): void {
-        this.setState({order: Object.assign(this.state.order, {smallOrder: !this.state.order.smallOrder})});
+        this.handleOrderChange(name, value);
     }
 
     private delete() {
         // @ts-ignore
         API.delete(this.state.order._links.self.href).then(() => {
+            this.props.onDelete();
         });
-        this.props.onDelete();
     }
 
     private fetchCurrentTechnician() {
         if (this.props.order && this.props.order._links.technician) {
             API.get(this.props!.order!._links!.technician.href)
-                .then(res => this.setState({selectedTechnician: res.data._links.self.href}))
+                .then(res => this.handleOrderChange('technician', res.data._links.self.href))
         }
     }
 
@@ -276,16 +169,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     private updateStatus(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
         const newOrder = Object.assign(this.state.order, {status: data.value});
         this.setState(Object.assign(this.state, {order: newOrder}))
-    }
-
-    private updateTechnician(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        const newOrder = Object.assign(this.state.order, {technician: data.value});
-        this.setState(Object.assign(this.state, {order: newOrder, selectedTechnician: data.value}))
-    }
-
-    private updateRealEstate(realEstate: string) {
-        const newOrder = Object.assign(this.state.order, {realEstate: realEstate});
-        this.setState({order: newOrder, selectedRealEstate: realEstate});
     }
 
     private updateOrderServies(orderServices: OrderService[]) {
@@ -322,19 +205,17 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         if (this.props.order && this.props.order._links.realEstate) {
             API.get(this.props!.order!._links!.realEstate.href)
                 .then(res => {
-                    this.setState({
-                        selectedRealEstate: res.data._links.self.href
-                    })
+                    this.handleOrderChange('realEstate', res.data._links.self.href)
                 })
         }
     }
 
     private getCurrentRealEstate() {
-        return this.state.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === this.state.selectedRealEstate);
+        return this.state.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === this.state.order.realEstate);
     }
 
     private getCurrentTechnician() {
-        return this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.selectedTechnician);
+        return this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.order.technician);
     }
 
     private getOrderStatusOptions(): { key: string, value: string, text: string }[] {
@@ -360,4 +241,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     private shouldRenderPdf() {
         return this.state.order.status === 'ORDER_BILL';
     }
+
+
 }
+
