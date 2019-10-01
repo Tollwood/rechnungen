@@ -9,6 +9,7 @@ interface SelectRealEstateProps {
     realestates: RealEstate[];
     selectedRealestate?: RealEstate;
     onValueChanged: (value: string) => void;
+    shouldValidate: boolean
 }
 
 export default class SelectRealEstate extends React.Component<SelectRealEstateProps, {}> {
@@ -30,6 +31,10 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
                                        options={this.mapRealestateToDropdownItems(this.props.realestates)}
                                        value={this.props.selectedRealestate?this.props.selectedRealestate._links.self!.href : undefined }
                                        onChange={this.updateRealEstate.bind(this)}
+                                       error={ this.props.shouldValidate && this.props.order.realEstate === undefined ?
+                                           {
+                                               content: 'Pflichtfeld',
+                                           } : null}
                         />
                     </Form.Field>
                     {this.renderDetails()}

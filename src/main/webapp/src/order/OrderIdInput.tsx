@@ -9,6 +9,7 @@ interface OrderIdInputProps {
     orderId?: string
     isValid: (valid: boolean) => void
     existing: boolean
+    shouldValidate: boolean
 }
 
 interface OrderIdInputState {
@@ -48,10 +49,13 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
                         onFocus={this.setUnknown.bind(this)}
                         loading={this.state.orderIdVerified === "checking"}
                         icon={this.state.orderIdVerified === "valid" ? this.validIcon : null}
-                        error={this.state.orderIdVerified === "invalid" ?
+                        error={ this.props.shouldValidate && this.state.orderIdVerified === "invalid" ?
                             {
                                 content: 'Auftrags-ID bereits erfasst',
-                            } : null}
+                            } : this.props.shouldValidate &&  (this.props.orderId === undefined || this.props.orderId.length <= 0) ?
+                                    {
+                                        content: 'Pflichtfeld',
+                                    } : null}
             />
         );
     }

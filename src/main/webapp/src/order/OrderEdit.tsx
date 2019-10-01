@@ -1,5 +1,5 @@
 import * as React from "react";
-import {DropdownItemProps, DropdownProps, Form, Grid, Icon, Step} from 'semantic-ui-react'
+import {DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
 import API from "../API";
 import Order from "./Order";
 import Employee from "../employees/Employee";
@@ -28,7 +28,8 @@ interface OrderEditState {
     technicians: Employee[];
     realEstates: RealEstate[];
     services: Service[];
-    canSave: boolean;
+    validUserId: boolean;
+    shouldValidate: boolean
 }
 
 export default class OrderEdit extends React.Component<OrderEditProps, OrderEditState> {
@@ -41,7 +42,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             technicians: [],
             realEstates: [],
             services: [],
-            canSave: false
+            validUserId: false,
+            shouldValidate: false
         }
     }
 
@@ -60,6 +62,10 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
     save() {
+        this.setState({shouldValidate:true});
+        if(!this.isValid()){
+            return;
+        }
         if (this.state.order._links.self === undefined) {
             API.post("/order", this.state.order)
                 .then(() => this.props.onSave());
@@ -83,8 +89,9 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                          selectedRealEstate={this.getCurrentRealEstate()}
                                          handleOrderChange={this.handleOrderChange.bind(this)}
                                          realEstates={this.state.realEstates} technicians={this.state.technicians}
-                                         canSave={this.state.canSave}
-                                         handleCanSave={this.setCanSave.bind(this)}
+                                         validUserId={this.state.validUserId}
+                                         handleValidUserId={(isValid: boolean) => this.setState({validUserId: isValid})}
+                                         shouldValidate={this.state.shouldValidate}
                                          readOnly={this.state.order.status !== 'ORDER_EDIT'}/>
 
                     <OrderAppointments handleOrderChange={this.handleOrderChange.bind(this)}
@@ -118,7 +125,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     </Grid.Row>
                     {this.shouldRenderPdf() ? this.renderPdf() : null}
                     <CUDButtons
-                        canSave={this.state.canSave || (this.props.order !== undefined && this.props.order._links.self !== undefined)}
                         onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit}
                         onDelete={this.delete.bind(this)}
                         canDelete={this.state.order._links.self !== undefined}/>
@@ -178,9 +184,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.setState(Object.assign(this.state, {order: Object.assign(this.state.order, {services: orderServices})}))
     }
 
-    private setCanSave(canSave: boolean) {
-        this.setState({canSave: canSave});
-    }
 
     private fetchServices() {
         API.get(`/services`)
@@ -247,5 +250,12 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
 
+    private isValid() {
+        return this.isSet(this.state.order.realEstate) && this.isSet(this.state.order.technician) && this.state.validUserId;
+    }
+
+    private isSet(value?: string ) {
+        return value !== undefined && value.length > 0;
+    }
 }
 

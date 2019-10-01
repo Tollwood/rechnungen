@@ -13,10 +13,11 @@ interface OrderEditProps {
     selectedTechnician?: Employee;
     selectedRealEstate?: RealEstate;
     handleOrderChange: (name: string, value: any) => void
-    handleCanSave: (canSave:boolean) => void
+    handleValidUserId: (isValid:boolean) => void
     technicians: Employee[];
     realEstates: RealEstate[];
-    canSave: boolean;
+    validUserId: boolean;
+    shouldValidate: boolean;
     readOnly : boolean;
 }
 
@@ -34,7 +35,9 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                         <Form.Field>
                             <label>Auftrags-ID</label>
                             <OrderIdInput existing={this.props.order._links.self !== undefined} orderId={this.props.order.orderId}
-                                          onChange={this.handleOrderChange.bind(this)} isValid={this.setCanSave.bind(this)}/>
+                                          onChange={this.handleOrderChange.bind(this)} isValid={this.props.handleValidUserId}
+                                          shouldValidate={this.props.shouldValidate}
+                            />
                         </Form.Field>
                     </Grid.Column>
                     <Grid.Column computer={6} tablet={6} mobile={8}>
@@ -46,6 +49,10 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                                            options={this.mapTechnicianToDropdownItems(this.props.technicians)}
                                            value={this.props.order.technician}
                                            onChange={this.updateTechnician.bind(this)}
+                                           error={this.props.shouldValidate && this.props.order.technician === undefined ?
+                                               {
+                                                   content: 'Pflichtfeld',
+                                               } : null}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -61,7 +68,9 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                     </Grid.Column>
                 </Grid.Row>
                 <SelectRealEstate selectedRealestate={this.getCurrentRealEstate()} realestates={this.props.realEstates}
-                                  order={this.props.order} onValueChanged={this.updateRealEstate.bind(this)}/>
+                                  order={this.props.order} onValueChanged={this.updateRealEstate.bind(this)}
+                                  shouldValidate={this.props.shouldValidate}
+                />
                 <Grid.Row>
                     <Grid.Column computer={4} tablet={4} mobile={8}>
                         <Form.Field>
@@ -122,14 +131,6 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
     toggleSmallOrder(): void {
         this.props.handleOrderChange('smallOrder', !this.props.order.smallOrder);
     }
-
-
-
-
-    private setCanSave(canSave: boolean) {
-        this.props.handleCanSave(canSave);
-    }
-
 
     private mapTechnicianToDropdownItems(employees: Employee[]): DropdownItemProps[] {
         return employees.map((emp: Employee) => {
