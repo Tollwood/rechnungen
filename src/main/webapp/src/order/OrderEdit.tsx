@@ -1,5 +1,5 @@
 import * as React from "react";
-import {DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
+import {DropdownItemProps, DropdownProps, Form, Grid, Icon, Step} from 'semantic-ui-react'
 import API from "../API";
 import Order from "./Order";
 import Employee from "../employees/Employee";
@@ -13,6 +13,8 @@ import Service from "./Service";
 import BillService from "../billing/BillService";
 import OrderBaseProperties from "./OrderBaseProperties";
 import OrderAppointments from "./OrderAppointments";
+import OrderStatusSteps from "./OrderStatusSteps";
+import {OrderStatus} from "./OrderStatus";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -71,10 +73,11 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         return (
             <Form autoComplete={"off"}>
                 <Grid>
-                    <Grid.Column width={16}>
-                        {this.state.order._links === undefined ? <h1>Neuen Auftrag anlegen</h1> : <h1>Auftrag bearbeiten</h1>}
-                    </Grid.Column>
-
+                    <Grid.Row textAlign={"center"}>
+                        <Grid.Column width={16}>
+                            <OrderStatusSteps status={this.state.order.status} statusChanged={(status: OrderStatus)=>this.handleOrderChange('status', status)}/>
+                        </Grid.Column>
+                    </Grid.Row>
                     <OrderBaseProperties order={this.state.order}
                                          selectedTechnician={this.getCurrentTechnician()}
                                          selectedRealEstate={this.getCurrentRealEstate()}
@@ -223,7 +226,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             {key: 'ORDER_EDIT', value: "ORDER_EDIT", text: "Auftrag erfassen"},
             {key: 'ORDER_EXECUTE', value: "ORDER_EXECUTE", text: "Auftragsdurchführung"},
             {key: 'ORDER_BILL', value: "ORDER_BILL", text: "Rechnung erfasst"},
-            {key: 'ORDER_BILL_RECIEVED', value: "ORDER_BILL_RECIEVED", text: "Rechnungsbetrag erhalten"}
+            {key: 'ORDER_BILL_RECIEVED', value: "ORDER_BILL_RECIEVED", text: "Rechnungsbetrag erhalten"},
+            {key: 'PAYMENT_RECIEVED', value: "PAYMENT_RECIEVED", text: "Rechnungsbetrag erhalten"}
         ];
     }
 
