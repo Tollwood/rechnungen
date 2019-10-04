@@ -33,20 +33,22 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
                 <td>
                     <Input style={{width: "80px"}}  value={this.state.amount} onChange={this.updateAmount.bind(this)} ref={this.inputRef}/>
                 </td>
-                 <td style={{textAlign:"center"}}>
-                     x
+                 <td >
+                     <Dropdown
+                         fluid
+                         selection
+                         search
+                         openOnFocus={false}
+                         selectOnNavigation={false}
+                         icon='none'
+                         options={this.computeAvailableServices()}
+                         onChange={this.selectService.bind(this)}
+                         placeholder=''
+                         noResultsMessage=''
+                     />
                  </td>
                 <td>
-                    <Dropdown
-                        fluid
-                        selection
-                        search
-                        openOnFocus={false}
-                        selectOnNavigation={false}
-                        options={this.computeAvailableServices()}
-                        onChange={this.selectService.bind(this)}
-                        placeholder='Dienstleistung auswählen'
-                    />
+                    {this.state.selectedService? this.state.selectedService.title: null}
                 </td>
                 <td>
                     <Button color={"green"} onClick={this.addService.bind(this)}><Icon name={"add"}/></Button>
@@ -61,7 +63,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
         return this.props.services
             .filter((service: Service) => !existingServices.includes(service._links.self.href))
             .filter((service: Service) => service.selectable)
-            .map((s: Service) => { return {key: s.articleNumber, value: s.articleNumber, text: s.title}} );
+            .map((s: Service) => { return {key: s.articleNumber, value: s.articleNumber, text: s.articleNumber}} );
     }
 
     private updateAmount(event: ChangeEvent<HTMLInputElement>){
