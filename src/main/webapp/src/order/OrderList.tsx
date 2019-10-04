@@ -1,5 +1,7 @@
 import * as React from "react";
 import Order from "./Order";
+import Helper from "../common/Helper";
+import {Icon} from "semantic-ui-react";
 
 interface OrderListProps {
     onAdd:()=>void,
@@ -14,7 +16,8 @@ export default class OrderList extends React.Component<OrderListProps> {
             <table className="ui compact celled table selectable" >
                 <thead>
                     <tr>
-                        <th>Bezeichnung</th>
+                        <th>Auftrags-Id</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +40,7 @@ export default class OrderList extends React.Component<OrderListProps> {
     private renderRow(order: Order) {
         return <tr key={order.orderId} onClick={this.props.onSelect.bind(this,order)}>
             <td>{order.orderId}</td>
+            <td><Icon name={Helper.getStatusIcon(order.status)}/> {Helper.getStatusName(order.status)}</td>
         </tr>;
     }
 }

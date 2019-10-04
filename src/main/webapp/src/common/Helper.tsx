@@ -19,11 +19,21 @@ export default class Helper {
 
     public static  getStatusIcon(status:OrderStatus): SemanticICONS{
         switch (status) {
-            case 'ORDER_EDIT': return 'list';
+            case 'ORDER_EDIT': return 'edit';
             case 'ORDER_EXECUTE': return 'truck';
             case 'ORDER_BILL': return 'envelope open';
             case 'ORDER_BILL_RECIEVED': return 'eye';
             case 'PAYMENT_RECIEVED' : return 'check';
+        }
+    }
+
+    public static  getStatusName(status:OrderStatus): string{
+        switch (status) {
+            case 'ORDER_EDIT': return 'Erfassen';
+            case 'ORDER_EXECUTE': return 'Durchführen';
+            case 'ORDER_BILL': return 'Rechnung';
+            case 'ORDER_BILL_RECIEVED': return 'Zahlungseingang';
+            case 'PAYMENT_RECIEVED' : return 'Abgeschloßen';
         }
     }
 }
