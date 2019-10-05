@@ -67,7 +67,13 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             return;
         }
         if (this.state.order._links.self === undefined) {
-            API.post("/order", this.state.order);
+            API.post("/order", this.state.order)
+                .then(result => result.data)
+                .then( (order: Order) => {
+                    order.technician = this.state.order.technician;
+                    order.realEstate = this.state.order.realEstate;
+                    this.setState({order: order});
+                });
         } else {
             API.patch(this.state.order._links.self!.href, this.state.order);
         }
