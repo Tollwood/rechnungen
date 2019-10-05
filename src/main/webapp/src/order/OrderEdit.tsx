@@ -133,7 +133,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     <Grid.Row centered>
                         <Grid.Column width={5} floated='left'>
                             {this.state.order.status === Helper.nextStatus(this.state.order.status)? null:<Button.Group primary>
-                                <Button content='Speichern' />
+                                <Button content='Speichern' onClick={this.save.bind(this)} />
 
                                 <Dropdown
                                     className='button icon'
