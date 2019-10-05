@@ -8,7 +8,7 @@ import Service from "../order/Service";
 
 export default class BillService {
 
-    static createNewBill(order: Order, services: Service[], realEstate?: RealEstate, technician?: Employee): Bill {
+    static createNewBill(billNo: string, billDate: string, order: Order, services: Service[], realEstate?: RealEstate, technician?: Employee): Bill {
 
         let billItems: BillItem[] = order.services.map((orderServices: OrderService) => {
             let service: Service | undefined = services.find((service: Service) => service._links.self.href === orderServices._links.service.href);
@@ -25,7 +25,7 @@ export default class BillService {
             ...this.addSmallOrder(services, order),
             ...billItems);
 
-        return new Bill("Bill-1234", new Date().toLocaleDateString('de-DE', {year: 'numeric', month: 'numeric', day: 'numeric'}),
+        return new Bill(billNo, billDate,
             order,
             allItems,
             realEstate,

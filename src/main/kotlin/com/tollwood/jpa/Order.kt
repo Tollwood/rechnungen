@@ -40,5 +40,9 @@ data class Order(
         @Enumerated(EnumType.STRING)
         val status: OrderState = OrderState.ORDER_EDIT,
 
-        val includeKmFee: Boolean = true
+        val includeKmFee: Boolean = true,
+
+        val billNo: String?,
+        val billDate: String?,
+        val paymentRecievedDate: String?
 )

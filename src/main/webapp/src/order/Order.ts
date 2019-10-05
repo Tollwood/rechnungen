@@ -17,5 +17,8 @@ export default class Order {
     includeKmFee: boolean = true;
     status: OrderStatus = "ORDER_EDIT";
     services: OrderService[] = [];
+    billDate: string = '';
+    billNo: string = '';
+    paymentRecievedDate: string = '';
     _links: {self?: Link, technician?: Link, realEstate?: Link} = {};
 }

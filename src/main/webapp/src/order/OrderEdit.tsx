@@ -5,17 +5,16 @@ import Order from "./Order";
 import Employee from "../employees/Employee";
 import OrderService from "./OrderService";
 import ListOrderServices from "./ListOrderServices";
-import CUDButtons from "../common/CUDButtons";
-import Billpdf from "../billing/Billpdf";
 import RealEstate from "../realestate/RealEstate";
-import {PDFViewer} from "@react-pdf/renderer";
 import Service from "./Service";
-import BillService from "../billing/BillService";
 import OrderBaseProperties from "./OrderBaseProperties";
 import OrderAppointments from "./OrderAppointments";
 import OrderStatusSteps from "./OrderStatusSteps";
 import {OrderStatus} from "./OrderStatus";
 import Helper from "../common/Helper";
+import BillDetails from "./BillDetails";
+import BillButton from "./BillButton";
+import PaymentRecieved from "./PaymentRecieved";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -97,18 +96,20 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                        order={this.state.order}
                                        readonly={!(this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE')}
                     />
+                    {this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE' ?
                     <Grid.Row>
                         <Grid.Column computer={8} tablet={8} mobile={16}>
                             <h2>Dienstleistungen</h2>
                         </Grid.Column>
-                    </Grid.Row>
+                    </Grid.Row> : null}
+                    {this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE' ?
                     <Grid.Row>
                         <Grid.Column width={16}>
                             <ListOrderServices services={this.state.services}
                                                orderServices={this.state.order.services ? this.state.order.services : []}
                                                onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
                         </Grid.Column>
-                    </Grid.Row>
+                    </Grid.Row> : null}
 
                     {this.state.order.status === 'ORDER_EXECUTE' ?
                         <Grid.Row>
@@ -120,8 +121,9 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                           onChange={()=>this.handleOrderChange('includeKmFee', !this.state.order.includeKmFee)}/>
                             </Grid.Column>
                         </Grid.Row> : null}
-                    {this.shouldRenderPdf() ? this.renderPdf() : null}
-
+                    {this.shouldRenderBillDetails() ? <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/> : null}
+                    {this.shouldRenderBillButton() ? <BillButton order={this.state.order} services={this.state.services} technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/> : null}
+                    {this.shouldRenderPaymentRecieved() ? <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/> : null}
                     <Grid.Row centered>
                         <Grid.Column width={5} floated='left'>
                             {this.state.order.status === Helper.nextStatus(this.state.order.status)? null:<Button.Group primary>
@@ -254,21 +256,17 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         ];
     }
 
-    private renderPdf() {
-        return <Grid.Row>
-            <Grid.Column width={16}>
-                <PDFViewer width={"100%"} height={"800px"}>
-                    <Billpdf
-                        bill={BillService.createNewBill(this.state.order, this.state.services, this.getCurrentRealEstate(), this.getCurrentTechnician())}/>
-                </PDFViewer>
-            </Grid.Column>
-        </Grid.Row>;
-    }
-
-    private shouldRenderPdf() {
+    private shouldRenderBillDetails() {
         return this.state.order.status === 'ORDER_BILL';
     }
 
+    private shouldRenderBillButton() {
+        return this.state.order.status === 'ORDER_BILL_RECIEVED' || this.state.order.status === 'ORDER_BILL';
+    }
+
+    private shouldRenderPaymentRecieved(){
+        return this.state.order.status === 'ORDER_BILL_RECIEVED';
+    }
 
     private isValid() {
         return this.isSet(this.state.order.realEstate) && this.isSet(this.state.order.technician)

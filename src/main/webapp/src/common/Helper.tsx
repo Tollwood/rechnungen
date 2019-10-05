@@ -1,10 +1,9 @@
 import {OrderStatus} from "../order/OrderStatus";
-import {IconProps} from "semantic-ui-react";
 import {SemanticICONS} from "semantic-ui-react/dist/commonjs/generic";
 
 export default class Helper {
     public static isEmpty(value?: string) {
-        return value === null || value === undefined || value.length > 0 ;
+        return value === null || value === undefined || value.length === 0  || value === '';
     }
 
     public static  nextStatus(status:OrderStatus): OrderStatus {

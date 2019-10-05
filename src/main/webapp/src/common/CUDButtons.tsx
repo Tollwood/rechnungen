@@ -1,6 +1,5 @@
 import * as React from "react";
-import {Button, Form, Grid, Icon} from "semantic-ui-react";
-import Dropdown from "semantic-ui-react/dist/commonjs/modules/Dropdown";
+import {Button, Form, Grid} from "semantic-ui-react";
 
 interface RealEstateListProps {
     onSave: () => void

@@ -34,6 +34,9 @@ create table order_table (
     small_order boolean,
     status varchar(255),
     include_km_fee boolean,
+    bill_no varchar(255),
+    bill_date varchar(255),
+    payment_recieved_date varchar(255),
     primary key (id)
 );
 
