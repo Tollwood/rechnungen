@@ -20,5 +20,6 @@ export default class Order {
     billDate: string = '';
     billNo: string = '';
     paymentRecievedDate: string = '';
+    sum: number = 0;
     _links: {self?: Link, technician?: Link, realEstate?: Link} = {};
 }

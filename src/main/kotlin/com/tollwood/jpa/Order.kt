@@ -1,6 +1,7 @@
 package com.tollwood.jpa
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.tollwood.OrderType
 import javax.persistence.*
 
@@ -46,3 +47,9 @@ data class Order(
         val billDate: String?,
         val paymentRecievedDate: String?
 )
+{
+        @JsonProperty("sum")
+        fun sum():Number{
+                return this.services.map { serviceOrder -> serviceOrder.amount * serviceOrder.service.price }.sum();
+        }
+}

@@ -45,7 +45,7 @@ export default class LoginModal extends React.Component<{},LoginModalSate> {
                                     <Form.Field inline>
                                         <Form.Input id="password"
                                                     type={"password"}
-                                                    placeholder='Password'
+                                                    placeholder='Passwort'
                                                     value={this.state.password}
                                                     name='password'
                                                     onChange={(e, {name, value}) => this.updateState(name, value)}
@@ -54,7 +54,7 @@ export default class LoginModal extends React.Component<{},LoginModalSate> {
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
-                                <Button label={'Login'} icon={'sign in'} labelPosition={"left"} primary onClick={this.doLogin.bind(this)}/>
+                                <Button label={'Anmelden'} icon={'sign in'} labelPosition={"left"} primary onClick={this.doLogin.bind(this)}/>
                             </Grid.Row>
                         </Grid>
                     </Modal.Content>

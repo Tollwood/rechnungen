@@ -17,6 +17,7 @@ export default class OrderList extends React.Component<OrderListProps> {
                 <thead>
                     <tr>
                         <th>Auftrags-Id</th>
+                        <th>Nettoumsatz</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -40,6 +41,7 @@ export default class OrderList extends React.Component<OrderListProps> {
     private renderRow(order: Order) {
         return <tr key={order.orderId} onClick={this.props.onSelect.bind(this,order)}>
             <td>{order.orderId}</td>
+            <td>{order.sum}</td>
             <td><Icon name={Helper.getStatusIcon(order.status)}/> {Helper.getStatusName(order.status)}</td>
         </tr>;
     }
