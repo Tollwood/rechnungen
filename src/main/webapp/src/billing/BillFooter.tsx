@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from '@react-pdf/renderer';
+import Employee from "../employees/Employee";
 
 // Create styles
 // @ts-ignore
@@ -36,20 +37,27 @@ const styles = StyleSheet.create({
 });
 
 
-export default class BillFooter extends Component<{}, {}> {
+export default class BillFooter extends Component<{ technician?: Employee }, {}> {
 
     render(): React.ReactNode {
+        var technician: Employee;
+        if (this.props.technician === undefined)
+        {
+            technician = {firstName: "FirstName", lastName: "LastName", taxIdent:"1234", address: {street:"street", houseNumber:"4", zipCode:"25355", city:"Barmstedt"}, technicianId:"1",_links:{}};
+        }else {
+            technician = this.props.technician;
+        }
         return (
-            <View style={[styles.row, styles.footer]}>
-                <View style={[styles.column3, {marginLeft:10}]}>
-                    <Text>Rainer Timm</Text>
-                    <Text>Fasanenweg 30 </Text>
-                    <Text>25364 Bokel</Text>
+            <View style={[styles.row, styles.footer]} fixed>
+                <View style={[styles.column3, {marginLeft: 10}]}>
+                    <Text>{technician.firstName} {technician.lastName}</Text>
+                    <Text>{technician.address.street} {technician.address.houseNumber} </Text>
+                    <Text>{technician.address.zipCode} {technician.address.city}</Text>
                 </View>
                 <View style={[styles.column3]}>
                     <Text>Tel.: 0176 / 51 51 26 81</Text>
                     <Text>Email: timm1960@gmail.com</Text>
-                    <Text>Steuernummer: 13 187 00870</Text>
+                    <Text>Steuernummer: {technician.taxIdent}</Text>
                 </View>
                 <View style={[styles.column3]}>
                     <Text>Hypo-Vereinsbank HH</Text>
