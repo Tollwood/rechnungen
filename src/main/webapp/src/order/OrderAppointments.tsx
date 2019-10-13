@@ -29,6 +29,7 @@ export default class OrderAppointments extends React.Component<OrderEditProps, {
                     <Form.Field>
                         <label>Erster Termin</label>
                         <DateInput
+                            dateFormat={"DD.MM.YYYY"}
                             minDate={'01.01.1990'}
                             hideMobileKeyboard={true}
                             name="firstAppointment"
@@ -43,6 +44,7 @@ export default class OrderAppointments extends React.Component<OrderEditProps, {
                     <Form.Field>
                         <label>Zweiter Termin</label>
                         <DateInput
+                            dateFormat={"DD.MM.YYYY"}
                             minDate={'01.01.1990'}
                             hideMobileKeyboard={true}
                             name="secondAppointment"

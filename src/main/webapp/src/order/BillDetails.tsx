@@ -38,6 +38,7 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                         <Form.Field>
                             <label>Rechnungsdatum: </label>
                             <DateInput
+                                dateFormat={"DD.MM.YYYY"}
                                 minDate={'01.01.1990'}
                                 hideMobileKeyboard={true}
                                 name="billDate"

@@ -27,6 +27,7 @@ export default class PaymentRecieved extends React.Component<BillDetailsProps, {
                         <Form.Field>
                             <label>Zahlung erhalten am: </label>
                             <DateInput
+                                dateFormat={"DD.MM.YYYY"}
                                 minDate={'01.01.1990'}
                                 hideMobileKeyboard={true}
                                 name="paymentRecievedDate"
