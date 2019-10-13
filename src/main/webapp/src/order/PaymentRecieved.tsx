@@ -17,6 +17,9 @@ export default class PaymentRecieved extends React.Component<BillDetailsProps, {
     }
 
     render() {
+        if (this.props.order.status !== 'ORDER_BILL_RECIEVED'){
+            return null;
+        }
         return (
             <React.Fragment>
                 <Grid.Row>

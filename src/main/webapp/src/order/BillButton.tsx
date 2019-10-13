@@ -19,6 +19,7 @@ interface BillDetailsProps {
 interface BillDetailsState {
     renderPdf: boolean;
 }
+
 export default class BillButton extends React.Component<BillDetailsProps, BillDetailsState> {
 
     constructor(props: BillDetailsProps) {
@@ -27,21 +28,24 @@ export default class BillButton extends React.Component<BillDetailsProps, BillDe
     }
 
     render() {
+        if (this.props.order.status !== 'ORDER_BILL_RECIEVED' && this.props.order.status !== 'ORDER_BILL') {
+            return null;
+        }
         return (
             <React.Fragment>
                 <Grid.Row>
-                    {!this.state.renderPdf? <Button icon={'newspaper outline'}
-                                                    label={'Rechnung anzeigen'}
-                                                    onClick={()=>this.setState({renderPdf:true})}
-                                                    disabled={this.cantShowPdf()}/>: null}
+                    {!this.state.renderPdf ? <Button icon={'newspaper outline'}
+                                                     label={'Rechnung anzeigen'}
+                                                     onClick={() => this.setState({renderPdf: true})}
+                                                     disabled={this.cantShowPdf()}/> : null}
 
-                    {this.state.renderPdf?
-                            <Button icon={'close'}
-                                    label={'Rechnung ausblenden'}
-                                    onClick={()=>this.setState({renderPdf:false})} /> : null}
+                    {this.state.renderPdf ?
+                        <Button icon={'close'}
+                                label={'Rechnung ausblenden'}
+                                onClick={() => this.setState({renderPdf: false})}/> : null}
 
                 </Grid.Row>
-                {this.state.renderPdf ? this.renderPdf(): null}
+                {this.state.renderPdf ? this.renderPdf() : null}
             </React.Fragment>
         );
     }
@@ -58,6 +62,6 @@ export default class BillButton extends React.Component<BillDetailsProps, BillDe
     }
 
     private cantShowPdf() {
-        return Helper.isEmpty(this.props.order.billNo)|| Helper.isEmpty(this.props.order.billDate);
+        return Helper.isEmpty(this.props.order.billNo) || Helper.isEmpty(this.props.order.billDate);
     }
 }

@@ -58,7 +58,7 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
     }
 
     private search(searchQuery: string) {
-        API.get('/order/search/findByOrderIdContaining?orderId='+ searchQuery)
+        API.get('/api/order/search/findByOrderIdContaining?orderId='+ searchQuery)
             .then(res => {
                 return res.data._embedded.order;
             })

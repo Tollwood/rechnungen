@@ -57,7 +57,7 @@ export default class EmployeeOverview extends React.Component<{},EmployeeOvervie
     }
 
     private refresh() {
-        API.get(`/employee`)
+        API.get('/api/employee')
             .then(res => {
                 console.log(res);
                 console.log(res.data);

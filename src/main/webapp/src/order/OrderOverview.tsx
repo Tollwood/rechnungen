@@ -63,7 +63,7 @@ export default class OrderOverview extends React.Component<{},OrderOverviewState
     }
 
     private refresh() {
-        API.get('/order')
+        API.get('/api/order')
             .then(res => {
                 return res.data;
             })

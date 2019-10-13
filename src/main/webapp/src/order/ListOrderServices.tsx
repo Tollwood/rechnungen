@@ -3,7 +3,7 @@ import {ChangeEvent} from "react";
 import OrderService from "./OrderService";
 import Service from "./Service";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
-import {Button, Table} from "semantic-ui-react";
+import {Button, Table, Grid} from "semantic-ui-react";
 import AddOrderService from "./AddOrderService";
 
 interface ListOrderServicesProps {
@@ -23,9 +23,16 @@ export default class ListOrderServices extends React.Component<ListOrderServices
         this.state = { amount: 0}
     }
 
-
     render() {
         return (
+            <React.Fragment>
+                <Grid.Row>
+                    <Grid.Column computer={8} tablet={8} mobile={16}>
+                        <h2>Dienstleistungen</h2>
+                    </Grid.Column>
+                </Grid.Row>
+            <Grid.Row>
+                <Grid.Column width={16}>
             <div>
                 <Table className="ui compact celled table">
                     <Table.Header>
@@ -43,6 +50,10 @@ export default class ListOrderServices extends React.Component<ListOrderServices
                     </tbody>
                 </Table>
             </div>
+                </Grid.Column>
+            </Grid.Row>
+            </React.Fragment>
+
         );
     }
 

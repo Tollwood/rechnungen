@@ -57,7 +57,7 @@ export default class RealEstateOverview extends React.Component<{},RealEstateOve
     }
 
     private refresh() {
-        API.get('/realestate')
+        API.get('/api/realestate')
             .then(res => {
                 return res.data;
             })

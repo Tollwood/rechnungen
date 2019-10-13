@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, Checkbox, Dropdown, DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
+import {Button, Dropdown, DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
 import API from "../API";
 import Order from "./Order";
 import Employee from "../employees/Employee";
@@ -15,6 +15,7 @@ import Helper from "../common/Helper";
 import BillDetails from "./BillDetails";
 import BillButton from "./BillButton";
 import PaymentRecieved from "./PaymentRecieved";
+import OrderKmPauschale from "./OrderKmPauschale";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -83,11 +84,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         return (
             <Form autoComplete={"off"}>
                 <Grid>
-                    <Grid.Row textAlign={"center"}>
-                        <Grid.Column width={16}>
-                            <OrderStatusSteps status={this.state.order.status} statusChanged={(status: OrderStatus)=>this.handleOrderChange('status', status)}/>
-                        </Grid.Column>
-                    </Grid.Row>
+                    <OrderStatusSteps status={this.state.order.status} statusChanged={(status: OrderStatus)=>this.handleOrderChange('status', status)}/>
                     <OrderBaseProperties order={this.state.order}
                                          selectedTechnician={this.getCurrentTechnician()}
                                          selectedRealEstate={this.getCurrentRealEstate()}
@@ -99,37 +96,16 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                          readOnly={this.state.order.status !== 'ORDER_EDIT'}/>
 
                     <OrderAppointments handleOrderChange={this.handleOrderChange.bind(this)}
-                                       order={this.state.order}
-                                       readonly={!(this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE')}
-                    />
+                                       order={this.state.order}/>
                     {this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE' ?
-                    <Grid.Row>
-                        <Grid.Column computer={8} tablet={8} mobile={16}>
-                            <h2>Dienstleistungen</h2>
-                        </Grid.Column>
-                    </Grid.Row> : null}
-                    {this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE' ?
-                    <Grid.Row>
-                        <Grid.Column width={16}>
                             <ListOrderServices services={this.state.services}
                                                orderServices={this.state.order.services ? this.state.order.services : []}
                                                onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
-                        </Grid.Column>
-                    </Grid.Row> : null}
-
-                    {this.state.order.status === 'ORDER_EXECUTE' ?
-                        <Grid.Row>
-                            <Grid.Column computer={8} tablet={8} mobile={16}>
-                                <Checkbox toggle
-                                          name={"includeKmFee"}
-                                          label={"Km Pauschale anwenden"}
-                                          checked={this.state.order.includeKmFee}
-                                          onChange={()=>this.handleOrderChange('includeKmFee', !this.state.order.includeKmFee)}/>
-                            </Grid.Column>
-                        </Grid.Row> : null}
+                   : null}
+                    <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)} order={this.state.order}/>
                     {this.shouldRenderBillDetails() ? <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/> : null}
-                    {this.shouldRenderBillButton() ? <BillButton order={this.state.order} services={this.state.services} technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/> : null}
-                    {this.shouldRenderPaymentRecieved() ? <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/> : null}
+                    <BillButton order={this.state.order} services={this.state.services} technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/>
+                    <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/>
                     <Grid.Row centered>
                         <Grid.Column width={5} floated='left'>
                             {this.state.order.status === Helper.nextStatus(this.state.order.status)? null:<Button.Group primary>
@@ -185,7 +161,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
     private fetchTechnicians() {
-        API.get(`/employee`)
+        API.get('/api/employee')
             .then(res => res.data)
             .then((data) => this.setState(Object.assign(this.state, {
                 technicians: data._embedded.employee
@@ -214,7 +190,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
 
     private fetchServices() {
-        API.get(`/services`)
+        API.get('/api/services')
             .then(res => {
                 console.log(res);
                 console.log(res.data);
@@ -226,7 +202,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
     private fetchRealEstates() {
-        API.get(`/realestate`)
+        API.get('/api/realestate')
             .then(res => res.data)
             .then((data) => {
                 this.setState({
@@ -264,14 +240,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private shouldRenderBillDetails() {
         return this.state.order.status === 'ORDER_BILL';
-    }
-
-    private shouldRenderBillButton() {
-        return this.state.order.status === 'ORDER_BILL_RECIEVED' || this.state.order.status === 'ORDER_BILL';
-    }
-
-    private shouldRenderPaymentRecieved(){
-        return this.state.order.status === 'ORDER_BILL_RECIEVED';
     }
 
     private isValid() {

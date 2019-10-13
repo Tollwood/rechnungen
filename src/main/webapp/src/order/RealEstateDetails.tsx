@@ -12,9 +12,7 @@ export default class RealEstateDetails extends React.Component<RealEstateDetails
         return (
             <Grid>
                 <Grid.Column width={14}>
-                    <label>{this.props.realEstate.address.street} {this.props.realEstate.address.houseNumber}</label>
-                </Grid.Column>
-                <Grid.Column width={13}>
+                    <div>{this.props.realEstate.address.street} {this.props.realEstate.address.houseNumber}</div>
                     <label>{this.props.realEstate.address.zipCode} {this.props.realEstate.address.city}</label>
                 </Grid.Column>
             </Grid>

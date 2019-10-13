@@ -66,7 +66,7 @@ export default class OrderIdInput extends React.Component<OrderIdInputProps, Ord
 
     private checkUniqueOrderId(orderId?: string, initialOrderId?: string) {
         if (!this.nullOrEmpty(orderId) && initialOrderId !== orderId) {
-            API.get('/order/search/findByOrderId?orderId=' + orderId)
+            API.get('/api/order/search/findByOrderId?orderId=' + orderId)
                 .then(res => {
                     return res.data._embedded.order;
                 })
