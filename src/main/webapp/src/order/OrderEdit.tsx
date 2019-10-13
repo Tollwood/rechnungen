@@ -16,12 +16,14 @@ import BillDetails from "./BillDetails";
 import BillButton from "./BillButton";
 import PaymentRecieved from "./PaymentRecieved";
 import OrderKmPauschale from "./OrderKmPauschale";
+import Company from "../employees/Company";
 
 interface OrderEditProps {
     onSave: () => void;
     onCancelEdit: () => void;
     onDelete: () => void;
     order?: Order;
+    company: Company;
 }
 
 interface OrderEditState {
@@ -104,7 +106,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                    : null}
                     <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)} order={this.state.order}/>
                     {this.shouldRenderBillDetails() ? <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/> : null}
-                    <BillButton order={this.state.order} services={this.state.services} technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/>
+                    <BillButton company={this.props.company} order={this.state.order} services={this.state.services} technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/>
                     <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/>
                     <Grid.Row centered>
                         <Grid.Column width={5} floated='left'>

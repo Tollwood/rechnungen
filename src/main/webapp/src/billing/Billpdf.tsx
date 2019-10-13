@@ -5,6 +5,7 @@ import BillFooter from "./BillFooter";
 import BillTotal from "./BillTotal";
 import BillGreetings from "./BillGreetings";
 import BillItems from "./BillItems";
+import Company from "../employees/Company";
 
 // Create styles
 // @ts-ignore
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
 });
 
 
-export default class Billpdf extends Component<{ bill: Bill }, {}> {
+export default class Billpdf extends Component<{ bill: Bill, company: Company }, {}> {
 
     render(): React.ReactNode {
         return (
@@ -43,10 +44,10 @@ export default class Billpdf extends Component<{ bill: Bill }, {}> {
                     <View style={styles.text}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text>{this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""}</Text>
-                            <Text>Bokel am, {this.props.bill.billDate}</Text>
+                            <Text>{this.props.company.address.city} am, {this.props.bill.billDate}</Text>
                         </View>
-                        <Text>Fasanenweg 30 </Text>
-                        <Text>25364 Bokel</Text>
+                        <Text>{this.props.company.address.street} {this.props.company.address.houseNumber}</Text>
+                        <Text>{this.props.company.address.zipCode} {this.props.company.address.city}</Text>
                     </View>
                     <View style={styles.text}>
                         <Text>An</Text>
@@ -85,7 +86,7 @@ export default class Billpdf extends Component<{ bill: Bill }, {}> {
                     <BillItems bill={this.props.bill} />
                     <BillTotal bill={this.props.bill}/>
                     <BillGreetings/>
-                    <BillFooter technician={this.props.bill.technician}/>
+                    <BillFooter technician={this.props.bill.technician} company={this.props.company}/>
                 </Page>
             </Document>
         )

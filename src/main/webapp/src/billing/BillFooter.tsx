@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from '@react-pdf/renderer';
 import Employee from "../employees/Employee";
+import Company from "../employees/Company";
 
 // Create styles
 // @ts-ignore
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
 });
 
 
-export default class BillFooter extends Component<{ technician?: Employee }, {}> {
+export default class BillFooter extends Component<{ technician?: Employee, company: Company }, {}> {
 
     render(): React.ReactNode {
         var technician: Employee;
@@ -55,14 +56,14 @@ export default class BillFooter extends Component<{ technician?: Employee }, {}>
                     <Text>{technician.address.zipCode} {technician.address.city}</Text>
                 </View>
                 <View style={[styles.column3]}>
-                    <Text>Tel.: 0176 / 51 51 26 81</Text>
-                    <Text>Email: timm1960@gmail.com</Text>
+                    <Text>Tel.: {this.props.company.phone}</Text>
+                    <Text>Email: {this.props.company.email}</Text>
                     <Text>Steuernummer: {technician.taxIdent}</Text>
                 </View>
                 <View style={[styles.column3]}>
-                    <Text>Hypo-Vereinsbank HH</Text>
-                    <Text>IBAN DE45 2003 0000 0016 3761 13</Text>
-                    <Text>BIC HYVEDEMM300</Text>
+                    <Text>{this.props.company.bankDetails.bankName}</Text>
+                    <Text>IBAN {this.props.company.bankDetails.iban}</Text>
+                    <Text>BIC {this.props.company.bankDetails.bic}</Text>
                 </View>
                 <Text style={styles.pageNumber} render={({pageNumber, totalPages}) => (
                     `${pageNumber} / ${totalPages}`

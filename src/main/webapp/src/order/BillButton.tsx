@@ -8,12 +8,14 @@ import Employee from "../employees/Employee";
 import RealEstate from "../realestate/RealEstate";
 import Service from "./Service";
 import Helper from "../common/Helper";
+import Company from "../employees/Company";
 
 interface BillDetailsProps {
     order: Order
     technician?: Employee
     realEstate?: RealEstate
     services: Service[]
+    company: Company
 }
 
 interface BillDetailsState {
@@ -54,7 +56,7 @@ export default class BillButton extends React.Component<BillDetailsProps, BillDe
         return <Grid.Row>
             <Grid.Column width={16}>
                 <PDFViewer width={"100%"} height={"800px"}>
-                    <Billpdf
+                    <Billpdf company={this.props.company}
                         bill={BillService.createNewBill(this.props.order.billNo, this.props.order.billDate, this.props.order, this.props.services, this.props.realEstate, this.props.technician)}/>
                 </PDFViewer>
             </Grid.Column>

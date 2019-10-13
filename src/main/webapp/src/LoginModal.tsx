@@ -3,7 +3,9 @@ import API from "./API";
 import {JwtTokenInterceptor} from "./jwtTokenInterceptor";
 import {Button, Grid, Modal, Form} from "semantic-ui-react";
 
-interface LoginModalProps {}
+interface LoginModalProps {
+    onSuccess: ()=>void
+}
 interface LoginModalSate {
     username?: string,
     password?: string
@@ -11,7 +13,7 @@ interface LoginModalSate {
     requiuresAuthorization: boolean
 }
 
-export default class LoginModal extends React.Component<{},LoginModalSate> {
+export default class LoginModal extends React.Component<LoginModalProps,LoginModalSate> {
 
     constructor(props: LoginModalProps){
         super(props);
@@ -78,6 +80,7 @@ export default class LoginModal extends React.Component<{},LoginModalSate> {
                 let interceptor = new JwtTokenInterceptor(data.jwttoken);
                 API.interceptors.request.use(interceptor.intercept.bind(interceptor));
                 this.setState({requiuresAuthorization: false});
+                this.props.onSuccess();
             });
 
     }
