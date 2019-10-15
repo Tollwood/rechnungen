@@ -61,7 +61,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
 
         const existingServices: string[] = this.props.orderServices.map((os:OrderService) => os._links.service.href);
         return this.props.services
-            .filter((service: Service) => !existingServices.includes(service._links.self.href))
+            .filter((service: Service) => !existingServices.includes(service._links.self!.href))
             .filter((service: Service) => service.selectable)
             .map((s: Service) => { return {key: s.articleNumber, value: s.articleNumber, text: s.articleNumber}} );
     }
@@ -78,7 +78,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
     private addService(event: React.MouseEvent<HTMLButtonElement>, data: ButtonProps) {
         if(this.state.selectedService){
             const updatedOrderServices:OrderService[] =  Object.assign(this.props.orderServices);
-            updatedOrderServices.push({amount: this.state.amount as unknown as number, service: this.state.selectedService._links.self.href, _links: {service: {href:this.state.selectedService._links.self.href}}});
+            updatedOrderServices.push({amount: this.state.amount as unknown as number, service: this.state.selectedService._links.self!.href, _links: {service: {href:this.state.selectedService._links.self!.href}}});
             this.setState(Object.assign(this.state, {
                 amount:"",
                 selectedService: null}));

@@ -15,6 +15,7 @@ import OrderOverview from "./order/OrderOverview";
 import LoginModal from './LoginModal';
 import API from "./API";
 import Company from "./employees/Company";
+import ServicesOverview from "./services/ServicesOverview";
 
 interface AppState {
     activeOrder?: Order,
@@ -58,6 +59,7 @@ class App extends Component<AppProps, AppState> {
                             {this.state.activeContent === ContentType.BILL ? <h1>Rechnungen</h1> : null}
                             {this.state.activeContent === ContentType.STATISTICS ? <h1>Statistiken</h1> : null}
                             {this.state.activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview/> : null}
+                            {this.state.activeContent === ContentType.SERVICES ? <ServicesOverview/> : null}
                             {this.state.activeContent === ContentType.ORDER_DETAILS ?
                                 <OrderEdit company={this.state.company}
                                     onSave={this.closeOrder.bind(this)} onCancelEdit={this.closeOrder.bind(this)}

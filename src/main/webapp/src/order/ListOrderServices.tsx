@@ -59,7 +59,7 @@ export default class ListOrderServices extends React.Component<ListOrderServices
 
     private renderRow(orderService: OrderService) {
 
-        let serviceData = this.props.services.find(service => service._links.self.href === orderService._links.service.href);
+        let serviceData = this.props.services.find(service => service._links.self!.href === orderService._links.service.href);
         if (!serviceData) {
             return null;
         }

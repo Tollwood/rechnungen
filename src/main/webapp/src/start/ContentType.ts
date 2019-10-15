@@ -3,6 +3,7 @@ export enum ContentType {
     ORDER_DETAILS,
     BILL,
     EMPLOYEE,
+    SERVICES,
     NONE,
     STATISTICS,
     REAL_ESTATE

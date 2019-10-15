@@ -192,7 +192,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
 
     private fetchServices() {
-        API.get('/api/services')
+        API.get('/api/service')
             .then(res => {
                 console.log(res);
                 console.log(res.data);

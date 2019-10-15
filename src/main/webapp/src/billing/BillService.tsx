@@ -11,7 +11,7 @@ export default class BillService {
     static createNewBill(billNo: string, billDate: string, order: Order, services: Service[], realEstate?: RealEstate, technician?: Employee): Bill {
 
         let billItems: BillItem[] = order.services.map((orderServices: OrderService) => {
-            let service: Service | undefined = services.find((service: Service) => service._links.self.href === orderServices._links.service.href);
+            let service: Service | undefined = services.find((service: Service) => service._links.self!.href === orderServices._links.service.href);
             return {
                 code: service ? service.articleNumber : "",
                 amount: orderServices.amount,

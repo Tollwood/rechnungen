@@ -24,6 +24,7 @@ export class Menu extends React.Component<MenuProps, MenuState> {
                 //new Content(ContentType.STATISTICS, "Statistiken", "chart line"),
                 new Content(ContentType.EMPLOYEE, "Mitarbeiterverwaltung", "address card", "employeeOverviewCard"),
                 new Content(ContentType.REAL_ESTATE, "Liegenschaften Verwalten", "home","realEstateOverviewCard"),
+                new Content(ContentType.SERVICES, "Dienstleistungen Verwalten", "sign language","servicesOverviewCard"),
             ]
         }
     }
