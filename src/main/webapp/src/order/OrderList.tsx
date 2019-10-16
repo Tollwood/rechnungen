@@ -41,7 +41,10 @@ export default class OrderList extends React.Component<OrderListProps> {
     private renderRow(order: Order) {
         return <tr key={order.orderId} onClick={this.props.onSelect.bind(this,order)}>
             <td>{order.orderId}</td>
-            <td>{order.sum}</td>
+            <td>{order.sum.toLocaleString('de', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}</td>
             <td><Icon name={Helper.getStatusIcon(order.status)}/> {Helper.getStatusName(order.status)}</td>
         </tr>;
     }

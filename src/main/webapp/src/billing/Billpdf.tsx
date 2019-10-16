@@ -6,6 +6,7 @@ import BillTotal from "./BillTotal";
 import BillGreetings from "./BillGreetings";
 import BillItems from "./BillItems";
 import Company from "../employees/Company";
+import BillHeader from "./BillHeader";
 
 // Create styles
 // @ts-ignore
@@ -13,7 +14,7 @@ import Company from "../employees/Company";
 // @ts-ignore
 const styles = StyleSheet.create({
     body: {
-        paddingTop: 35,
+        paddingTop: 40,
         paddingBottom: 65,
         paddingHorizontal: 35,
         fontSize: 12,
@@ -34,13 +35,13 @@ const styles = StyleSheet.create({
     }
 });
 
-
 export default class Billpdf extends Component<{ bill: Bill, company: Company }, {}> {
 
     render(): React.ReactNode {
         return (
             <Document>
                 <Page size="A4" style={styles.body}>
+                    <BillHeader company={this.props.company}/>
                     <View style={styles.text}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text>{this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""}</Text>

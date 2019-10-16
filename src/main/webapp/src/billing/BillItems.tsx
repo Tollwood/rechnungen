@@ -20,11 +20,12 @@ const styles = StyleSheet.create({
         marginRight: 5,
         marginTop: 2
     },
-
 });
 
 export default class BillItems extends Component<{ bill: Bill }, {}> {
 
+    maxItemsOnFirstPage = 14; //17 wihtout logo
+    maxItemsOnPage = 27;
 
     render(): React.ReactNode {
         return (
@@ -37,9 +38,9 @@ export default class BillItems extends Component<{ bill: Bill }, {}> {
 
 
     private renderItemsFirstPage() {
-        let maxItems = 17;
-        let itemCountToRender = this.props.bill.billItems.length > maxItems ? maxItems : this.props.bill.billItems.length;
-        let morePages: boolean = this.props.bill.billItems.length > maxItems - 3;
+
+        let itemCountToRender = this.props.bill.billItems.length > this.maxItemsOnFirstPage ? this.maxItemsOnFirstPage : this.props.bill.billItems.length;
+        let morePages: boolean = this.props.bill.billItems.length > this.maxItemsOnFirstPage - 3;
         return <React.Fragment>
             <BillServiceTable data={this.props.bill.billItems.slice(0, itemCountToRender)}/>
             {morePages ?
@@ -52,10 +53,10 @@ export default class BillItems extends Component<{ bill: Bill }, {}> {
     }
 
     private renderItemsForRemainingPages() {
-        let maxItemsOnPage = 27;
-        let requiresMorPages = this.props.bill.billItems.length > 17;
+
+        let requiresMorPages = this.props.bill.billItems.length > this.maxItemsOnFirstPage;
         if (requiresMorPages) {
-            return this.renderAdditionalItems(17, maxItemsOnPage)
+            return this.renderAdditionalItems(this.maxItemsOnFirstPage, this.maxItemsOnPage)
         }
         return null;
     }
@@ -68,7 +69,7 @@ export default class BillItems extends Component<{ bill: Bill }, {}> {
                 maximumFractionDigits: 2
             });
         return <View style={[styles.row]} break={breakPage}>
-            <Text style={[styles.column2, {marginLeft: 270, marginTop: 12}]}>Übertrag</Text>
+            <Text style={[styles.column2, {marginLeft: 400, marginTop: 12}]}>Übertrag</Text>
             <Text
                 style={[styles.column2, styles.sum, {marginTop: 12}]}>{takeOver}</Text>
         </View>

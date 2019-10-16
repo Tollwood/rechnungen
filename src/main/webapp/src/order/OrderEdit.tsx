@@ -70,7 +70,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             return;
         }
         if (this.state.order._links.self === undefined) {
-            API.post("/order", this.state.order)
+            API.post("/api/order", this.state.order)
                 .then(result => result.data)
                 .then( (order: Order) => {
                     order.technician = this.state.order.technician;
@@ -199,7 +199,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                 return res.data;
             })
             .then(data => {
-                this.setState({services: data._embedded.services});
+                this.setState({services: data._embedded.service});
             });
     }
 
