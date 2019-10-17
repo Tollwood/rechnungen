@@ -39,10 +39,10 @@ export default class BillItems extends Component<{ bill: Bill }, {}> {
 
     private renderItemsFirstPage() {
 
-        let itemCountToRender = this.props.bill.billItems.length > this.maxItemsOnFirstPage ? this.maxItemsOnFirstPage : this.props.bill.billItems.length;
-        let morePages: boolean = this.props.bill.billItems.length > this.maxItemsOnFirstPage - 3;
+        let itemCountToRender = this.props.bill.order.billItems.length > this.maxItemsOnFirstPage ? this.maxItemsOnFirstPage : this.props.bill.order.billItems.length;
+        let morePages: boolean = this.props.bill.order.billItems.length > this.maxItemsOnFirstPage - 3;
         return <React.Fragment>
-            <BillServiceTable data={this.props.bill.billItems.slice(0, itemCountToRender)}/>
+            <BillServiceTable data={this.props.bill.order.billItems.slice(0, itemCountToRender)}/>
             {morePages ?
                 <React.Fragment>
                     {this.renderTakeOver(0, itemCountToRender)}
@@ -54,7 +54,7 @@ export default class BillItems extends Component<{ bill: Bill }, {}> {
 
     private renderItemsForRemainingPages() {
 
-        let requiresMorPages = this.props.bill.billItems.length > this.maxItemsOnFirstPage;
+        let requiresMorPages = this.props.bill.order.billItems.length > this.maxItemsOnFirstPage;
         if (requiresMorPages) {
             return this.renderAdditionalItems(this.maxItemsOnFirstPage, this.maxItemsOnPage)
         }
@@ -62,7 +62,7 @@ export default class BillItems extends Component<{ bill: Bill }, {}> {
     }
 
     private renderTakeOver(start: number, end: number, breakPage?: boolean) {
-        let takeOver = this.props.bill.billItems
+        let takeOver = this.props.bill.order.billItems
             .slice(start, end)
             .map((billitem: BillItem) => billitem.amount * billitem.price).reduce((a: number, b: number) => a + b, 0).toLocaleString('de', {
                 minimumFractionDigits: 2,
@@ -76,12 +76,12 @@ export default class BillItems extends Component<{ bill: Bill }, {}> {
     }
 
     private renderAdditionalItems(index: number, maxItems: number) {
-        if (index >= this.props.bill.billItems.length) {
+        if (index >= this.props.bill.order.billItems.length) {
             return null;
         }
-        let morePages: boolean = this.props.bill.billItems.length > index + maxItems - 3;
+        let morePages: boolean = this.props.bill.order.billItems.length > index + maxItems - 3;
         return <React.Fragment>
-            <BillServiceTable data={this.props.bill.billItems.slice(index, index + maxItems)}/>
+            <BillServiceTable data={this.props.bill.order.billItems.slice(index, index + maxItems)}/>
             {morePages ?
                 <React.Fragment>
                     {this.renderTakeOver(0, index + maxItems)}

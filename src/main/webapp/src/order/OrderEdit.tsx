@@ -17,6 +17,7 @@ import BillButton from "./BillButton";
 import PaymentRecieved from "./PaymentRecieved";
 import OrderKmPauschale from "./OrderKmPauschale";
 import Company from "../employees/Company";
+import BillService from "../billing/BillService";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -65,14 +66,14 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
     save() {
-        this.setState({shouldValidate:true});
-        if(!this.isValid()){
+        this.setState({shouldValidate: true});
+        if (!this.isValid()) {
             return;
         }
         if (this.state.order._links.self === undefined) {
             API.post("/api/order", this.state.order)
                 .then(result => result.data)
-                .then( (order: Order) => {
+                .then((order: Order) => {
                     order.technician = this.state.order.technician;
                     order.realEstate = this.state.order.realEstate;
                     this.setState({order: order});
@@ -86,7 +87,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         return (
             <Form autoComplete={"off"}>
                 <Grid>
-                    <OrderStatusSteps status={this.state.order.status} statusChanged={(status: OrderStatus)=>this.handleOrderChange('status', status)}/>
+                    <OrderStatusSteps status={this.state.order.status}
+                                      statusChanged={(status: OrderStatus) => this.handleOrderChange('status', status)}/>
                     <OrderBaseProperties order={this.state.order}
                                          selectedTechnician={this.getCurrentTechnician()}
                                          selectedRealEstate={this.getCurrentRealEstate()}
@@ -100,18 +102,20 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     <OrderAppointments handleOrderChange={this.handleOrderChange.bind(this)}
                                        order={this.state.order}/>
                     {this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE' ?
-                            <ListOrderServices services={this.state.services}
-                                               orderServices={this.state.order.services ? this.state.order.services : []}
-                                               onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
-                   : null}
+                        <ListOrderServices services={this.state.services}
+                                           orderServices={this.state.order.services ? this.state.order.services : []}
+                                           onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
+                        : null}
                     <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)} order={this.state.order}/>
-                    {this.shouldRenderBillDetails() ? <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/> : null}
-                    <BillButton company={this.props.company} order={this.state.order} services={this.state.services} technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/>
+                    {this.shouldRenderBillDetails() ?
+                        <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/> : null}
+                    <BillButton company={this.props.company} order={this.state.order} services={this.state.services}
+                                technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/>
                     <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/>
                     <Grid.Row centered>
                         <Grid.Column width={5} floated='left'>
-                            {this.state.order.status === Helper.nextStatus(this.state.order.status)? null:<Button.Group primary>
-                                <Button content='Speichern' onClick={this.save.bind(this)} />
+                            {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null : <Button.Group primary>
+                                <Button content='Speichern' onClick={this.save.bind(this)}/>
 
                                 <Dropdown
                                     className='button icon'
@@ -119,7 +123,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                     value={''}
                                     onChange={this.saveAndContinue.bind(this)}
                                     options={this.getSaveOptions()}
-                                    trigger={<React.Fragment />}
+                                    trigger={<React.Fragment/>}
                                 />
 
                             </Button.Group>}
@@ -246,21 +250,24 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private isValid() {
         return this.isSet(this.state.order.realEstate) && this.isSet(this.state.order.technician)
-            && (this.state.validUserId  || (this.props.order !== undefined && this.props.order._links.self !== undefined));
+            && (this.state.validUserId || (this.props.order !== undefined && this.props.order._links.self !== undefined));
     }
 
-    private isSet(value?: string ) {
+    private isSet(value?: string) {
         return value !== undefined && value.length > 0;
     }
 
     private saveAndContinue(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
         this.handleOrderChange('status', Helper.nextStatus(this.state.order.status));
+        if (this.state.order.status === 'ORDER_BILL') {
+            this.handleOrderChange('billItems', BillService.createBillItems(this.state.order, this.state.services, this.getCurrentRealEstate()))
+        }
         this.save();
     }
 
     private getSaveOptions() {
-        let icon =  Helper.getStatusIcon(Helper.nextStatus(this.state.order.status));
-        return  [{key:'Speicher',value:'Speichern', text:'Speichern und weiter', icon:icon}];
+        let icon = Helper.getStatusIcon(Helper.nextStatus(this.state.order.status));
+        return [{key: 'Speicher', value: 'Speichern', text: 'Speichern und weiter', icon: icon}];
     }
 }
 

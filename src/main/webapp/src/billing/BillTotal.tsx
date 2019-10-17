@@ -30,7 +30,7 @@ export default class BillTotal extends Component<{bill: Bill}, {}> {
     }
 
     sumBill(factor: number): String {
-        return (this.props.bill.billItems.map(billItem => billItem.amount * billItem.price).reduce((a, b) => a + b, 0) * factor).toLocaleString('de', {
+        return (this.props.bill.order.billItems.map(billItem => billItem.amount * billItem.price).reduce((a, b) => a + b, 0) * factor).toLocaleString('de', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });

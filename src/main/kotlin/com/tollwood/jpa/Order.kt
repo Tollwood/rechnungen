@@ -38,6 +38,10 @@ data class Order(
         @JsonManagedReference
         val services: List<ServiceOrder>,
 
+        @OneToMany(cascade = [CascadeType.ALL], mappedBy = "order")
+        @JsonManagedReference
+        val billItems: List<BillItem>,
+
         @Enumerated(EnumType.STRING)
         val status: OrderState = OrderState.ORDER_EDIT,
 
@@ -46,10 +50,9 @@ data class Order(
         val billNo: String?,
         val billDate: String?,
         val paymentRecievedDate: String?
-)
-{
-        @JsonProperty("sum")
-        fun sum():Number{
-                return this.services.map { serviceOrder -> serviceOrder.amount * serviceOrder.service.price }.sum();
-        }
+) {
+    @JsonProperty("sum")
+    fun sum(): Number {
+        return this.billItems.map { billItem -> billItem.amount * billItem.price }.sum();
+    }
 }

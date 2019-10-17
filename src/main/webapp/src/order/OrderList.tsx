@@ -18,6 +18,7 @@ export default class OrderList extends React.Component<OrderListProps> {
                     <tr>
                         <th>Auftrags-Id</th>
                         <th>Nettoumsatz</th>
+                        <th>Bruttoumsatz</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -42,6 +43,10 @@ export default class OrderList extends React.Component<OrderListProps> {
         return <tr key={order.orderId} onClick={this.props.onSelect.bind(this,order)}>
             <td>{order.orderId}</td>
             <td>{order.sum.toLocaleString('de', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}</td>
+            <td>{(order.sum * 1.19).toLocaleString('de', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             })}</td>

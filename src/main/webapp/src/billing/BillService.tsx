@@ -8,7 +8,7 @@ import Service from "../order/Service";
 
 export default class BillService {
 
-    static createNewBill(billNo: string, billDate: string, order: Order, services: Service[], realEstate?: RealEstate, technician?: Employee): Bill {
+    static createBillItems(order:Order, services: Service[], realEstate?: RealEstate):BillItem[]{
 
         let billItems: BillItem[] = order.services.map((orderServices: OrderService) => {
             let service: Service | undefined = services.find((service: Service) => service._links.self!.href === orderServices._links.service.href);
@@ -16,18 +16,21 @@ export default class BillService {
                 code: service ? service.articleNumber : "",
                 amount: orderServices.amount,
                 serviceName: service ? service.title : "",
-                price: service ? service.price : 0.00
+                price: service ? service.price : 0.00,
+                custom: false
             }
         });
 
-        let allItems: BillItem[] = Array.of(...this.addBasePrice(services),
+        return Array.of(...this.addBasePrice(services),
             ...this.addDistanceItem(services, order, realEstate),
             ...this.addSmallOrder(services, order),
             ...billItems);
+    }
+
+    static createNewBill(billNo: string, billDate: string, order: Order, services: Service[], realEstate?: RealEstate, technician?: Employee): Bill {
 
         return new Bill(billNo, billDate,
             order,
-            allItems,
             realEstate,
             technician
         );
@@ -36,7 +39,7 @@ export default class BillService {
     static addBasePrice(services: Service[]): BillItem[] {
         let service: Service | undefined = services.find((services: Service) => services.articleNumber === '1A');
         if (service !== undefined) {
-            return [new BillItem(service.articleNumber, 1, service.title, service.price)];
+            return [new BillItem(service.articleNumber, 1, service.title, service.price, false)];
         }
         return [];
     }
@@ -47,7 +50,7 @@ export default class BillService {
         }
         let service: Service | undefined = services.find((services: Service) => services.articleNumber === '1F');
         if (service !== undefined) {
-            return [new BillItem(service.articleNumber, 1, service.title, service.price)];
+            return [new BillItem(service.articleNumber, 1, service.title, service.price,false)];
         }
         return [];
     }
@@ -79,6 +82,6 @@ export default class BillService {
         if (service === undefined) {
             return [];
         }
-        return [new BillItem(service.articleNumber, 1, service.title, service.price * distance)];
+        return [new BillItem(service.articleNumber, 1, service.title, service.price * distance, false)];
     }
 }

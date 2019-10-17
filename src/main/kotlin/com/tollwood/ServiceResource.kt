@@ -6,7 +6,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource
 
 
 @RepositoryRestResource(collectionResourceRel = "service", path = "service")
-interface ArticleRepository: CrudRepository<Service, Long> {
+interface ServiceResource: CrudRepository<Service, Long> {
 
 
 }

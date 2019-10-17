@@ -1,6 +1,7 @@
 import OrderService from "./OrderService";
 import Link from "../common/Links";
 import {OrderStatus} from "./OrderStatus";
+import BillItem from "../billing/BillItem";
 
 export default class Order {
 
@@ -17,6 +18,7 @@ export default class Order {
     includeKmFee: boolean = true;
     status: OrderStatus = "ORDER_EDIT";
     services: OrderService[] = [];
+    billItems: BillItem[] = [];
     billDate: string = '';
     billNo: string = '';
     paymentRecievedDate: string = '';
