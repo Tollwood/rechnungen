@@ -6,7 +6,7 @@ export default class AppHeader extends React.Component {
     render () {
             return (
                 <div>
-                    <h1>Meine Auftragsverwaltung</h1>
+                    <h1 className="header-title">Meine Auftragsverwaltung</h1>
                 </div>
             );
     }

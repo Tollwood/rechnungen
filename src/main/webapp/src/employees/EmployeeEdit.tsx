@@ -32,19 +32,13 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
 
     render() {
         return (
-            <div>
-
+            <div className={"employee-edit"}>
                 <Form>
                     <Grid>
                         <Grid.Row>
-                            <Grid.Column textAlign={"center"}>
-                                {this.state.employee._links === undefined ? <h1>Neuer Mitarbeiter</h1> : <h1>Mitarbeiter Bearbeiten</h1>}
-                            </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row>
                             <Grid.Column>
                                 <Form.Field>
-                                    <label>Monteuer</label>
+                                    <label>Monteur</label>
                                     <input id="technicianId"
                                            placeholder='Monteur'
                                            value={this.state.employee.technicianId}
@@ -110,7 +104,7 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
 
     save() {
         if (this.state.employee._links.self === undefined) {
-            API.post("/employee", this.state.employee)
+            API.post("/api/employee", this.state.employee)
                 .then(() => this.props.onSave());
         } else {
             API.patch(this.state.employee._links.self.href, this.state.employee)

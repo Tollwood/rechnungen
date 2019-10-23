@@ -23,7 +23,7 @@ export default class EmployeeOverview extends React.Component<{},EmployeeOvervie
 
     render () {
         return (
-            <div>
+            <div className={"employee-overview"} >
                 {this.state.editEmployee? null:
                 <EmployeeList employees={this.state.employees}
                               onAddEmployee={this.handleAddEmployee.bind(this)}

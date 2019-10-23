@@ -1,6 +1,7 @@
 import com.moowork.gradle.node.npm.NpmTask
 import org.jetbrains.kotlin.com.google.common.collect.Lists
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.tasks.run.BootRun
 
 
 plugins {
@@ -34,9 +35,13 @@ dependencies {
 	compile ("org.postgresql:postgresql:9.4.1212")
 	compile ("com.zaxxer:HikariCP:2.6.0")
 	compile("org.flywaydb:flyway-core")
+
+	testCompile("io.github.bonigarcia:selenium-jupiter:3.3.0")
+
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.junit.jupiter:junit-jupiter:5.5.1")
 }
 
 tasks.withType<KotlinCompile> {
@@ -58,6 +63,11 @@ node {
 	npmWorkDir = file("${project.buildDir}/npm")
 }
 
+/*tasks.test {
+	useJUnitPlatform()
+	testLogging.events("passed", "skipped", "failed")
+	dependsOn("startServer")
+}*/
 
 tasks.create<NpmTask>("appNpmInstall"){
 	description = "Installs all dependencies from package.json"

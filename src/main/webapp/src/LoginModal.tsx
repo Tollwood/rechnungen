@@ -22,7 +22,7 @@ export default class LoginModal extends React.Component<LoginModalProps,LoginMod
 
     render () {
             return (
-                <Modal open={this.state.requiuresAuthorization} dimmer={'blurring'} size={"mini"}>
+                <Modal open={this.state.requiuresAuthorization} dimmer={'blurring'} size={"mini"} name="loginModal">
                     <Modal.Content>
                         <Grid centered>
                             <Grid.Row>
@@ -34,6 +34,7 @@ export default class LoginModal extends React.Component<LoginModalProps,LoginMod
                                 <Grid.Column width={16} textAlign={'center'}>
                                     <Form.Field inline>
                                         <Form.Input id="username"
+                                                    className="username"
                                                     placeholder='Benutzername'
                                                     value={this.state.username}
                                                     name='username'
@@ -46,6 +47,7 @@ export default class LoginModal extends React.Component<LoginModalProps,LoginMod
                                 <Grid.Column width={16} textAlign={'center'}>
                                     <Form.Field inline>
                                         <Form.Input id="password"
+                                                    className="password"
                                                     type={"password"}
                                                     placeholder='Passwort'
                                                     value={this.state.password}
@@ -56,7 +58,9 @@ export default class LoginModal extends React.Component<LoginModalProps,LoginMod
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
-                                <Button label={'Anmelden'} icon={'sign in'} labelPosition={"left"} primary onClick={this.doLogin.bind(this)}/>
+                                <Button
+                                    name="login"
+                                    label={'Anmelden'} icon={'sign in'} labelPosition={"left"} primary onClick={this.doLogin.bind(this)}/>
                             </Grid.Row>
                         </Grid>
                     </Modal.Content>

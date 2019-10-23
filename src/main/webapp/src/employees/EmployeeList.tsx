@@ -1,5 +1,6 @@
 import Employee from "./Employee";
 import * as React from "react";
+import {Button} from "semantic-ui-react";
 
 interface EmployeeListProps {
     onAddEmployee:()=>void,
@@ -11,7 +12,7 @@ export default class EmployeeList extends React.Component<EmployeeListProps> {
 
     render () {
          return (
-            <table className="ui compact celled table selectable" >
+            <table className="ui compact celled table selectable employee-list" >
                 <thead>
                 <tr>
                     <th>Monteur</th>
@@ -27,9 +28,7 @@ export default class EmployeeList extends React.Component<EmployeeListProps> {
                 <tfoot className="full-width">
                 <tr>
                     <th colSpan={5}>
-                        <div className="ui right floated small primary labeled icon button" onClick={this.props.onAddEmployee}>
-                            <i className="user icon"/> Add User
-                        </div>
+                        <Button primary icon={{name:"user icon"}} label={"Add User"} onClick={this.props.onAddEmployee} className={"add"}/>
                     </th>
                 </tr>
                 </tfoot>
@@ -38,7 +37,7 @@ export default class EmployeeList extends React.Component<EmployeeListProps> {
     }
 
     private renderRow(employee: Employee) {
-        return <tr onClick={()=>{this.props.onSelectEmployee(employee)} } key={employee.technicianId}>
+        return <tr onClick={()=>{this.props.onSelectEmployee(employee)} } key={employee.technicianId} className={"row-"+employee.technicianId}>
             <td>{employee.technicianId}</td>
             <td>{employee.firstName}</td>
             <td>{employee.lastName}</td>

@@ -19,12 +19,10 @@ export class Menu extends React.Component<MenuProps, MenuState> {
         super(props);
         this.state = {
             contents: [
-                new Content(ContentType.ORDER, "Auftragsübersicht", "unordered list","orderOverviewCard"),
-                //new Content(ContentType.BILL, "Rechnungen", "money bill alternate"),
-                //new Content(ContentType.STATISTICS, "Statistiken", "chart line"),
-                new Content(ContentType.EMPLOYEE, "Mitarbeiterverwaltung", "address card", "employeeOverviewCard"),
-                new Content(ContentType.REAL_ESTATE, "Liegenschaften Verwalten", "home","realEstateOverviewCard"),
-                new Content(ContentType.SERVICES, "Dienstleistungen Verwalten", "sign language","servicesOverviewCard"),
+                new Content(ContentType.ORDER, "Aufträge", "unordered list","order-overview-card"),
+                new Content(ContentType.EMPLOYEE, "Mitarbeiter", "address card", "employee-overview-card"),
+                new Content(ContentType.REAL_ESTATE, "Liegenschaften", "home","realEstate-overview-card"),
+                new Content(ContentType.SERVICES, "Dienstleistungen", "sign language","service-overview-card"),
             ]
         }
     }
