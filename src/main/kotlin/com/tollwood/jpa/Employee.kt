@@ -17,14 +17,5 @@ data class Employee (
         val address: Address,
         val taxIdent: String,
         @NotNull
-        val technicianId: String,
-        @CreatedDate
-        @Temporal(TemporalType.TIMESTAMP)
-        var createdAt: Date?
-
-){
-        @PrePersist
-        fun setCreatedDate(){
-                this.createdAt = Date()
-        }
-}
+        val technicianId: String
+): BaseEntity()

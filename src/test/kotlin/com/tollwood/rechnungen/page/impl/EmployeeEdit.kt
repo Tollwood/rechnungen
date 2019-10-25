@@ -48,7 +48,7 @@ class EmployeeEdit(private var driver: WebDriver) {
         driver.findElement<WebElement>(FIRST_NAME_INPUT).sendKeys(newEmployee.firstName)
         driver.findElement<WebElement>(LAST_NAME_INPUT).sendKeys(newEmployee.lastName)
         driver.findElement<WebElement>(TAX_IDENT_INPUT).sendKeys(newEmployee.taxIdent)
-
+        AddressEdit.enterAddressData(driver, newEmployee.address)
         return this
     }
 }

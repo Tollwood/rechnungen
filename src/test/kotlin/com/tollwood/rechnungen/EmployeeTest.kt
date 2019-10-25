@@ -50,7 +50,7 @@ internal class EmployeeTest : UiTest() {
 
     @Test
     fun testAddEmployee() {
-        val newEmployee = Employee(1, "Max", "Mustermann", Address("Musterstrasse", "2", "25355", "Barmstedt"), "1234-1234", "T1",null)
+        val newEmployee = Employee(1, "Max", "Mustermann", Address("Musterstrasse", "2", "25355", "Barmstedt"), "1234-1234", "T1")
         overviewPage
                 .expectLoggedIn("admin", "1234")
                 .verifyOverviewPage()

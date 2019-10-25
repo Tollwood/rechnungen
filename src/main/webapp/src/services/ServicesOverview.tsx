@@ -26,7 +26,7 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
 
     render() {
         return (
-            <div>
+            <div className={"service-overview"}>
                 {this.state.edit ? null :
                     <ServiceList services={this.state.services}
                                onAdd={this.handleAdd.bind(this)}

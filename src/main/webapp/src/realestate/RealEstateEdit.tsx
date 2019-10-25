@@ -31,7 +31,7 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
 
     render() {
         return (
-            <div>
+            <div className={"realEstate-edit"}>
                 {this.state.realEstate._links === undefined ? <h1>Neue Liegenschaft</h1> : <h1>Liegenschaft Bearbeiten</h1>}
                 <Form>
                     <Grid>
@@ -80,7 +80,7 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
 
     save() {
         if (this.state.realEstate._links.self === undefined) {
-            API.post("/realestate", this.state.realEstate)
+            API.post("/api/realestate", this.state.realEstate)
                 .then(() => this.props.onSave());
         } else {
             API.patch(this.state.realEstate._links.self.href, this.state.realEstate)

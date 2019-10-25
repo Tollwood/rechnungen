@@ -1,5 +1,6 @@
 import * as React from "react";
 import RealEstate from "./RealEstate";
+import {Button} from "semantic-ui-react";
 
 interface RealEstateListProps {
     onAdd:()=>void,
@@ -11,7 +12,7 @@ export default class RealEstateList extends React.Component<RealEstateListProps>
 
     render () {
          return (
-            <table className="ui compact celled table selectable" >
+            <table className="ui compact celled table selectable realEstate-list" >
                 <thead>
                     <tr>
                         <th>Bezeichnung</th>
@@ -24,10 +25,8 @@ export default class RealEstateList extends React.Component<RealEstateListProps>
                 </tbody>
                 <tfoot className="full-width">
                 <tr>
-                    <th colSpan={2}>
-                        <div className="ui right floated small primary labeled icon button" onClick={this.props.onAdd}>
-                            <i className="user icon"/> Neue Liegenschaft
-                        </div>
+                    <th colSpan={3}>
+                        <Button floated={"right"} primary icon={{name:"add"}} label={"Neue Liegenschaft"} onClick={this.props.onAdd} className={"add"}/>
                     </th>
                 </tr>
                 </tfoot>

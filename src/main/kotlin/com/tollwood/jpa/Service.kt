@@ -1,7 +1,9 @@
 package com.tollwood.jpa
 
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType.AUTO
+import javax.persistence.Id
 import javax.validation.constraints.NotNull
 
 @Entity(name = "SERVICE")
@@ -12,8 +14,8 @@ data class Service(
         @NotNull
         val articleNumber: String,
         @NotNull
-        val title: String ,
+        val title: String,
         @NotNull
         val price: Double,
         @NotNull
-        val selectable: Boolean)
+        val selectable: Boolean) : BaseEntity()

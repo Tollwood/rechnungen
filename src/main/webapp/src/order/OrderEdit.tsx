@@ -85,61 +85,63 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     render() {
         return (
-            <Form autoComplete={"off"}>
-                <Grid>
-                    <OrderStatusSteps status={this.state.order.status}
-                                      statusChanged={(status: OrderStatus) => this.handleOrderChange('status', status)}/>
-                    <OrderBaseProperties order={this.state.order}
-                                         selectedTechnician={this.getCurrentTechnician()}
-                                         selectedRealEstate={this.getCurrentRealEstate()}
-                                         handleOrderChange={this.handleOrderChange.bind(this)}
-                                         realEstates={this.state.realEstates} technicians={this.state.technicians}
-                                         validUserId={this.state.validUserId}
-                                         handleValidUserId={(isValid: boolean) => this.setState({validUserId: isValid})}
-                                         shouldValidate={this.state.shouldValidate}
-                                         readOnly={this.state.order.status !== 'ORDER_EDIT'}/>
+            <div className="order-edit">
+                <Form autoComplete={"off"}>
+                    <Grid>
+                        <OrderStatusSteps status={this.state.order.status}
+                                          statusChanged={(status: OrderStatus) => this.handleOrderChange('status', status)}/>
+                        <OrderBaseProperties order={this.state.order}
+                                             selectedTechnician={this.getCurrentTechnician()}
+                                             selectedRealEstate={this.getCurrentRealEstate()}
+                                             handleOrderChange={this.handleOrderChange.bind(this)}
+                                             realEstates={this.state.realEstates} technicians={this.state.technicians}
+                                             validUserId={this.state.validUserId}
+                                             handleValidUserId={(isValid: boolean) => this.setState({validUserId: isValid})}
+                                             shouldValidate={this.state.shouldValidate}
+                                             readOnly={this.state.order.status !== 'ORDER_EDIT'}/>
 
-                    <OrderAppointments handleOrderChange={this.handleOrderChange.bind(this)}
-                                       order={this.state.order}/>
-                    {this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE' ?
-                        <ListOrderServices services={this.state.services}
-                                           orderServices={this.state.order.services ? this.state.order.services : []}
-                                           onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
-                        : null}
-                    <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)} order={this.state.order}/>
-                    {this.shouldRenderBillDetails() ?
-                        <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/> : null}
-                    <BillButton company={this.props.company} order={this.state.order} services={this.state.services}
-                                technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/>
-                    <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/>
-                    <Grid.Row centered>
-                        <Grid.Column width={5} floated='left'>
-                            {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null : <Button.Group primary>
-                                <Button content='Speichern' onClick={this.save.bind(this)}/>
+                        <OrderAppointments handleOrderChange={this.handleOrderChange.bind(this)}
+                                           order={this.state.order}/>
+                        {this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE' ?
+                            <ListOrderServices services={this.state.services}
+                                               orderServices={this.state.order.services ? this.state.order.services : []}
+                                               onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
+                            : null}
+                        <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)} order={this.state.order}/>
+                        {this.shouldRenderBillDetails() ?
+                            <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/> : null}
+                        <BillButton company={this.props.company} order={this.state.order} services={this.state.services}
+                                    technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/>
+                        <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/>
+                        <Grid.Row centered>
+                            <Grid.Column width={5} floated='left'>
+                                {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null : <Button.Group primary>
+                                    <Button content='Speichern' onClick={this.save.bind(this)} className={"save-bttn"}/>
 
-                                <Dropdown
-                                    className='button icon'
-                                    floating
-                                    value={''}
-                                    onChange={this.saveAndContinue.bind(this)}
-                                    options={this.getSaveOptions()}
-                                    trigger={<React.Fragment/>}
-                                />
+                                    <Dropdown
+                                        className='button icon'
+                                        floating
+                                        value={''}
+                                        onChange={this.saveAndContinue.bind(this)}
+                                        options={this.getSaveOptions()}
+                                        trigger={<React.Fragment/>}
+                                    />
 
-                            </Button.Group>}
-                        </Grid.Column>
-                        <Grid.Column width={5}>
-                            <Button content='Abbrechen' icon='cancel' labelPosition='left' onClick={this.props.onCancelEdit}/>
-                        </Grid.Column>
-                        <Grid.Column width={5} floated='right'>
-                            {this.state.order._links.self !== undefined ?
-                                <Button floated={"right"} color={"red"} content={"Löschen"} icon='trash' labelPosition='left'
-                                        onClick={this.props.onDelete}/> : null
-                            }
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Form>
+                                </Button.Group>}
+                            </Grid.Column>
+                            <Grid.Column width={5}>
+                                <Button className={"cancel-bttn"} content='Abbrechen' icon='cancel' labelPosition='left' onClick={this.props.onCancelEdit}/>
+                            </Grid.Column>
+                            <Grid.Column width={5} floated='right'>
+                                {this.state.order._links.self !== undefined ?
+                                    <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash' labelPosition='left'
+                                            onClick={this.delete.bind(this)}/> : null
+                                }
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </Form>
+            </div>
         );
     }
 

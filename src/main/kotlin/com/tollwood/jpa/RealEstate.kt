@@ -19,4 +19,4 @@ data class RealEstate (
         val distance: Int
         //@OneToMany
         //val instrumentation: List<Instrumentation>
-)
+):BaseEntity()

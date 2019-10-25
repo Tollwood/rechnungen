@@ -28,7 +28,7 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
 
     render() {
         return (
-            <div>
+            <div className={"order-overview"}>
                 {this.state.edit ? null :
                     <OrderList orders={this.state.orders}
                                onAdd={this.handleAdd.bind(this)}

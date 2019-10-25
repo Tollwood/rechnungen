@@ -23,7 +23,7 @@ export default class RealEstateOverview extends React.Component<{},RealEstateOve
 
     render () {
         return (
-            <div>
+            <div className={"realEstate-overview"}>
                 {this.state.edit? null:
                 <RealEstateList realEstates={this.state.realEstates}
                                 onAdd={this.handleAdd.bind(this)}

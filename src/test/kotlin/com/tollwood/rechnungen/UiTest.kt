@@ -35,5 +35,7 @@ internal abstract class UiTest {
     @AfterEach
     fun cleanUpTestData() {
         jdbcTemplate.update("delete from employee where created_at >= ?", testStartedAt)
+        jdbcTemplate.update("delete from real_estate where created_at >= ?", testStartedAt)
+        jdbcTemplate.update("delete from service where created_at >= ?", testStartedAt)
     }
 }

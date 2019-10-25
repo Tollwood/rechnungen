@@ -3,13 +3,14 @@ package com.tollwood.jpa
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.tollwood.OrderType
+import com.tollwood.jpa.OrderState.ORDER_EDIT
 import javax.persistence.*
 
 @Entity(name = "ORDER_TABLE")
 data class Order(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long,
+        val id: Long?,
 
         @Column(unique = true)
         val orderId: String,
@@ -43,7 +44,7 @@ data class Order(
         val billItems: List<BillItem>,
 
         @Enumerated(EnumType.STRING)
-        val status: OrderState = OrderState.ORDER_EDIT,
+        val status: OrderState = ORDER_EDIT,
 
         val includeKmFee: Boolean = true,
 
@@ -51,6 +52,11 @@ data class Order(
         val billDate: String?,
         val paymentRecievedDate: String?
 ) {
+    constructor(orderId: String) : this(null, orderId, null, null, null, null, null, null, null, null, null, false, emptyList<ServiceOrder>(),
+            emptyList<BillItem>(), ORDER_EDIT,
+            false,
+            null, null, null)
+
     @JsonProperty("sum")
     fun sum(): Number {
         return this.billItems.map { billItem -> billItem.amount * billItem.price }.sum();

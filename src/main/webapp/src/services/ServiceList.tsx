@@ -1,6 +1,6 @@
 import * as React from "react";
 import Service from "../order/Service";
-import {Icon} from "semantic-ui-react";
+import {Button, Icon} from "semantic-ui-react";
 
 interface ServiceListProps {
     onAdd:()=>void,
@@ -12,7 +12,7 @@ export default class ServiceList extends React.Component<ServiceListProps> {
 
     render () {
          return (
-            <table className="ui compact celled table selectable" >
+            <table className="ui compact celled table selectable service-list" >
                 <thead>
                     <tr>
                         <th>Artikelnummer</th>
@@ -26,10 +26,8 @@ export default class ServiceList extends React.Component<ServiceListProps> {
                 </tbody>
                 <tfoot className="full-width">
                 <tr>
-                    <th colSpan={2}>
-                        <div className="ui right floated small primary labeled icon button" onClick={this.props.onAdd}>
-                            <i className="user icon"/> Neuen Service
-                        </div>
+                    <th colSpan={4}>
+                        <Button floated={"right"} primary icon={{name:"add"}} label={"Neuen Service"} onClick={this.props.onAdd} className={"add"}/>
                     </th>
                 </tr>
                 </tfoot>

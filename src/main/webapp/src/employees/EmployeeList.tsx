@@ -28,7 +28,7 @@ export default class EmployeeList extends React.Component<EmployeeListProps> {
                 <tfoot className="full-width">
                 <tr>
                     <th colSpan={5}>
-                        <Button primary icon={{name:"user icon"}} label={"Add User"} onClick={this.props.onAddEmployee} className={"add"}/>
+                        <Button floated={"right"} primary icon={{name:"user icon"}} label={"Add User"} onClick={this.props.onAddEmployee} className={"add"}/>
                     </th>
                 </tr>
                 </tfoot>

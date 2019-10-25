@@ -32,8 +32,7 @@ export default class ServiceEdit extends React.Component<Props, State> {
 
     render() {
         return (
-            <div>
-
+            <div className={"service-edit"}>
                 <Form>
                     <Grid>
                         <Grid.Row>
@@ -80,6 +79,7 @@ export default class ServiceEdit extends React.Component<Props, State> {
                                 <Form.Field>
                                     <Checkbox toggle
                                               name="selectable"
+                                              id="selectable"
                                               label="Wählbar"
                                               checked={this.state.service.selectable}
                                               onChange={this.handleSelectable.bind(this)}/>
@@ -105,7 +105,7 @@ export default class ServiceEdit extends React.Component<Props, State> {
 
     save() {
         if (this.state.service._links.self === undefined) {
-            API.post("/api/employee", this.state.service)
+            API.post("/api/service", this.state.service)
                 .then(() => this.props.onSave());
         } else {
             API.patch(this.state.service._links.self.href, this.state.service)
