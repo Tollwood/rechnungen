@@ -2,6 +2,7 @@ package com.tollwood.rechnungen
 
 
 import com.tollwood.rechnungen.page.impl.OverviewPage
+import io.github.bonigarcia.seljup.Arguments
 import io.github.bonigarcia.seljup.SeleniumExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -24,8 +25,11 @@ internal abstract class UiTest {
     @Autowired
     lateinit var jdbcTemplate: JdbcTemplate
 
+    @Autowired
+    lateinit var testData: TestData
+
     @BeforeEach
-    fun beforeEach(driver: ChromeDriver) {
+    fun beforeEach(@Arguments("--headless")driver: ChromeDriver) {
 
         driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
         this.overviewPage = OverviewPage(driver)
@@ -37,5 +41,6 @@ internal abstract class UiTest {
         jdbcTemplate.update("delete from employee where created_at >= ?", testStartedAt)
         jdbcTemplate.update("delete from real_estate where created_at >= ?", testStartedAt)
         jdbcTemplate.update("delete from service where created_at >= ?", testStartedAt)
+        jdbcTemplate.update("delete from order_table where created_at >= ?", testStartedAt)
     }
 }

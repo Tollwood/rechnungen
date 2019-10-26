@@ -1,5 +1,6 @@
 package com.tollwood.rechnungen.page.impl
 
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
 import org.openqa.selenium.By
@@ -15,7 +16,7 @@ class OverviewPage {
 
     private var driver: WebDriver
 
-    constructor(driver: WebDriver){
+    constructor(driver: WebDriver) {
         this.driver = driver
     }
 
@@ -24,21 +25,22 @@ class OverviewPage {
 
     private val SEARCH_INPUT = By.ByCssSelector(".order-search .search")
     private val SEARCH_ADD_OPTION = By.ByCssSelector(".order-search .addition")
+    private val SEARCH_OPTIONS = By.ByCssSelector(".order-search .item .text")
 
 
-    fun navigateTo(){
+    fun navigateTo() {
         driver.get("http://localhost:8090");
     }
 
     fun expectLoginModal(): LoginModal {
         val loginModal = LoginModal(driver)
-        PageFactory.initElements(driver,loginModal)
+        PageFactory.initElements(driver, loginModal)
         return loginModal;
     }
 
-    fun expectLoggedIn(username: String, password: String): OverviewPage{
+    fun expectLoggedIn(username: String, password: String): OverviewPage {
         val loginModal = LoginModal(driver)
-        PageFactory.initElements(driver,loginModal)
+        PageFactory.initElements(driver, loginModal)
         return loginModal.enterUsername(username)
                 .enterPassword(password)
                 .loginSuccess()
@@ -56,17 +58,17 @@ class OverviewPage {
         .click()
 
         val employeeOverview = EmployeeOverview(driver)
-        PageFactory.initElements(driver,employeeOverview)
-        return  employeeOverview
+        PageFactory.initElements(driver, employeeOverview)
+        return employeeOverview
     }
 
-    fun clickRealEstateOverview(): RealEstateOverview{
+    fun clickRealEstateOverview(): RealEstateOverview {
         WebDriverWait(driver, 10)
                 .until(elementToBeClickable(By.className("realEstate-overview-card")))
                 .click()
         val realEstateOverview = RealEstateOverview(driver)
-        PageFactory.initElements(driver,realEstateOverview)
-        return  realEstateOverview
+        PageFactory.initElements(driver, realEstateOverview)
+        return realEstateOverview
     }
 
     fun clickServiceOverview(): ServiceOverview {
@@ -74,8 +76,8 @@ class OverviewPage {
                 .until(elementToBeClickable(By.className("service-overview-card")))
                 .click()
         val serviceOverview = ServiceOverview(driver)
-        PageFactory.initElements(driver,serviceOverview)
-        return  serviceOverview
+        PageFactory.initElements(driver, serviceOverview)
+        return serviceOverview
     }
 
     fun clickOrderOverview(): OrderOverview {
@@ -85,26 +87,39 @@ class OverviewPage {
         return OrderOverview(driver)
     }
 
-    fun enterSearch(value: CharSequence): OverviewPage{
+    fun enterSearch(value: CharSequence): OverviewPage {
         WebDriverWait(driver, 10)
                 .until(elementToBeClickable(SEARCH_INPUT))
                 .sendKeys(value)
         return this
     }
 
-    fun executeSearch(): OrderEdit{
+    fun executeSearch(): OrderEdit {
         WebDriverWait(driver, 10)
                 .until(elementToBeClickable(SEARCH_INPUT))
                 .sendKeys(Keys.ENTER)
         return OrderEdit(driver)
     }
 
+    fun expectSuggestion(value: String): OverviewPage {
+        WebDriverWait(driver, 10)
+                .until(elementToBeClickable(SEARCH_OPTIONS))
+        val match = driver.findElements<WebElement>(SEARCH_OPTIONS).filter { option -> value.equals(option.text) }.size == 1
+        assertThat(match, `is`(true))
+        return this
+    }
+
     fun expectAddSuggestion(value: String): OverviewPage {
-        var addOption = WebDriverWait(driver, 10)
+        val addOption = WebDriverWait(driver, 10)
                 .until(elementToBeClickable(SEARCH_ADD_OPTION))
         assertThat(addOption.findElement<WebElement>(By.cssSelector(".text")).text, containsString(value))
         return this
     }
 
+    fun selectAdd(): OrderEdit {
+        WebDriverWait(driver, 10)
+                .until(elementToBeClickable(SEARCH_ADD_OPTION)).click()
+        return OrderEdit(driver)
+    }
 
 }

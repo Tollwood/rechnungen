@@ -51,8 +51,11 @@ data class Order(
         val billNo: String?,
         val billDate: String?,
         val paymentRecievedDate: String?
-) {
-    constructor(orderId: String) : this(null, orderId, null, null, null, null, null, null, null, null, null, false, emptyList<ServiceOrder>(),
+): BaseEntity() {
+    constructor(orderId: String, technician: Employee?, realEstate: RealEstate?) : this(null, orderId, realEstate, null, technician, null, null, null,
+            null, null, null,
+            false,
+            emptyList<ServiceOrder>(),
             emptyList<BillItem>(), ORDER_EDIT,
             false,
             null, null, null)

@@ -1,5 +1,6 @@
 package com.tollwood.rechnungen.page.impl
 
+import com.tollwood.jpa.Order
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
@@ -11,6 +12,13 @@ import org.openqa.selenium.support.ui.WebDriverWait
 class OrderEdit(private var driver: WebDriver) {
     val ORDER_EDIT = By.cssSelector(".order-edit")
     val ORDER_ID_INPUT = By.cssSelector("#orderId")
+    val ORDER_ID_INPUT_ERROR = By.cssSelector(".error.field.OrderIdInput")
+
+    val TECHNICIAN_INPUT_ERROR = By.cssSelector(".error.field #technician")
+    val TECHNICIAN_INPUT = By.cssSelector("#technician input")
+
+    val REAL_ESTATE_INPUT_ERROR = By.cssSelector(".error.field #realestate")
+    val REAL_ESTATE_INPUT = By.cssSelector("#realestate input")
     val VALID_ORDER_ID_ICON = By.cssSelector(".OrderIdInput i.green.check")
 
     val CANCEL_BTTN = By.cssSelector(".cancel-bttn")
@@ -51,9 +59,9 @@ class OrderEdit(private var driver: WebDriver) {
         return overviewPage
     }
 
-    fun clickSaveSuccess(): OrderOverview {
+    fun clickSave(): OrderEdit {
         driver.findElement<WebElement>(SAVE_BTTN).click()
-        return OrderOverview(driver)
+        return this
     }
 
     fun delete(): OrderOverview {
@@ -61,5 +69,37 @@ class OrderEdit(private var driver: WebDriver) {
         return OrderOverview(driver)
     }
 
+    fun verifyDeleteButton(): OrderEdit {
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(DELETE_BTTN))
+        return this
+    }
 
+    fun verifyRequiredFields(): OrderEdit {
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(ORDER_ID_INPUT_ERROR))
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(TECHNICIAN_INPUT_ERROR))
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(REAL_ESTATE_INPUT_ERROR))
+        return this
+    }
+
+    fun enterOrderEditData(newOrder: Order): OrderEdit {
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(ORDER_ID_INPUT)).sendKeys(newOrder.orderId)
+        selectTechnician()
+        selectRealEstate()
+        return this
+    }
+
+    private fun selectTechnician() {
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(TECHNICIAN_INPUT)).click()
+    }
+
+    private fun selectRealEstate() {
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(REAL_ESTATE_INPUT)).click()
+    }
 }

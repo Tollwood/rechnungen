@@ -57,11 +57,12 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
     }
 
     private handleCancelEdit() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Order()}))
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Order()}));
+        this.refresh();
     }
 
     private handleDelete() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Order()}))
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Order()}));
         this.refresh();
     }
 

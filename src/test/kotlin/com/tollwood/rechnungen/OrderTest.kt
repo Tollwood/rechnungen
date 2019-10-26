@@ -1,17 +1,11 @@
 package com.tollwood.rechnungen
 
-import com.tollwood.OrderResource
-import com.tollwood.jpa.Order
 import io.github.bonigarcia.seljup.SeleniumExtension
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
 
 @ExtendWith(SeleniumExtension::class)
 internal class OrderTest : UiTest() {
-
-    @Autowired
-    lateinit var orderResource: OrderResource
 
     private val INITIAL_ROW_COUNT = 0
 
@@ -67,12 +61,44 @@ internal class OrderTest : UiTest() {
                 .verifyValidOrderId()
     }
 
-    //Validate requiredFields OrderEdit
+    @Test
+    fun testAddOrder(){
+
+        val newOrder = testData.givenOrder("1234")
+
+        overviewPage
+                .expectLoggedIn("admin", "1234")
+                .verifyOverviewPage()
+                .clickOrderOverview()
+                .clickAdd()
+                .verifyOnOrderEditPage()
+                .enterOrderEditData(newOrder)
+                .clickSave()
+                .clickCancel()
+                .verifyOnOrderOverviewPage()
+                .expectNRows(1)
+    }
+
+
+    @Test
+    fun testRequiredFieldsForOrderEdit(){
+
+        overviewPage
+                .expectLoggedIn("admin", "1234")
+                .verifyOverviewPage()
+                .clickOrderOverview()
+                .clickAdd()
+                .verifyOnOrderEditPage()
+                .clickSave()
+                .verifyRequiredFields()
+    }
+
     //Validate requiredFields ORDER_BILL
+    //Validate existing OrderId
 
     @Test
     fun testDeleteExistingOrder(){
-        givenOrder()
+        testData.givenOrderPersisted("1234")
 
         overviewPage
                 .expectLoggedIn("admin", "1234")
@@ -84,11 +110,5 @@ internal class OrderTest : UiTest() {
                 .delete()
                 .verifyOnOrderOverviewPage()
                 .expectNRows(0)
-
-
-    }
-
-    private fun givenOrder() {
-        orderResource.save(Order("1234"))
     }
 }

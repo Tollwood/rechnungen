@@ -63,11 +63,11 @@ node {
 	npmWorkDir = file("${project.buildDir}/npm")
 }
 
-/*tasks.test {
+tasks.test {
 	useJUnitPlatform()
 	testLogging.events("passed", "skipped", "failed")
-	dependsOn("startServer")
-}*/
+	maxParallelForks = 2
+}
 
 tasks.create<NpmTask>("appNpmInstall"){
 	description = "Installs all dependencies from package.json"
