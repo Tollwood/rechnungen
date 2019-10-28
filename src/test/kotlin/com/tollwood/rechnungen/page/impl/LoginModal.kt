@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
 import org.openqa.selenium.support.PageFactory
 import org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfAllElements
+import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated
 import org.openqa.selenium.support.ui.WebDriverWait
 
 
@@ -24,6 +25,8 @@ class LoginModal(private var driver: WebDriver) {
 
     @FindBy(name = "loginModal")
     private val loginModal: WebElement? = null
+
+    private val LOGIN_ERROR = By.ById("loginError")
 
     fun enterUsername(username: String): LoginModal {
         usernameInput?.sendKeys(username)
@@ -44,12 +47,24 @@ class LoginModal(private var driver: WebDriver) {
         return overviewPage
     }
 
-    fun loginFailure() : LoginModal {
+    fun loginFailure(): LoginModal {
         loginButton?.click()
         return this
     }
 
-    fun expectOnPage(){
+    fun expectOnPage(): LoginModal {
         assertThat(loginModal!!.isDisplayed, `is`(true))
+        return this
+    }
+
+    fun expectLoginErrorMessage(): LoginModal {
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(LOGIN_ERROR))
+        return this
+    }
+
+    fun expectNoLoginErrorMessage(): LoginModal {
+        assertThat(driver.findElements<WebElement>(LOGIN_ERROR).isEmpty(), `is`(true))
+        return this
     }
 }

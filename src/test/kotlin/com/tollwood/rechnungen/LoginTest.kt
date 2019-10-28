@@ -12,6 +12,7 @@ internal class LoginTest : UiTest() {
     @Test
     fun testLoginSuccess() {
         overviewPage.expectLoginModal()
+                .expectNoLoginErrorMessage()
                 .enterUsername("admin")
                 .enterPassword("1234")
                 .loginSuccess()
@@ -25,5 +26,18 @@ internal class LoginTest : UiTest() {
                 .enterPassword("56789")
                 .loginFailure()
                 .expectOnPage()
+                .expectLoginErrorMessage()
+
+                .enterUsername("a")
+                .expectNoLoginErrorMessage()
+
+                .loginFailure()
+                .expectOnPage()
+                .expectLoginErrorMessage()
+
+                .enterPassword("b")
+                .expectNoLoginErrorMessage()
+
+
     }
 }

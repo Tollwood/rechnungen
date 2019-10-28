@@ -29,7 +29,7 @@ internal abstract class UiTest {
     lateinit var testData: TestData
 
     @BeforeEach
-    fun beforeEach(@Arguments("--headless")driver: ChromeDriver) {
+    fun beforeEach(driver: ChromeDriver) {
 
         driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
         this.overviewPage = OverviewPage(driver)

@@ -1,35 +1,36 @@
 import * as React from "react";
 import API from "./API";
 import {JwtTokenInterceptor} from "./jwtTokenInterceptor";
-import {Button, Grid, Modal, Form} from "semantic-ui-react";
+import {Button, Form, Grid, Label, Modal, Segment} from "semantic-ui-react";
 
 interface LoginModalProps {
-    onSuccess: ()=>void
+    onSuccess: () => void
 }
+
 interface LoginModalSate {
     username?: string,
     password?: string
     jwtToken?: string
     requiuresAuthorization: boolean
+    validationfailed: boolean
 }
 
-export default class LoginModal extends React.Component<LoginModalProps,LoginModalSate> {
+export default class LoginModal extends React.Component<LoginModalProps, LoginModalSate> {
 
-    constructor(props: LoginModalProps){
+    constructor(props: LoginModalProps) {
         super(props);
-        this.state = {requiuresAuthorization:true}
+        this.state = {requiuresAuthorization: true, validationfailed: false}
     }
 
-    render () {
-            return (
-                <Modal open={this.state.requiuresAuthorization} dimmer={'blurring'} size={"mini"} name="loginModal">
-                    <Modal.Content>
+    render() {
+        return (
+            <Modal open={this.state.requiuresAuthorization} dimmer={'blurring'} size={"mini"} name="loginModal">
+                <Modal.Content>
+                    <h2 style={{textAlign: "center"}}>Wärmemessdienst Timm</h2>
+                    <Segment raised>
+                        {this.state.validationfailed ? this.renderError() : null}
                         <Grid centered>
-                            <Grid.Row>
-                                <Grid.Column textAlign={'center'}>
-                                    <h2>Wärmemessdienst Timm</h2>
-                                </Grid.Column>
-                            </Grid.Row>
+                            <Grid.Row/>
                             <Grid.Row>
                                 <Grid.Column width={16} textAlign={'center'}>
                                     <Form.Field inline>
@@ -63,14 +64,15 @@ export default class LoginModal extends React.Component<LoginModalProps,LoginMod
                                     label={'Anmelden'} icon={'sign in'} labelPosition={"left"} primary onClick={this.doLogin.bind(this)}/>
                             </Grid.Row>
                         </Grid>
-                    </Modal.Content>
-                </Modal>
-            );
+                    </Segment>
+                </Modal.Content>
+            </Modal>
+        );
     }
 
     private updateState(name: string, value: string) {
         // @ts-ignore
-        this.setState({[name]: value})
+        this.setState({[name]: value, validationfailed:false})
     }
 
     private doLogin() {
@@ -80,12 +82,20 @@ export default class LoginModal extends React.Component<LoginModalProps,LoginMod
         })
             .then(result => result.data)
             .then(data => {
-                console.log(data.jwttoken);
                 let interceptor = new JwtTokenInterceptor(data.jwttoken);
                 API.interceptors.request.use(interceptor.intercept.bind(interceptor));
                 this.setState({requiuresAuthorization: false});
                 this.props.onSuccess();
+            })
+            .catch( (error) => {
+                this.setState({validationfailed:true})
             });
 
+    }
+
+    private renderError() {
+        return <Label id="loginError" as='a' color='red' ribbon>
+            Benutzername oder Passwort ungültig
+        </Label>;
     }
 }

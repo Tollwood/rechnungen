@@ -5,7 +5,9 @@ import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.PageFactory
+import org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable
 import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated
 import org.openqa.selenium.support.ui.WebDriverWait
 
@@ -65,7 +67,14 @@ class OrderEdit(private var driver: WebDriver) {
     }
 
     fun delete(): OrderOverview {
-        driver.findElement<WebElement>(DELETE_BTTN).click()
+
+        val element = WebDriverWait(driver, 10)
+                .until(elementToBeClickable(DELETE_BTTN))
+        val actions = Actions(driver)
+        actions.moveToElement(element)
+        actions.perform()
+
+        element.click()
         return OrderOverview(driver)
     }
 
@@ -94,12 +103,14 @@ class OrderEdit(private var driver: WebDriver) {
     }
 
     private fun selectTechnician() {
-        WebDriverWait(driver, 10)
-                .until(presenceOfElementLocated(TECHNICIAN_INPUT)).click()
+        val dropDown = WebDriverWait(driver, 10).until(presenceOfElementLocated(TECHNICIAN_INPUT))
+        dropDown.click()
+        dropDown.sendKeys(Keys.TAB)
     }
 
     private fun selectRealEstate() {
-        WebDriverWait(driver, 10)
-                .until(presenceOfElementLocated(REAL_ESTATE_INPUT)).click()
+        val dropDown = WebDriverWait(driver, 10).until(presenceOfElementLocated(REAL_ESTATE_INPUT))
+        dropDown.click()
+        dropDown.sendKeys(Keys.TAB)
     }
 }

@@ -20,8 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
-    private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint? = null
-    @Autowired
     private val jwtUserDetailsService: UserDetailsService? = null
     @Autowired
     private val jwtRequestFilter: JwtRequestFilter? = null
@@ -52,9 +50,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .headers().frameOptions().sameOrigin().and() // only needed for h2 endpoint
                 .csrf().disable()
                 .authorizeRequests().antMatchers("/api/**").authenticated()
-                .and().exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         httpSecurity.addFilterBefore(jwtRequestFilter!!, UsernamePasswordAuthenticationFilter::class.java)
     }
 }

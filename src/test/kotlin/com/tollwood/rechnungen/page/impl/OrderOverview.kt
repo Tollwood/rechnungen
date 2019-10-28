@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 class OrderOverview(private var driver: WebDriver) {
 
 
+    val ORDER_LIST = By.ByCssSelector(".order-list")
     val ROW_SELECTOR = By.ByCssSelector(".order-list > tbody > tr")
     val ADD_BTTN = By.ByCssSelector(".add")
 
@@ -28,6 +29,8 @@ class OrderOverview(private var driver: WebDriver) {
     fun verifyOnOrderOverviewPage(): OrderOverview {
         WebDriverWait(driver, 10)
                 .until(presenceOfElementLocated(ORDER_OVERVIEW))
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(ORDER_LIST))
         return this
     }
 
