@@ -1,34 +1,36 @@
 import * as React from "react";
 import Order from "./Order";
 import Helper from "../common/Helper";
-import {Button, Icon} from "semantic-ui-react";
+import {Button, Icon, Placeholder} from "semantic-ui-react";
 
 interface OrderListProps {
-    onAdd:()=>void,
-    onSelect:(selectedItem: Order)=>void,
-    orders:Order[]
+    onAdd: () => void,
+    onSelect: (selectedItem: Order) => void,
+    orders: Order[]
+    isLoading: boolean
 }
 
 export default class OrderList extends React.Component<OrderListProps> {
 
-    render () {
-         return (
-            <table className="ui compact celled table selectable order-list" >
+    render() {
+        return (
+            <table className="ui compact celled table selectable order-list">
                 <thead>
-                    <tr>
-                        <th>Auftrags-Id</th>
-                        <th>Nettoumsatz</th>
-                        <th>Bruttoumsatz</th>
-                        <th>Status</th>
-                    </tr>
+                <tr>
+                    <th>Auftrags-Id</th>
+                    <th>Nettoumsatz</th>
+                    <th>Bruttoumsatz</th>
+                    <th>Status</th>
+                </tr>
                 </thead>
                 <tbody>
-                {this.props.orders.map(order => this.renderRow(order))}
+                {this.renderRows()}
                 </tbody>
                 <tfoot className="full-width">
                 <tr>
                     <th colSpan={4}>
-                        <Button floated={"right"} primary icon={{name:"add"}} label={"Neuen Auftrag"} onClick={this.props.onAdd} className={"add"}/>
+                        <Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"} onClick={this.props.onAdd}
+                                className={"add"}/>
                     </th>
                 </tr>
                 </tfoot>
@@ -38,7 +40,7 @@ export default class OrderList extends React.Component<OrderListProps> {
     }
 
     private renderRow(order: Order) {
-        return <tr key={order.orderId} onClick={this.props.onSelect.bind(this,order)}>
+        return <tr key={order.orderId} onClick={this.props.onSelect.bind(this, order)}>
             <td>{order.orderId}</td>
             <td>{order.sum.toLocaleString('de', {
                 minimumFractionDigits: 2,
@@ -49,6 +51,47 @@ export default class OrderList extends React.Component<OrderListProps> {
                 maximumFractionDigits: 2
             })}</td>
             <td><Icon name={Helper.getStatusIcon(order.status)}/> {Helper.getStatusName(order.status)}</td>
+        </tr>;
+    }
+
+    private renderRows() {
+
+        if (this.props.isLoading) {
+            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(numer => this.placeHolderRow())
+        }
+        return this.props.orders.map(order => this.renderRow(order))
+    }
+
+    private placeHolderRow() {
+        return <tr>
+            <td>
+                <Placeholder>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line/>
+                    </Placeholder.Paragraph>
+                </Placeholder>
+            </td>
+            <td>
+                <Placeholder>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line/>
+                    </Placeholder.Paragraph>
+                </Placeholder>
+            </td>
+            <td>
+                <Placeholder>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line/>
+                    </Placeholder.Paragraph>
+                </Placeholder>
+            </td>
+            <td>
+                <Placeholder>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line/>
+                    </Placeholder.Paragraph>
+                </Placeholder>
+            </td>
         </tr>;
     }
 }

@@ -10,14 +10,15 @@ interface ServiceOverviewProps {
 interface ServiceOverviewState {
     services: Service[]
     selectedItem: Service,
-    edit: boolean
+    edit: boolean,
+    isLoading: boolean
 }
 
 export default class ServicesOverview extends React.Component<ServiceOverviewProps, ServiceOverviewState> {
 
     constructor(props: ServiceOverviewProps) {
         super(props);
-        this.state = {services: [], edit: false, selectedItem: new Service()};
+        this.state = {services: [], edit: false, selectedItem: new Service(), isLoading: true};
     }
 
     componentDidMount(): void {
@@ -29,10 +30,12 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
             <div className={"service-overview"}>
                 {this.state.edit ? null :
                     <ServiceList services={this.state.services}
-                               onAdd={this.handleAdd.bind(this)}
-                               onSelect={(service: Service) => {
-                                   this.handleSelection(service)
-                               }}/>}
+                                 onAdd={this.handleAdd.bind(this)}
+                                 onSelect={(service: Service) => {
+                                     this.handleSelection(service)
+                                 }}
+                                 isLoading={this.state.isLoading}
+                    />}
                 {!this.state.edit ? null :
                     <ServiceEdit
                         service={this.state.selectedItem}
@@ -69,10 +72,12 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
     }
 
     private refresh() {
+        this.setState({isLoading: true});
         API.get('/api/service')
             .then(res => {
                 return res.data;
             })
-            .then(data => this.setState({services: data._embedded.service}));
+            .then(data => this.setState({services: data._embedded.service}))
+            .finally(() => this.setState({isLoading: false}));
     }
 }

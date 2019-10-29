@@ -12,14 +12,15 @@ interface OrderOverviewProps {
 interface OrderOverviewState {
     orders: Order[]
     selectedItem: Order,
-    edit: boolean
+    edit: boolean,
+    isLoading: boolean
 }
 
 export default class OrderOverview extends React.Component<OrderOverviewProps, OrderOverviewState> {
 
     constructor(props: OrderOverviewProps) {
         super(props);
-        this.state = {orders: [], edit: false, selectedItem: new Order()};
+        this.state = {orders: [], edit: false, selectedItem: new Order(), isLoading: true};
     }
 
     componentDidMount(): void {
@@ -34,7 +35,9 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
                                onAdd={this.handleAdd.bind(this)}
                                onSelect={(order: Order) => {
                                    this.handleSelection(order)
-                               }}/>}
+                               }}
+                               isLoading={this.state.isLoading}
+                    />}
                 {!this.state.edit ? null :
                     <OrderEdit
                         company={this.props.company}
@@ -73,11 +76,15 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
     }
 
     private refresh() {
+        this.setState({isLoading: true});
         API.get('/api/order')
             .then(res => {
                 return res.data;
             })
-            .then(data => this.setState({orders: data._embedded.order}));
+            .then(data => this.setState({orders: data._embedded.order}))
+            .finally(() =>
+                this.setState({isLoading: false})
+            );
     }
 }
 
