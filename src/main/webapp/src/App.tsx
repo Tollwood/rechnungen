@@ -39,7 +39,7 @@ class App extends Component<AppProps, AppState> {
     render() {
         return (
             <React.Fragment>
-                <LoginModal onSuccess={()=> this.onLogin()} />
+                <LoginModal onSuccess={() => this.onLogin()}/>
                 <Grid centered padded>
                     <Grid.Row>
                         <Grid.Column textAlign={'center'}>
@@ -62,8 +62,10 @@ class App extends Component<AppProps, AppState> {
                             {this.state.activeContent === ContentType.SERVICES ? <ServicesOverview/> : null}
                             {this.state.activeContent === ContentType.ORDER_DETAILS ?
                                 <OrderEdit company={this.state.company}
-                                    onSave={this.closeOrder.bind(this)} onCancelEdit={this.closeOrder.bind(this)}
-                                           onDelete={this.closeOrder.bind(this)} order={this.state.activeOrder}/> : null}
+                                           onSave={this.closeOrder.bind(this)}
+                                           onCancelEdit={this.closeOrder.bind(this)}
+                                           onDelete={this.closeOrder.bind(this)}
+                                           order={this.state.activeOrder}/> : null}
                         </div>
                     </Grid.Column>
                 </Grid>

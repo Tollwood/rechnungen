@@ -25,6 +25,8 @@ class OrderEdit(private var driver: WebDriver) {
 
     val CANCEL_BTTN = By.cssSelector(".cancel-bttn")
     val SAVE_BTTN = By.cssSelector(".save-bttn")
+    val SAVE_CONTINUE_BTTN = By.cssSelector(".save-continue")
+    val SAVE_CONTINUE_OPTION = By.cssSelector(".save-continue .item")
     val CLOSE_BTTN = By.cssSelector(".close")
     val DELETE_BTTN = By.cssSelector(".delete-bttn")
 
@@ -112,5 +114,11 @@ class OrderEdit(private var driver: WebDriver) {
         val dropDown = WebDriverWait(driver, 10).until(presenceOfElementLocated(REAL_ESTATE_INPUT))
         dropDown.click()
         dropDown.sendKeys(Keys.TAB)
+    }
+
+    fun clickSaveAndContinue(): OrderEdit {
+        WebDriverWait(driver, 10).until(presenceOfElementLocated(SAVE_CONTINUE_BTTN)).click()
+        WebDriverWait(driver, 10).until(presenceOfElementLocated(SAVE_CONTINUE_OPTION)).click()
+        return this
     }
 }

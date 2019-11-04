@@ -37,6 +37,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
                      <Dropdown
                          fluid
                          selection
+                         value={this.state.selectedService? this.state.selectedService.articleNumber: ""}
                          search
                          openOnFocus={false}
                          selectOnNavigation={false}
@@ -48,7 +49,17 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
                      />
                  </td>
                 <td>
-                    {this.state.selectedService? this.state.selectedService.title: null}
+                    <Dropdown
+                        fluid
+                        selection
+                        search
+                        value={this.state.selectedService? this.state.selectedService.articleNumber: ""}
+                        openOnFocus={false}
+                        selectOnNavigation={false}
+                        options={this.computeAvailableServicesByTitle()}
+                        onChange={this.selectService.bind(this)}
+                        placeholder='Dienstleistung auswählen'
+                    />
                 </td>
                 <td>
                     <Button color={"green"} onClick={this.addService.bind(this)}><Icon name={"add"}/></Button>
@@ -64,6 +75,15 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
             .filter((service: Service) => !existingServices.includes(service._links.self!.href))
             .filter((service: Service) => service.selectable)
             .map((s: Service) => { return {key: s.articleNumber, value: s.articleNumber, text: s.articleNumber}} );
+    }
+
+    private computeAvailableServicesByTitle( ): {key:string, value:string,text:string}[] {
+
+        const existingServices: string[] = this.props.orderServices.map((os:OrderService) => os._links.service.href);
+        return this.props.services
+            .filter((service: Service) => !existingServices.includes(service._links.self!.href))
+            .filter((service: Service) => service.selectable)
+            .map((s: Service) => { return {key: s.articleNumber, value: s.articleNumber, text: s.title}} );
     }
 
     private updateAmount(event: ChangeEvent<HTMLInputElement>){

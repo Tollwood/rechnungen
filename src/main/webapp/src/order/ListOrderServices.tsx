@@ -38,8 +38,8 @@ export default class ListOrderServices extends React.Component<ListOrderServices
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell width={1}>Menge</Table.HeaderCell>
-                            <Table.HeaderCell width={2}>Artikel Nr.</Table.HeaderCell>
-                            <Table.HeaderCell width={12}>Dienstleistung</Table.HeaderCell>
+                            <Table.HeaderCell width={3}>Artikel Nr.</Table.HeaderCell>
+                            <Table.HeaderCell width={11}>Dienstleistung</Table.HeaderCell>
                             <Table.HeaderCell width={1}></Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>

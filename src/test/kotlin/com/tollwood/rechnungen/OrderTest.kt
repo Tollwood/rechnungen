@@ -92,6 +92,18 @@ internal class OrderTest : UiTest() {
                 .clickSave()
                 .verifyRequiredFields()
     }
+    @Test
+    fun testRequiredFieldsSaveAndContinueForOrderEdit(){
+
+        overviewPage
+                .expectLoggedIn("admin", "1234")
+                .verifyOverviewPage()
+                .clickOrderOverview()
+                .clickAdd()
+                .verifyOnOrderEditPage()
+                .clickSaveAndContinue()
+                .verifyRequiredFields()
+    }
 
     //Validate requiredFields ORDER_BILL
     //Validate existing OrderId

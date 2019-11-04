@@ -119,7 +119,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                     <Button content='Speichern' onClick={this.save.bind(this)} className={"save-bttn"}/>
 
                                     <Dropdown
-                                        className='button icon'
+                                        className='button icon save-continue'
                                         floating
                                         value={''}
                                         onChange={this.saveAndContinue.bind(this)}
@@ -260,6 +260,10 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
     private saveAndContinue(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        this.setState({shouldValidate: true});
+        if (!this.isValid()) {
+            return;
+        }
         this.handleOrderChange('status', Helper.nextStatus(this.state.order.status));
         if (this.state.order.status === 'ORDER_BILL') {
             this.handleOrderChange('billItems', BillService.createBillItems(this.state.order, this.state.services, this.getCurrentRealEstate()))

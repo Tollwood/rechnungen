@@ -14,7 +14,7 @@ class OrderOverview(private var driver: WebDriver) {
 
     val ORDER_LIST = By.ByCssSelector(".order-list")
     val ROW_SELECTOR = By.ByCssSelector(".order-list > tbody > tr")
-    val ADD_BTTN = By.ByCssSelector(".add")
+    val ADD_BTTN = By.ByCssSelector(".add.button")
 
     val ORDER_OVERVIEW = By.cssSelector(".order-overview")
 
