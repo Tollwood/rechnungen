@@ -39,9 +39,9 @@ class ServiceEdit(private var driver: WebDriver) {
         return overviewPage
     }
 
-    fun clickSaveSuccess(): ServiceOverview {
+    fun clickSaveSuccess(): ServiceEdit {
         driver.findElement<WebElement>(SAVE_BTTN).click()
-        return ServiceOverview(driver)
+        return this
     }
 
     fun enterServiceData(service: Service): ServiceEdit {

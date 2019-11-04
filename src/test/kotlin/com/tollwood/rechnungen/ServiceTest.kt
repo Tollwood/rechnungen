@@ -55,10 +55,12 @@ internal class ServiceTest : UiTest() {
                 .verifyOverviewPage()
                 .clickServiceOverview()
                 .verifyOnServiceOverviewPage()
+                .expectNRows(INITIAL_ROW_COUNT )
                 .clickAdd()
                 .verifyOnServiceEditPage()
                 .enterServiceData(newService)
                 .clickSaveSuccess()
+                .clickCancel()
                 .verifyOnServiceOverviewPage()
                 .expectNRows(INITIAL_ROW_COUNT + 1)
     }

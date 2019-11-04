@@ -21,9 +21,10 @@ class RealEstateOverview(private var driver: WebDriver) {
     @FindBy(className = "menu-title")
     lateinit var title: WebElement
 
-    fun expectNRows(n: Number) {
+    fun expectNRows(n: Number): RealEstateOverview {
         WebDriverWait(driver, 2)
                 .until(numberOfElementsToBe(ROW_SELECTOR, n.toInt()))
+        return this
     }
 
     fun verifyOnRealEstateOverviewPage(): RealEstateOverview {

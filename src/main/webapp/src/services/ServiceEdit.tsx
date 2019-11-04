@@ -117,6 +117,6 @@ export default class ServiceEdit extends React.Component<Props, State> {
         // @ts-ignore
         API.delete(this.state.service._links.self.href).then(() => {
         });
-        this.props.onCancelEdit();
+        this.props.onDelete();
     }
 }

@@ -40,7 +40,8 @@ class OrderOverview(private var driver: WebDriver) {
     }
 
     fun clickAdd(): OrderEdit {
-        driver.findElement<WebElement>(ADD_BTTN).click()
+        WebDriverWait(driver, 10)
+                .until(presenceOfElementLocated(ADD_BTTN)).click()
         return OrderEdit(driver)
     }
 

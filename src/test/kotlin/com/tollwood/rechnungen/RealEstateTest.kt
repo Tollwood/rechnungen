@@ -58,6 +58,7 @@ internal class RealEstateTest : UiTest() {
                 .verifyOverviewPage()
                 .clickRealEstateOverview()
                 .verifyOnRealEstateOverviewPage()
+                .expectNRows(INITIAL_ROW_COUNT )
                 .clickAdd()
                 .verifyOnRealEstateEditPage()
                 .enterRealEstateeData(newRealEstate)
@@ -65,4 +66,6 @@ internal class RealEstateTest : UiTest() {
                 .verifyOnRealEstateOverviewPage()
                 .expectNRows(INITIAL_ROW_COUNT + 1)
     }
+
+    //TODO delete Realestate
 }
