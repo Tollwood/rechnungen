@@ -35,7 +35,7 @@ internal class OrderTest : UiTest() {
     }
 
     @Test
-    fun testCloseAddRealEstate() {
+    fun testCloseAddOrder() {
         overviewPage
                 .expectLoggedIn("admin", "1234")
                 .verifyOverviewPage()

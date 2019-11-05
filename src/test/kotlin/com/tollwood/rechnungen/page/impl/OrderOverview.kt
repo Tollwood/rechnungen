@@ -5,8 +5,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
-import org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe
-import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated
+import org.openqa.selenium.support.ui.ExpectedConditions.*
 import org.openqa.selenium.support.ui.WebDriverWait
 
 class OrderOverview(private var driver: WebDriver) {
@@ -14,7 +13,7 @@ class OrderOverview(private var driver: WebDriver) {
 
     val ORDER_LIST = By.ByCssSelector(".order-list")
     val ROW_SELECTOR = By.ByCssSelector(".order-list > tbody > tr")
-    val ADD_BTTN = By.ByCssSelector(".add.button")
+    val ADD_BTTN = By.ByCssSelector("div .add")
 
     val ORDER_OVERVIEW = By.cssSelector(".order-overview")
 
@@ -41,7 +40,7 @@ class OrderOverview(private var driver: WebDriver) {
 
     fun clickAdd(): OrderEdit {
         WebDriverWait(driver, 10)
-                .until(presenceOfElementLocated(ADD_BTTN)).click()
+                .until(elementToBeClickable(ADD_BTTN)).click()
         return OrderEdit(driver)
     }
 

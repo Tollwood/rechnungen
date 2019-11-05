@@ -6,15 +6,14 @@ import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.FindBy
-import org.openqa.selenium.support.ui.ExpectedConditions.numberOfElementsToBe
-import org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated
+import org.openqa.selenium.support.ui.ExpectedConditions.*
 import org.openqa.selenium.support.ui.WebDriverWait
 
 class EmployeeOverview(private var driver: WebDriver) {
 
 
     val ROW_SELECTOR = By.ByCssSelector(".employee-list > tbody > tr")
-    val ADD_BTTN = ".add"
+    val ADD_BTTN = By.ByCssSelector("div .add")
 
     val EMPLOYEE_OVERVIEW = By.cssSelector(".employee-overview")
 
@@ -39,7 +38,8 @@ class EmployeeOverview(private var driver: WebDriver) {
     }
 
     fun clickAdd(): EmployeeEdit {
-        driver.findElement<WebElement>(By.ByCssSelector(ADD_BTTN)).click()
+        WebDriverWait(driver, 10)
+                .until(elementToBeClickable(ADD_BTTN)).click()
         return EmployeeEdit(driver)
     }
 }

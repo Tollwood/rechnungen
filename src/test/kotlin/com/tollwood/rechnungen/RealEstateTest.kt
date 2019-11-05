@@ -67,5 +67,19 @@ internal class RealEstateTest : UiTest() {
                 .expectNRows(INITIAL_ROW_COUNT + 1)
     }
 
-    //TODO delete Realestate
+    @Test
+    fun testDeleteRealEstate(){
+        val persistedRealEstate = testData.givenRealEstatePersisted()
+        overviewPage
+                .expectLoggedIn("admin", "1234")
+                .verifyOverviewPage()
+                .clickRealEstateOverview()
+                .expectNRows(INITIAL_ROW_COUNT +1)
+                .verifyOnRealEstateOverviewPage()
+                .selectByName(persistedRealEstate.name)
+                .verifyOnRealEstateEditPage()
+                .clickDelete()
+                .expectNRows(INITIAL_ROW_COUNT)
+
+    }
 }

@@ -7,8 +7,7 @@ import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
 
 interface RealEstateEditProps {
-    onSave: () => void;
-    onCancelEdit: () => void;
+    onChange: () => void;
     realEstate: RealEstate;
 }
 
@@ -60,7 +59,7 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
                             </Grid.Column>
                         </Grid.Row>
                         <AddressInput address={this.state.realEstate.address} handleAddressChange={this.handleAddressChange.bind(this)}/>
-                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)}
+                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onChange} onDelete={this.delete.bind(this)}
                                     canDelete={this.state.realEstate._links.self !== undefined}/>
                     </Grid>
                 </Form>
@@ -81,17 +80,18 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
     save() {
         if (this.state.realEstate._links.self === undefined) {
             API.post("/api/realestate", this.state.realEstate)
-                .then(() => this.props.onSave());
+                .then(() => this.props.onChange());
         } else {
             API.patch(this.state.realEstate._links.self.href, this.state.realEstate)
-                .then(() => this.props.onSave());
+                .then(() => this.props.onChange());
         }
     }
 
     private delete() {
         // @ts-ignore
         API.delete(this.state.realEstate._links.self.href).then(() => {
+            this.props.onChange();
         });
-        this.props.onCancelEdit();
+
     }
 }

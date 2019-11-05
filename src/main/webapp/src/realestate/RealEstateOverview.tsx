@@ -35,8 +35,7 @@ export default class RealEstateOverview extends React.Component<{}, RealEstateOv
                     />}
                 {!this.state.edit ? null :
                     <RealEstateEdit realEstate={this.state.selectedItem}
-                                    onCancelEdit={this.handleCancelEdit.bind(this)}
-                                    onSave={this.handleSave.bind(this)}
+                                    onChange={this.handleChange.bind(this)}
                     />}
             </div>
 
@@ -51,11 +50,7 @@ export default class RealEstateOverview extends React.Component<{}, RealEstateOv
         this.setState(Object.assign(this.state, {edit: true, selectedItem: selectedItem}))
     }
 
-    private handleCancelEdit() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new RealEstate()}))
-    }
-
-    private handleSave() {
+    private handleChange() {
         this.setState(Object.assign(this.state, {edit: false, selectedItem: new RealEstate()}));
         this.refresh();
 

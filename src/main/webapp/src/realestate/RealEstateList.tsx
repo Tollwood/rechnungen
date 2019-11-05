@@ -38,7 +38,7 @@ export default class RealEstateList extends React.Component<RealEstateListProps>
     }
 
     private renderRow(realEstate: RealEstate) {
-        return <tr key={realEstate.name} onClick={this.props.onSelect.bind(this, realEstate)}>
+        return <tr className={realEstate.name.replace(" ","")} key={realEstate.name} onClick={this.props.onSelect.bind(this, realEstate)}>
             <td>{realEstate.name}</td>
             <td>
                 <div>

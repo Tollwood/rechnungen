@@ -11,8 +11,9 @@ import org.openqa.selenium.support.ui.WebDriverWait
 class RealEstateEdit(private var driver: WebDriver) {
     val REAL_ESTATE_EDIT = By.cssSelector(".realEstate-edit")
 
-    val CANCEL_BTTN = By.cssSelector(".cancel-bttn")
     val SAVE_BTTN = By.cssSelector(".save-bttn")
+    val CANCEL_BTTN = By.cssSelector(".cancel-bttn")
+    val DELETE_BTTN = By.cssSelector(".delete-bttn")
     val CLOSE_BTTN = By.cssSelector(".close")
 
 
@@ -47,6 +48,11 @@ class RealEstateEdit(private var driver: WebDriver) {
         driver.findElement<WebElement>(DISTANCE_INPUT).sendKeys(newRealEstate.distance.toString())
         AddressEdit.enterAddressData(driver, newRealEstate.address)
         return this
+    }
+
+    fun clickDelete(): RealEstateOverview {
+        driver.findElement<WebElement>(DELETE_BTTN).click()
+        return RealEstateOverview(driver)
     }
 
 }
