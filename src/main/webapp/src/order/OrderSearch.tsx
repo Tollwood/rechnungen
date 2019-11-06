@@ -64,7 +64,8 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
             })
             .then ((orders: Order[]) => {
 
-                 let suggetions = orders.map(order => { return {key: order.orderId, value: order.orderId, text: order.orderId}});
+                 let suggetions = orders.map(order => { return {key: order.orderId, value: order.orderId, text: order.orderId, icon:"unordered list"}});
+                 // envelope open if its a bill
                 this.setState({ orders: orders, suggetions: suggetions, isFetching:false})
             })
     }
