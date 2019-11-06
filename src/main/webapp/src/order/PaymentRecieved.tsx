@@ -1,7 +1,7 @@
 import * as React from "react";
 import Order from "./Order";
 import {DateInput} from "semantic-ui-calendar-react";
-import {Form, Grid} from "semantic-ui-react";
+import {Form, Grid, Input} from "semantic-ui-react";
 
 interface BillDetailsProps {
     order: Order
@@ -17,29 +17,46 @@ export default class PaymentRecieved extends React.Component<BillDetailsProps, {
     }
 
     render() {
-        if (this.props.order.status !== 'ORDER_BILL_RECIEVED'){
-            return null;
+        if (this.props.order.status === 'ORDER_BILL_RECIEVED'){
+            return this.edit();
         }
-        return (
-            <React.Fragment>
-                <Grid.Row>
-                    <Grid.Column computer={5} tablet={5} mobile={8}>
-                        <Form.Field>
-                            <label>Zahlung erhalten am: </label>
-                            <DateInput
-                                dateFormat={"DD.MM.YYYY"}
-                                minDate={'01.01.1990'}
-                                hideMobileKeyboard={true}
-                                name="paymentRecievedDate"
-                                placeholder="Zahlungseingang wählen"
-                                value={this.props.order.paymentRecievedDate ? this.props.order.paymentRecievedDate : ''}
-                                iconPosition="left"
-                                onChange={(e, {name, value})=> this.props.handleOrderChange(name,value)}
-                            />
-                        </Form.Field>
-                    </Grid.Column>
-                </Grid.Row>
-            </React.Fragment>
-        );
+        else if(this.props.order.status === 'PAYMENT_RECIEVED'){
+            return this.readOnly();
+        }
+        return null;
+    }
+
+    private edit() {
+        return <React.Fragment>
+            <Grid.Row>
+                <Grid.Column computer={5} tablet={5} mobile={8}>
+                    <Form.Field>
+                        <label>Zahlung erhalten am: </label>
+                        <DateInput
+                            dateFormat={"DD.MM.YYYY"}
+                            minDate={'01.01.1990'}
+                            hideMobileKeyboard={true}
+                            name="paymentRecievedDate"
+                            placeholder="Zahlungseingang wählen"
+                            value={this.props.order.paymentRecievedDate ? this.props.order.paymentRecievedDate : ''}
+                            iconPosition="left"
+                            onChange={(e, {name, value}) => this.props.handleOrderChange(name, value)}
+                        />
+                    </Form.Field>
+                </Grid.Column>
+            </Grid.Row>
+        </React.Fragment>;
+    }
+    private readOnly() {
+        return <React.Fragment>
+            <Grid.Row>
+                <Grid.Column computer={5} tablet={5} mobile={8}>
+                    <Form.Field inline>
+                        <label >Zahlung erhalten am: </label>
+                        <span>{this.props.order.paymentRecievedDate}</span>
+                    </Form.Field>
+                </Grid.Column>
+            </Grid.Row>
+        </React.Fragment>;
     }
 }

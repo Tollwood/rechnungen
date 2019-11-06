@@ -34,7 +34,8 @@ export default class EmployeeList extends React.Component<EmployeeListProps> {
                                 icon={{name: "user icon"}}
                                 label={"Add User"}
                                 onClick={this.props.onAddEmployee}
-                                className={"add"}/>
+                                className={"add"}
+                        />
                     </th>
                 </tr>
                 </tfoot>
