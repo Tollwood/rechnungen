@@ -30,22 +30,24 @@ export default class BillButton extends React.Component<BillDetailsProps, BillDe
     }
 
     render() {
-        if (this.props.order.status !== 'ORDER_BILL_RECIEVED' && this.props.order.status !== 'ORDER_BILL') {
+        if (this.props.order.status !== 'ORDER_BILL_RECIEVED' && this.props.order.status !== 'ORDER_BILL' && this.props.order.status !== 'PAYMENT_RECIEVED') {
             return null;
         }
         return (
             <React.Fragment>
                 <Grid.Row>
-                    {!this.state.renderPdf ? <Button icon={'newspaper outline'}
-                                                     label={'Rechnung anzeigen'}
-                                                     onClick={() => this.setState({renderPdf: true})}
-                                                     disabled={this.cantShowPdf()}/> : null}
+                    <Grid.Column width={16}>
+                        {!this.state.renderPdf ? <Button icon={'newspaper outline'}
+                                                         label={'Rechnung anzeigen'}
+                                                         onClick={() => this.setState({renderPdf: true})}
+                                                         disabled={this.cantShowPdf()}/> : null}
 
-                    {this.state.renderPdf ?
-                        <Button icon={'close'}
-                                label={'Rechnung ausblenden'}
-                                onClick={() => this.setState({renderPdf: false})}/> : null}
+                        {this.state.renderPdf ?
+                            <Button icon={'close'}
+                                    label={'Rechnung ausblenden'}
+                                    onClick={() => this.setState({renderPdf: false})}/> : null}
 
+                    </Grid.Column>
                 </Grid.Row>
                 {this.state.renderPdf ? this.renderPdf() : null}
             </React.Fragment>
@@ -57,7 +59,7 @@ export default class BillButton extends React.Component<BillDetailsProps, BillDe
             <Grid.Column width={16}>
                 <PDFViewer width={"100%"} height={"800px"}>
                     <Billpdf company={this.props.company}
-                        bill={BillService.createNewBill(this.props.order.billNo, this.props.order.billDate, this.props.order, this.props.services, this.props.realEstate, this.props.technician)}/>
+                             bill={BillService.createNewBill(this.props.order.billNo, this.props.order.billDate, this.props.order, this.props.services, this.props.realEstate, this.props.technician)}/>
                 </PDFViewer>
             </Grid.Column>
         </Grid.Row>;

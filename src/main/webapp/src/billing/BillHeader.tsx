@@ -40,8 +40,7 @@ export default class BillHeader extends Component<{ company: Company }, {}> {
                     <Image src={window.location.origin + '/logo_timm.png'}  style={[styles.image]}/>
                 </View>
                 <View style={[{marginLeft: 5},{flex:95, minHeight:"35px"}]}>
-                    <Text >{this.props.company.name}</Text>
-                    <Text style={{fontSize:10}}>Keiner kann es besser!</Text>
+                    <Text style={{marginTop:5}}>{this.props.company.name}</Text>
                 </View>
             </View>
 

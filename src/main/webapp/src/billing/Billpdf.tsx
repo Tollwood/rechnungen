@@ -18,10 +18,13 @@ const styles = StyleSheet.create({
         paddingBottom: 65,
         paddingHorizontal: 35,
         fontSize: 12,
-        fontFamily: 'Times-Roman'
+        fontFamily: 'Times-Roman',
     },
     text: {
         margin: 12,
+    },
+    bold: {
+        fontFamily: 'Times-Bold'
     },
     row: {
         flexDirection: 'row'
@@ -44,7 +47,7 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                     <BillHeader company={this.props.company}/>
                     <View style={styles.text}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>{this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""}</Text>
+                            <Text>{this.props.bill.technician ? this.props.bill.technician.technicianId : ""} {this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""}</Text>
                             <Text>{this.props.company.address.city} am, {this.props.bill.billDate}</Text>
                         </View>
                         <Text>{this.props.company.address.street} {this.props.company.address.houseNumber}</Text>
@@ -59,18 +62,18 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
 
                     <View style={styles.text}>
                         <View style={styles.row}>
-                            <Text style={styles.column2}>Rechnung Nr.: {this.props.bill.billNumber}</Text>
-                        </View>
-                        <View style={styles.rowBelow}>
-                            <Text style={styles.column2}>Auftrag: {this.props.bill.order.orderId}</Text>
-                            <Text
-                                style={styles.column2}>Kürzel: {this.props.bill.technician ? this.props.bill.technician.technicianId : ""}</Text>
+                            <Text style={styles.column2}><Text style={styles.bold}>Rechnung Nr.:</Text> {this.props.bill.billNumber}</Text>
+                            <Text style={styles.column2}><Text style={styles.bold}>Auftrag:</Text> {this.props.bill.order.orderId}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text
-                                style={styles.column2}>Liegenschaft: {this.props.bill.realEstate ? this.props.bill.realEstate.name : ""}</Text>
+                                style={styles.column2}><Text
+                                style={styles.bold}>Liegenschaft:</Text> {this.props.bill.realEstate ? this.props.bill.realEstate.name : ""}
+                            </Text>
                             <Text
-                                style={styles.column2}>Kilometer: {this.props.bill.realEstate ? this.props.bill.realEstate.distance : ""}</Text>
+                                style={styles.column2}><Text
+                                style={styles.bold}>Kilometer:</Text> {this.props.bill.realEstate ? this.props.bill.realEstate.distance : ""}
+                            </Text>
                         </View>
                         <View style={styles.row}>
                             <Text
@@ -84,7 +87,7 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                         {this.shouldRender(this.props.bill.order.utilisationUnit) ? this.renderUu() : null}
                         {this.shouldRender(this.props.bill.order.firstAppointment) ? this.renderAppointments() : null}
                     </View>
-                    <BillItems bill={this.props.bill} />
+                    <BillItems bill={this.props.bill}/>
                     <BillTotal bill={this.props.bill}/>
                     <BillGreetings/>
                     <BillFooter technician={this.props.bill.technician} company={this.props.company}/>
@@ -106,17 +109,19 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
 
     private renderAppointments() {
         return <View style={styles.row}>
-            <Text style={styles.column2}>Erster Termin: {this.props.bill.order.firstAppointment}</Text>
+            <Text style={styles.column2}><Text style={styles.bold}>Erster Termin:</Text> {this.props.bill.order.firstAppointment}</Text>
             {this.shouldRender(this.props.bill.order.secondAppointment) ?
-                <Text style={styles.column2}>Zweiter Termin: {this.props.bill.order.secondAppointment}</Text> : null}
+                <Text style={styles.column2}><Text style={styles.bold}>Zweiter Termin:</Text> {this.props.bill.order.secondAppointment}
+                </Text> : null}
         </View>
     }
 
     private renderUu() {
         return <View style={styles.rowBelow}>
-            <Text style={styles.column2}>NE: {this.props.bill.order.utilisationUnit} - {this.props.bill.order.name}</Text>
+            <Text style={styles.column2}><Text
+                style={styles.bold}>NE:</Text> {this.props.bill.order.utilisationUnit} - {this.props.bill.order.name}</Text>
             {this.shouldRender(this.props.bill.order.location) ?
-                <Text style={styles.column2}>Lage: {this.props.bill.order.location}</Text> : null}
+                <Text style={styles.column2}><Text style={styles.bold}>Lage:</Text> {this.props.bill.order.location}</Text> : null}
         </View>
     }
 }
