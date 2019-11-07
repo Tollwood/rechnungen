@@ -24,49 +24,70 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
 
     render() {
         return (
-                <Dropdown className="order-search"
-                          icon='search'
-                          placeholder='Auftrags-ID'
-                          fluid
-                          selectOnNavigation={false}
-                          search
-                          selection
-                          options={this.state.suggetions}
-                          noResultsMessage='Neuen Auftrag anlegen'
-                          onChange={this.select.bind(this)}
-                          value={this.state.currentValue}
-                          allowAdditions
-                          loading={this.state.isFetching}
-                          onAddItem={this.handleAddition.bind(this)}
-                          minCharacters={this.state.minSearchLength}
-                          onSearchChange={this.handleSearchChange.bind(this)}
-                />
+            <Dropdown className="order-search"
+                      icon='search'
+                      placeholder='Auftrags-ID'
+                      fluid
+                      selectOnNavigation={false}
+                      search
+                      selection
+                      options={this.state.suggetions}
+                      noResultsMessage='Neuen Auftrag anlegen'
+                      onChange={this.select.bind(this)}
+                      value={this.state.currentValue}
+                      allowAdditions
+                      loading={this.state.isFetching}
+                      onAddItem={this.handleAddition.bind(this)}
+                      minCharacters={this.state.minSearchLength}
+                      onSearchChange={this.handleSearchChange.bind(this)}
+            />
         );
     }
 
-    private select(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps){
-        this.setState({currentValue:""});
+    private select(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        this.setState({currentValue: ""});
         this.props.onSelected(this.state.orders.find(order => order.orderId === data.value)!);
     }
+
     private handleAddition(event: React.KeyboardEvent<HTMLElement>, data: DropdownProps) {
-        this.props.onSelected({orderId: data.value as string, services: [], _links: {}, smallOrder: false, status: 'ORDER_EDIT', includeKmFee:true, billDate:'', billNo:'', paymentRecievedDate:'', sum:0, billItems:[]});
+        this.props.onSelected({
+            orderId: data.value as string,
+            services: [],
+            _links: {},
+            smallOrder: false,
+            status: 'ORDER_EDIT',
+            includeKmFee: true,
+            billDate: '',
+            billNo: '',
+            paymentRecievedDate: '',
+            sum: 0,
+            billItems: []
+        });
     }
 
     private handleSearchChange(event: React.SyntheticEvent<HTMLElement>, data: DropdownOnSearchChangeData,) {
-            this.setState(Object.assign(this.state, {isFetching: true}));
-            this.search(data.searchQuery);
+        this.setState(Object.assign(this.state, {isFetching: true}));
+        this.search(data.searchQuery);
     }
 
     private search(searchQuery: string) {
-        API.get('/api/order/search/findByOrderIdContaining?orderId='+ searchQuery)
+        API.get('api/order/search/findByOrderIdContainingOrBillNoContaining?orderId=' + searchQuery + '&billNo=' + searchQuery)
             .then(res => {
                 return res.data._embedded.order;
             })
-            .then ((orders: Order[]) => {
+            .then((orders: Order[]) => {
 
-                 let suggetions = orders.map(order => { return {key: order.orderId, value: order.orderId, text: order.orderId, icon:"unordered list"}});
-                 // envelope open if its a bill
-                this.setState({ orders: orders, suggetions: suggetions, isFetching:false})
+                let suggetions = orders.flatMap(order => {
+                    let elements = [];
+                    if (order.billNo !== null && order.billNo.includes(searchQuery)) {
+                        elements.push({key: order.billNo, value: order.orderId, text: order.billNo, icon: "envelope open"});
+                    }
+                    if (order.orderId !== null && order.orderId !== undefined && order.orderId.includes(searchQuery)) {
+                        elements.push({key: order.orderId, value: order.orderId, text: order.orderId, icon: "unordered list"});
+                    }
+                    return elements
+                });
+                this.setState({orders: orders, suggetions: suggetions, isFetching: false})
             })
     }
 }

@@ -28,7 +28,13 @@ class TestData {
     fun givenOrder(orderId: String): Order {
         val technician = employeeResource.findAll().first()
         val realEstate = realestateResource.findAll().first()
-        return Order(orderId, technician = technician, realEstate = realEstate)
+        return Order(orderId = orderId, technician = technician, realEstate = realEstate)
+    }
+
+    fun givenOrderWithBill(orderId: String): Order {
+        val technician = employeeResource.findAll().first()
+        val realEstate = realestateResource.findAll().first()
+        return Order(orderId = orderId, technician = technician, realEstate = realEstate, billNo = orderId + "-bill")
     }
 
     fun givenRealEstatePersisted(): RealEstate {
@@ -37,5 +43,9 @@ class TestData {
 
     fun givenRealEstate(): RealEstate {
         return RealEstate(name = "New RealEstate", address = Address("New Street", "2", "22111", "NewTown"), distance = 5)
+    }
+
+    fun givenOrderWithBillPersisted(orderId: String): Order {
+        return orderResource.save(givenOrderWithBill(orderId))
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource
 @RepositoryRestResource(collectionResourceRel = "order", path = "order")
 interface OrderResource : PagingAndSortingRepository<Order, Long> {
 
-    fun findByOrderIdContaining(@Param("orderId") orderId: String): List<Order>
+    fun findByOrderIdContainingOrBillNoContaining(@Param("orderId") orderId: String,@Param("billNo") billNo: String): List<Order>
     fun findByOrderId(@Param("orderId") orderId: String): List<Order>
 
 }

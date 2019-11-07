@@ -10,56 +10,48 @@ import javax.persistence.*
 data class Order(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long?,
+        val id: Long? = null,
 
         @Column(unique = true)
         val orderId: String,
 
         @ManyToOne
         @JoinColumn(foreignKey = ForeignKey(name = "ORDER_REAL_ESTATE_FK"))
-        val realEstate: RealEstate?,
+        val realEstate: RealEstate? = null,
 
         @Enumerated
-        val type: OrderType?,
+        val type: OrderType? = null,
 
         @ManyToOne
         @JoinColumn(foreignKey = ForeignKey(name = "ORDER_EMPLOYEE_FK"))
-        val technician: Employee?,
+        val technician: Employee? = null,
 
-        val firstAppointment: String?,
-        val secondAppointment: String?,
+        val firstAppointment: String? = null,
+        val secondAppointment: String? = null,
 
-        val utilisationUnit: String?,
-        val name: String?,
-        val location: String?,
-        val phoneNumber: String?,
+        val utilisationUnit: String? = null,
+        val name: String? = null,
+        val location: String? = null,
+        val phoneNumber: String? = null,
         val smallOrder: Boolean = false,
 
         @OneToMany(cascade = [CascadeType.ALL])
         @JsonManagedReference
-        val services: List<ServiceOrder>,
+        val services: List<ServiceOrder> = emptyList(),
 
         @OneToMany(cascade = [CascadeType.ALL], mappedBy = "order")
         @JsonManagedReference
-        val billItems: List<BillItem>,
+        val billItems: List<BillItem> = emptyList(),
 
         @Enumerated(EnumType.STRING)
         val status: OrderState = ORDER_EDIT,
 
         val includeKmFee: Boolean = true,
 
-        val billNo: String?,
-        val billDate: String?,
-        val paymentRecievedDate: String?
-): BaseEntity() {
-    constructor(orderId: String, technician: Employee?, realEstate: RealEstate?) : this(null, orderId, realEstate, null, technician, null, null, null,
-            null, null, null,
-            false,
-            emptyList<ServiceOrder>(),
-            emptyList<BillItem>(), ORDER_EDIT,
-            false,
-            null, null, null)
-
+        val billNo: String? = null,
+        val billDate: String? = null,
+        val paymentRecievedDate: String? = null
+) : BaseEntity() {
     @JsonProperty("sum")
     fun sum(): Number {
         return this.billItems.map { billItem -> billItem.amount * billItem.price }.sum();

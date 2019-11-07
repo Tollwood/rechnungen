@@ -45,4 +45,17 @@ internal class SearchTest : UiTest() {
                 //.verifyValidOrderId()
                 .verifyDeleteButton()
     }
+
+    @Test
+    fun testSearchBillExisting() {
+        val orderId = "1234-12"
+        testData.givenOrderWithBillPersisted(orderId)
+
+        overviewPage
+                .expectLoggedIn("admin", "1234")
+                .verifyOverviewPage()
+                .enterSearch(orderId)
+                .expectSuggestion(orderId)
+                .expectSuggestion(orderId + "-bill")
+    }
 }
