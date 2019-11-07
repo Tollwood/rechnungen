@@ -1,7 +1,7 @@
 import * as React from "react";
 import Order from "./Order";
 import {DateInput} from "semantic-ui-calendar-react";
-import {Form, Grid, Input} from "semantic-ui-react";
+import {Form, Grid} from "semantic-ui-react";
 
 interface BillDetailsProps {
     order: Order

@@ -13,32 +13,28 @@ export default class RealEstateList extends React.Component<RealEstateListProps>
 
     render() {
         return (
-            <table className="ui compact celled table selectable realEstate-list">
-                <thead>
-                <tr>
-                    <th>Bezeichnung</th>
-                    <th>Adresse</th>
-                    <th>Entfernung</th>
-                </tr>
-                </thead>
-                <tbody>
-                {this.renderRows()}
-                </tbody>
-                <tfoot className="full-width">
-                <tr>
-                    <th colSpan={3}>
-                        <Button floated={"right"} primary icon={{name: "add"}} label={"Neue Liegenschaft"} onClick={this.props.onAdd}
-                                className={"add"}/>
-                    </th>
-                </tr>
-                </tfoot>
-            </table>
+            <React.Fragment>
+                <Button floated={"right"} primary icon={{name: "add"}} label={"Neue Liegenschaft"} onClick={this.props.onAdd}
+                        className={"add"}/>
+                <table className="ui compact celled table selectable realEstate-list">
+                    <thead>
+                    <tr>
+                        <th>Bezeichnung</th>
+                        <th>Adresse</th>
+                        <th>Entfernung</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.renderRows()}
+                    </tbody>
+                </table>
+            </React.Fragment>
         )
 
     }
 
     private renderRow(realEstate: RealEstate) {
-        return <tr className={realEstate.name.replace(" ","")} key={realEstate.name} onClick={this.props.onSelect.bind(this, realEstate)}>
+        return <tr className={realEstate.name.replace(" ", "")} key={realEstate.name} onClick={this.props.onSelect.bind(this, realEstate)}>
             <td>{realEstate.name}</td>
             <td>
                 <div>
