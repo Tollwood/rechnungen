@@ -18,6 +18,8 @@ data class BillItem(
         val price: Double,
         @NotNull
         val amount: Int,
+
+        @NotNull
         @JsonBackReference
         @ManyToOne
         @JoinColumn(name = "order_id")

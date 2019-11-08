@@ -17,7 +17,8 @@ export default class BillService {
                 amount: orderServices.amount,
                 serviceName: service ? service.title : "",
                 price: service ? service.price : 0.00,
-                custom: false
+                custom: false,
+                order: order._links.self ? order._links.self.href : null
             }
         });
 
