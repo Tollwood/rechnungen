@@ -52,8 +52,8 @@ data class Order(
         val billDate: String? = null,
         val paymentRecievedDate: String? = null
 ) : BaseEntity() {
-    @JsonProperty("sum")
-    fun sum(): Number {
+    //@JsonProperty("sum")
+    fun sum(): Number? {
         return this.billItems.map { billItem -> billItem.amount * billItem.price }.sum();
     }
 }

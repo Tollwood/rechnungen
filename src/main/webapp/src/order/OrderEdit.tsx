@@ -79,7 +79,13 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     this.setState({order: order});
                 });
         } else {
-            API.patch(this.state.order._links.self!.href, this.state.order);
+            API.patch(this.state.order._links.self!.href, this.state.order)
+                .then(result => result.data)
+                .then((order: Order) => {
+                    order.technician = this.state.order.technician;
+                    order.realEstate = this.state.order.realEstate;
+                    this.setState({order: order});
+                });
         }
     }
 
@@ -130,11 +136,13 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                 </Button.Group>}
                             </Grid.Column>
                             <Grid.Column width={5}>
-                                <Button className={"cancel-bttn"} content='Abbrechen' icon='cancel' labelPosition='left' onClick={this.props.onCancelEdit}/>
+                                <Button className={"cancel-bttn"} content='Abbrechen' icon='cancel' labelPosition='left'
+                                        onClick={this.props.onCancelEdit}/>
                             </Grid.Column>
                             <Grid.Column width={5} floated='right'>
                                 {this.state.order._links.self !== undefined ?
-                                    <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash' labelPosition='left'
+                                    <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash'
+                                            labelPosition='left'
                                             onClick={this.delete.bind(this)}/> : null
                                 }
                             </Grid.Column>
