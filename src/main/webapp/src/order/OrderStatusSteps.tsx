@@ -44,12 +44,12 @@ export default class OrderStatusSteps extends React.Component<OrderStatusStepsPr
                               disabled={this.props.status === 'ORDER_EDIT' || this.props.status === 'ORDER_EXECUTE' || this.props.status === 'ORDER_BILL'}>
                             <Icon name={Helper.getStatusIcon('ORDER_BILL_RECIEVED')}/>
                             <Step.Content>
-                                <Step.Title>Zahlungseingang</Step.Title>
+                                <Step.Title>Bezahlt?</Step.Title>
                             </Step.Content>
                         </Step>
                         <Step active={this.props.status === 'PAYMENT_RECIEVED'}
-                              disabled={this.props.status === 'ORDER_EDIT' || this.props.status === 'ORDER_EXECUTE' || this.props.status === 'ORDER_BILL' || this.props.status === 'ORDER_BILL_RECIEVED'}>
-                            <Icon name={Helper.getStatusIcon('PAYMENT_RECIEVED')}/>
+                              disabled={this.orderComplete()}>
+                            <Icon name={Helper.getStatusIcon('PAYMENT_RECIEVED')} color={this.orderComplete()? "green": "grey"} disabled={!this.orderComplete()}/>
                             <Step.Content>
                             </Step.Content>
                         </Step>
@@ -61,4 +61,7 @@ export default class OrderStatusSteps extends React.Component<OrderStatusStepsPr
     }
 
 
+    private orderComplete() {
+        return !(this.props.status === 'ORDER_EDIT' || this.props.status === 'ORDER_EXECUTE' || this.props.status === 'ORDER_BILL' || this.props.status === 'ORDER_BILL_RECIEVED');
+    }
 }

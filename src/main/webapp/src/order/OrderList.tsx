@@ -50,7 +50,8 @@ export default class OrderList extends React.Component<OrderListProps> {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             })}</td>
-            <td><Icon name={Helper.getStatusIcon(order.status)}/> {Helper.getStatusName(order.status)}</td>
+            <td><Icon name={Helper.getStatusIcon(order.status)} color={order.status === "PAYMENT_RECIEVED" ? "green" : "grey"}/>" +
+                " {Helper.getStatusName(order.status)}</td>
         </tr>;
     }
 
