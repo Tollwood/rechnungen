@@ -28,7 +28,9 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                             <label>Rechnungsnummer: </label>
                             <Form.Input id="billNo"
                                         placeholder='Rechungsnummer'
-                                        value={this.props.order.billNo}
+                                        value={this.props.order.billNo ? this.props.order.billNo : "R"+new Intl.DateTimeFormat('de-DE', {
+                                            year: '2-digit'
+                                        }).format(new Date())+"-    "}
                                         name='billNo'
                                         onChange={this.handleOrderChange.bind(this)}
                             />
@@ -43,7 +45,11 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                                 hideMobileKeyboard={true}
                                 name="billDate"
                                 placeholder="Rechnungsdatum wählen"
-                                value={this.props.order.billDate ? this.props.order.billDate : ''}
+                                value={this.props.order.billDate ? this.props.order.billDate : new Intl.DateTimeFormat('de-DE', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit'
+                                }).format(new Date())}
                                 iconPosition="left"
                                 onChange={this.handleDateChange.bind(this)}
                             />

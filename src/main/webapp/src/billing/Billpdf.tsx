@@ -35,6 +35,12 @@ const styles = StyleSheet.create({
     },
     column2: {
         flex: 50
+    },
+    orderRow: {
+        marginBottom: 10,
+        fontSize:16,
+        fontFamily: 'Times-Bold',
+        flexDirection: 'row'
     }
 });
 
@@ -47,8 +53,8 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                     <BillHeader company={this.props.company}/>
                     <View style={styles.text}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>{this.props.bill.technician ? this.props.bill.technician.technicianId : ""} {this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""}</Text>
-                            <Text>{this.props.company.address.city} am, {this.props.bill.billDate}</Text>
+                            <Text>{this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""} {this.props.bill.technician ? this.props.bill.technician.technicianId : ""}</Text>
+                            <Text>{this.props.company.address.city}, am {this.props.bill.billDate}</Text>
                         </View>
                         <Text>{this.props.company.address.street} {this.props.company.address.houseNumber}</Text>
                         <Text>{this.props.company.address.zipCode} {this.props.company.address.city}</Text>
@@ -56,16 +62,17 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                     <View style={styles.text}>
                         <Text>An</Text>
                         <Text>BRUNATA Wärmemesser Hagen GmbH & Co KG</Text>
-                        <Text>Doberanerweg 10, 22143 Hamburg</Text>
+                        <Text>Doberanerweg 10</Text>
+                        <Text>22143 Hamburg</Text>
                     </View>
 
 
                     <View style={styles.text}>
-                        <View style={styles.row}>
-                            <Text style={styles.column2}><Text style={styles.bold}>Rechnung Nr.:</Text> {this.props.bill.billNumber}</Text>
-                            <Text style={styles.column2}><Text style={styles.bold}>Auftrag:</Text> {this.props.bill.order.orderId}</Text>
+                        <View style={styles.orderRow}>
+                            <Text style={[styles.column2]}>Rechnung Nr.: {this.props.bill.billNumber}</Text>
+                            <Text style={[styles.column2]}>Auftrag: {this.props.bill.order.orderId}</Text>
                         </View>
-                        <View style={styles.row}>
+                        <View style={[styles.row]}>
                             <Text
                                 style={styles.column2}><Text
                                 style={styles.bold}>Liegenschaft:</Text> {this.props.bill.realEstate ? this.props.bill.realEstate.name : ""}
@@ -89,7 +96,7 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                     </View>
                     <BillItems bill={this.props.bill}/>
                     <BillTotal bill={this.props.bill}/>
-                    <BillGreetings/>
+                    <BillGreetings technician={this.props.bill.technician}/>
                     <BillFooter technician={this.props.bill.technician} company={this.props.company}/>
                 </Page>
             </Document>
@@ -119,7 +126,7 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
     private renderUu() {
         return <View style={styles.rowBelow}>
             <Text style={styles.column2}><Text
-                style={styles.bold}>NE:</Text> {this.props.bill.order.utilisationUnit} - {this.props.bill.order.name}</Text>
+                style={styles.bold}>NE:</Text> {this.props.bill.order.utilisationUnit}{this.props.bill.order.name? " - "+this.props.bill.order.name: ""}</Text>
             {this.shouldRender(this.props.bill.order.location) ?
                 <Text style={styles.column2}><Text style={styles.bold}>Lage:</Text> {this.props.bill.order.location}</Text> : null}
         </View>
