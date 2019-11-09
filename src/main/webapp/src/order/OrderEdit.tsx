@@ -115,18 +115,10 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/>
                         <Grid.Row centered>
                             <Grid.Column width={5} floated='left'>
-                                {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null : <Button.Group primary>
-                                    <Button content='Speichern' onClick={this.save.bind(this)} className={"save-bttn"}/>
-
-                                    <Dropdown
-                                        className='button icon save-continue'
-                                        floating
-                                        value={''}
-                                        onChange={this.saveAndContinue.bind(this)}
-                                        options={this.getSaveOptions()}
-                                        trigger={<React.Fragment/>}
-                                    />
-
+                                {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null : <Button.Group >
+                                    <Button primary content='Speichern' onClick={this.save.bind(this)} className={"save-bttn"}/>
+                                    <Button.Or text='&' />
+                                    <Button primary content='Weiter' onClick={this.saveAndContinue.bind(this)} className={"save-bttn"} icon={Helper.getStatusIcon(Helper.nextStatus(this.state.order.status))} labelPosition={"right"}/>
                                 </Button.Group>}
                             </Grid.Column>
                             <Grid.Column width={5}>
@@ -259,7 +251,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         return value !== undefined && value.length > 0;
     }
 
-    private saveAndContinue(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+    private saveAndContinue() {
         this.setState({shouldValidate: true});
         if (!this.isValid()) {
             return;
@@ -269,11 +261,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             this.handleOrderChange('billItems', BillService.createBillItems(this.state.order, this.state.services, this.getCurrentRealEstate()))
         }
         this.save();
-    }
-
-    private getSaveOptions() {
-        let icon = Helper.getStatusIcon(Helper.nextStatus(this.state.order.status));
-        return [{key: 'Speicher', value: 'Speichern', text: 'Speichern und weiter', icon: icon}];
     }
 }
 
