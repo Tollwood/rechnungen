@@ -1,6 +1,6 @@
 import * as React from "react";
 import Order from "./Order";
-import {PDFViewer} from "@react-pdf/renderer";
+import {PDFDownloadLink, PDFViewer} from "@react-pdf/renderer";
 import BillService from "../billing/BillService";
 import {Button, Grid} from "semantic-ui-react";
 import Billpdf from "../billing/Billpdf";
@@ -43,9 +43,17 @@ export default class BillButton extends React.Component<BillDetailsProps, BillDe
                                                          disabled={this.cantShowPdf()}/> : null}
 
                         {this.state.renderPdf ?
-                            <Button icon={'close'}
-                                    label={'Rechnung ausblenden'}
-                                    onClick={() => this.setState({renderPdf: false})}/> : null}
+                            <React.Fragment>
+                                <Button icon={'close'}
+                                        label={'Rechnung ausblenden'}
+                                        onClick={() => this.setState({renderPdf: false})}/>
+                                <PDFDownloadLink document={<Billpdf company={this.props.company}
+                                                                    bill={BillService.createNewBill(this.props.order.billNo, this.props.order.billDate, this.props.order, this.props.services, this.props.realEstate, this.props.technician)}/>}
+                                                 fileName={this.props.order.billNo + ".pdf"}>
+                                    {({blob, url, loading, error}) => (loading ? 'Rechnung wird generiert' : 'Rechnung herunterladen')}
+                                </PDFDownloadLink>
+                            </React.Fragment> : null}
+
 
                     </Grid.Column>
                 </Grid.Row>
