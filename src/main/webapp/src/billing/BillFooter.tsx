@@ -42,10 +42,19 @@ export default class BillFooter extends Component<{ technician?: Employee, compa
 
     render(): React.ReactNode {
         var technician: Employee;
-        if (this.props.technician === undefined)
-        {
-            technician = {firstName: "FirstName", lastName: "LastName", taxIdent:"1234", address: {street:"street", houseNumber:"4", zipCode:"25355", city:"Barmstedt"}, technicianId:"1",_links:{}};
-        }else {
+        if (this.props.technician === undefined) {
+            technician = {
+                firstName: "FirstName",
+                lastName: "LastName",
+                taxIdent: "1234",
+                address: {street: "street", houseNumber: "4", zipCode: "25355", city: "Barmstedt"},
+                technicianId: "1",
+                email: "email",
+                phone: "phone",
+                bankDetails: {iban: "iban", bic: "bic", bankName: "bankName"},
+                _links: {}
+            };
+        } else {
             technician = this.props.technician;
         }
         return (
@@ -56,14 +65,14 @@ export default class BillFooter extends Component<{ technician?: Employee, compa
                     <Text>{technician.address.zipCode} {technician.address.city}</Text>
                 </View>
                 <View style={[styles.column3]}>
-                    <Text>Tel.: {this.props.company.phone}</Text>
-                    <Text>Email: {this.props.company.email}</Text>
+                    <Text>Tel.: {technician.phone}</Text>
+                    <Text>Email: {technician.email}</Text>
                     <Text>Steuernummer: {technician.taxIdent}</Text>
                 </View>
                 <View style={[styles.column3]}>
-                    <Text>{this.props.company.bankDetails.bankName}</Text>
-                    <Text>IBAN {this.props.company.bankDetails.iban}</Text>
-                    <Text>BIC {this.props.company.bankDetails.bic}</Text>
+                    <Text>{technician.bankDetails.bankName}</Text>
+                    <Text>IBAN {technician.bankDetails.iban}</Text>
+                    <Text>BIC {technician.bankDetails.bic}</Text>
                 </View>
                 <Text style={styles.pageNumber} render={({pageNumber, totalPages}) => (
                     `${pageNumber} / ${totalPages}`

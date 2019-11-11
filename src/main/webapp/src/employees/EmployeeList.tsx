@@ -13,33 +13,29 @@ export default class EmployeeList extends React.Component<EmployeeListProps> {
 
     render() {
         return (
-            <table className="ui compact celled table selectable employee-list">
-                <thead>
-                <tr>
-                    <th>Monteur</th>
-                    <th>Vorname</th>
-                    <th>Nachname</th>
-                    <th>Steuernummer</th>
-                    <th>Adresse</th>
-                </tr>
-                </thead>
-                <tbody>
-                {this.renderRows()}
-                </tbody>
-                <tfoot className="full-width">
-                <tr>
-                    <th colSpan={5}>
-                        <Button floated={"right"}
-                                primary
-                                icon={{name: "user icon"}}
-                                label={"Add User"}
-                                onClick={this.props.onAddEmployee}
-                                className={"add"}
-                        />
-                    </th>
-                </tr>
-                </tfoot>
-            </table>
+            <React.Fragment>
+                <Button floated={"right"}
+                        primary
+                        icon={{name: "user icon"}}
+                        label={"Add User"}
+                        onClick={this.props.onAddEmployee}
+                        className={"add"}
+                />
+                <table className="ui compact celled table selectable employee-list">
+                    <thead>
+                    <tr>
+                        <th>Monteur</th>
+                        <th>Vorname</th>
+                        <th>Nachname</th>
+                        <th>Steuernummer</th>
+                        <th>Adresse</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.renderRows()}
+                    </tbody>
+                </table>
+            </React.Fragment>
         )
     }
 

@@ -14,27 +14,23 @@ export default class OrderList extends React.Component<OrderListProps> {
 
     render() {
         return (
-            <table className="ui compact celled table selectable order-list">
-                <thead>
-                <tr>
-                    <th>Auftrags-Id</th>
-                    <th>Nettoumsatz</th>
-                    <th>Bruttoumsatz</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                {this.renderRows()}
-                </tbody>
-                <tfoot className="full-width">
-                <tr>
-                    <th colSpan={4}>
-                        <Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"} onClick={this.props.onAdd}
-                                className={"add"}/>
-                    </th>
-                </tr>
-                </tfoot>
-            </table>
+            <React.Fragment>
+                <Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"} onClick={this.props.onAdd}
+                        className={"add"}/>
+                <table className="ui compact celled table selectable order-list">
+                    <thead>
+                    <tr>
+                        <th>Auftrags-Id</th>
+                        <th>Nettoumsatz</th>
+                        <th>Bruttoumsatz</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.renderRows()}
+                    </tbody>
+                </table>
+            </React.Fragment>
         )
 
     }
@@ -50,7 +46,8 @@ export default class OrderList extends React.Component<OrderListProps> {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             })}</td>
-            <td><Icon name={Helper.getStatusIcon(order.status)} color={order.status === "PAYMENT_RECIEVED" ? "green" : "grey"}/> {Helper.getStatusName(order.status)}</td>
+            <td><Icon name={Helper.getStatusIcon(order.status)}
+                      color={order.status === "PAYMENT_RECIEVED" ? "green" : "grey"}/> {Helper.getStatusName(order.status)}</td>
         </tr>;
     }
 

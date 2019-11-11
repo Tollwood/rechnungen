@@ -13,27 +13,23 @@ export default class ServiceList extends React.Component<ServiceListProps> {
 
     render() {
         return (
-            <table className="ui compact celled table selectable service-list">
-                <thead>
-                <tr>
-                    <th>Artikelnummer</th>
-                    <th>Bezeichnung</th>
-                    <th>Preis</th>
-                    <th>Selektierbar</th>
-                </tr>
-                </thead>
-                <tbody>
-                {this.renderRows()}
-                </tbody>
-                <tfoot className="full-width">
-                <tr>
-                    <th colSpan={4}>
-                        <Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Service"} onClick={this.props.onAdd}
-                                className={"add"}/>
-                    </th>
-                </tr>
-                </tfoot>
-            </table>
+            <React.Fragment>
+                <Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Service"} onClick={this.props.onAdd}
+                        className={"add"}/>
+                <table className="ui compact celled table selectable service-list">
+                    <thead>
+                    <tr>
+                        <th>Artikelnummer</th>
+                        <th>Bezeichnung</th>
+                        <th>Preis</th>
+                        <th>Selektierbar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.renderRows()}
+                    </tbody>
+                </table>
+            </React.Fragment>
         )
 
     }

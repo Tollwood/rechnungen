@@ -14,8 +14,5 @@ data class Company(
         @Embedded
         val address: Address,
         val phone: String,
-        val email: String,
-        @Embedded
-        val bankDetails: BankDetails
-
+        val email: String
 )
