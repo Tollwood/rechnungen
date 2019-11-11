@@ -58,7 +58,7 @@ export default class RealEstateOverview extends React.Component<{}, RealEstateOv
 
     private refresh() {
         this.setState({isLoading: true});
-        API.get('/api/realestate')
+        API.get('/api/realestate?sort=name')
             .then(res => {
                 return res.data;
             })
