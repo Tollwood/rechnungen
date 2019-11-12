@@ -46,12 +46,7 @@ class App extends Component<AppProps, AppState> {
                             <AppHeader/>
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column textAlign={'center'} computer={3} tablet={12} mobile={16}>
-                            <OrderSearch onSelected={this.openOrder.bind(this)}/>
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent}/>
+                    <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent} onOpenOrder={this.openOrder.bind(this)}/>
                     <Grid.Column computer={8} tablet={12} mobile={16}>
                         <div id={"content-container"}>
                             {this.state.activeContent === ContentType.EMPLOYEE ? <EmployeeOverview/> : null}
