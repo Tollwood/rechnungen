@@ -36,7 +36,7 @@ export class Menu extends React.Component<Props, State> {
             return (
                 <React.Fragment>
                     <Grid.Row>
-                        <Grid.Column textAlign={'center'} computer={3} tablet={12} mobile={16}>
+                        <Grid.Column computer={8} tablet={12} mobile={16} textAlign={'center'}>
                             <OrderSearch onSelected={this.props.onOpenOrder.bind(this)}/>
                         </Grid.Column>
                     </Grid.Row>

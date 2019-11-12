@@ -5,7 +5,6 @@ import EmployeeOverview from "./employees/EmployeeOverview";
 import 'semantic-ui/dist/semantic.min.css';
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import {ContentType} from "./start/ContentType";
-import OrderSearch from "./order/OrderSearch";
 import AppHeader from "./Header";
 import OrderEdit from "./order/OrderEdit";
 import Order from "./order/Order";
@@ -41,9 +40,9 @@ class App extends Component<AppProps, AppState> {
             <React.Fragment>
                 <LoginModal onSuccess={() => this.onLogin()}/>
                 <Grid centered padded>
-                    <Grid.Row>
-                        <Grid.Column textAlign={'center'}>
-                            <AppHeader/>
+                    <Grid.Row centered>
+                        <Grid.Column computer={8} tablet={12} mobile={16}>
+                            <AppHeader company={this.state.company}/>
                         </Grid.Column>
                     </Grid.Row>
                     <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent} onOpenOrder={this.openOrder.bind(this)}/>
