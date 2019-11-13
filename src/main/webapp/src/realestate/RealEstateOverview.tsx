@@ -4,6 +4,7 @@ import RealEstate from "./RealEstate";
 import RealEstateList from "./RealEstateList";
 import RealEstateEdit from "./RealEstateEdit";
 import {Page} from "../common/Page";
+import {PageService} from "../common/PageService";
 
 interface RealEstateOverviewState {
     realEstates: RealEstate[]
@@ -22,12 +23,12 @@ export default class RealEstateOverview extends React.Component<{}, RealEstateOv
             edit: false,
             selectedItem: new RealEstate(),
             isLoading: true,
-            page: {number: 0, size: 20, totalPages: 0, totalElements: 0}
+            page: new Page('name')
         };
     }
 
     componentDidMount(): void {
-        this.refresh();
+        this.refresh(this.state.page);
     }
 
     render() {
@@ -62,23 +63,20 @@ export default class RealEstateOverview extends React.Component<{}, RealEstateOv
 
     private handleChange() {
         this.setState(Object.assign(this.state, {edit: false, selectedItem: new RealEstate()}));
-        this.refresh();
+        this.refresh(this.state.page);
     }
 
-    private onPageChange(page: Page){
-        this.setState({page: page});
-        this.refresh();
+    private onPageChange(page: Page) {
+        this.refresh(this.state.page);
     }
 
-    private refresh() {
-        this.setState({isLoading: true});
-        let page = '&page=' + this.state.page.number;
-        let size = '&size=' + this.state.page.size;
-        API.get('/api/realestate?sort=name' + page + size)
+    private refresh(page: Page) {
+        this.setState({isLoading: true, page: page});
+        API.get('/api/realestate?' + PageService.getPageAndSortParams(page))
             .then(res => {
                 return res.data;
             })
-            .then(data => this.setState({realEstates: data._embedded.realestate, page: data.page}))
+            .then(data => this.setState({realEstates: data._embedded.realestate, page: Object.assign(this.state.page, data.page)}))
             .finally(() => this.setState({isLoading: false}));
     }
 }

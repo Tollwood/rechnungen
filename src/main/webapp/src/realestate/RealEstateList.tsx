@@ -1,7 +1,9 @@
 import * as React from "react";
 import RealEstate from "./RealEstate";
-import {Button, Dropdown, DropdownProps, Pagination, PaginationProps, Placeholder, Table} from "semantic-ui-react";
+import {Button, Placeholder, Table} from "semantic-ui-react";
 import {Page} from "../common/Page";
+import PaginationFooter from "../common/PaginationFooter";
+import {PageService} from "../common/PageService";
 
 interface RealEstateListProps {
     onAdd: () => void,
@@ -12,71 +14,41 @@ interface RealEstateListProps {
     isLoading: boolean
 }
 
-export default class RealEstateList extends React.Component<RealEstateListProps, { }> {
+export default class RealEstateList extends React.Component<RealEstateListProps,{}> {
 
     render() {
         return (
             <React.Fragment>
                 <Button floated={"right"} primary icon={{name: "add"}} label={"Neue Liegenschaft"} onClick={this.props.onAdd}
                         className={"add"}/>
-                <Table className="ui compact celled table selectable realEstate-list">
+                <Table sortable striped>
                     <Table.Header>
-                        <Table.HeaderCell>Bezeichnung</Table.HeaderCell>
-                        <Table.HeaderCell>Adresse</Table.HeaderCell>
-                        <Table.HeaderCell>Entfernung</Table.HeaderCell>
+                        <Table.Row>
+                            <Table.HeaderCell
+                                sorted={this.props.page.sort === 'name' ? this.props.page.direction : undefined}
+                                onClick={() => PageService.sort('name',this.props.page,this.props.onPageChange)}
+                            >
+                                Bezeichnung
+                            </Table.HeaderCell>
+                            <Table.HeaderCell
+                                sorted={this.props.page.sort === 'address.zipCode' ? this.props.page.direction : undefined}
+                                onClick={() => PageService.sort('address.zipCode',this.props.page,this.props.onPageChange)}
+                            >Adresse</Table.HeaderCell>
+                            <Table.HeaderCell
+                                sorted={this.props.page.sort === 'distance' ? this.props.page.direction : undefined}
+                                onClick={() => PageService.sort('distance',this.props.page,this.props.onPageChange)}
+                            >Entfernung</Table.HeaderCell>
+                        </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {this.renderRows()}
                     </Table.Body>
-                    {this.props.page ?
-                        <Table.Footer>
-                            <Table.Cell colSpan={2}>
-                                {this.props.page.totalPages > 1 ?
-                                <Pagination  activePage={this.props.page.number + 1}
-                                            onPageChange={this.handlePaginationChange.bind(this)}
-                                            totalPages={this.props.page.totalPages}
-                                            lastItem={this.props.page.totalPages - 1 === this.props.page.number? null : undefined}
-                                            nextItem={this.props.page.totalPages - 1 === this.props.page.number? null : undefined}
-                                            firstItem={0 === this.props.page.number? null : undefined}
-                                            prevItem={0 === this.props.page.number? null : undefined}
-
-                                />:null}
-                            </Table.Cell>
-                            <Table.Cell>
-                                <Dropdown id="pageSize"
-                                          style={{float: "right"}}
-                                          compact={true}
-                                          selection
-                                          options={[{key: 10, value: 10, text: 10}, {
-                                              key: 20,
-                                              value: 20,
-                                              text: 20
-                                          }, {key: 30, value: 30, text: 30}, {key: 40, value: 40, text: 40}, {
-                                              key: 50,
-                                              value: 50,
-                                              text: 50
-                                          }]}
-                                          value={this.props.page.size}
-                                          onChange={this.handlePageSizeChange.bind(this)}
-                                />
-                            </Table.Cell>
-                        </Table.Footer>
-
-                        : null}
+                   <PaginationFooter page={this.props.page} onPageChange={this.props.onPageChange} columns={3}/>
                 </Table>
-
             </React.Fragment>
         )
 
     }
-
-    handlePageSizeChange(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        this.props.onPageChange(Object.assign(this.props.page, {size: data.value, number: 0}))
-    }
-
-    handlePaginationChange(event: React.MouseEvent<HTMLAnchorElement>, data: PaginationProps) {
-        this.props.onPageChange(Object.assign(this.props.page, {number: data.activePage as number - 1}))
-    };
 
     private renderRow(realEstate: RealEstate) {
         return <Table.Row className={realEstate.name ? realEstate.name.replace(" ", "") : ""} key={realEstate.name}

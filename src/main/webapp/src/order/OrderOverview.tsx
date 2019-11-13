@@ -6,6 +6,8 @@ import OrderEdit from "./OrderEdit";
 import Company from "../employees/Company";
 import {Grid} from "semantic-ui-react";
 import OrderSearch from "./OrderSearch";
+import {Page} from "../common/Page";
+import {PageService} from "../common/PageService";
 
 interface OrderOverviewProps {
     company: Company
@@ -15,18 +17,25 @@ interface OrderOverviewState {
     orders: Order[]
     selectedItem: Order,
     edit: boolean,
-    isLoading: boolean
+    isLoading: boolean,
+    page: Page
 }
 
 export default class OrderOverview extends React.Component<OrderOverviewProps, OrderOverviewState> {
 
     constructor(props: OrderOverviewProps) {
         super(props);
-        this.state = {orders: [], edit: false, selectedItem: new Order(), isLoading: true};
+        this.state = {
+            orders: [],
+            edit: false,
+            selectedItem: new Order(),
+            isLoading: true,
+            page: new Page('orderId')
+        };
     }
 
     componentDidMount(): void {
-        this.refresh();
+        this.refresh(this.state.page);
     }
 
     render() {
@@ -45,6 +54,8 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
                                        this.handleSelection(order)
                                    }}
                                    isLoading={this.state.isLoading}
+                                   page={this.state.page}
+                                   onPageChange={this.refresh.bind(this)}
                         />}
                     {!this.state.edit ? null :
                         <OrderEdit
@@ -70,27 +81,28 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
 
     private handleCancelEdit() {
         this.setState(Object.assign(this.state, {edit: false, selectedItem: new Order()}));
-        this.refresh();
+        this.refresh(this.state.page);
     }
 
     private handleDelete() {
         this.setState(Object.assign(this.state, {edit: false, selectedItem: new Order()}));
-        this.refresh();
+        this.refresh(this.state.page);
     }
 
     private handleSave() {
         this.setState(Object.assign(this.state, {edit: false, selectedItem: new Order()}));
-        this.refresh();
+        this.refresh(this.state.page);
 
     }
 
-    private refresh() {
-        this.setState({isLoading: true});
-        API.get('/api/order')
+    private refresh(page: Page) {
+        this.setState({isLoading: true, page: page});
+        API.get('/api/order?' + PageService.getPageAndSortParams(page))
             .then(res => {
                 return res.data;
             })
-            .then(data => this.setState({orders: data._embedded.order}))
+            .then(data => {this.setState({orders: data._embedded.order, page: Object.assign(this.state.page, data.page)})
+            })
             .finally(() =>
                 this.setState({isLoading: false})
             );
