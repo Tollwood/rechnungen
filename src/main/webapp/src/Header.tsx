@@ -7,7 +7,7 @@ export default class AppHeader extends React.Component<{ company: Company }> {
 
     render() {
         return (
-            <Header as='h1' textAlign={"center"} className="header-title" image={window.location.origin + '/logo_timm.png'} content={this.props.company.name}/>
+            <Header as='h1' textAlign={"center"} className="header-title" image={window.location.origin + '/'+ this.props.company.logo} content={this.props.company.name}/>
         );
     }
 
