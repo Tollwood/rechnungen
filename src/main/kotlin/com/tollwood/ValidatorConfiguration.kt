@@ -19,7 +19,7 @@ class ValidatorConfiguration : InitializingBean {
 
     @Throws(Exception::class)
     override fun afterPropertiesSet() {
-        val events = Arrays.asList("beforeCreate")
+        val events = Arrays.asList("beforeCreate","beforeSave")
         for ((key, value) in validators!!) {
             events.stream()
                     .filter({ p -> key.startsWith(p) })

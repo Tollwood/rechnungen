@@ -12,14 +12,15 @@ interface RealEstateEditProps {
 }
 
 interface RealEstateEditState {
-    realEstate: RealEstate
+    realEstate: RealEstate,
+    errors: Map<string, string>
 }
 
 export default class RealEstateEdit extends React.Component<RealEstateEditProps, RealEstateEditState> {
 
     constructor(props: RealEstateEditProps) {
         super(props);
-        this.state = {realEstate: props.realEstate}
+        this.state = {realEstate: props.realEstate, errors: new Map()}
     }
 
     componentDidUpdate(prevProps: Readonly<RealEstateEditProps>, prevState: Readonly<RealEstateEditState>, snapshot?: any): void {
@@ -38,11 +39,12 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
                             <Grid.Column width={8}>
                                 <Form.Field>
                                     <label>Bezeichnung</label>
-                                    <input id="name"
-                                           placeholder='Bezeichnung'
-                                           value={this.state.realEstate.name}
-                                           name='name'
-                                           onChange={this.handleRealestateChange.bind(this)}
+                                    <Form.Input id="name"
+                                                placeholder='Bezeichnung'
+                                                value={this.state.realEstate.name}
+                                                name='name'
+                                                onChange={this.handleRealestateChange.bind(this)}
+                                                error={this.state.errors.get('name') ? {content: this.state.errors.get('name')} : null}
                                     />
                                 </Form.Field>
                             </Grid.Column>
@@ -80,10 +82,21 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
     save() {
         if (this.state.realEstate._links.self === undefined) {
             API.post("/api/realestate", this.state.realEstate)
-                .then(() => this.props.onChange());
+                .then(() => this.props.onChange())
+                .catch(error => {
+                    if (error.response && error.response.status === 400) {
+                        this.setState({errors: new Map(Object.entries(error.response.data))});
+                    }
+                });
         } else {
             API.patch(this.state.realEstate._links.self.href, this.state.realEstate)
-                .then(() => this.props.onChange());
+                .then(() => this.props.onChange())
+                .catch(error => {
+                    if (error.response && error.response.status === 400) {
+                        this.setState({errors: new Map(Object.entries(error.response.data))});
+                    }
+                });
+            ;
         }
     }
 
