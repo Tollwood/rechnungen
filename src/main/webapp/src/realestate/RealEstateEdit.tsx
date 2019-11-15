@@ -5,6 +5,7 @@ import API from "../API";
 import RealEstate from "./RealEstate";
 import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
+import ErrorMapper from "../ErrorMapper";
 
 interface RealEstateEditProps {
     onChange: () => void;
@@ -84,19 +85,14 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
             API.post("/api/realestate", this.state.realEstate)
                 .then(() => this.props.onChange())
                 .catch(error => {
-                    if (error.response && error.response.status === 400) {
-                        this.setState({errors: new Map(Object.entries(error.response.data))});
-                    }
+                    ErrorMapper.map(error,this)
                 });
         } else {
             API.patch(this.state.realEstate._links.self.href, this.state.realEstate)
                 .then(() => this.props.onChange())
                 .catch(error => {
-                    if (error.response && error.response.status === 400) {
-                        this.setState({errors: new Map(Object.entries(error.response.data))});
-                    }
+                    ErrorMapper.map(error,this)
                 });
-            ;
         }
     }
 

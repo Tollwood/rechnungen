@@ -9,5 +9,5 @@ import java.util.*
 @RepositoryRestResource(collectionResourceRel = "realestate", path = "realestate")
 interface RealestateResource: PagingAndSortingRepository<RealEstate, Long> {
 
-    fun findByName(name: String): Optional<RealEstate>
+    fun findByName(name: String?): Optional<RealEstate>
 }

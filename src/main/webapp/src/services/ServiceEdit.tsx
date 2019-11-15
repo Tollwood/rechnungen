@@ -1,10 +1,11 @@
 import * as React from "react";
 import {ChangeEvent} from "react";
-import {Checkbox, CheckboxProps, Form, Icon, Input} from 'semantic-ui-react'
+import {Checkbox, CheckboxProps, Form, Icon} from 'semantic-ui-react'
 import API from "../API";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import Service from "../order/Service";
+import ErrorMapper from "../ErrorMapper";
 
 interface Props {
     onSave: () => void;
@@ -15,13 +16,14 @@ interface Props {
 
 interface State {
     service: Service
+    errors: Map<string, string>
 }
 
 export default class ServiceEdit extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = {service: props.service}
+        this.state = {service: props.service, errors: new Map<string, string>()}
     }
 
     componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
@@ -39,37 +41,41 @@ export default class ServiceEdit extends React.Component<Props, State> {
                             <Grid.Column width={4}>
                                 <Form.Field>
                                     <label>Code</label>
-                                    <input id="articleNumber"
-                                           placeholder='Code'
-                                           value={this.state.service.articleNumber}
-                                           name='articleNumber'
-                                           onChange={this.handleChange.bind(this)}
+                                    <Form.Input
+                                        id="articleNumber"
+                                        placeholder='Code'
+                                        value={this.state.service.articleNumber}
+                                        name='articleNumber'
+                                        onChange={this.handleChange.bind(this)}
+                                        error={this.state.errors.get('articleNumber') ? {content: this.state.errors.get('articleNumber')} : null}
                                     />
                                 </Form.Field>
                             </Grid.Column>
                             <Grid.Column width={8}>
                                 <Form.Field>
                                     <label>Bezeichnung</label>
-                                    <input id="title"
-                                           placeholder='Bezeichnung'
-                                           value={this.state.service.title}
-                                           name='title'
-                                           onChange={this.handleChange.bind(this)}
+                                    <Form.Input id="title"
+                                                placeholder='Bezeichnung'
+                                                value={this.state.service.title}
+                                                name='title'
+                                                onChange={this.handleChange.bind(this)}
+                                                error={this.state.errors.get('title') ? {content: this.state.errors.get('title')} : null}
                                     />
                                 </Form.Field>
                             </Grid.Column>
                             <Grid.Column width={4}>
                                 <Form.Field>
                                     <label>Preis</label>
-                                    <Input
-                                           type={"number"}
-                                           step="0.01"
-                                           id="price"
-                                           placeholder='Preis'
-                                           value={this.state.service.price}
-                                           name='price'
-                                           onChange={this.handleChange.bind(this)}
-                                           icon={<Icon name='eur'/>}
+                                    <Form.Input
+                                        type={"number"}
+                                        step="0.01"
+                                        id="price"
+                                        placeholder='Preis'
+                                        value={this.state.service.price}
+                                        name='price'
+                                        onChange={this.handleChange.bind(this)}
+                                        icon={<Icon name='eur'/>}
+                                        error={this.state.errors.get('price') ? {content: this.state.errors.get('price')} : null}
                                     />
                                 </Form.Field>
                             </Grid.Column>
@@ -87,7 +93,8 @@ export default class ServiceEdit extends React.Component<Props, State> {
                                 </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
-                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)} canDelete={this.state.service._links.self !== undefined}/>
+                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)}
+                                    canDelete={this.state.service._links.self !== undefined}/>
                     </Grid>
                 </Form>
             </div>
@@ -106,10 +113,16 @@ export default class ServiceEdit extends React.Component<Props, State> {
     save() {
         if (this.state.service._links.self === undefined) {
             API.post("/api/service", this.state.service)
-                .then(() => this.props.onSave());
+                .then(() => this.props.onSave())
+                .catch(error => {
+                    ErrorMapper.map(error, this)
+                });
         } else {
             API.patch(this.state.service._links.self.href, this.state.service)
-                .then(() => this.props.onSave());
+                .then(() => this.props.onSave())
+                .catch(error => {
+                    ErrorMapper.map(error, this)
+                });
         }
     }
 

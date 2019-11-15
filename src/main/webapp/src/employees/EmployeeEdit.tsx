@@ -7,6 +7,7 @@ import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
 import BankInput from "../common/BankInput";
+import ErrorMapper from "../ErrorMapper";
 
 interface EmployeeEditProps {
     onSave: () => void;
@@ -16,13 +17,14 @@ interface EmployeeEditProps {
 
 interface EmployeeEditState {
     employee: Employee
+    errors: Map<string, string>
 }
 
 export default class EmployeeEdit extends React.Component<EmployeeEditProps, EmployeeEditState> {
 
     constructor(props: EmployeeEditProps) {
         super(props);
-        this.state = {employee: props.employee}
+        this.state = {employee: props.employee, errors: new Map<string, string>()}
     }
 
     componentDidUpdate(prevProps: Readonly<EmployeeEditProps>, prevState: Readonly<EmployeeEditState>, snapshot?: any): void {
@@ -40,11 +42,12 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                             <Grid.Column width={3}>
                                 <Form.Field>
                                     <label>Monteur</label>
-                                    <input id="technicianId"
+                                    <Form.Input id="technicianId"
                                            placeholder='Monteur'
                                            value={this.state.employee.technicianId}
                                            name='technicianId'
                                            onChange={this.handleEmployeeChange.bind(this)}
+                                           error={this.state.errors.get('technicianId') ? {content: this.state.errors.get('technicianId')} : null}
                                     />
                                 </Form.Field>
                             </Grid.Column>
@@ -53,22 +56,26 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                             <Grid.Column width={8}>
                                 <Form.Field>
                                     <label>Vorname</label>
-                                    <input id="firstName"
+                                    <Form.Input id="firstName"
                                            placeholder='Vorname'
                                            value={this.state.employee.firstName}
                                            name='firstName'
                                            onChange={this.handleEmployeeChange.bind(this)}
+                                           error={this.state.errors.get('firstName') ? {content: this.state.errors.get('firstName')} : null}
+
                                     />
                                 </Form.Field>
                             </Grid.Column>
                             <Grid.Column width={8}>
                                 <Form.Field>
                                     <label>Nachname</label>
-                                    <input id="lastName"
+                                    <Form.Input id="lastName"
                                            placeholder='Nachname'
                                            value={this.state.employee.lastName}
                                            name='lastName'
-                                           onChange={this.handleEmployeeChange.bind(this)}/>
+                                           onChange={this.handleEmployeeChange.bind(this)}
+                                           error={this.state.errors.get('lastName') ? {content: this.state.errors.get('lastName')} : null}
+                                    />
                                 </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
@@ -76,21 +83,25 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                             <Grid.Column width={8}>
                                 <Form.Field>
                                     <label>Email</label>
-                                    <input id="email"
+                                    <Form.Input id="email"
                                            placeholder='Email'
                                            value={this.state.employee.email}
                                            name='email'
-                                           onChange={this.handleEmployeeChange.bind(this)}/>
+                                           onChange={this.handleEmployeeChange.bind(this)}
+                                           error={this.state.errors.get('email') ? {content: this.state.errors.get('email')} : null}
+                                    />
                                 </Form.Field>
                             </Grid.Column>
                             <Grid.Column width={8}>
                                 <Form.Field>
                                     <label>Telefon</label>
-                                    <input id="phone"
+                                    <Form.Input id="phone"
                                            placeholder='Telefon'
                                            value={this.state.employee.phone}
                                            name='phone'
-                                           onChange={this.handleEmployeeChange.bind(this)}/>
+                                           onChange={this.handleEmployeeChange.bind(this)}
+                                           error={this.state.errors.get('phone') ? {content: this.state.errors.get('phone')} : null}
+                                    />
                                 </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
@@ -98,11 +109,14 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                             <Grid.Column width={8}>
                                 <Form.Field>
                                     <label>Steuernummer</label>
-                                    <input id="taxtIdent"
+                                    <Form.Input id="taxtIdent"
                                            placeholder='Steuernummer'
                                            value={this.state.employee.taxIdent}
                                            name='taxIdent'
-                                           onChange={this.handleEmployeeChange.bind(this)}/>
+                                           onChange={this.handleEmployeeChange.bind(this)}
+                                           error={this.state.errors.get('taxIdent') ? {content: this.state.errors.get('taxIdent')} : null}
+                                    />
+
                                 </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
@@ -117,9 +131,11 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 <h4>Bankdaten</h4>
                             </Grid.Column>
                         </Grid.Row>
-                        <BankInput bankDetails={this.state.employee.bankDetails} handleBankDetailsChange={this.handleBankDetailsChange.bind(this)}/>
+                        <BankInput bankDetails={this.state.employee.bankDetails}
+                                   handleBankDetailsChange={this.handleBankDetailsChange.bind(this)}/>
 
-                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)} canDelete={this.state.employee._links.self !== undefined}/>
+                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)}
+                                    canDelete={this.state.employee._links.self !== undefined}/>
                     </Grid>
                 </Form>
             </div>
@@ -144,10 +160,12 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
     save() {
         if (this.state.employee._links.self === undefined) {
             API.post("/api/employee", this.state.employee)
-                .then(() => this.props.onSave());
+                .then(() => this.props.onSave())
+                .catch(errors => ErrorMapper.map(errors, this))
         } else {
             API.patch(this.state.employee._links.self.href, this.state.employee)
-                .then(() => this.props.onSave());
+                .then(() => this.props.onSave())
+                .catch(errors => ErrorMapper.map(errors, this))
         }
     }
 

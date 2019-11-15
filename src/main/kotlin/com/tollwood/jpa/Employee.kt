@@ -15,7 +15,7 @@ data class Employee(
         val address: Address,
         val taxIdent: String,
         @NotNull
-        val technicianId: String,
+        val technicianId: String?,
 
         @NotNull
         val email: String,

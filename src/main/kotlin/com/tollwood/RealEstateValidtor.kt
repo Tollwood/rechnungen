@@ -1,11 +1,12 @@
 package com.tollwood
 
 import com.tollwood.jpa.RealEstate
+import com.tollwood.validation.ValidationErrors.Companion.alreadyExists
+import com.tollwood.validation.ValidationErrors.Companion.notEmpty
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.validation.Errors
 import org.springframework.validation.Validator
-import java.util.function.Consumer
 
 
 @Component("beforeSaveRealEstateValidtor")
@@ -24,15 +25,7 @@ open class RealEstateValidtor(@Autowired val realestateResource: RealestateResou
     override fun validate(obj: Any, errors: Errors) {
         val realEstate = obj as RealEstate
 
-        if (checkInputString(realEstate.name)) {
-            errors.rejectValue("name", "requiredField", "requiredField")
-        } else {
-            realestateResource.findByName(realEstate.name!!)
-                    .ifPresent(Consumer { errors.rejectValue("name", "alreadyExists", "alreadyExists") })
-        }
-    }
-
-    private fun checkInputString(input: String?): Boolean {
-        return input == null || input.trim { it <= ' ' }.length == 0
+        notEmpty(realEstate.name, "name", errors)
+        alreadyExists(realestateResource.findByName(realEstate.name), "name", errors)
     }
 }

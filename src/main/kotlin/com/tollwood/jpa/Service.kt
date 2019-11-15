@@ -12,10 +12,10 @@ data class Service(
         @GeneratedValue(strategy = AUTO)
         val id: Long,
         @NotNull
-        val articleNumber: String,
+        val articleNumber: String?,
         @NotNull
         val title: String,
         @NotNull
-        val price: Double,
+        val price: Double? = null,
         @NotNull
         val selectable: Boolean) : BaseEntity()

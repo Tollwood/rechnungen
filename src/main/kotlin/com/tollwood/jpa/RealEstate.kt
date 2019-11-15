@@ -11,8 +11,7 @@ data class RealEstate (
         val id: Long? = null,
 
         @Column(unique = true, nullable = false)
-        @NotEmpty
-        val name: String? = null,
+        val name: String?,
 
         @Embedded
         val address: Address,
