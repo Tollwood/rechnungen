@@ -102,12 +102,18 @@ export default class ServiceEdit extends React.Component<Props, State> {
     }
 
     handleSelectable(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) {
-        this.setState({service: Object.assign(this.state.service, {"selectable": data.value})});
+        this.setState({
+            service: Object.assign(this.state.service, {"selectable": data.value}),
+            errors: ErrorMapper.removeError(this.state.errors, "selectable", )
+        });
     }
 
     handleChange(event: ChangeEvent<HTMLInputElement>) {
         const name: string = event.target.name;
-        this.setState({service: Object.assign(this.state.service, {[name]: event.target.value})});
+        this.setState({
+            service: Object.assign(this.state.service, {[name]: event.target.value}),
+            errors: ErrorMapper.removeError(this.state.errors, name)
+        });
     }
 
     save() {

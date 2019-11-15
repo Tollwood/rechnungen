@@ -43,11 +43,11 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 <Form.Field>
                                     <label>Monteur</label>
                                     <Form.Input id="technicianId"
-                                           placeholder='Monteur'
-                                           value={this.state.employee.technicianId}
-                                           name='technicianId'
-                                           onChange={this.handleEmployeeChange.bind(this)}
-                                           error={this.state.errors.get('technicianId') ? {content: this.state.errors.get('technicianId')} : null}
+                                                placeholder='Monteur'
+                                                value={this.state.employee.technicianId}
+                                                name='technicianId'
+                                                onChange={this.handleEmployeeChange.bind(this)}
+                                                error={this.state.errors.get('technicianId') ? {content: this.state.errors.get('technicianId')} : null}
                                     />
                                 </Form.Field>
                             </Grid.Column>
@@ -57,11 +57,11 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 <Form.Field>
                                     <label>Vorname</label>
                                     <Form.Input id="firstName"
-                                           placeholder='Vorname'
-                                           value={this.state.employee.firstName}
-                                           name='firstName'
-                                           onChange={this.handleEmployeeChange.bind(this)}
-                                           error={this.state.errors.get('firstName') ? {content: this.state.errors.get('firstName')} : null}
+                                                placeholder='Vorname'
+                                                value={this.state.employee.firstName}
+                                                name='firstName'
+                                                onChange={this.handleEmployeeChange.bind(this)}
+                                                error={this.state.errors.get('firstName') ? {content: this.state.errors.get('firstName')} : null}
 
                                     />
                                 </Form.Field>
@@ -70,11 +70,11 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 <Form.Field>
                                     <label>Nachname</label>
                                     <Form.Input id="lastName"
-                                           placeholder='Nachname'
-                                           value={this.state.employee.lastName}
-                                           name='lastName'
-                                           onChange={this.handleEmployeeChange.bind(this)}
-                                           error={this.state.errors.get('lastName') ? {content: this.state.errors.get('lastName')} : null}
+                                                placeholder='Nachname'
+                                                value={this.state.employee.lastName}
+                                                name='lastName'
+                                                onChange={this.handleEmployeeChange.bind(this)}
+                                                error={this.state.errors.get('lastName') ? {content: this.state.errors.get('lastName')} : null}
                                     />
                                 </Form.Field>
                             </Grid.Column>
@@ -84,11 +84,11 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 <Form.Field>
                                     <label>Email</label>
                                     <Form.Input id="email"
-                                           placeholder='Email'
-                                           value={this.state.employee.email}
-                                           name='email'
-                                           onChange={this.handleEmployeeChange.bind(this)}
-                                           error={this.state.errors.get('email') ? {content: this.state.errors.get('email')} : null}
+                                                placeholder='Email'
+                                                value={this.state.employee.email}
+                                                name='email'
+                                                onChange={this.handleEmployeeChange.bind(this)}
+                                                error={this.state.errors.get('email') ? {content: this.state.errors.get('email')} : null}
                                     />
                                 </Form.Field>
                             </Grid.Column>
@@ -96,11 +96,11 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 <Form.Field>
                                     <label>Telefon</label>
                                     <Form.Input id="phone"
-                                           placeholder='Telefon'
-                                           value={this.state.employee.phone}
-                                           name='phone'
-                                           onChange={this.handleEmployeeChange.bind(this)}
-                                           error={this.state.errors.get('phone') ? {content: this.state.errors.get('phone')} : null}
+                                                placeholder='Telefon'
+                                                value={this.state.employee.phone}
+                                                name='phone'
+                                                onChange={this.handleEmployeeChange.bind(this)}
+                                                error={this.state.errors.get('phone') ? {content: this.state.errors.get('phone')} : null}
                                     />
                                 </Form.Field>
                             </Grid.Column>
@@ -110,11 +110,11 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 <Form.Field>
                                     <label>Steuernummer</label>
                                     <Form.Input id="taxtIdent"
-                                           placeholder='Steuernummer'
-                                           value={this.state.employee.taxIdent}
-                                           name='taxIdent'
-                                           onChange={this.handleEmployeeChange.bind(this)}
-                                           error={this.state.errors.get('taxIdent') ? {content: this.state.errors.get('taxIdent')} : null}
+                                                placeholder='Steuernummer'
+                                                value={this.state.employee.taxIdent}
+                                                name='taxIdent'
+                                                onChange={this.handleEmployeeChange.bind(this)}
+                                                error={this.state.errors.get('taxIdent') ? {content: this.state.errors.get('taxIdent')} : null}
                                     />
 
                                 </Form.Field>
@@ -125,14 +125,16 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                 <h4>Adresse</h4>
                             </Grid.Column>
                         </Grid.Row>
-                        <AddressInput address={this.state.employee.address} handleAddressChange={this.handleAddressChange.bind(this)}/>
+                        <AddressInput address={this.state.employee.address} handleAddressChange={this.handleAddressChange.bind(this)}
+                                      errors={ErrorMapper.childError(this.state.errors)}/>
                         <Grid.Row>
                             <Grid.Column>
                                 <h4>Bankdaten</h4>
                             </Grid.Column>
                         </Grid.Row>
                         <BankInput bankDetails={this.state.employee.bankDetails}
-                                   handleBankDetailsChange={this.handleBankDetailsChange.bind(this)}/>
+                                   handleBankDetailsChange={this.handleBankDetailsChange.bind(this)}
+                                   errors={ErrorMapper.childError(this.state.errors)}/>
 
                         <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)}
                                     canDelete={this.state.employee._links.self !== undefined}/>
@@ -144,17 +146,17 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
 
     handleEmployeeChange(event: ChangeEvent<HTMLInputElement>) {
         const name: string = event.target.name;
-        this.setState({employee: Object.assign(this.state.employee, {[name]: event.target.value})});
+        this.setState({employee: Object.assign(this.state.employee, {[name]: event.target.value}), errors: ErrorMapper.removeError(this.state.errors, name)});
     }
 
     handleAddressChange(event: ChangeEvent<HTMLInputElement>) {
         const newAddress = Object.assign(this.state.employee.address, {[event.target.name]: event.target.value});
-        this.setState({employee: Object.assign(this.state.employee, {address: newAddress})});
+        this.setState({employee: Object.assign(this.state.employee, {address: newAddress}), errors: ErrorMapper.removeError(this.state.errors, "address."+event.target.name)});
     }
 
     handleBankDetailsChange(event: ChangeEvent<HTMLInputElement>) {
         const newBankDetails = Object.assign(this.state.employee.bankDetails, {[event.target.name]: event.target.value});
-        this.setState({employee: Object.assign(this.state.employee, {bankDetails: newBankDetails})});
+        this.setState({employee: Object.assign(this.state.employee, {bankDetails: newBankDetails}), errors: ErrorMapper.removeError(this.state.errors, "bankDetails."+event.target.name)});
     }
 
     save() {

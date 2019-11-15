@@ -61,7 +61,8 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
                                 </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
-                        <AddressInput address={this.state.realEstate.address} handleAddressChange={this.handleAddressChange.bind(this)}/>
+                        <AddressInput address={this.state.realEstate.address} handleAddressChange={this.handleAddressChange.bind(this)}
+                                      errors={new Map()}/>
                         <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onChange} onDelete={this.delete.bind(this)}
                                     canDelete={this.state.realEstate._links.self !== undefined}/>
                     </Grid>
@@ -72,12 +73,18 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
 
     handleRealestateChange(event: ChangeEvent<HTMLInputElement>) {
         const name: string = event.target.name;
-        this.setState({realEstate: Object.assign(this.state.realEstate, {[name]: event.target.value})});
+        this.setState({
+            realEstate: Object.assign(this.state.realEstate, {[name]: event.target.value}),
+            errors: ErrorMapper.removeError(this.state.errors, name)
+        });
     }
 
     handleAddressChange(event: ChangeEvent<HTMLInputElement>) {
         const newAddress = Object.assign(this.state.realEstate.address, {[event.target.name]: event.target.value});
-        this.setState({realEstate: Object.assign(this.state.realEstate, {address: newAddress})});
+        this.setState({
+            realEstate: Object.assign(this.state.realEstate, {address: newAddress}),
+            errors: ErrorMapper.removeError(this.state.errors, "address." + event.target.name)
+        });
     }
 
     save() {
@@ -85,13 +92,13 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
             API.post("/api/realestate", this.state.realEstate)
                 .then(() => this.props.onChange())
                 .catch(error => {
-                    ErrorMapper.map(error,this)
+                    ErrorMapper.map(error, this)
                 });
         } else {
             API.patch(this.state.realEstate._links.self.href, this.state.realEstate)
                 .then(() => this.props.onChange())
                 .catch(error => {
-                    ErrorMapper.map(error,this)
+                    ErrorMapper.map(error, this)
                 });
         }
     }
