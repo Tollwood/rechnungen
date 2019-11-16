@@ -10,7 +10,7 @@ import javax.persistence.*
 data class Order(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long? = null,
+        override val id: Long? = null,
 
         @Column(unique = true)
         val orderId: String,

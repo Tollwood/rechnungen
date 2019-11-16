@@ -44,8 +44,8 @@ class RealEstateOverview(private var driver: WebDriver) {
         return RealEstateEdit(driver)
     }
 
-    fun selectByName(name: String): RealEstateEdit {
-        driver.findElement<WebElement>(By.ByCssSelector(".realEstate-list ."+ name.replace(" ",""))).click()
+    fun selectByName(name: String?): RealEstateEdit {
+        driver.findElement<WebElement>(By.ByCssSelector(".realEstate-list ."+ name?.replace(" ",""))).click()
         return RealEstateEdit(driver)
     }
 }

@@ -23,24 +23,24 @@ open class EmployeeValidtor(@Autowired val employeeResource: EmployeeResource) :
     }
 
     override fun validate(obj: Any, errors: Errors) {
-        val service = obj as Employee
-        notEmpty(service.technicianId, "technicianId", errors);
-        ValidationErrors.alreadyExists(employeeResource.findByTechnicianId(service.technicianId), "technicianId", errors)
-        notEmpty(service.firstName, "firstName", errors);
-        notEmpty(service.lastName, "lastName", errors);
-        notEmpty(service.email, "email", errors);
-        notEmpty(service.phone, "phone", errors);
-        notEmpty(service.taxIdent, "taxIdent", errors);
+        val employee = obj as Employee
+        notEmpty(employee.technicianId, "technicianId", errors);
+        ValidationErrors.alreadyExists(employeeResource.findByTechnicianId(employee.technicianId), employee.id,"technicianId", errors)
+        notEmpty(employee.firstName, "firstName", errors);
+        notEmpty(employee.lastName, "lastName", errors);
+        notEmpty(employee.email, "email", errors);
+        notEmpty(employee.phone, "phone", errors);
+        notEmpty(employee.taxIdent, "taxIdent", errors);
 
 
-        notEmpty(service.bankDetails.bankName, "bankDetails.bankName", errors);
-        notEmpty(service.bankDetails.iban, "bankDetails.iban", errors);
-        notEmpty(service.bankDetails.bic, "bankDetails.bic", errors);
+        notEmpty(employee.bankDetails.bankName, "bankDetails.bankName", errors);
+        notEmpty(employee.bankDetails.iban, "bankDetails.iban", errors);
+        notEmpty(employee.bankDetails.bic, "bankDetails.bic", errors);
 
 
-        notEmpty(service.address.street, "address.street", errors);
-        notEmpty(service.address.houseNumber, "address.houseNumber", errors);
-        notEmpty(service.address.zipCode, "address.zipCode", errors);
-        notEmpty(service.address.city, "address.city", errors);
+        notEmpty(employee.address.street, "address.street", errors);
+        notEmpty(employee.address.houseNumber, "address.houseNumber", errors);
+        notEmpty(employee.address.zipCode, "address.zipCode", errors);
+        notEmpty(employee.address.city, "address.city", errors);
     }
 }

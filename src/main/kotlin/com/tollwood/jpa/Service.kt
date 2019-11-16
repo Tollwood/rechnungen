@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull
 data class Service(
         @Id
         @GeneratedValue(strategy = AUTO)
-        val id: Long,
+        override val id: Long,
         @NotNull
         val articleNumber: String?,
         @NotNull

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull
 data class RealEstate (
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long? = null,
+        override val id: Long? = null,
 
         @Column(unique = true, nullable = false)
         val name: String?,

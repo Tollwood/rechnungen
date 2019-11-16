@@ -9,6 +9,9 @@ import javax.persistence.TemporalType
 
 @MappedSuperclass
 abstract class BaseEntity{
+
+    abstract val id: Long?
+
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     protected lateinit var createdAt: Date

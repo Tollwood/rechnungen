@@ -47,7 +47,7 @@ class OrderEdit(private var driver: WebDriver) {
         val orderIdInput = driver.findElement<WebElement>(ORDER_ID_INPUT)
         orderIdInput.sendKeys(value)
 
-        if (leaveFocus) orderIdInput.sendKeys(Keys.TAB) else null
+        if (leaveFocus) orderIdInput.sendKeys(Keys.TAB)
         return this
     }
 

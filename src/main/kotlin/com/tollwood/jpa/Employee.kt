@@ -8,7 +8,7 @@ import javax.persistence.*
 data class Employee(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long,
+        override val id: Long,
         val firstName: String,
         val lastName: String,
         @Embedded

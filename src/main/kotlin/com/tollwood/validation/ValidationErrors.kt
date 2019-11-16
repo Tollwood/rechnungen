@@ -1,7 +1,9 @@
 package com.tollwood.validation
 
+import com.tollwood.jpa.BaseEntity
 import org.springframework.validation.Errors
 import java.util.*
+import kotlin.reflect.full.isSubclassOf
 
 class ValidationErrors() {
 
@@ -18,8 +20,10 @@ class ValidationErrors() {
             }
         }
 
-        fun alreadyExists(optional: Optional<*>, field: String, errors: Errors) {
-            optional.ifPresent({ errors.rejectValue(field, "alreadyExists", "Existiert bereits") })
+        fun alreadyExists(optional: Optional<*>, id: Long?, field: String, errors: Errors) {
+            if (optional.isPresent && optional.get()::class.isSubclassOf(BaseEntity::class) && id != (optional.get() as BaseEntity).id) {
+                errors.rejectValue(field, "alreadyExists", "Existiert bereits")
+            }
         }
     }
 }
