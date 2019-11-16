@@ -18,6 +18,7 @@ import PaymentRecieved from "./PaymentRecieved";
 import OrderKmPauschale from "./OrderKmPauschale";
 import Company from "../employees/Company";
 import BillService from "../billing/BillService";
+import ErrorMapper from "../ErrorMapper";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -32,8 +33,7 @@ interface OrderEditState {
     technicians: Employee[];
     realEstates: RealEstate[];
     services: Service[];
-    validUserId: boolean;
-    shouldValidate: boolean
+    errors: Map<string, string>;
 }
 
 export default class OrderEdit extends React.Component<OrderEditProps, OrderEditState> {
@@ -46,8 +46,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             technicians: [],
             realEstates: [],
             services: [],
-            validUserId: false,
-            shouldValidate: false
+            errors: new Map<string, string>()
         }
     }
 
@@ -66,10 +65,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
     save() {
-        this.setState({shouldValidate: true});
-        if (!this.isValid()) {
-            return;
-        }
         if (this.state.order._links.self === undefined) {
             API.post("/api/order", this.state.order)
                 .then(result => result.data)
@@ -77,9 +72,15 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                     order.technician = this.state.order.technician;
                     order.realEstate = this.state.order.realEstate;
                     this.setState({order: order});
+                })
+                .catch(error => {
+                    ErrorMapper.map(error, this)
                 });
         } else {
-            API.patch(this.state.order._links.self!.href, this.state.order);
+            API.patch(this.state.order._links.self!.href, this.state.order)
+                .catch(error => {
+                    ErrorMapper.map(error, this)
+                });
         }
     }
 
@@ -95,10 +96,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                              selectedRealEstate={this.getCurrentRealEstate()}
                                              handleOrderChange={this.handleOrderChange.bind(this)}
                                              realEstates={this.state.realEstates} technicians={this.state.technicians}
-                                             validUserId={this.state.validUserId}
-                                             handleValidUserId={(isValid: boolean) => this.setState({validUserId: isValid})}
-                                             shouldValidate={this.state.shouldValidate}
-                                             readOnly={this.state.order.status !== 'ORDER_EDIT'}/>
+                                             readOnly={this.state.order.status !== 'ORDER_EDIT'}
+                                             errors={this.state.errors}/>
 
                         <OrderAppointments handleOrderChange={this.handleOrderChange.bind(this)}
                                            order={this.state.order}/>
@@ -115,18 +114,22 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}/>
                         <Grid.Row centered>
                             <Grid.Column width={5} floated='left'>
-                                {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null : <Button.Group >
+                                {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null : <Button.Group>
                                     <Button primary content='Speichern' onClick={this.save.bind(this)} className={"save-bttn"}/>
-                                    <Button.Or text='&' />
-                                    <Button primary content='Weiter' onClick={this.saveAndContinue.bind(this)} className={"save-bttn"} icon={Helper.getStatusIcon(Helper.nextStatus(this.state.order.status))} labelPosition={"right"}/>
+                                    <Button.Or text='&'/>
+                                    <Button primary content='Weiter' onClick={this.saveAndContinue.bind(this)} className={"save-bttn"}
+                                            icon={Helper.getStatusIcon(Helper.nextStatus(this.state.order.status))}
+                                            labelPosition={"right"}/>
                                 </Button.Group>}
                             </Grid.Column>
                             <Grid.Column width={5}>
-                                <Button className={"cancel-bttn"} content='Abbrechen' icon='cancel' labelPosition='left' onClick={this.props.onCancelEdit}/>
+                                <Button className={"cancel-bttn"} content='Abbrechen' icon='cancel' labelPosition='left'
+                                        onClick={this.props.onCancelEdit}/>
                             </Grid.Column>
                             <Grid.Column width={5} floated='right'>
                                 {this.state.order._links.self !== undefined ?
-                                    <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash' labelPosition='left'
+                                    <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash'
+                                            labelPosition='left'
                                             onClick={this.delete.bind(this)}/> : null
                                 }
                             </Grid.Column>
@@ -138,7 +141,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
     handleOrderChange(name: string, value: any) {
-        this.setState({order: Object.assign(this.state.order, {[name]: value})});
+        this.setState({order: Object.assign(this.state.order, {[name]: value}),
+            errors: ErrorMapper.removeError(this.state.errors, name )});
     }
 
     // @ts-ignore
@@ -228,34 +232,11 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         return this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.order.technician);
     }
 
-    private getOrderStatusOptions(): { key: string, value: string, text: string }[] {
-        return [
-            {key: 'ORDER_EDIT', value: "ORDER_EDIT", text: "Auftrag erfassen"},
-            {key: 'ORDER_EXECUTE', value: "ORDER_EXECUTE", text: "Auftragsdurchführung"},
-            {key: 'ORDER_BILL', value: "ORDER_BILL", text: "Rechnung erfasst"},
-            {key: 'ORDER_BILL_RECIEVED', value: "ORDER_BILL_RECIEVED", text: "Rechnungsbetrag erhalten"},
-            {key: 'PAYMENT_RECIEVED', value: "PAYMENT_RECIEVED", text: "Rechnungsbetrag erhalten"}
-        ];
-    }
-
     private shouldRenderBillDetails() {
         return this.state.order.status === 'ORDER_BILL';
     }
 
-    private isValid() {
-        return this.isSet(this.state.order.realEstate) && this.isSet(this.state.order.technician)
-            && (this.state.validUserId || (this.props.order !== undefined && this.props.order._links.self !== undefined));
-    }
-
-    private isSet(value?: string) {
-        return value !== undefined && value.length > 0;
-    }
-
     private saveAndContinue() {
-        this.setState({shouldValidate: true});
-        if (!this.isValid()) {
-            return;
-        }
         this.handleOrderChange('status', Helper.nextStatus(this.state.order.status));
         if (this.state.order.status === 'ORDER_BILL') {
             this.handleOrderChange('billItems', BillService.createBillItems(this.state.order, this.state.services, this.getCurrentRealEstate()))

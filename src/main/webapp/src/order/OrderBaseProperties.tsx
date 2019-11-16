@@ -14,12 +14,10 @@ interface OrderEditProps {
     selectedTechnician?: Employee;
     selectedRealEstate?: RealEstate;
     handleOrderChange: (name: string, value: any) => void
-    handleValidUserId: (isValid: boolean) => void
     technicians: Employee[];
     realEstates: RealEstate[];
-    validUserId: boolean;
-    shouldValidate: boolean;
     readOnly: boolean;
+    errors: Map<string,string>
 }
 
 export default class OrderBaseProperties extends React.Component<OrderEditProps, {}> {
@@ -36,8 +34,8 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                         <Form.Field>
                             <label>Auftrags-ID</label>
                             <OrderIdInput existing={this.props.order._links.self !== undefined} orderId={this.props.order.orderId}
-                                          onChange={this.handleOrderChange.bind(this)} isValid={this.props.handleValidUserId}
-                                          shouldValidate={this.props.shouldValidate}
+                                          onChange={this.handleOrderChange.bind(this)}
+                                          errors={this.props.errors}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -50,10 +48,7 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                                            options={this.mapTechnicianToDropdownItems(this.props.technicians)}
                                            value={this.props.order.technician}
                                            onChange={this.updateTechnician.bind(this)}
-                                           error={this.props.shouldValidate && this.props.order.technician === undefined ?
-                                               {
-                                                   content: 'Pflichtfeld',
-                                               } : null}
+                                           error={this.props.errors.get('technician') ? {content: this.props.errors.get('technician')} : null}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -70,7 +65,7 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                 </Grid.Row>
                 <SelectRealEstate selectedRealestate={this.getCurrentRealEstate()} realestates={this.props.realEstates}
                                   order={this.props.order} onValueChanged={this.updateRealEstate.bind(this)}
-                                  shouldValidate={this.props.shouldValidate}
+                                  errors={this.props.errors}
                 />
                 <Grid.Row>
                     <Grid.Column computer={4} tablet={4} mobile={16}>

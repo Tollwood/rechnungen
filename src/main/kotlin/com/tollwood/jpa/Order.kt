@@ -13,7 +13,7 @@ data class Order(
         override val id: Long? = null,
 
         @Column(unique = true)
-        val orderId: String,
+        val orderId: String?,
 
         @ManyToOne
         @JoinColumn(foreignKey = ForeignKey(name = "ORDER_REAL_ESTATE_FK"))

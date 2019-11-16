@@ -20,6 +20,12 @@ class ValidationErrors() {
             }
         }
 
+        fun notEmpty(input: BaseEntity?, field: String, errors: Errors) {
+            if (input?.id == null) {
+                errors.rejectValue(field, "notEmpty", "Pflichtfeld")
+            }
+        }
+
         fun alreadyExists(optional: Optional<*>, id: Long?, field: String, errors: Errors) {
             if (optional.isPresent && optional.get()::class.isSubclassOf(BaseEntity::class) && id != (optional.get() as BaseEntity).id) {
                 errors.rejectValue(field, "alreadyExists", "Existiert bereits")

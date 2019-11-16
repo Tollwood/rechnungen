@@ -9,7 +9,7 @@ interface SelectRealEstateProps {
     realestates: RealEstate[];
     selectedRealestate?: RealEstate;
     onValueChanged: (value: string) => void;
-    shouldValidate: boolean
+    errors: Map<string,string>
 }
 
 export default class SelectRealEstate extends React.Component<SelectRealEstateProps, {}> {
@@ -25,16 +25,13 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
                 <Grid.Column computer={8} tablet={8} mobile={16}>
                     <Form.Field>
                         <label>Liegenschaft</label>
-                        <Form.Dropdown id="realestate"
+                        <Form.Dropdown id="realEstate"
                                        search
                                        selection
                                        options={this.mapRealestateToDropdownItems(this.props.realestates)}
                                        value={this.props.selectedRealestate ? this.props.selectedRealestate._links.self!.href : undefined}
                                        onChange={this.updateRealEstate.bind(this)}
-                                       error={this.props.shouldValidate && this.props.order.realEstate === undefined ?
-                                           {
-                                               content: 'Pflichtfeld',
-                                           } : null}
+                                       error={this.props.errors.get('realEstate') ? {content: this.props.errors.get('realEstate')} : null}
                         />
                     </Form.Field>
                 </Grid.Column>
