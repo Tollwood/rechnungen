@@ -32,6 +32,10 @@ export default class OrderList extends React.Component<OrderListProps> {
                             <Table.HeaderCell>Nettoumsatz</Table.HeaderCell>
                             <Table.HeaderCell>Bruttoumsatz</Table.HeaderCell>
                             <Table.HeaderCell
+                                sorted={this.props.page.sort === 'billNo' ? this.props.page.direction : undefined}
+                                onClick={() => PageService.sort('billNo',this.props.page,this.props.onPageChange)}
+                            >RG-Nummer</Table.HeaderCell>
+                            <Table.HeaderCell
                                 sorted={this.props.page.sort === 'status' ? this.props.page.direction : undefined}
                                 onClick={() => PageService.sort('status',this.props.page,this.props.onPageChange)}
                             >Status</Table.HeaderCell>
@@ -40,7 +44,7 @@ export default class OrderList extends React.Component<OrderListProps> {
                     <Table.Body>
                         {this.renderRows()}
                     </Table.Body>
-                    <PaginationFooter page={this.props.page} onPageChange={this.props.onPageChange} columns={4}/>
+                    <PaginationFooter page={this.props.page} onPageChange={this.props.onPageChange} columns={5}/>
                 </Table>
             </React.Fragment>
         )
@@ -58,6 +62,7 @@ export default class OrderList extends React.Component<OrderListProps> {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             })}</Table.Cell>
+            <Table.Cell>{order.billNo ? order.billNo : "-"}</Table.Cell>
             <Table.Cell><Icon name={Helper.getStatusIcon(order.status)}
                               color={order.status === "PAYMENT_RECIEVED" ? "green" : "grey"}/> {Helper.getStatusName(order.status)}
             </Table.Cell>
@@ -74,6 +79,13 @@ export default class OrderList extends React.Component<OrderListProps> {
 
     private placeHolderRow() {
         return <Table.Row>
+            <Table.Cell>
+                <Placeholder>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line/>
+                    </Placeholder.Paragraph>
+                </Placeholder>
+            </Table.Cell>
             <Table.Cell>
                 <Placeholder>
                     <Placeholder.Paragraph>
