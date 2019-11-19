@@ -7,6 +7,7 @@ import Helper from "../common/Helper";
 interface OrderEditProps {
     handleOrderChange: (name: string, value: any) => void
     order: Order;
+    errors: Map<string,string>
 }
 
 
@@ -37,6 +38,7 @@ export default class OrderAppointments extends React.Component<OrderEditProps, {
                             value={this.props.order.firstAppointment ? this.props.order.firstAppointment : ''}
                             iconPosition="left"
                             onChange={this.handleDateChange.bind(this)}
+                            error={this.props.errors.get('firstAppointment') ? {content: this.props.errors.get('firstAppointment')} : null}
                         />
                     </Form.Field>
                 </Grid.Column>

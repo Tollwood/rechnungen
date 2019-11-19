@@ -46,6 +46,9 @@ data class Order(
         @Enumerated(EnumType.STRING)
         val status: OrderState = ORDER_EDIT,
 
+        @Transient
+        val prevStatus: OrderState?,
+
         val includeKmFee: Boolean = true,
 
         val billNo: String? = null,

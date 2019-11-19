@@ -6,5 +6,5 @@ enum class OrderState {
     ORDER_EXECUTE,
     ORDER_BILL,
     ORDER_BILL_RECIEVED,
-    PAYMENT_RECIEVED
+    PAYMENT_RECIEVED;
 }

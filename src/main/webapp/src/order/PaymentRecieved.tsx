@@ -6,6 +6,7 @@ import {Form, Grid} from "semantic-ui-react";
 interface BillDetailsProps {
     order: Order
     handleOrderChange: (name: string, value: string) => void
+    errors: Map<string,string>
 }
 
 
@@ -41,6 +42,7 @@ export default class PaymentRecieved extends React.Component<BillDetailsProps, {
                             value={this.props.order.paymentRecievedDate ? this.props.order.paymentRecievedDate : ''}
                             iconPosition="left"
                             onChange={(e, {name, value}) => this.props.handleOrderChange(name, value)}
+                            error={this.props.errors.get('paymentRecievedDate') ? {content: this.props.errors.get('paymentRecievedDate')} : null}
                         />
                     </Form.Field>
                 </Grid.Column>

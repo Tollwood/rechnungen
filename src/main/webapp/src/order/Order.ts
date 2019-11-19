@@ -17,6 +17,7 @@ export default class Order {
     smallOrder: boolean = false;
     includeKmFee: boolean = true;
     status: OrderStatus = "ORDER_EDIT";
+    prevStatus?: OrderStatus ;
     services: OrderService[] = [];
     billItems: BillItem[] = [];
     billDate: string = '';

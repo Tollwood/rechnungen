@@ -11,5 +11,6 @@ interface OrderResource : PagingAndSortingRepository<Order, Long> {
 
     fun findByOrderIdContainingOrBillNoContaining(@Param("orderId") orderId: String,@Param("billNo") billNo: String): List<Order>
     fun findByOrderId(@Param("orderId") orderId: String?): Optional<Order>
+    fun findByBillNo(@Param("billNo") billNo: String?): Optional<Order>
 
 }

@@ -7,6 +7,7 @@ import {Form, Grid} from "semantic-ui-react";
 interface BillDetailsProps {
     order: Order
     handleOrderChange: (name: string, value: string) => void
+    errors: Map<string,string>
 }
 
 interface BillDetailsState {
@@ -47,6 +48,7 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                                         value={this.props.order.billNo ? this.props.order.billNo : ''}
                                         name='billNo'
                                         onChange={this.handleOrderChange.bind(this)}
+                                        error={this.props.errors.get('billNo') ? {content: this.props.errors.get('billNo')} : null}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -62,6 +64,7 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                                 value={this.props.order.billDate ? this.props.order.billDate : ''}
                                 iconPosition="left"
                                 onChange={this.handleDateChange.bind(this)}
+                                error={this.props.errors.get('billDate') ? {content: this.props.errors.get('billDate')} : null}
                             />
                         </Form.Field>
                     </Grid.Column>
