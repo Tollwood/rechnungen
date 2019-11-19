@@ -73,7 +73,7 @@ export default class BillService {
             return this.getDistanceItem(services, '1D');
         }
         if (distance > 50) {
-            return this.getDistanceItem(services, '1E', distance * 0.75);
+            return this.getDistanceItem(services, '1E', distance);
         }
         return [];
     }
