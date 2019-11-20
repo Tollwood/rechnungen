@@ -1,10 +1,10 @@
 package com.tollwood.jpa
 
-enum class OrderState {
+enum class OrderState(val order:Int) {
 
-    ORDER_EDIT,
-    ORDER_EXECUTE,
-    ORDER_BILL,
-    ORDER_BILL_RECIEVED,
-    PAYMENT_RECIEVED;
+    ORDER_EDIT(0),
+    ORDER_EXECUTE(1),
+    ORDER_BILL(2),
+    ORDER_BILL_RECIEVED(3),
+    PAYMENT_RECIEVED(4);
 }

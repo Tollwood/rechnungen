@@ -5,6 +5,8 @@ import com.tollwood.jpa.OrderState
 import com.tollwood.jpa.OrderState.*
 import com.tollwood.validation.ValidationErrors.Companion.alreadyExists
 import com.tollwood.validation.ValidationErrors.Companion.notEmpty
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.validation.Errors
@@ -49,15 +51,8 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
     }
 
     private fun shouldValidate(stateToValidate: OrderState, order: Order): Boolean {
-        var orderStatus = order.status;
-        if (order.prevStatus != null && order.status.ordinal > 0) {
-            orderStatus = OrderState.values()[order.status.ordinal - 1]
-        }
-        return stateToValidate.ordinal <= orderStatus.ordinal
-    }
-
-    private fun sameStatus(existingOrder: Optional<Order>, order: Order): Boolean {
-        return existingOrder.isPresent && existingOrder.get().status.equals(order.status)
+        val orderStatus = order.prevStatus?: order.status;
+        return stateToValidate.order <= orderStatus.order
     }
 
     fun notDefault(input: String?, field: String, errors: Errors) {

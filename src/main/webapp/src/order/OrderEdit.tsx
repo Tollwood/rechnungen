@@ -79,7 +79,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                 })
                 .catch(error => {
                     ErrorMapper.map(error, this)
-                });
+                });^
         } else {
             API.patch(this.state.order._links.self!.href, orderToSave)
                 .then(result => result.data)
