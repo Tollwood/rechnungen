@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull
 data class BillItem(
         @Id
         @GeneratedValue(strategy = AUTO)
-        val id: Long,
+        val id: Long? = null,
         @NotNull
         val code: String,
         @NotNull

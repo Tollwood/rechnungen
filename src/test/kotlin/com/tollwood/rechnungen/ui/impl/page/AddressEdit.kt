@@ -1,4 +1,4 @@
-package com.tollwood.rechnungen.page.impl
+package com.tollwood.rechnungen.ui.impl.page
 
 import com.tollwood.jpa.Address
 import org.openqa.selenium.By

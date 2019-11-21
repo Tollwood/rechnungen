@@ -1,4 +1,4 @@
-package com.tollwood.rechnungen
+package com.tollwood.rechnungen.ui.impl.page
 
 import com.tollwood.EmployeeResource
 import com.tollwood.OrderResource

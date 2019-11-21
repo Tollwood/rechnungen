@@ -1,4 +1,4 @@
-package com.tollwood.rechnungen
+package com.tollwood.rechnungen.ui.impl.page
 
 import com.tollwood.jpa.Address
 import com.tollwood.jpa.BankDetails

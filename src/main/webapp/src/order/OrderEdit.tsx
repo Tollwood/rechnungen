@@ -238,9 +238,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     private saveAndContinue() {
         this.handleOrderChange('status', Helper.nextStatus(this.state.order.status));
-        if (this.state.order.status === 'ORDER_BILL') {
-            this.handleOrderChange('billItems', BillService.createBillItems(this.state.order, this.state.services, this.getCurrentRealEstate()))
-        }
         this.save();
     }
 }

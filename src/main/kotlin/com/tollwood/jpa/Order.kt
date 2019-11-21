@@ -41,7 +41,7 @@ data class Order(
 
         @OneToMany(cascade = [CascadeType.ALL], mappedBy = "order")
         @JsonManagedReference
-        val billItems: List<BillItem> = emptyList(),
+        var billItems: List<BillItem> = emptyList(),
 
         @Enumerated(EnumType.STRING)
         val status: OrderState = ORDER_EDIT,
