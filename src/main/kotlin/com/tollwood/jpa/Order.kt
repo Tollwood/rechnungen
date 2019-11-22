@@ -39,7 +39,7 @@ data class Order(
         @JsonManagedReference
         val services: List<ServiceOrder> = emptyList(),
 
-        @OneToMany(cascade = [CascadeType.ALL], mappedBy = "order")
+        @OneToMany(cascade = [CascadeType.ALL], mappedBy = "order", fetch = FetchType.EAGER)
         @JsonManagedReference
         var billItems: List<BillItem> = emptyList(),
 

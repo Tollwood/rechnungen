@@ -1,0 +1,10 @@
+ALTER TABLE bill_item
+  DROP PRIMARY KEY;
+
+ALTER TABLE bill_item
+  DROP COLUMN id;
+
+ALTER TABLE bill_item ALTER COLUMN  code SET NOT NULL;
+ALTER TABLE bill_item ALTER COLUMN  order_id SET NOT NULL;
+
+ALTER TABLE bill_item ADD PRIMARY KEY (code, order_id);

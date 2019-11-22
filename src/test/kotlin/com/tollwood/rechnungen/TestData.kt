@@ -1,11 +1,13 @@
-package com.tollwood.rechnungen.ui.impl.page
+package com.tollwood.rechnungen
 
 import com.tollwood.EmployeeResource
 import com.tollwood.OrderResource
 import com.tollwood.RealestateResource
+import com.tollwood.ServiceResource
 import com.tollwood.jpa.Address
 import com.tollwood.jpa.Order
 import com.tollwood.jpa.RealEstate
+import com.tollwood.jpa.ServiceOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -21,8 +23,11 @@ class TestData {
     @Autowired
     lateinit var realestateResource: RealestateResource
 
-    fun givenOrderPersisted(orderId: String) {
-        orderResource.save(givenOrder(orderId))
+    @Autowired
+    lateinit var serviceResource: ServiceResource
+
+    fun givenOrderPersisted(orderId: String): Order {
+        return orderResource.save(givenOrder(orderId))
     }
 
     fun givenOrder(orderId: String): Order {
@@ -41,11 +46,16 @@ class TestData {
         return realestateResource.save(givenRealEstate())
     }
 
-    fun givenRealEstate(): RealEstate {
-        return RealEstate(name = "New RealEstate", address = Address("New Street", "2", "22111", "NewTown"), distance = 5)
+    fun givenRealEstate(distance: Int = 5): RealEstate {
+        return RealEstate(name = "New RealEstate", address = Address("New Street", "2", "22111", "NewTown"), distance = distance)
     }
 
     fun givenOrderWithBillPersisted(orderId: String): Order {
         return orderResource.save(givenOrderWithBill(orderId))
+    }
+
+    fun givenAdditionalService(order: Order, code: String, amount: Int = 1): ServiceOrder {
+        val service = serviceResource.findByArticleNumber(code).get();
+        return ServiceOrder(1, amount, service, order)
     }
 }

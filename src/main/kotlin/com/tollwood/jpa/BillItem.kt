@@ -1,17 +1,16 @@
 package com.tollwood.jpa
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import java.io.Serializable
 import javax.persistence.*
-import javax.persistence.GenerationType.AUTO
 import javax.validation.constraints.NotNull
+
 
 @Entity(name = "BiLL_ITEM")
 data class BillItem(
-        @Id
-        @GeneratedValue(strategy = AUTO)
-        val id: Long? = null,
-        @NotNull
-        val code: String,
+
+        @EmbeddedId val id: DependentId,
+
         @NotNull
         val serviceName: String,
         @NotNull
@@ -23,5 +22,14 @@ data class BillItem(
         @JsonBackReference
         @ManyToOne
         @JoinColumn(name = "order_id")
+        @MapsId("orderId")
         val order: Order
 )
+
+
+@Embeddable
+class DependentId(
+        @NotNull
+        val code: String,
+        val orderId: Long?
+): Serializable

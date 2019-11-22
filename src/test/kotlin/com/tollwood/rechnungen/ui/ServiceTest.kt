@@ -1,4 +1,4 @@
-package com.tollwood.rechnungen.ui.impl.page
+package com.tollwood.rechnungen.ui
 
 import com.tollwood.jpa.Service
 import io.github.bonigarcia.seljup.SeleniumExtension

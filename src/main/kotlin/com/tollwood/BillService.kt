@@ -1,6 +1,7 @@
 package com.tollwood
 
 import com.tollwood.jpa.BillItem
+import com.tollwood.jpa.DependentId
 import com.tollwood.jpa.Order
 import com.tollwood.jpa.Service
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,7 +28,9 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
 
         order.services
                 .map { serviceOrder ->
-                    BillItem(code = serviceOrder.service.articleNumber ?: "", amount = 1, serviceName = serviceOrder.service.title,
+                    BillItem(id = DependentId(serviceOrder.service.articleNumber ?: "", order.id),
+                            amount = serviceOrder.amount,
+                            serviceName = serviceOrder.service.title,
                             price = serviceOrder.service.price ?: 0.0, order = order)
                 }
                 .let { billItems.addAll(it) }
@@ -60,7 +63,7 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
     private fun getDistanceItem(order: Order, code: String, distance: Int = 1): BillItem? {
         val service: Optional<Service> = serviceResource.findByArticleNumber(code)
         if (service.isPresent) {
-            return BillItem(code = service.get().articleNumber ?: "", amount = 1, serviceName = service.get().title,
+            return BillItem(id = DependentId(service.get().articleNumber ?: "", order.id), amount = 1, serviceName = service.get().title,
                     price = (service.get().price ?: 0.0) * distance, order = order);
         }
         return null
@@ -69,7 +72,7 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
     private fun basePrice(order: Order): BillItem? {
         val service: Optional<Service> = serviceResource.findByArticleNumber("1A")
         if (service.isPresent) {
-            return BillItem(code = service.get().articleNumber ?: "", amount = 1, serviceName = service.get().title,
+            return BillItem(id = DependentId(service.get().articleNumber ?: "", order.id), amount = 1, serviceName = service.get().title,
                     price = service.get().price ?: 0.0, order = order);
         }
         return null;
@@ -83,7 +86,7 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
 
         val service: Optional<Service> = serviceResource.findByArticleNumber("1F")
         if (service.isPresent) {
-            return BillItem(code = service.get().articleNumber ?: "", amount = 1, serviceName = service.get().title,
+            return BillItem(id = DependentId(service.get().articleNumber ?: "", order.id), amount = 1, serviceName = service.get().title,
                     price = service.get().price ?: 0.0, order = order);
         }
         return null;
