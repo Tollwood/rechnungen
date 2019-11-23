@@ -36,9 +36,12 @@ const styles = StyleSheet.create({
     column2: {
         flex: 50
     },
+    column3: {
+        flex: 33
+    },
     orderRow: {
         marginBottom: 10,
-        fontSize:16,
+        fontSize:14,
         fontFamily: 'Times-Bold',
         flexDirection: 'row'
     }
@@ -53,7 +56,7 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                     <BillHeader company={this.props.company}/>
                     <View style={styles.text}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text>{this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""} {this.props.bill.technician ? this.props.bill.technician.technicianId : ""}</Text>
+                            <Text>{this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""}</Text>
                             <Text>{this.props.company.address.city}, am {this.props.bill.billDate}</Text>
                         </View>
                         <Text>{this.props.company.address.street} {this.props.company.address.houseNumber}</Text>
@@ -69,8 +72,9 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
 
                     <View style={styles.text}>
                         <View style={styles.orderRow}>
-                            <Text style={[styles.column2]}>Rechnung Nr.: {this.props.bill.billNumber}</Text>
-                            <Text style={[styles.column2]}>Auftrag: {this.props.bill.order.orderId}</Text>
+                            <Text style={[styles.column3]}>RG. Nr.: {this.props.bill.billNumber}</Text>
+                            <Text style={[styles.column3]}>Auftrags-ID: {this.props.bill.order.orderId}</Text>
+                            <Text style={[styles.column3]}>Monteur / AN: {this.props.bill.technician ? this.props.bill.technician.technicianId : ""}</Text>
                         </View>
                         <View style={[styles.row]}>
                             <Text
