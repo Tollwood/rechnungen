@@ -1,8 +1,8 @@
-package com.tollwood.rechnungen
+package com.tollwood.rechnungen.ui
 
 
-import com.tollwood.rechnungen.page.impl.OverviewPage
-import io.github.bonigarcia.seljup.Arguments
+import com.tollwood.rechnungen.TestData
+import com.tollwood.rechnungen.ui.page.OverviewPage
 import io.github.bonigarcia.seljup.SeleniumExtension
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

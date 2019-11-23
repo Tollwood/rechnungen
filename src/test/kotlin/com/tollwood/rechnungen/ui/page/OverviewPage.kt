@@ -1,4 +1,4 @@
-package com.tollwood.rechnungen.page.impl
+package com.tollwood.rechnungen.ui.page
 
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.containsString

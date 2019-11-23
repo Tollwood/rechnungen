@@ -39,7 +39,8 @@ export default class PaginationFooter extends React.Component<Props> {
                                   { key: 20, value: 20, text: 20},
                                   {key: 30, value: 30, text: 30},
                                   {key: 40, value: 40, text: 40},
-                                  { key: 50, value: 50, text: 50}
+                                  { key: 50, value: 50, text: 50},
+                                  { key: 100, value: 100, text: 100}
                                   ]}
                               value={this.props.page.size}
                               onChange={this.handlePageSizeChange.bind(this)}

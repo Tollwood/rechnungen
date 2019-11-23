@@ -1,4 +1,4 @@
-package com.tollwood.rechnungen
+package com.tollwood.rechnungen.ui
 
 
 import io.github.bonigarcia.seljup.SeleniumExtension

@@ -1,4 +1,4 @@
-package com.tollwood.rechnungen
+package com.tollwood.rechnungen.ui
 
 import com.tollwood.jpa.Address
 import com.tollwood.jpa.RealEstate

@@ -79,7 +79,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                 })
                 .catch(error => {
                     ErrorMapper.map(error, this)
-                });^
+                });
         } else {
             API.patch(this.state.order._links.self!.href, orderToSave)
                 .then(result => result.data)
@@ -250,9 +250,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
     private saveAndContinue() {
-        if (this.state.order.status === 'ORDER_BILL') {
-            this.handleOrderChange('billItems', BillService.createBillItems(this.state.order, this.state.services, this.getCurrentRealEstate()))
-        }
         this.save(true);
 
     }

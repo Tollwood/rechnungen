@@ -1,4 +1,4 @@
-package com.tollwood.rechnungen.page.impl
+package com.tollwood.rechnungen.ui.page
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
