@@ -1,6 +1,7 @@
 package com.tollwood.rechnungen.rest
 
 import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -51,6 +52,7 @@ class OrderRestTest : RestTest() {
                 .content(givenPatchBody(orderId)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.billItems",hasSize<String>(1)))
+                .andExpect(jsonPath("$.billItems[0].code", equalTo("1A")))
 
         assertThat(testData.orderResource.findByOrderId(orderId).get().billItems.size).isEqualTo(1)
 

@@ -78,6 +78,12 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                 });
         } else {
             API.patch(this.state.order._links.self!.href, this.state.order)
+                .then(result => result.data)
+                .then((order: Order) => {
+                    order.technician = this.state.order.technician;
+                    order.realEstate = this.state.order.realEstate;
+                    this.setState({order: order});
+                })
                 .catch(error => {
                     ErrorMapper.map(error, this)
                 });

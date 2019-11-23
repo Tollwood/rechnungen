@@ -1,6 +1,7 @@
 package com.tollwood.jpa
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.io.Serializable
 import javax.persistence.*
 import javax.validation.constraints.NotNull
@@ -24,7 +25,12 @@ data class BillItem(
         @JoinColumn(name = "order_id")
         @MapsId("orderId")
         val order: Order
-)
+) {
+    @JsonProperty(value ="code")
+    fun getCode(): String {
+        return id.code
+    }
+}
 
 
 @Embeddable
@@ -32,4 +38,4 @@ class DependentId(
         @NotNull
         val code: String,
         val orderId: Long?
-): Serializable
+) : Serializable

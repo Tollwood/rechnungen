@@ -1,3 +1,6 @@
+DELETE FROM bill_item where order_id is null;
+DELETE FROM bill_item where code is null;
+
 ALTER TABLE bill_item
   DROP PRIMARY KEY;
 
