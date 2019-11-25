@@ -1,5 +1,6 @@
 package com.tollwood.rechnungen.rest
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.tollwood.rechnungen.TestData
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.json.JacksonJsonParser
@@ -14,6 +15,8 @@ abstract  class RestTest {
     @Autowired
     protected lateinit var testData: TestData
 
+    @Autowired
+    protected lateinit var objectMapper: ObjectMapper
 
     protected fun getAccessToken(): String {
 

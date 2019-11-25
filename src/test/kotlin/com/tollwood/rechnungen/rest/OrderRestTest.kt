@@ -1,5 +1,9 @@
 package com.tollwood.rechnungen.rest
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.tollwood.jpa.Order
+import com.tollwood.jpa.OrderState
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -28,44 +32,214 @@ class OrderRestTest : RestTest() {
 
 
     @Test
-    fun `create order`() {
+    fun `create order min success`() {
         this.mockMvc.perform(post("/api/order")
                 .headers(givenHeaders())
                 .content(givenPostBody()))
-
                 .andExpect(status().isCreated())
     }
 
     @Test
-    fun `patch order`() {
-        val orderId = "1234"
+    fun `create order validation errors`() {
+        this.mockMvc.perform(post("/api/order")
+                .headers(givenHeaders())
+                .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("orderId", equalTo("Pflichtfeld")))
+                .andExpect(jsonPath("technician", equalTo("Pflichtfeld")))
+                .andExpect(jsonPath("realEstate", equalTo("Pflichtfeld")))
+    }
+
+    @Test
+    fun `patch order empty`() {
+        val order = testData.givenOrderPersisted("1234")
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content("{}"))
+                .andExpect(status().isOk())
+
+        val dbOrder = testData.orderResource.findById(order.id!!)
+        assertThat(dbOrder.isPresent()).isTrue()
+        assertThat(dbOrder.get().orderId).isNotNull()
+        assertThat(dbOrder.get().technician).isNotNull()
+        assertThat(dbOrder.get().realEstate).isNotNull()
+    }
+
+    @Test
+    fun `patch order min success`() {
+        val orderId = "12345"
         val order = testData.givenOrderPersisted(orderId)
 
-        this.mockMvc.perform(put("/api/order/" + order.id)
+        this.mockMvc.perform(patch("/api/order/" + order.id)
                 .headers(givenHeaders())
-                .content(givenPatchBody(orderId)))
+                .content(givenPatchBody(order)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.billItems",hasSize<String>(1)))
+                .andExpect(jsonPath("$.billItems", hasSize<String>(1)))
 
-        this.mockMvc.perform(put("/api/order/" + order.id)
+        this.mockMvc.perform(patch("/api/order/" + order.id)
                 .headers(givenHeaders())
-                .content(givenPatchBody(orderId)))
+                .content(givenPatchBody(order)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.billItems",hasSize<String>(1)))
+                .andExpect(jsonPath("$.billItems", hasSize<String>(1)))
                 .andExpect(jsonPath("$.billItems[0].code", equalTo("1A")))
 
         assertThat(testData.orderResource.findByOrderId(orderId).get().billItems.size).isEqualTo(1)
 
     }
 
-    private fun givenPatchBody(orderId: String): String {
-        return """{"orderId":"$orderId","type":null,"firstAppointment":"26.11.2019","secondAppointment":null,"utilisationUnit":null,
-            |"name":null,
-            |"location":null,"phoneNumber":null,"smallOrder":false,"services":[],"billItems":[{"code":"1A","serviceName":"Liegeschaftspauschale","price":17.5,"amount":1,"_links":{"order":{"href":"http://localhost:8090/api/order/107"}}},{"code":"1B","serviceName":"Anfahrt bis 30 km","price":7.5,"amount":1,"_links":{"order":{"href":"http://localhost:8090/api/order/107"}}}],"status":"ORDER_EXECUTE","includeKmFee":true,"billNo":"","billDate":"","paymentRecievedDate":"","sum":25,"_links":{"self":{"href":"http://localhost:8090/api/order/107"},"order":{"href":"http://localhost:8090/api/order/107"},"technician":{"href":"http://localhost:8090/api/order/107/technician"},"realEstate":{"href":"http://localhost:8090/api/order/107/realEstate"}},"technician":"http://localhost:8090/api/employee/1","realEstate":"http://localhost:8090/api/realestate/2"}""".trimMargin()
+    @Test
+    fun `patch order switch to orderExecute`() {
+        val orderId = "123456"
+        val order = testData.givenOrderPersisted(orderId)
+        val modifiedOrder = order.copy(status = OrderState.ORDER_EXECUTE, prevStatus = OrderState.ORDER_EDIT)
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(modifiedOrder)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status", equalTo(OrderState.ORDER_EXECUTE.toString())))
+    }
+
+    @Test
+    fun `patch order invalid orderExecute`() {
+        val orderId = "1234567"
+        val order = testData.givenOrderPersisted(orderId)
+        val modifiedOrder = order.copy(status = OrderState.ORDER_EXECUTE, prevStatus = OrderState.ORDER_EXECUTE)
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(modifiedOrder)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("firstAppointment", equalTo("Pflichtfeld")))
+    }
+
+    @Test
+    fun `patch order valid orderExecute`() {
+        val orderId = "2"
+        val order = testData.givenOrderPersisted(orderId)
+        val modifiedOrder = order.copy(status = OrderState.ORDER_EXECUTE, prevStatus = OrderState.ORDER_EXECUTE, firstAppointment = "01.01" +
+                ".2019")
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(modifiedOrder)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status", equalTo(OrderState.ORDER_EXECUTE.toString())))
+    }
+
+    @Test
+    fun `patch order valid ORDER_BILL`() {
+        val orderId = "3"
+        val order = testData.givenOrderPersisted(orderId)
+        val modifiedOrder = order.copy(
+                status = OrderState.ORDER_BILL,
+                prevStatus = OrderState.ORDER_BILL,
+                firstAppointment = "01.01.2019",
+                billNo = "3",
+                billDate = "02.01.2019")
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(modifiedOrder)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status", equalTo(OrderState.ORDER_BILL.toString())))
+
+        val updatedOrder = testData.orderResource.findById(order.id!!).get()
+        assertThat(updatedOrder.status).isEqualTo(OrderState.ORDER_BILL)
+    }
+
+    @Test
+    fun `patch order switch to ORDER_BILL`() {
+        val orderId = "4"
+        val order = testData.givenOrderPersisted(orderId)
+        val modifiedOrder = order.copy(
+                status = OrderState.ORDER_BILL,
+                prevStatus = OrderState.ORDER_EXECUTE,
+                firstAppointment = "01.01.2019")
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(modifiedOrder)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status", equalTo(OrderState.ORDER_BILL.toString())))
+
+        val updatedOrder = testData.orderResource.findById(order.id!!).get()
+        assertThat(updatedOrder.status).isEqualTo(OrderState.ORDER_BILL)
+    }
+
+    @Test
+    fun `patch order invalid ORDER_BILL_RECIEVED`() {
+        val orderId = "5"
+        val order = testData.givenOrderPersisted(orderId)
+        val modifiedOrder = order.copy(
+                status = OrderState.ORDER_BILL_RECIEVED,
+                prevStatus = OrderState.ORDER_BILL_RECIEVED,
+                firstAppointment = "01.01.2019",
+                billNo = "5",
+                billDate = "02.01.2019")
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(modifiedOrder)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("paymentRecievedDate", equalTo("Pflichtfeld")))
+
+        val updatedOrder = testData.orderResource.findById(order.id!!).get()
+        assertThat(updatedOrder.status).isEqualTo(order.status)
+    }
+
+    @Test
+    fun `patch order valid ORDER_BILL_RECIEVED`() {
+        val orderId = "6"
+        val order = testData.givenOrderPersisted(orderId)
+        val modifiedOrder = order.copy(
+                status = OrderState.ORDER_BILL_RECIEVED,
+                prevStatus = OrderState.ORDER_BILL_RECIEVED,
+                firstAppointment = "01.01.2019",
+                billNo = "6",
+                billDate = "02.01.2019",
+                paymentRecievedDate = "03.01.2019")
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(modifiedOrder)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status", equalTo(OrderState.ORDER_BILL_RECIEVED.toString())))
+
+        val updatedOrder = testData.orderResource.findById(order.id!!).get()
+        assertThat(updatedOrder.status).isEqualTo(OrderState.ORDER_BILL_RECIEVED)
+    }
+
+    @Test
+    fun `patch order switch to ORDER_BILL_RECIEVED`() {
+        val orderId = "7"
+        val order = testData.givenOrderPersisted(orderId)
+        val modifiedOrder = order.copy(
+                status = OrderState.ORDER_BILL_RECIEVED,
+                prevStatus = OrderState.ORDER_BILL,
+                firstAppointment = "01.01.2019",
+                billNo = "7",
+                billDate = "02.01.2019")
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(modifiedOrder)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("status", equalTo(OrderState.ORDER_BILL_RECIEVED.toString())))
+
+        val updatedOrder = testData.orderResource.findById(order.id!!).get()
+        assertThat(updatedOrder.status).isEqualTo(OrderState.ORDER_BILL_RECIEVED)
+    }
+    private fun givenPatchBody(order: Order): String {
+        val json: JsonNode = objectMapper.valueToTree(order)
+        val objectNode: ObjectNode = json as ObjectNode
+        objectNode.put("technician", "http://localhost:8090/api/employee/" + order.technician!!.id)
+        objectNode.put("realEstate", "http://localhost:8090/api/realestate/" + order.realEstate!!.id)
+        return objectNode.toString()
     }
 
     private fun givenPostBody(): String {
-        return """{"orderId":"1","technician":"http://localhost:8090/api/employee/1","realEstate":"http://localhost:8090/api/realestate/2","smallOrder":false,"includeKmFee":true,"status":"ORDER_EDIT","services":[],"billItems":[],"billDate":"","billNo":"","paymentRecievedDate":"","sum":0,"_links":{}}""".trimMargin()
+
+        val newOrder = Order(orderId = "1", technician = testData.employeeResource.findById(1).get(), realEstate = testData.realestateResource.findById(2)
+                .get())
+        val json: JsonNode = objectMapper.valueToTree(newOrder)
+        val objectNode: ObjectNode = json as ObjectNode
+        objectNode.put("technician", "http://localhost:8090/api/employee/1")
+        objectNode.put("realEstate", "http://localhost:8090/api/realestate/2")
+
+        return objectNode.toString()
     }
 
 

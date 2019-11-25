@@ -45,7 +45,7 @@ class JwtRequestFilter : OncePerRequestFilter() {
             val userDetails = this.jwtUserDetailsService.loadUserByUsername(username)
             // if token is valid configure Spring Security to manually set
             // authentication
-            if (jwtTokenUtil.validateToken(jwtToken!!, userDetails)!!) {
+            if (jwtTokenUtil.validateToken(jwtToken!!, userDetails)) {
                 val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities())
                 usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
