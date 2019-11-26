@@ -2,7 +2,6 @@ package com.tollwood.jpa
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.tollwood.OrderType
 import com.tollwood.jpa.OrderState.ORDER_EDIT
 import javax.persistence.*
 
