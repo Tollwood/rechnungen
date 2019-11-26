@@ -1,6 +1,3 @@
-ALTER TABLE order_table DROP CONSTRAINT IF EXISTS UK_bill_no;
-alter table order_table
-  add constraint  UK_bill_no unique (bill_no);
 
 ALTER TABLE employee DROP CONSTRAINT IF EXISTS UK_technician_id;
 ALTER TABLE employee
