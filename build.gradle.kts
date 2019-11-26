@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.com.google.common.collect.Lists
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	val kotlinVersion = "1.3.60"
+	val kotlinVersion = "1.2.71"
     id("com.moowork.node") version "1.3.1"
     id("org.springframework.boot") version "2.1.7.RELEASE"
 	id("io.spring.dependency-management") version "1.0.8.RELEASE"
@@ -30,7 +30,6 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-devtools")
 	compile("org.springframework.boot:spring-boot-starter-data-rest")
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
-	compile ("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.+")
 	compile("com.h2database:h2")
 
 	compile ("org.postgresql:postgresql:9.4.1212")

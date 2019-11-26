@@ -1,6 +1,7 @@
 package com.tollwood.rechnungen.rest
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.tollwood.jpa.Order
 import com.tollwood.jpa.OrderState
@@ -36,7 +37,7 @@ class OrderRestTest : RestTest() {
     fun `create order min success`() {
         this.mockMvc.perform(post("/api/order")
                 .headers(givenHeaders())
-                .content(givenPostBody()))
+                .content(givenPostBody("1")))
                 .andExpect(status().isCreated())
     }
 
@@ -44,7 +45,7 @@ class OrderRestTest : RestTest() {
     fun `create order min with service success`() {
         this.mockMvc.perform(post("/api/order")
                 .headers(givenHeaders())
-                .content(givenPostBody()))
+                .content(givenPostBody("2")))
                 .andExpect(status().isCreated())
     }
 
@@ -103,19 +104,24 @@ class OrderRestTest : RestTest() {
 
         this.mockMvc.perform(patch("/api/order/" + order.id)
                 .headers(givenHeaders())
-                .content(givenPatchBody(order, listOf(testData.givenOrderService(order)))))
+                .content(givenPatchBodyWithService()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.billItems", hasSize<String>(1)))
+                .andExpect(jsonPath("$.services", hasSize<String>(1)))
 
         this.mockMvc.perform(patch("/api/order/" + order.id)
                 .headers(givenHeaders())
-                .content(givenPatchBody(order, listOf(testData.givenOrderService(order)))))
+                .content(givenPatchBodyWithService()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.billItems", hasSize<String>(1)))
                 .andExpect(jsonPath("$.billItems[0].code", equalTo("1A")))
 
         assertThat(testData.orderResource.findByOrderId(orderId).get().billItems.size).isEqualTo(1)
 
+    }
+
+    private fun givenPatchBodyWithService(): String {
+        return """{"orderId":"24","technician":"http://localhost:8090/api/employee/1","realEstate":"http://localhost:8090/api/realestate/1","smallOrder":false,"includeKmFee":true,"status":"ORDER_EXECUTE","prevStatus":"ORDER_EDIT","services":[{"amount":"2","service":"http://localhost:8090/api/service/16","_links":{"service":{"href":"http://localhost:8090/api/service/16"}}}],"billItems":[],"billDate":"","billNo":"","paymentRecievedDate":"","sum":0,"_links":{}}"""
     }
 
     @Test
@@ -144,7 +150,7 @@ class OrderRestTest : RestTest() {
 
     @Test
     fun `patch order valid orderExecute`() {
-        val orderId = "2"
+        val orderId = "36447879e"
         val order = testData.givenOrderPersisted(orderId)
         val modifiedOrder = order.copy(status = OrderState.ORDER_EXECUTE, prevStatus = OrderState.ORDER_EXECUTE, firstAppointment = "01.01" +
                 ".2019")
@@ -254,25 +260,28 @@ class OrderRestTest : RestTest() {
         assertThat(updatedOrder.status).isEqualTo(OrderState.ORDER_BILL_RECIEVED)
     }
 
-    private fun givenPatchBody(order: Order, services: List<ServiceOrder> = emptyList()): String {
+    private fun givenPatchBody(order: Order, orderService: ServiceOrder? = null): String {
         val json: JsonNode = objectMapper.valueToTree(order)
         val objectNode: ObjectNode = json as ObjectNode
         objectNode.put("technician", "http://localhost:8090/api/employee/" + order.technician!!.id)
         objectNode.put("realEstate", "http://localhost:8090/api/realestate/" + order.realEstate!!.id)
 
-        val servicesArray = objectNode.putArray("services")
-        val serviceJson: JsonNode = objectMapper.valueToTree(services.get(0))
-        val serviceNode = serviceJson as ObjectNode
-        serviceNode.put("service", "http://localhost:8090/api/service/" + services.get(0).service.id)
-        serviceNode.put("order", "http://localhost:8090/api/order/" + order.id)
-        servicesArray.add(serviceJson as ObjectNode)
+        if(orderService != null){
+            val servicesArray = objectNode.putArray("services")
+            val serviceNode = JsonNodeFactory.instance.objectNode()
+            serviceNode.put("amount", 1)
+            serviceNode.put("service", "http://localhost:8090/api/service/" + orderService.service.id)
+            servicesArray.add(serviceNode)
+        }
+
         return objectNode.toString()
     }
 
-    private fun givenPostBody(services: List<ServiceOrder> = emptyList()): String {
+    private fun givenPostBody(orderId: String): String {
 
-        val newOrder = Order(orderId = "1", technician = testData.employeeResource.findById(1).get(), realEstate = testData.realestateResource.findById(2)
-                .get(), services = services)
+        val newOrder = Order(orderId = orderId, technician = testData.employeeResource.findById(1).get(), realEstate = testData
+                .realestateResource.findById(2)
+                .get())
 
 
         val json: JsonNode = objectMapper.valueToTree(newOrder)
