@@ -43,7 +43,7 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
             notDefault(order.billNo, "billNo", errors)
             notEmpty(order.billDate, "billDate", errors)
         }
-        if(order.billNo != null){
+        if(order.billNo != null && !"".equals(order.billNo)){
             alreadyExists(orderResource.findByBillNo(order.billNo), order.id, "billNo", order.billNo, errors)
         }
 
