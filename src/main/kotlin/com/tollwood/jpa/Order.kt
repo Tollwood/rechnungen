@@ -19,9 +19,6 @@ data class Order(
         @JoinColumn(foreignKey = ForeignKey(name = "ORDER_REAL_ESTATE_FK"))
         val realEstate: RealEstate? = null,
 
-        @Enumerated
-        val type: OrderType? = null,
-
         @ManyToOne
         @JoinColumn(foreignKey = ForeignKey(name = "ORDER_EMPLOYEE_FK"))
         val technician: Employee? = null,
