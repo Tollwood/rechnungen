@@ -58,4 +58,8 @@ class TestData {
         val service = serviceResource.findByArticleNumber(code).get();
         return ServiceOrder(1, amount, service, order)
     }
+
+    fun givenOrderService(order: Order): ServiceOrder {
+        return ServiceOrder(amount = 1,service = serviceResource.findAll().first(),order = order)
+    }
 }

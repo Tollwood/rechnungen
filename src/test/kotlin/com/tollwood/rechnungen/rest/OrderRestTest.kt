@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.tollwood.jpa.Order
 import com.tollwood.jpa.OrderState
+import com.tollwood.jpa.ServiceOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -40,6 +41,14 @@ class OrderRestTest : RestTest() {
     }
 
     @Test
+    fun `create order min with service success`() {
+        this.mockMvc.perform(post("/api/order")
+                .headers(givenHeaders())
+                .content(givenPostBody()))
+                .andExpect(status().isCreated())
+    }
+
+    @Test
     fun `create order validation errors`() {
         this.mockMvc.perform(post("/api/order")
                 .headers(givenHeaders())
@@ -67,7 +76,7 @@ class OrderRestTest : RestTest() {
 
     @Test
     fun `patch order min success`() {
-        val orderId = "12345"
+        val orderId = "112345"
         val order = testData.givenOrderPersisted(orderId)
 
         this.mockMvc.perform(patch("/api/order/" + order.id)
@@ -79,6 +88,28 @@ class OrderRestTest : RestTest() {
         this.mockMvc.perform(patch("/api/order/" + order.id)
                 .headers(givenHeaders())
                 .content(givenPatchBody(order)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.billItems", hasSize<String>(1)))
+                .andExpect(jsonPath("$.billItems[0].code", equalTo("1A")))
+
+        assertThat(testData.orderResource.findByOrderId(orderId).get().billItems.size).isEqualTo(1)
+
+    }
+
+    @Test
+    fun `patch order with service success`() {
+        val orderId = "12345"
+        val order = testData.givenOrderPersisted(orderId)
+
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(order, listOf(testData.givenOrderService(order)))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.billItems", hasSize<String>(1)))
+
+        this.mockMvc.perform(patch("/api/order/" + order.id)
+                .headers(givenHeaders())
+                .content(givenPatchBody(order, listOf(testData.givenOrderService(order)))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.billItems", hasSize<String>(1)))
                 .andExpect(jsonPath("$.billItems[0].code", equalTo("1A")))
@@ -222,18 +253,28 @@ class OrderRestTest : RestTest() {
         val updatedOrder = testData.orderResource.findById(order.id!!).get()
         assertThat(updatedOrder.status).isEqualTo(OrderState.ORDER_BILL_RECIEVED)
     }
-    private fun givenPatchBody(order: Order): String {
+
+    private fun givenPatchBody(order: Order, services: List<ServiceOrder> = emptyList()): String {
         val json: JsonNode = objectMapper.valueToTree(order)
         val objectNode: ObjectNode = json as ObjectNode
         objectNode.put("technician", "http://localhost:8090/api/employee/" + order.technician!!.id)
         objectNode.put("realEstate", "http://localhost:8090/api/realestate/" + order.realEstate!!.id)
+
+        val servicesArray = objectNode.putArray("services")
+        val serviceJson: JsonNode = objectMapper.valueToTree(services.get(0))
+        val serviceNode = serviceJson as ObjectNode
+        serviceNode.put("service", "http://localhost:8090/api/service/" + services.get(0).service.id)
+        serviceNode.put("order", "http://localhost:8090/api/order/" + order.id)
+        servicesArray.add(serviceJson as ObjectNode)
         return objectNode.toString()
     }
 
-    private fun givenPostBody(): String {
+    private fun givenPostBody(services: List<ServiceOrder> = emptyList()): String {
 
         val newOrder = Order(orderId = "1", technician = testData.employeeResource.findById(1).get(), realEstate = testData.realestateResource.findById(2)
-                .get())
+                .get(), services = services)
+
+
         val json: JsonNode = objectMapper.valueToTree(newOrder)
         val objectNode: ObjectNode = json as ObjectNode
         objectNode.put("technician", "http://localhost:8090/api/employee/1")
