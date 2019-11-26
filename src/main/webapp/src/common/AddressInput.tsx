@@ -2,11 +2,12 @@ import * as React from "react";
 import {ChangeEvent} from "react";
 import {Form, Grid} from "semantic-ui-react";
 import {Address} from "./Address";
+import NameValue from "./NameValue";
 
 interface RealEstateListProps {
     address: Address
-    handleAddressChange:(event: ChangeEvent<HTMLInputElement>)=>void
-    errors: Map<string,string>
+    handleAddressChange: (nameValue: NameValue) => void
+    errors: Map<string, string>
 }
 
 export default class AddressInput extends React.Component<RealEstateListProps> {
@@ -18,11 +19,14 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                     <Form.Field>
                         <label>Straße</label>
                         <Form.Input id="street"
-                               placeholder='Straße'
-                               value={this.props.address.street}
-                               name='street'
-                               onChange={this.props.handleAddressChange}
-                               error={this.props.errors.get('street') ? {content: this.props.errors.get('street')} : null}
+                                    placeholder='Straße'
+                                    value={this.props.address.street}
+                                    name='street'
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.handleAddressChange({
+                                        name: e.target.name,
+                                        value: e.target.value
+                                    })}
+                                    error={this.props.errors.get('street') ? {content: this.props.errors.get('street')} : null}
                         />
                     </Form.Field>
                 </Grid.Column>
@@ -30,10 +34,13 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                     <Form.Field>
                         <label>Nr.</label>
                         <Form.Input id="houseNumber"
-                               placeholder='Nr.'
-                               value={this.props.address.houseNumber}
-                               name='houseNumber'
-                               onChange={this.props.handleAddressChange}
+                                    placeholder='Nr.'
+                                    value={this.props.address.houseNumber}
+                                    name='houseNumber'
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.handleAddressChange({
+                                        name: e.target.name,
+                                        value: e.target.value
+                                    })}
                                     error={this.props.errors.get('houseNumber') ? {content: this.props.errors.get('houseNumber')} : null}
                         />
                     </Form.Field>
@@ -44,11 +51,14 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                     <Form.Field>
                         <label>PLZ</label>
                         <Form.Input id="zipCode"
-                               placeholder='PLZ'
-                               value={this.props.address.zipCode}
-                               name='zipCode'
-                               onChange={this.props.handleAddressChange}
-                               error={this.props.errors.get('zipCode') ? {content: this.props.errors.get('zipCode')} : null}
+                                    placeholder='PLZ'
+                                    value={this.props.address.zipCode}
+                                    name='zipCode'
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.handleAddressChange({
+                                        name: e.target.name,
+                                        value: e.target.value
+                                    })}
+                                    error={this.props.errors.get('zipCode') ? {content: this.props.errors.get('zipCode')} : null}
                         />
                     </Form.Field>
                 </Grid.Column>
@@ -56,11 +66,14 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                     <Form.Field>
                         <label>Stadt</label>
                         <Form.Input id="city"
-                               placeholder='Stadt'
-                               value={this.props.address.city}
-                               name='city'
-                               onChange={this.props.handleAddressChange}
-                               error={this.props.errors.get('city') ? {content: this.props.errors.get('city')} : null}
+                                    placeholder='Stadt'
+                                    value={this.props.address.city}
+                                    name='city'
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.handleAddressChange({
+                                        name: e.target.name,
+                                        value: e.target.value
+                                    })}
+                                    error={this.props.errors.get('city') ? {content: this.props.errors.get('city')} : null}
                         />
                     </Form.Field>
                 </Grid.Column>

@@ -115,7 +115,7 @@ class BillServiceTest {
             assertThat(billItem.price).isEqualTo(so.service.price)
             assertThat(billItem.serviceName).isEqualTo(so.service.title)
             assertThat(billItem.amount).isEqualTo(so.amount)
-            assertThat(billItem.order.id).isEqualTo(so.order.id)
+            assertThat(billItem.order.id).isEqualTo(so.order!!.id)
         }
     }
 

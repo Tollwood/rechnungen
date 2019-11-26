@@ -30,7 +30,7 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
     override fun validate(obj: Any, errors: Errors) {
         val order = obj as Order
         notEmpty(order.orderId, "orderId", errors);
-        alreadyExists(orderResource.findByOrderId(order.orderId), order.id, "orderId", errors)
+        alreadyExists(orderResource.findByOrderId(order.orderId), order.id, "orderId", order.orderId,errors)
         notEmpty(order.realEstate, "realEstate", errors)
         notEmpty(order.technician, "technician", errors)
 
@@ -41,9 +41,9 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
         if (shouldValidate(ORDER_BILL, order)) {
             notEmpty(order.billNo, "billNo", errors)
             notDefault(order.billNo, "billNo", errors)
-            alreadyExists(orderResource.findByBillNo(order.billNo), order.id, "billNo", errors)
             notEmpty(order.billDate, "billDate", errors)
         }
+        alreadyExists(orderResource.findByBillNo(order.billNo), order.id, "billNo", order.billNo, errors)
 
         if (shouldValidate(ORDER_BILL_RECIEVED, order)) {
             notEmpty(order.paymentRecievedDate, "paymentRecievedDate", errors)

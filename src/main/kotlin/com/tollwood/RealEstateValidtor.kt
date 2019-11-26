@@ -26,6 +26,6 @@ open class RealEstateValidtor(@Autowired val realestateResource: RealestateResou
         val realEstate = obj as RealEstate
 
         notEmpty(realEstate.name, "name", errors)
-        alreadyExists(realestateResource.findByName(realEstate.name), realEstate.id, "name", errors)
+        alreadyExists(realestateResource.findByName(realEstate.name), realEstate.id, "name", realEstate.name, errors)
     }
 }

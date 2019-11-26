@@ -26,7 +26,8 @@ open class ServiceValidtor(@Autowired val serviceResource: ServiceResource) : Va
     override fun validate(obj: Any, errors: Errors) {
         val service = obj as Service
         notEmpty(service.articleNumber, "articleNumber", errors);
-        ValidationErrors.alreadyExists(serviceResource.findByArticleNumber(service.articleNumber), service.id,"articleNumber", errors)
+        ValidationErrors.alreadyExists(serviceResource.findByArticleNumber(service.articleNumber), service.id,"articleNumber",
+                service.articleNumber, errors)
         notEmpty(service.title, "title", errors);
         notNull(service.price, "price", errors)
     }

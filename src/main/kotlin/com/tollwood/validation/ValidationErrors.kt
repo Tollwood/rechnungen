@@ -26,8 +26,9 @@ class ValidationErrors() {
             }
         }
 
-        fun alreadyExists(optional: Optional<*>, id: Long?, field: String, errors: Errors) {
-            if (optional.isPresent && optional.get()::class.isSubclassOf(BaseEntity::class) && id != (optional.get() as BaseEntity).id) {
+        fun alreadyExists(optional: Optional<*>, id: Long?, field: String, value: Any?, errors: Errors) {
+            if (value != null && optional.isPresent && optional.get()::class.isSubclassOf(BaseEntity::class) && id != (optional.get() as
+                            BaseEntity).id) {
                 errors.rejectValue(field, "alreadyExists", "Existiert bereits")
             }
         }

@@ -6,6 +6,7 @@ import RealEstate from "./RealEstate";
 import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
 import ErrorMapper from "../ErrorMapper";
+import NameValue from "../common/NameValue";
 
 interface RealEstateEditProps {
     onChange: () => void;
@@ -79,11 +80,11 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
         });
     }
 
-    handleAddressChange(event: ChangeEvent<HTMLInputElement>) {
-        const newAddress = Object.assign(this.state.realEstate.address, {[event.target.name]: event.target.value});
+    handleAddressChange(nameValue: NameValue) {
+        const newAddress = Object.assign(this.state.realEstate.address, {[nameValue.name]: nameValue.value});
         this.setState({
             realEstate: Object.assign(this.state.realEstate, {address: newAddress}),
-            errors: ErrorMapper.removeError(this.state.errors, "address." + event.target.name)
+            errors: ErrorMapper.removeError(this.state.errors, "address." + nameValue.name)
         });
     }
 

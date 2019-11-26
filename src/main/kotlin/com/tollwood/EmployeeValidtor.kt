@@ -25,7 +25,8 @@ open class EmployeeValidtor(@Autowired val employeeResource: EmployeeResource) :
     override fun validate(obj: Any, errors: Errors) {
         val employee = obj as Employee
         notEmpty(employee.technicianId, "technicianId", errors);
-        ValidationErrors.alreadyExists(employeeResource.findByTechnicianId(employee.technicianId), employee.id,"technicianId", errors)
+        ValidationErrors.alreadyExists(employeeResource.findByTechnicianId(employee.technicianId), employee.id,"technicianId", employee
+                .technicianId, errors)
         notEmpty(employee.firstName, "firstName", errors);
         notEmpty(employee.lastName, "lastName", errors);
         notEmpty(employee.email, "email", errors);

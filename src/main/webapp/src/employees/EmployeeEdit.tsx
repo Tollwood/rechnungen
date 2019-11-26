@@ -8,6 +8,7 @@ import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
 import BankInput from "../common/BankInput";
 import ErrorMapper from "../ErrorMapper";
+import NameValue from "../common/NameValue";
 
 interface EmployeeEditProps {
     onSave: () => void;
@@ -149,9 +150,9 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
         this.setState({employee: Object.assign(this.state.employee, {[name]: event.target.value}), errors: ErrorMapper.removeError(this.state.errors, name)});
     }
 
-    handleAddressChange(event: ChangeEvent<HTMLInputElement>) {
-        const newAddress = Object.assign(this.state.employee.address, {[event.target.name]: event.target.value});
-        this.setState({employee: Object.assign(this.state.employee, {address: newAddress}), errors: ErrorMapper.removeError(this.state.errors, "address."+event.target.name)});
+    handleAddressChange(nameValue: NameValue) {
+        const newAddress = Object.assign(this.state.employee.address, {[nameValue.name]: nameValue.value});
+        this.setState({employee: Object.assign(this.state.employee, {address: newAddress}), errors: ErrorMapper.removeError(this.state.errors, "address."+nameValue.name)});
     }
 
     handleBankDetailsChange(event: ChangeEvent<HTMLInputElement>) {
