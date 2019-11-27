@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate
 import org.springframework.data.rest.core.annotation.HandleBeforeSave
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler
+import java.lang.IllegalStateException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -23,7 +24,7 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
     fun computeBillItems(order: Order): List<BillItem> {
         val billItems = ArrayList<BillItem>()
         basePrice(order)?.let { billItems.add(it) }
-        addDistanceItem(order)?.let { billItems.add(it) }
+        addDistanceItem(order)?.let { billItems.addAll(it) }
         smallOrder(order)?.let { billItems.add(it) }
 
         order.services
@@ -37,36 +38,39 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
         return billItems
     }
 
-    private fun addDistanceItem(order: Order): BillItem? {
+    private fun addDistanceItem(order: Order): List<BillItem> {
 
         if (!order.includeKmFee || order.realEstate == null){
-            return null
+            return emptyList()
         }
 
         val distance = order.realEstate.distance;
         if (distance in 21..30) {
-            return this.getDistanceItem(order, "1B");
+            return listOf(this.getDistanceItem(order, "1B"))
         }
         if (distance in 31..40) {
-            return this.getDistanceItem(order, "1C");
+            return listOf(this.getDistanceItem(order, "1C"))
         }
         if (distance in 41..50) {
-            return this.getDistanceItem(order, "1D");
-        }
-        if (distance > 50) {
-            return this.getDistanceItem(order, "1E", distance);
+            return listOf(this.getDistanceItem(order, "1D"))
         }
 
-        return null
+        if (distance > 50) {
+            return listOf(
+                    this.getDistanceItem(order, "1D"),
+                    this.getDistanceItem(order, "1E", distance - 50))
+        }
+
+        return emptyList()
     }
 
-    private fun getDistanceItem(order: Order, code: String, distance: Int = 1): BillItem? {
+    private fun getDistanceItem(order: Order, code: String, distance: Int = 1): BillItem {
         val service: Optional<Service> = serviceResource.findByArticleNumber(code)
         if (service.isPresent) {
-            return BillItem(id = DependentId(service.get().articleNumber ?: "", order.id), amount = 1, serviceName = service.get().title,
-                    price = (service.get().price ?: 0.0) * distance, order = order);
+            return BillItem(id = DependentId(service.get().articleNumber ?: "", order.id), amount = distance, serviceName = service.get().title,
+                    price = service.get().price ?: 0.0, order = order);
         }
-        return null
+        return throw IllegalStateException("Service Item with code: " + code + " not found")
     }
 
     private fun basePrice(order: Order): BillItem? {

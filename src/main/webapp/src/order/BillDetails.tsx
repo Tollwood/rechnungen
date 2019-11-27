@@ -29,11 +29,6 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
             }).format(new Date()));
         }
 
-        if (!this.props.order.billNo) {
-            this.props.handleOrderChange("billNo", "R" + new Intl.DateTimeFormat('de-DE', {
-                year: '2-digit'
-            }).format(new Date()) + "-");
-        }
     }
 
     render() {
