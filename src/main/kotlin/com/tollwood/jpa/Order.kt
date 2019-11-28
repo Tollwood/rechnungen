@@ -49,7 +49,9 @@ data class Order(
 
         val billNo: String? = null,
         val billDate: String? = null,
-        val paymentRecievedDate: String? = null
+        val paymentRecievedDate: String? = null,
+        val distance: Int? = realEstate?.distance
+
 ) : BaseEntity() {
     @JsonProperty("sum")
     fun sum(): Number {

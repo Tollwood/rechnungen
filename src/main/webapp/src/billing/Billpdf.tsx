@@ -83,7 +83,7 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                             </Text>
                             <Text
                                 style={styles.column2}><Text
-                                style={styles.bold}>Kilometer:</Text> {this.props.bill.realEstate ? this.props.bill.realEstate.distance : ""}
+                                style={styles.bold}>Kilometer:</Text> {this.props.bill.order.distance}
                             </Text>
                         </View>
                         <View style={styles.row}>

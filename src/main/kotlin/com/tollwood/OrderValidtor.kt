@@ -5,6 +5,7 @@ import com.tollwood.jpa.OrderState
 import com.tollwood.jpa.OrderState.*
 import com.tollwood.validation.ValidationErrors.Companion.alreadyExists
 import com.tollwood.validation.ValidationErrors.Companion.notEmpty
+import com.tollwood.validation.ValidationErrors.Companion.notNull
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -36,6 +37,7 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
 
         if (shouldValidate(ORDER_EXECUTE, order)) {
             notEmpty(order.firstAppointment, "firstAppointment", errors)
+            notNull(order.distance, "distance", errors)
         }
 
         if (shouldValidate(ORDER_BILL, order)) {

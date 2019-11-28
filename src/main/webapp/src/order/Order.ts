@@ -12,6 +12,7 @@ export default class Order {
     phoneNumber?: string;
     technician?: string;
     realEstate?: string;
+    distance?: number;
     firstAppointment?: string;
     secondAppointment?: string;
     smallOrder: boolean = false;

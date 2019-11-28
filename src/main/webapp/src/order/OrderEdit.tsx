@@ -17,7 +17,6 @@ import BillButton from "./BillButton";
 import PaymentRecieved from "./PaymentRecieved";
 import OrderKmPauschale from "./OrderKmPauschale";
 import Company from "../employees/Company";
-import BillService from "../billing/BillService";
 import ErrorMapper from "../ErrorMapper";
 
 interface OrderEditProps {
@@ -66,6 +65,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     save(continueToNextStep: boolean) {
         let orderToSave: Order = Object.assign({}, this.state.order);
+        orderToSave.distance = this.state.order.distance === undefined && this.getCurrentRealEstate() !== undefined ? this.getCurrentRealEstate()!!.distance : this.state.order.distance;
         if (continueToNextStep) {
             orderToSave.prevStatus = orderToSave.status;
             orderToSave.status = Helper.nextStatus(this.state.order.status);
@@ -115,7 +115,9 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                                orderServices={this.state.order.services ? this.state.order.services : []}
                                                onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
                             : null}
-                        <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)} order={this.state.order}/>
+                        <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)}
+                                          order={this.state.order}
+                                          errors={this.state.errors}/>
                         {this.shouldRenderBillDetails() ?
                             <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}
                                          errors={this.state.errors}/> : null}

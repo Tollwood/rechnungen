@@ -8,7 +8,7 @@ import kotlin.reflect.full.isSubclassOf
 class ValidationErrors() {
 
     companion object {
-        fun notNull(input: Double?, field: String, errors: Errors) {
+        fun notNull(input: Any?, field: String, errors: Errors) {
             if (input == null) {
                 errors.rejectValue(field, "requiredField", "Pflichtfeld")
             }
