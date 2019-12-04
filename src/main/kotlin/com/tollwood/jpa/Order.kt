@@ -3,8 +3,12 @@ package com.tollwood.jpa
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.tollwood.jpa.OrderState.ORDER_EDIT
+import org.hibernate.search.annotations.Field
+import org.hibernate.search.annotations.Indexed
+import org.hibernate.search.annotations.IndexedEmbedded
 import javax.persistence.*
 
+@Indexed
 @Entity(name = "ORDER_TABLE")
 data class Order(
         @Id
@@ -12,10 +16,12 @@ data class Order(
         override val id: Long? = null,
 
         @Column(unique = true)
+        @Field
         val orderId: String?,
 
         @ManyToOne
         @JoinColumn(foreignKey = ForeignKey(name = "ORDER_REAL_ESTATE_FK"))
+        @IndexedEmbedded
         val realEstate: RealEstate? = null,
 
         @ManyToOne
@@ -26,6 +32,7 @@ data class Order(
         val secondAppointment: String? = null,
 
         val utilisationUnit: String? = null,
+        @Field
         val name: String? = null,
         val location: String? = null,
         val phoneNumber: String? = null,
@@ -47,12 +54,13 @@ data class Order(
 
         val includeKmFee: Boolean = true,
 
+        @Field
         val billNo: String? = null,
         val billDate: String? = null,
         val paymentRecievedDate: String? = null,
-        val distance: Int? = realEstate?.distance
+        val distance: Int? = 0
 
-) : BaseEntity() {
+) :BaseEntity() {
     @JsonProperty("sum")
     fun sum(): Number {
         return this.billItems.map { billItem -> billItem.amount * billItem.price }.sum();

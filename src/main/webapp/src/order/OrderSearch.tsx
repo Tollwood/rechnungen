@@ -2,9 +2,10 @@ import * as React from "react";
 import {Dropdown, DropdownItemProps, DropdownOnSearchChangeData, DropdownProps} from "semantic-ui-react";
 import Order from "./Order";
 import API from "../API";
+import Link from "../common/Links";
 
 interface OrderSearchProps {
-    onSelected: (selectedOrder: Order) => void;
+    onSelected: (selectedOrder: Link) => void;
 }
 
 interface OrderSearchState {
@@ -32,12 +33,9 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
                       search
                       selection
                       options={this.state.suggetions}
-                      noResultsMessage='Neuen Auftrag anlegen'
                       onChange={this.select.bind(this)}
                       value={this.state.currentValue}
-                      allowAdditions
                       loading={this.state.isFetching}
-                      onAddItem={this.handleAddition.bind(this)}
                       minCharacters={this.state.minSearchLength}
                       onSearchChange={this.handleSearchChange.bind(this)}
             />
@@ -46,23 +44,7 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
 
     private select(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
         this.setState({currentValue: ""});
-        this.props.onSelected(this.state.orders.find(order => order.orderId === data.value)!);
-    }
-
-    private handleAddition(event: React.KeyboardEvent<HTMLElement>, data: DropdownProps) {
-        this.props.onSelected({
-            orderId: data.value as string,
-            services: [],
-            _links: {},
-            smallOrder: false,
-            status: 'ORDER_EDIT',
-            includeKmFee: true,
-            billDate: '',
-            billNo: '',
-            paymentRecievedDate: '',
-            sum: 0,
-            billItems: []
-        });
+        this.props.onSelected(this.state.orders.find(order => order.orderId === data.value)!._links.self!);
     }
 
     private handleSearchChange(event: React.SyntheticEvent<HTMLElement>, data: DropdownOnSearchChangeData,) {
@@ -71,7 +53,7 @@ export default class OrderSearch extends React.Component<OrderSearchProps, Order
     }
 
     private search(searchQuery: string) {
-        API.get('api/order/search/findByOrderIdContainingOrBillNoContaining?orderId=' + searchQuery + '&billNo=' + searchQuery)
+        API.get('api/search?term=' + searchQuery)
             .then(res => {
                 return res.data._embedded.order;
             })

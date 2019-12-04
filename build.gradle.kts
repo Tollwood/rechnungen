@@ -3,15 +3,17 @@ import org.jetbrains.kotlin.com.google.common.collect.Lists
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	val kotlinVersion = "1.2.71"
+	val kotlinVersion = "1.3.61"
     id("com.moowork.node") version "1.3.1"
-    id("org.springframework.boot") version "2.1.7.RELEASE"
+    id("org.springframework.boot") version "2.2.1.RELEASE"
 	id("io.spring.dependency-management") version "1.0.8.RELEASE"
 	id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
+	id ("org.jetbrains.kotlin.plugin.allopen") version kotlinVersion
 	id("idea")
 	kotlin("jvm") version kotlinVersion
 	kotlin("plugin.spring") version kotlinVersion
 }
+
 
 group = "com.tollwood"
 version = "0.0.1-SNAPSHOT"
@@ -31,6 +33,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-rest")
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile("com.h2database:h2")
+	compile("org.hibernate:hibernate-search-orm:5.11.4.Final")
 
 	compile ("org.postgresql:postgresql:9.4.1212")
 	compile ("com.zaxxer:HikariCP:2.6.0")

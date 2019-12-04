@@ -292,12 +292,4 @@ class OrderRestTest : RestTest() {
         return objectNode.toString()
     }
 
-
-    private fun givenHeaders(): HttpHeaders {
-        val httpHeaders = HttpHeaders()
-        httpHeaders.put("Authorization", listOf("Bearer " + getAccessToken()))
-        httpHeaders.put(HttpHeaders.ACCEPT, listOf("application/json"))
-        httpHeaders.put(HttpHeaders.CONTENT_TYPE, listOf("application/json"))
-        return httpHeaders
-    }
 }

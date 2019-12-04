@@ -4,7 +4,7 @@ import {Content} from "./Content";
 import {MenuCard} from "./MenuCard";
 import {Card, Grid, Icon} from "semantic-ui-react";
 import OrderSearch from "../order/OrderSearch";
-import Order from "../order/Order";
+import Link from "../common/Links";
 
 interface State {
     contents: Content[]
@@ -13,7 +13,7 @@ interface State {
 interface Props {
     activeContent: ContentType,
     onMenuChanges: (content: ContentType) => void
-    onOpenOrder: (orde: Order) => void
+    onOpenOrder: (orde?: Link) => void
 }
 
 export class Menu extends React.Component<Props, State> {

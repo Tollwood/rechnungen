@@ -8,6 +8,7 @@ import {Grid} from "semantic-ui-react";
 import OrderSearch from "./OrderSearch";
 import {Page} from "../common/Page";
 import {PageService} from "../common/PageService";
+import Link from "../common/Links";
 
 interface OrderOverviewProps {
     company: Company
@@ -15,7 +16,7 @@ interface OrderOverviewProps {
 
 interface OrderOverviewState {
     orders: Order[]
-    selectedItem: Order,
+    selectedItem?: Link,
     edit: boolean,
     isLoading: boolean,
     page: Page
@@ -28,7 +29,6 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
         this.state = {
             orders: [],
             edit: false,
-            selectedItem: new Order(),
             isLoading: true,
             page: new Page('orderId')
         };
@@ -50,8 +50,8 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
                     {this.state.edit ? null :
                         <OrderList orders={this.state.orders}
                                    onAdd={this.handleAdd.bind(this)}
-                                   onSelect={(order: Order) => {
-                                       this.handleSelection(order)
+                                   onSelect={(orderLink: Link) => {
+                                       this.handleSelection(orderLink)
                                    }}
                                    isLoading={this.state.isLoading}
                                    page={this.state.page}
@@ -60,7 +60,7 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
                     {!this.state.edit ? null :
                         <OrderEdit
                             company={this.props.company}
-                            order={this.state.selectedItem}
+                            orderLink={this.state.selectedItem}
                             onCancelEdit={this.handleCancelEdit.bind(this)}
                             onSave={this.handleSave.bind(this)}
                             onDelete={this.handleDelete.bind(this)}
@@ -75,8 +75,8 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
         this.setState(Object.assign(this.state, {edit: true, selectedItem: new Order()}))
     }
 
-    private handleSelection(selectedItem: Order) {
-        this.setState(Object.assign(this.state, {edit: true, selectedItem: selectedItem}))
+    private handleSelection(selectedOrderLink?: Link) {
+        this.setState(Object.assign(this.state, {edit: true, selectedItem: selectedOrderLink}))
     }
 
     private handleCancelEdit() {

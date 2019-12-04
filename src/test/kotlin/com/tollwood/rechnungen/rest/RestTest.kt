@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.tollwood.rechnungen.TestData
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.json.JacksonJsonParser
+import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -29,5 +30,13 @@ abstract  class RestTest {
         val resultString = result.andReturn().response.contentAsString
         val jsonParser = JacksonJsonParser()
         return jsonParser.parseMap(resultString)["jwttoken"].toString()
+    }
+
+    protected fun givenHeaders(): HttpHeaders {
+        val httpHeaders = HttpHeaders()
+        httpHeaders.put("Authorization", listOf("Bearer " + getAccessToken()))
+        httpHeaders.put(HttpHeaders.ACCEPT, listOf("application/json"))
+        httpHeaders.put(HttpHeaders.CONTENT_TYPE, listOf("application/json"))
+        return httpHeaders
     }
 }

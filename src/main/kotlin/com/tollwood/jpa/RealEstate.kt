@@ -1,5 +1,6 @@
 package com.tollwood.jpa
 
+import org.hibernate.search.annotations.IndexedEmbedded
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
@@ -14,6 +15,7 @@ data class RealEstate (
         val name: String?,
 
         @Embedded
+        @IndexedEmbedded
         val address: Address,
 
         @NotNull

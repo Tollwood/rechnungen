@@ -18,12 +18,13 @@ import PaymentRecieved from "./PaymentRecieved";
 import OrderKmPauschale from "./OrderKmPauschale";
 import Company from "../employees/Company";
 import ErrorMapper from "../ErrorMapper";
+import Link from "../common/Links";
 
 interface OrderEditProps {
     onSave: () => void;
     onCancelEdit: () => void;
     onDelete: () => void;
-    order?: Order;
+    orderLink?: Link;
     company: Company;
 }
 
@@ -39,7 +40,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     constructor(props: OrderEditProps) {
         super(props);
-        let order = props.order ? props.order : new Order();
+        let order = new Order();
         this.state = {
             order: order,
             technicians: [],
@@ -51,15 +52,16 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
 
     componentDidMount(): void {
         this.fetchTechnicians();
-        this.fetchCurrentTechnician();
         this.fetchServices();
         this.fetchRealEstates();
-        this.fetchCurrentRealEstate();
+        if (this.props.orderLink !== undefined) {
+            this.fetchOrder(this.props.orderLink);
+        }
     }
 
     componentDidUpdate(prevProps: Readonly<OrderEditProps>, prevState: Readonly<OrderEditState>, snapshot?: any): void {
-        if (this.props.order !== undefined && this.props.order !== prevProps.order) {
-            this.setState({order: this.props.order});
+        if (this.props.orderLink !== undefined && this.props.orderLink !== prevProps.orderLink) {
+            this.fetchOrder(this.props.orderLink);
         }
     }
 
@@ -172,11 +174,18 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         });
     }
 
-    private fetchCurrentTechnician() {
-        if (this.props.order && this.props.order._links.technician) {
-            API.get(this.props!.order!._links!.technician.href)
+    private fetchCurrentTechnician(technicianLink: Link) {         API.get(technicianLink.href)
                 .then(res => this.handleOrderChange('technician', res.data._links.self.href))
-        }
+    }
+
+    private fetchOrder(orderLink: Link) {
+        API.get(orderLink.href)
+            .then(res => res.data)
+            .then((order) => {
+                this.setState(Object.assign(this.state, {order: order}));
+                if(this.state.order._links.realEstate !== undefined) this.fetchCurrentRealEstate(this.state.order._links.realEstate);
+                if(this.state.order._links.technician !== undefined) this.fetchCurrentTechnician(this.state.order._links.technician);
+            });
     }
 
     private fetchTechnicians() {
@@ -211,8 +220,6 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     private fetchServices() {
         API.get('/api/service')
             .then(res => {
-                console.log(res);
-                console.log(res.data);
                 return res.data;
             })
             .then(data => {
@@ -230,13 +237,11 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             });
     }
 
-    private fetchCurrentRealEstate() {
-        if (this.props.order && this.props.order._links.realEstate) {
-            API.get(this.props!.order!._links!.realEstate.href)
-                .then(res => {
-                    this.handleOrderChange('realEstate', res.data._links.self.href)
-                })
-        }
+    private fetchCurrentRealEstate(realEstateLink: Link) {
+        API.get(realEstateLink.href)
+            .then(res => {
+                this.handleOrderChange('realEstate', res.data._links.self.href)
+            });
     }
 
     private getCurrentRealEstate() {

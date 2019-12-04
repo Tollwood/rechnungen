@@ -26,14 +26,15 @@ class TestData {
     @Autowired
     lateinit var serviceResource: ServiceResource
 
+    fun givenOrderPersistedWithRealEstateAndEmployee(order:Order): Order {
+        return orderResource.save(order.copy(technician = employeeResource.findAll().first(), realEstate =  realestateResource.findAll().first()))
+    }
     fun givenOrderPersisted(orderId: String): Order {
         return orderResource.save(givenOrder(orderId))
     }
 
     fun givenOrder(orderId: String): Order {
-        val technician = employeeResource.findAll().first()
-        val realEstate = realestateResource.findAll().first()
-        return Order(orderId = orderId, technician = technician, realEstate = realEstate)
+        return Order(orderId = orderId, technician = employeeResource.findAll().first(), realEstate = realestateResource.findAll().first())
     }
 
     fun givenOrderWithBill(orderId: String): Order {

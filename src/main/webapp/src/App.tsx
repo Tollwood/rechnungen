@@ -7,7 +7,6 @@ import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import {ContentType} from "./start/ContentType";
 import AppHeader from "./Header";
 import OrderEdit from "./order/OrderEdit";
-import Order from "./order/Order";
 import {Menu} from "./start/Menu";
 import RealEstateOverview from "./realestate/RealEstateOverview";
 import OrderOverview from "./order/OrderOverview";
@@ -15,9 +14,10 @@ import LoginModal from './LoginModal';
 import API from "./API";
 import Company from "./employees/Company";
 import ServicesOverview from "./services/ServicesOverview";
+import Link from "./common/Links";
 
 interface AppState {
-    activeOrder?: Order,
+    activeOrder?: Link,
     activeContent: ContentType,
     company: Company
 }
@@ -59,7 +59,7 @@ class App extends Component<AppProps, AppState> {
                                            onSave={this.closeOrder.bind(this)}
                                            onCancelEdit={this.closeOrder.bind(this)}
                                            onDelete={this.closeOrder.bind(this)}
-                                           order={this.state.activeOrder}/> : null}
+                                           orderLink={this.state.activeOrder}/> : null}
                         </div>
                     </Grid.Column>
                 </Grid>
@@ -71,8 +71,8 @@ class App extends Component<AppProps, AppState> {
         this.setState(Object.assign(this.state, {activeContent: content}));
     }
 
-    private openOrder(order: Order): void {
-        this.setState(Object.assign(this.state, {activeOrder: order, activeContent: ContentType.ORDER_DETAILS}))
+    private openOrder(orderLink?: Link): void {
+        this.setState(Object.assign(this.state, {activeOrder: orderLink, activeContent: ContentType.ORDER_DETAILS}))
     }
 
     private closeOrder() {

@@ -5,10 +5,11 @@ import {Button, Icon, Placeholder, Table} from "semantic-ui-react";
 import {Page} from "../common/Page";
 import PaginationFooter from "../common/PaginationFooter";
 import {PageService} from "../common/PageService";
+import Link from "../common/Links";
 
 interface OrderListProps {
     onAdd: () => void,
-    onSelect: (selectedItem: Order) => void,
+    onSelect: (selectedItem: Link) => void,
     orders: Order[]
     isLoading: boolean
     page: Page,
@@ -52,7 +53,7 @@ export default class OrderList extends React.Component<OrderListProps> {
     }
 
     private renderRow(order: Order) {
-        return <Table.Row key={order.orderId} onClick={this.props.onSelect.bind(this, order)}>
+        return <Table.Row key={order.orderId} onClick={this.props.onSelect.bind(this, order._links.self!)}>
             <Table.Cell>{order.orderId}</Table.Cell>
             <Table.Cell>{order.sum.toLocaleString('de', {
                 minimumFractionDigits: 2,
