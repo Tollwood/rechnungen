@@ -2,6 +2,7 @@ package com.tollwood.search
 
 import com.tollwood.OrderResource
 import com.tollwood.jpa.Order
+import org.apache.lucene.search.Query
 import org.hibernate.search.jpa.Search
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.hateoas.CollectionModel
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-
+import org.apache.lucene.search.BooleanClause.Occur
+import org.apache.lucene.search.BooleanQuery
 
 @RestController
 class SearchController {
@@ -42,16 +44,27 @@ class SearchController {
                 .forEntity(Order::class.java)
                 .get();
 
-        val query = queryBuilder
-                .keyword()
-                .fuzzy()
-                .withEditDistanceUpTo(2)
-                .withPrefixLength(0)
-                .onFields("orderId", "billNo", "realEstate.address.city", "realEstate.address.street", "realEstate.address.zipCode")
-                .matching(term)
-                .createQuery()
+        val terms = term.split(" ")
 
-        val jpaQuery = fullTextEntityManager.createFullTextQuery(query, Order::class.java)
+        val queries = ArrayList<Query>()
+
+        for(t in terms){
+            queries.add(queryBuilder
+                    .keyword()
+                    .fuzzy()
+                    .withEditDistanceUpTo(2)
+                    .withPrefixLength(0)
+                    .onFields("orderId", "billNo", "realEstate.address.city", "realEstate.address.street", "realEstate.address.zipCode")
+                    .matching(t)
+                    .createQuery())
+        }
+
+        val finalQuery = BooleanQuery.Builder()
+        for(query in queries){
+            finalQuery.add(query, Occur.MUST)
+        }
+
+        val jpaQuery = fullTextEntityManager.createFullTextQuery(finalQuery.build(), Order::class.java)
         val results = jpaQuery.resultList as List<Order>
         return ResponseEntity(orderEntityModelAssembler.toCollectionModel(results), HttpStatus.OK)
     }
