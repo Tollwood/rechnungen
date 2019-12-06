@@ -45,7 +45,7 @@ class App extends Component<AppProps, AppState> {
                             <AppHeader company={this.state.company}/>
                         </Grid.Column>
                     </Grid.Row>
-                    <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent} onOpenOrder={this.openOrder.bind(this)}/>
+                    <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent} />
                     <Grid.Column computer={8} tablet={12} mobile={16}>
                         <div id={"content-container"}>
                             {this.state.activeContent === ContentType.EMPLOYEE ? <EmployeeOverview/> : null}
@@ -69,10 +69,6 @@ class App extends Component<AppProps, AppState> {
 
     private changeActiveContent(content: ContentType): void {
         this.setState(Object.assign(this.state, {activeContent: content}));
-    }
-
-    private openOrder(orderLink?: Link): void {
-        this.setState(Object.assign(this.state, {activeOrder: orderLink, activeContent: ContentType.ORDER_DETAILS}))
     }
 
     private closeOrder() {

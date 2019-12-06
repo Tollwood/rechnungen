@@ -3,8 +3,6 @@ import {ContentType} from "./ContentType";
 import {Content} from "./Content";
 import {MenuCard} from "./MenuCard";
 import {Card, Grid, Icon} from "semantic-ui-react";
-import OrderSearch from "../order/OrderSearch";
-import Link from "../common/Links";
 
 interface State {
     contents: Content[]
@@ -13,7 +11,6 @@ interface State {
 interface Props {
     activeContent: ContentType,
     onMenuChanges: (content: ContentType) => void
-    onOpenOrder: (orde?: Link) => void
 }
 
 export class Menu extends React.Component<Props, State> {
@@ -30,16 +27,10 @@ export class Menu extends React.Component<Props, State> {
         }
     }
 
-
     render() {
         if (this.props.activeContent === ContentType.NONE) {
             return (
                 <React.Fragment>
-                    <Grid.Row>
-                        <Grid.Column computer={8} tablet={12} mobile={16} textAlign={'center'}>
-                            <OrderSearch onSelected={this.props.onOpenOrder.bind(this)}/>
-                        </Grid.Column>
-                    </Grid.Row>
                     <Grid.Row>
                         <Grid.Column computer={8} tablet={12} mobile={16} textAlign={'center'}>
                             <div id={"menu-conainter"}>

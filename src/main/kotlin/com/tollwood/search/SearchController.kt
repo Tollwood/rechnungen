@@ -1,11 +1,9 @@
 package com.tollwood.search
 
-import com.tollwood.jpa.Employee
+import com.tollwood.OrderResource
 import com.tollwood.jpa.Order
-import com.tollwood.jpa.RealEstate
 import org.hibernate.search.jpa.Search
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.EntityModel
 import org.springframework.http.HttpStatus
@@ -26,8 +24,19 @@ class SearchController {
     @Autowired
     lateinit var orderEntityModelAssembler: OrderEntityModelAssembler
 
+    @Autowired
+    lateinit var orderResource: OrderResource
+
     @RequestMapping("/api/search")
-    fun search(@RequestParam(value="term") term: String): ResponseEntity<CollectionModel<EntityModel<Order>>> {
+    fun search(@RequestParam(value = "term") term: String,
+               @RequestParam(value = "page") page: String,
+               @RequestParam(value = "size") size: String
+    ): ResponseEntity<CollectionModel<EntityModel<Order>>> {
+
+        if (term.isBlank()) {
+            val orders = orderResource.findAll()
+            return ResponseEntity(orderEntityModelAssembler.toCollectionModel(orders), HttpStatus.OK)
+        }
 
         val fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 
@@ -41,12 +50,12 @@ class SearchController {
                 .fuzzy()
                 .withEditDistanceUpTo(2)
                 .withPrefixLength(0)
-                .onFields("orderId", "billNo", "realEstate.address.city","realEstate.address.street","realEstate.address.zipCode")
+                .onFields("orderId", "billNo", "realEstate.address.city", "realEstate.address.street", "realEstate.address.zipCode")
                 .matching(term)
                 .createQuery()
 
         val jpaQuery = fullTextEntityManager.createFullTextQuery(query, Order::class.java)
         val results = jpaQuery.resultList as List<Order>
-        return ResponseEntity(orderEntityModelAssembler.toCollectionModel(results), HttpStatus.OK);
+        return ResponseEntity(orderEntityModelAssembler.toCollectionModel(results), HttpStatus.OK)
     }
 }

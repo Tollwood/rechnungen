@@ -54,7 +54,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.fetchTechnicians();
         this.fetchServices();
         this.fetchRealEstates();
-        if (this.props.orderLink !== undefined) {
+        if (this.props.orderLink !== undefined && this.props.orderLink !== null ) {
             this.fetchOrder(this.props.orderLink);
         }
     }

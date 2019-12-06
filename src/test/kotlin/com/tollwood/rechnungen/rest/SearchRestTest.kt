@@ -3,6 +3,7 @@ package com.tollwood.rechnungen.rest
 import com.tollwood.jpa.Order
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.collection.IsCollectionWithSize.hasSize
 import org.junit.FixMethodOrder
 import org.junit.jupiter.api.Test
 import org.junit.runners.MethodSorters
@@ -41,6 +42,15 @@ class SearchRestTest : RestTest() {
                 testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "12345")),
                 testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "34"))
         )
+    }
+
+    @Test
+    fun `search no result`() {
+        this.mockMvc.perform(get("/api/search")
+                .headers(givenHeaders())
+                .param("term", "Not existing"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", equalTo("")))
     }
 
     @Test
