@@ -28,10 +28,7 @@ class SearchController {
     lateinit var orderResource: OrderResource
 
     @RequestMapping("/api/search")
-    fun search(@RequestParam(value = "term") term: String,
-               @RequestParam(value = "page") page: String,
-               @RequestParam(value = "size") size: String
-    ): ResponseEntity<CollectionModel<EntityModel<Order>>> {
+    fun search(@RequestParam(value = "term") term: String): ResponseEntity<CollectionModel<EntityModel<Order>>> {
 
         if (term.isBlank()) {
             val orders = orderResource.findAll()
