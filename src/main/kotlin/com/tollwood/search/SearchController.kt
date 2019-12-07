@@ -52,7 +52,7 @@ class SearchController {
             queries.add(queryBuilder
                     .keyword()
                     .fuzzy()
-                    .withEditDistanceUpTo(5)
+                    .withEditDistanceUpTo(3)
                     .withPrefixLength(0)
                     .onFields("orderId", "name", "billNo", "realEstate.address.city", "realEstate.address.street", "realEstate.address" +
                             ".zipCode")
