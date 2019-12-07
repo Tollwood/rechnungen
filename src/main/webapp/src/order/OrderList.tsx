@@ -22,14 +22,13 @@ interface State {
 }
 
 const options = [
-    { key: 'ORDER_EDIT', text: Helper.getStatusName('ORDER_EDIT'), value: 'ORDER_EDIT' },
-    { key: 'ORDER_EXECUTE', text: Helper.getStatusName('ORDER_EXECUTE'), value: 'ORDER_EXECUTE' },
-    { key: 'ORDER_BILL', text: Helper.getStatusName('ORDER_BILL'), value: 'ORDER_BILL' },
-    { key: 'ORDER_BILL_RECIEVED', text: Helper.getStatusName('ORDER_BILL_RECIEVED'), value: 'ORDER_BILL_RECIEVED' },
-    { key: 'PAYMENT_RECIEVED', text: Helper.getStatusName('PAYMENT_RECIEVED'), value: 'PAYMENT_RECIEVED' }
+    {key: 'ORDER_EDIT', text: Helper.getStatusName('ORDER_EDIT'), value: 'ORDER_EDIT'},
+    {key: 'ORDER_EXECUTE', text: Helper.getStatusName('ORDER_EXECUTE'), value: 'ORDER_EXECUTE'},
+    {key: 'ORDER_BILL', text: Helper.getStatusName('ORDER_BILL'), value: 'ORDER_BILL'},
+    {key: 'ORDER_BILL_RECIEVED', text: Helper.getStatusName('ORDER_BILL_RECIEVED'), value: 'ORDER_BILL_RECIEVED'},
+    {key: 'PAYMENT_RECIEVED', text: Helper.getStatusName('PAYMENT_RECIEVED'), value: 'PAYMENT_RECIEVED'}
 ];
 export default class OrderList extends React.Component<OrderListProps, State> {
-
 
 
     constructor(props: OrderListProps) {
@@ -53,8 +52,8 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell colSpan={4}><OrderSearch onSelected={this.props.onSelect.bind(this)}
-                                                           onSearchResult={this.updateOrders.bind(this)}
-                            statusFilter={this.state.statusFilter}/></Table.HeaderCell>
+                                                                       onSearchResult={this.updateOrders.bind(this)}
+                                                                       statusFilter={this.state.statusFilter}/></Table.HeaderCell>
                             <Table.HeaderCell><Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"}
                                                       onClick={this.props.onAdd}
                                                       className={"add"}/>
@@ -62,7 +61,9 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                         </Table.Row>
                         <Table.Row>
                             <Table.HeaderCell colSpan={5}>
-                                <Dropdown placeholder='Nach Status Filtern' fluid multiple selection search options={options}  onChange={this.updateStatusFilter.bind(this)}/>
+                                <Dropdown placeholder='Nach Status Filtern' fluid multiple selection search closeOnChange
+                                          options={options}
+                                          onChange={this.updateStatusFilter.bind(this)}/>
                             </Table.HeaderCell>
                         </Table.Row>
 
@@ -177,7 +178,7 @@ export default class OrderList extends React.Component<OrderListProps, State> {
             );
     }
 
-    private updateStatusFilter(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps){
-        this.setState({statusFilter: data.value as string[]} );
+    private updateStatusFilter(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        this.setState({statusFilter: data.value as string[]});
     }
 }
