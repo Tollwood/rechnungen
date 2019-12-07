@@ -38,11 +38,16 @@ export default class OrderList extends React.Component<OrderListProps, State> {
     render() {
         return (
             <React.Fragment>
-                <OrderSearch onSelected={this.props.onSelect.bind(this)} onSearchResult={this.updateOrders.bind(this)}/>
-                <Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"} onClick={this.props.onAdd}
-                        className={"add"}/>
                 <Table className="order-list" sortable striped>
                     <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell colSpan={4}><OrderSearch onSelected={this.props.onSelect.bind(this)}
+                                                           onSearchResult={this.updateOrders.bind(this)}/></Table.HeaderCell>
+                            <Table.HeaderCell><Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"}
+                                                      onClick={this.props.onAdd}
+                                                      className={"add"}/>
+                            </Table.HeaderCell>
+                        </Table.Row>
                         <Table.Row>
                             <Table.HeaderCell
                                 sorted={this.state.page.sort === 'orderId' ? this.state.page.direction : undefined}
