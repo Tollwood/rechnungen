@@ -5,8 +5,8 @@ import com.tollwood.jpa.Order
 import com.tollwood.jpa.OrderState
 import org.apache.lucene.search.BooleanClause.Occur
 import org.apache.lucene.search.BooleanQuery
-import org.apache.lucene.search.Query
 import org.hibernate.search.jpa.Search
+import org.hibernate.search.query.dsl.QueryBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.EntityModel
@@ -31,10 +31,11 @@ class SearchController {
     lateinit var orderResource: OrderResource
 
     @RequestMapping("/api/search")
-    fun search(@RequestParam(value = "term") term: String = "",
-               @RequestParam(value = "status") status: List<OrderState> = emptyList()): ResponseEntity<CollectionModel<EntityModel<Order>>> {
+    fun search(@RequestParam(value = "term", required = false) term: String?,
+               @RequestParam(value = "status", required = false) status: List<OrderState>?):
+            ResponseEntity<CollectionModel<EntityModel<Order>>> {
 
-        if (term.isBlank() && status.isEmpty()) {
+        if ((term == null || term.isBlank()) && (status == null || status.isEmpty())) {
             val orders = orderResource.findAll()
             return ResponseEntity(orderEntityModelAssembler.toCollectionModel(orders), HttpStatus.OK)
         }
@@ -46,31 +47,17 @@ class SearchController {
                 .forEntity(Order::class.java)
                 .get();
 
-        val terms = term.split(" ")
-
-        val queries = ArrayList<Query>()
-
-        for (t in terms) {
-            if( t.isBlank()){
-                continue
-            }
-            queries.add(queryBuilder
-                    .keyword()
-                    .fuzzy()
-                    .withEditDistanceUpTo(2)
-                    .withPrefixLength(0)
-                    .onFields("orderId", "name", "billNo", "realEstate.address.city", "realEstate.address.street", "realEstate.address" +
-                            ".zipCode")
-                    .matching(t)
-                    .createQuery())
-        }
-
         val finalQuery = BooleanQuery.Builder()
-        for (query in queries) {
-            finalQuery.add(query, Occur.MUST)
-        }
+        addSearchByTerm(term, queryBuilder, finalQuery)
+        addSearchByStatus(status, queryBuilder, finalQuery)
 
-        if (status.isNotEmpty()) {
+        val jpaQuery = fullTextEntityManager.createFullTextQuery(finalQuery.build(), Order::class.java)
+        val results = jpaQuery.resultList as List<Order>
+        return ResponseEntity(orderEntityModelAssembler.toCollectionModel(results), HttpStatus.OK)
+    }
+
+    private fun addSearchByStatus(status: List<OrderState>?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
+        if (status != null && status.isNotEmpty()) {
             val statusQuery = BooleanQuery.Builder()
             for (st in status) {
                 val stQuery = queryBuilder
@@ -82,9 +69,22 @@ class SearchController {
             }
             finalQuery.add(statusQuery.build(), Occur.FILTER)
         }
+    }
 
-        val jpaQuery = fullTextEntityManager.createFullTextQuery(finalQuery.build(), Order::class.java)
-        val results = jpaQuery.resultList as List<Order>
-        return ResponseEntity(orderEntityModelAssembler.toCollectionModel(results), HttpStatus.OK)
+    private fun addSearchByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
+        if (term == null) return
+        val terms = term.split(" ")
+        for (t in terms) {
+            if (t.isBlank()) continue
+            finalQuery.add(queryBuilder
+                    .keyword()
+                    .fuzzy()
+                    .withEditDistanceUpTo(2)
+                    .withPrefixLength(0)
+                    .onFields("orderId", "name", "billNo", "realEstate.address.city", "realEstate.address.street", "realEstate.address" +
+                            ".zipCode")
+                    .matching(t)
+                    .createQuery(), Occur.MUST)
+        }
     }
 }
