@@ -47,6 +47,7 @@ data class Order(
         var billItems: List<BillItem> = emptyList(),
 
         @Enumerated(EnumType.STRING)
+        @Field
         val status: OrderState = ORDER_EDIT,
 
         @Enumerated(EnumType.STRING)

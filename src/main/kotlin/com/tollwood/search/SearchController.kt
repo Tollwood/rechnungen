@@ -2,6 +2,7 @@ package com.tollwood.search
 
 import com.tollwood.OrderResource
 import com.tollwood.jpa.Order
+import com.tollwood.jpa.OrderState
 import org.apache.lucene.search.BooleanClause.Occur
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
@@ -30,9 +31,10 @@ class SearchController {
     lateinit var orderResource: OrderResource
 
     @RequestMapping("/api/search")
-    fun search(@RequestParam(value = "term") term: String): ResponseEntity<CollectionModel<EntityModel<Order>>> {
+    fun search(@RequestParam(value = "term") term: String,
+               @RequestParam(value = "status") status: List<OrderState>): ResponseEntity<CollectionModel<EntityModel<Order>>> {
 
-        if (term.isBlank()) {
+        if (term.isBlank() && status.isEmpty()) {
             val orders = orderResource.findAll()
             return ResponseEntity(orderEntityModelAssembler.toCollectionModel(orders), HttpStatus.OK)
         }
@@ -49,6 +51,9 @@ class SearchController {
         val queries = ArrayList<Query>()
 
         for (t in terms) {
+            if( t.isBlank()){
+                continue
+            }
             queries.add(queryBuilder
                     .keyword()
                     .fuzzy()
@@ -63,6 +68,19 @@ class SearchController {
         val finalQuery = BooleanQuery.Builder()
         for (query in queries) {
             finalQuery.add(query, Occur.MUST)
+        }
+
+        if (status.isNotEmpty()) {
+            val statusQuery = BooleanQuery.Builder()
+            for (st in status) {
+                val stQuery = queryBuilder
+                        .keyword()
+                        .onField("status")
+                        .matching(st)
+                        .createQuery()
+                statusQuery.add(stQuery, Occur.SHOULD)
+            }
+            finalQuery.add(statusQuery.build(), Occur.FILTER)
         }
 
         val jpaQuery = fullTextEntityManager.createFullTextQuery(finalQuery.build(), Order::class.java)
