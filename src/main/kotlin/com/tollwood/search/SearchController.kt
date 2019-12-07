@@ -32,7 +32,7 @@ class SearchController {
 
     @RequestMapping("/api/search")
     fun search(@RequestParam(value = "term") term: String = "",
-               @RequestParam(value = "status") status: List<OrderState>): ResponseEntity<CollectionModel<EntityModel<Order>>> {
+               @RequestParam(value = "status") status: List<OrderState> = emptyList()): ResponseEntity<CollectionModel<EntityModel<Order>>> {
 
         if (term.isBlank() && status.isEmpty()) {
             val orders = orderResource.findAll()
