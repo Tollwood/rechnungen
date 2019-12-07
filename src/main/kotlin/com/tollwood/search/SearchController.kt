@@ -31,7 +31,7 @@ class SearchController {
     lateinit var orderResource: OrderResource
 
     @RequestMapping("/api/search")
-    fun search(@RequestParam(value = "term") term: String,
+    fun search(@RequestParam(value = "term") term: String = "",
                @RequestParam(value = "status") status: List<OrderState>): ResponseEntity<CollectionModel<EntityModel<Order>>> {
 
         if (term.isBlank() && status.isEmpty()) {
