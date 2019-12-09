@@ -18,7 +18,8 @@ interface State {
     orders: Order[],
     page: Page,
     isLoading: boolean,
-    statusFilter: string[]
+    statusFilter: string[],
+    searchTerm: string
 }
 
 const options = [
@@ -37,12 +38,13 @@ export default class OrderList extends React.Component<OrderListProps, State> {
             orders: [],
             page: new Page('orderId'),
             isLoading: true,
-            statusFilter: []
+            statusFilter: [],
+            searchTerm: ""
         }
     }
 
     componentDidMount(): void {
-        this.refresh(this.state.page);
+        this.search(this.state.searchTerm, this.state.statusFilter, this.state.page);
     }
 
     render() {
@@ -51,9 +53,10 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                 <Table className="order-list" sortable striped>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell colSpan={4}><OrderSearch onSelected={this.props.onSelect.bind(this)}
-                                                                       onSearchResult={this.updateOrders.bind(this)}
-                                                                       statusFilter={this.state.statusFilter}/></Table.HeaderCell>
+                            <Table.HeaderCell colSpan={4}>
+                                <OrderSearch onSearchChanged={this.searchByTerm.bind(this)}
+                                             currentValue={this.state.searchTerm}/>
+                            </Table.HeaderCell>
                             <Table.HeaderCell><Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"}
                                                       onClick={this.props.onAdd}
                                                       className={"add"}/>
@@ -70,28 +73,27 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                         <Table.Row>
                             <Table.HeaderCell
                                 sorted={this.state.page.sort === 'orderId' ? this.state.page.direction : undefined}
-                                onClick={() => PageService.sort('orderId', this.state.page, this.refresh.bind(this))}
+                                onClick={() => PageService.sort('orderId', this.state.page, this.sortAndPage.bind(this))}
                             >Auftrags-Id</Table.HeaderCell>
                             <Table.HeaderCell>Nettoumsatz</Table.HeaderCell>
                             <Table.HeaderCell>Bruttoumsatz</Table.HeaderCell>
                             <Table.HeaderCell
                                 sorted={this.state.page.sort === 'billNo' ? this.state.page.direction : undefined}
-                                onClick={() => PageService.sort('billNo', this.state.page, this.refresh.bind(this))}
+                                onClick={() => PageService.sort('billNo', this.state.page, this.sortAndPage.bind(this))}
                             >RG-Nummer</Table.HeaderCell>
                             <Table.HeaderCell
                                 sorted={this.state.page.sort === 'status' ? this.state.page.direction : undefined}
-                                onClick={() => PageService.sort('status', this.state.page, this.refresh.bind(this))}
+                                onClick={() => PageService.sort('status', this.state.page, this.sortAndPage.bind(this))}
                             >Status</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {this.renderRows()}
                     </Table.Body>
-                    <PaginationFooter page={this.state.page} onPageChange={this.refresh.bind(this)} columns={5}/>
+                    <PaginationFooter page={this.state.page} onPageChange={this.sortAndPage.bind(this)} columns={5}/>
                 </Table>
             </React.Fragment>
         )
-
     }
 
     private renderRow(order: Order) {
@@ -160,25 +162,36 @@ export default class OrderList extends React.Component<OrderListProps, State> {
         </Table.Row>;
     }
 
-    private updateOrders(newOrders: Order[]) {
-        this.setState({orders: newOrders, isLoading: false, page: new Page("orderId")})
-    }
-
-    private refresh(page: Page) {
+    private sortAndPage(page: Page) {
         this.setState({isLoading: true, page: page});
-        API.get('/api/order?' + PageService.getPageAndSortParams(page))
-            .then(res => {
-                return res.data;
-            })
-            .then(data => {
-                this.setState({orders: data._embedded.order, page: Object.assign(this.state.page, data.page)})
-            })
-            .finally(() =>
-                this.setState({isLoading: false})
-            );
+        this.search(this.state.searchTerm, this.state.statusFilter, page);
     }
 
     private updateStatusFilter(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        this.setState({statusFilter: data.value as string[]});
+        this.search(this.state.searchTerm, data.value as string[], this.state.page);
+    }
+
+    private searchByTerm(searchTerm: string) {
+        this.search(searchTerm, this.state.statusFilter, this.state.page)
+    }
+
+    private search(searchQuery: string, statusFilter: string[], page: Page) {
+        var status = this.computeStatusParams(statusFilter);
+        this.setState({isLoading: true, searchTerm: searchQuery, statusFilter: statusFilter, page: page});
+        API.get('api/search?term=' + searchQuery + status + PageService.getPageAndSortParams(page))
+            .then(res => {
+                return res.data._embedded === undefined ? [] : res.data._embedded.order;
+            })
+            .then((orders: Order[]) => {
+                this.setState({orders: orders, isLoading: false});
+            })
+    }
+
+    private computeStatusParams(statusFilter: string[]) {
+        var statusParams = "";
+        if (statusFilter.length > 0) {
+            statusParams = "&status=" + statusFilter.join("&status=");
+        }
+        return statusParams
     }
 }

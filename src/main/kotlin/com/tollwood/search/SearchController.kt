@@ -1,10 +1,12 @@
 package com.tollwood.search
 
-import com.tollwood.OrderResource
 import com.tollwood.jpa.Order
 import com.tollwood.jpa.OrderState
 import org.apache.lucene.search.BooleanClause.Occur
 import org.apache.lucene.search.BooleanQuery
+import org.apache.lucene.search.Sort
+import org.apache.lucene.search.SortField
+import org.hibernate.search.jpa.FullTextQuery
 import org.hibernate.search.jpa.Search
 import org.hibernate.search.query.dsl.QueryBuilder
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,18 +29,13 @@ class SearchController {
     @Autowired
     lateinit var orderEntityModelAssembler: OrderEntityModelAssembler
 
-    @Autowired
-    lateinit var orderResource: OrderResource
-
     @RequestMapping("/api/search")
     fun search(@RequestParam(value = "term", required = false) term: String?,
-               @RequestParam(value = "status", required = false) status: List<OrderState>?):
+               @RequestParam(value = "status", required = false) status: List<OrderState>?,
+                @RequestParam(value = "page", required = false) page: Int,
+               @RequestParam(value = "sort", required = false) sort: String?,
+               @RequestParam(value = "size", required = false) size: Int):
             ResponseEntity<CollectionModel<EntityModel<Order>>> {
-
-        if ((term == null || term.isBlank()) && (status == null || status.isEmpty())) {
-            val orders = orderResource.findAll()
-            return ResponseEntity(orderEntityModelAssembler.toCollectionModel(orders), HttpStatus.OK)
-        }
 
         val fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 
@@ -47,13 +44,29 @@ class SearchController {
                 .forEntity(Order::class.java)
                 .get();
 
+        if ((term == null || term.isBlank()) && (status == null || status.isEmpty())) {
+            val jpaQuery = fullTextEntityManager.createFullTextQuery( queryBuilder.all().createQuery(), Order::class.java)
+            val results = jpaQuery.resultList as List<Order>
+            return ResponseEntity(orderEntityModelAssembler.toCollectionModel(results), HttpStatus.OK)
+        }
+
         val finalQuery = BooleanQuery.Builder()
         addSearchByTerm(term, queryBuilder, finalQuery)
         addSearchByStatus(status, queryBuilder, finalQuery)
 
         val jpaQuery = fullTextEntityManager.createFullTextQuery(finalQuery.build(), Order::class.java)
+        addSort(jpaQuery,sort)
+        jpaQuery.setMaxResults(size)
+        jpaQuery.setFirstResult(page * size)
         val results = jpaQuery.resultList as List<Order>
         return ResponseEntity(orderEntityModelAssembler.toCollectionModel(results), HttpStatus.OK)
+    }
+
+    private fun addSort( jpaQuery: FullTextQuery, sort: String?) {
+        if(sort == null) return
+        val sortValues = sort.split(",")
+        val reverse = sortValues.size == 2 && sortValues[1].equals("desc")
+        jpaQuery.setSort(Sort(SortField(sortValues[0], SortField.Type.STRING, reverse)))
     }
 
     private fun addSearchByStatus(status: List<OrderState>?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {

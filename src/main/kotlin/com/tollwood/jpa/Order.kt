@@ -6,6 +6,7 @@ import com.tollwood.jpa.OrderState.ORDER_EDIT
 import org.hibernate.search.annotations.Field
 import org.hibernate.search.annotations.Indexed
 import org.hibernate.search.annotations.IndexedEmbedded
+import org.hibernate.search.annotations.SortableField
 import javax.persistence.*
 
 @Indexed
@@ -17,6 +18,7 @@ data class Order(
 
         @Column(unique = true)
         @Field
+        @SortableField
         val orderId: String?,
 
         @ManyToOne
@@ -48,6 +50,7 @@ data class Order(
 
         @Enumerated(EnumType.STRING)
         @Field
+        @SortableField
         val status: OrderState = ORDER_EDIT,
 
         @Enumerated(EnumType.STRING)
@@ -56,6 +59,7 @@ data class Order(
         val includeKmFee: Boolean = true,
 
         @Field
+        @SortableField
         val billNo: String? = null,
         val billDate: String? = null,
         val paymentRecievedDate: String? = null,
