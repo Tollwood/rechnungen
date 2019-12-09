@@ -8,6 +8,7 @@ import {PageService} from "../common/PageService";
 import Link from "../common/Links";
 import OrderSearch from "./OrderSearch";
 import API from "../API";
+import {debounce} from "ts-debounce";
 
 interface OrderListProps {
     onAdd: () => void,
@@ -40,7 +41,18 @@ export default class OrderList extends React.Component<OrderListProps, State> {
             isLoading: true,
             statusFilter: [],
             searchTerm: ""
-        }
+        };
+
+        // Binds our scroll event handler
+        window.onscroll = debounce(() => {
+
+            if (this.state.isLoading) return;
+
+            // Checks that the page has scrolled to the bottom
+            if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+                this.scroll();
+            }
+        }, 100);
     }
 
     componentDidMount(): void {
@@ -171,19 +183,29 @@ export default class OrderList extends React.Component<OrderListProps, State> {
         this.search(this.state.searchTerm, data.value as string[], this.state.page);
     }
 
+    private scroll() {
+        let page = this.state.page;
+        page.number += 1;
+        this.search(this.state.searchTerm, this.state.statusFilter, page, true)
+    }
+
     private searchByTerm(searchTerm: string) {
         this.search(searchTerm, this.state.statusFilter, this.state.page)
     }
 
-    private search(searchQuery: string, statusFilter: string[], page: Page) {
+    private search(searchQuery: string, statusFilter: string[], page: Page, append: boolean = false) {
         var status = this.computeStatusParams(statusFilter);
         this.setState({isLoading: true, searchTerm: searchQuery, statusFilter: statusFilter, page: page});
-        API.get('api/search?term=' + searchQuery + status + PageService.getPageAndSortParams(page))
+        API.get('api/search?term=' + searchQuery + status + "&" + PageService.getPageAndSortParams(page))
             .then(res => {
                 return res.data._embedded === undefined ? [] : res.data._embedded.order;
             })
             .then((orders: Order[]) => {
-                this.setState({orders: orders, isLoading: false});
+                if (append) {
+                    this.setState({orders: this.state.orders.concat(orders), isLoading: false});
+                } else {
+                    this.setState({orders: orders, isLoading: false});
+                }
             })
     }
 

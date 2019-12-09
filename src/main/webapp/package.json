@@ -17,6 +17,7 @@
     "semantic-ui-calendar-react": "^0.15.3",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.0",
+    "ts-debounce": "^1.0.0",
     "typescript": "3.5.3"
   },
   "scripts": {
