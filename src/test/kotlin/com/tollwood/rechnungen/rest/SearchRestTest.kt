@@ -1,17 +1,18 @@
 package com.tollwood.rechnungen.rest
 
 import com.tollwood.jpa.Order
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.collection.IsCollectionWithSize.hasSize
+import org.hamcrest.Matchers.*
 import org.junit.FixMethodOrder
 import org.junit.jupiter.api.Test
 import org.junit.runners.MethodSorters
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Commit
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import javax.persistence.EntityManager
 import javax.transaction.Transactional
 
 
@@ -48,9 +49,9 @@ class SearchRestTest : RestTest() {
     fun `search no result`() {
         this.mockMvc.perform(get("/api/search")
                 .headers(givenHeaders())
-                .param("term", "Not existing"))
+                .param("term", "NothingToFind"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", equalTo("")))
+                .andExpect(jsonPath("$", anEmptyMap<String,String>()))
     }
 
     @Test
@@ -100,5 +101,48 @@ class SearchRestTest : RestTest() {
                 .andExpect(jsonPath("$._embedded.order[0]._links.self.href", equalTo("http://localhost/api/order/100")))
                 .andExpect(jsonPath("$._embedded.order[0]._links.realEstate.href", equalTo("http://localhost/api/realestate/1")))
                 .andExpect(jsonPath("$._embedded.order[0]._links.technician.href", equalTo("http://localhost/api/employee/1")))
+    }
+    @Test
+    fun `empty term`() {
+        this.mockMvc.perform(get("/api/search")
+                .headers(givenHeaders())
+                .param("term", ""))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.order.length()", `is`(9)))
+    }
+
+    @Test
+    fun `empty term with paging`() {
+        this.mockMvc.perform(get("/api/search")
+                .headers(givenHeaders())
+                .param("term", "")
+                .param("page", "0")
+                .param("size","2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.order.length()", `is`(2)))
+    }
+
+
+    @Test
+    fun `empty term with not existing paging`() {
+        this.mockMvc.perform(get("/api/search")
+                .headers(givenHeaders())
+                .param("term", "")
+                .param("page", "10")
+                .param("size","2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", anEmptyMap<String,String>()))
+    }
+
+
+    @Test
+    fun `matchting term with paging`() {
+        this.mockMvc.perform(get("/api/search")
+                .headers(givenHeaders())
+                .param("term", "123")
+                .param("page", "0")
+                .param("size","2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.order.length()", `is`(2)))
     }
 }

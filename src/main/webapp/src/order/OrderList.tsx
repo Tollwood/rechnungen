@@ -3,7 +3,6 @@ import Order from "./Order";
 import Helper from "../common/Helper";
 import {Button, Dropdown, DropdownProps, Icon, Placeholder, Table} from "semantic-ui-react";
 import {Page} from "../common/Page";
-import PaginationFooter from "../common/PaginationFooter";
 import {PageService} from "../common/PageService";
 import Link from "../common/Links";
 import OrderSearch from "./OrderSearch";
@@ -102,7 +101,6 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                     <Table.Body>
                         {this.renderRows()}
                     </Table.Body>
-                    <PaginationFooter page={this.state.page} onPageChange={this.sortAndPage.bind(this)} columns={5}/>
                 </Table>
             </React.Fragment>
         )
@@ -180,7 +178,7 @@ export default class OrderList extends React.Component<OrderListProps, State> {
     }
 
     private updateStatusFilter(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        this.search(this.state.searchTerm, data.value as string[], this.state.page);
+        this.filterByStatus(data.value as string[]);
     }
 
     private scroll() {
@@ -190,7 +188,15 @@ export default class OrderList extends React.Component<OrderListProps, State> {
     }
 
     private searchByTerm(searchTerm: string) {
-        this.search(searchTerm, this.state.statusFilter, this.state.page)
+        let page = this.state.page;
+        page.number = 0;
+        this.search(searchTerm, this.state.statusFilter, page)
+    }
+
+    private filterByStatus(statusFilter: string[]) {
+        let page = this.state.page;
+        page.number = 0;
+        this.search(this.state.searchTerm, statusFilter, page)
     }
 
     private search(searchQuery: string, statusFilter: string[], page: Page, append: boolean = false) {
