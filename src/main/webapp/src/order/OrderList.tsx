@@ -1,13 +1,13 @@
 import * as React from "react";
-import Order from "./Order";
 import Helper from "../common/Helper";
-import {Button, Dropdown, DropdownProps, Icon, Placeholder, Table} from "semantic-ui-react";
+import {Button, Dropdown, DropdownProps, Icon, Label, Placeholder, Table} from "semantic-ui-react";
 import {Page} from "../common/Page";
 import {PageService} from "../common/PageService";
 import Link from "../common/Links";
 import OrderSearch from "./OrderSearch";
 import API from "../API";
 import {debounce} from "ts-debounce";
+import OrderSearchInput from "./OrderSearchInput";
 
 interface OrderListProps {
     onAdd: () => void,
@@ -15,7 +15,7 @@ interface OrderListProps {
 }
 
 interface State {
-    orders: Order[],
+    orders: OrderSearch[],
     page: Page,
     isLoading: boolean,
     statusFilter: string[],
@@ -66,8 +66,8 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                 <Table className="order-list" sortable striped>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell colSpan={4}>
-                                <OrderSearch onSearchChanged={this.searchByTerm.bind(this)}
+                            <Table.HeaderCell colSpan={6}>
+                                <OrderSearchInput onSearchChanged={this.searchByTerm.bind(this)}
                                              currentValue={this.state.searchTerm}/>
                             </Table.HeaderCell>
                             <Table.HeaderCell><Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"}
@@ -76,18 +76,22 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                             </Table.HeaderCell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.HeaderCell colSpan={5}>
+                            <Table.HeaderCell colSpan={1} selectable={false}>
+                                <Label>Treffer: {this.state.page.totalElements}</Label>
+                            </Table.HeaderCell>
+                            <Table.HeaderCell colSpan={6}>
                                 <Dropdown placeholder='Nach Status Filtern' fluid multiple selection search closeOnChange
                                           options={options}
                                           onChange={this.updateStatusFilter.bind(this)}/>
                             </Table.HeaderCell>
                         </Table.Row>
-
                         <Table.Row>
                             <Table.HeaderCell
                                 sorted={this.state.page.sort === 'orderId' ? this.state.page.direction : undefined}
                                 onClick={() => PageService.sort('orderId', this.state.page, this.sortAndPage.bind(this))}
                             >Auftrags-Id</Table.HeaderCell>
+                            <Table.HeaderCell>Liegenschaft</Table.HeaderCell>
+                            <Table.HeaderCell>Name</Table.HeaderCell>
                             <Table.HeaderCell>Nettoumsatz</Table.HeaderCell>
                             <Table.HeaderCell>Bruttoumsatz</Table.HeaderCell>
                             <Table.HeaderCell
@@ -108,9 +112,15 @@ export default class OrderList extends React.Component<OrderListProps, State> {
         )
     }
 
-    private renderRow(order: Order) {
+    private renderRow(order: OrderSearch) {
         return <Table.Row key={order.orderId} onClick={this.props.onSelect.bind(this, order._links.self!)}>
             <Table.Cell>{order.orderId}</Table.Cell>
+            <Table.Cell><div>
+                <div>{order.realEstate!!.name}</div>
+                <div>{order.realEstate!!.address.street} {order.realEstate!!.address.houseNumber}</div>
+                <div>{order.realEstate!!.address.zipCode} {order.realEstate!!.address.city}</div>
+            </div></Table.Cell>
+            <Table.Cell>{order.name ? order.name : "-"}</Table.Cell>
             <Table.Cell>{order.sum.toLocaleString('de', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
@@ -203,14 +213,14 @@ export default class OrderList extends React.Component<OrderListProps, State> {
 
     private search(searchQuery: string, statusFilter: string[], page: Page, append: boolean = false) {
         var status = this.computeStatusParams(statusFilter);
-        this.setState({isLoading: true, searchTerm: searchQuery, statusFilter: statusFilter, page: page});
+        this.setState({ searchTerm: searchQuery, statusFilter: statusFilter, page: page});
         API.get('api/search?term=' + searchQuery + status + "&" + PageService.getPageAndSortParams(page))
             .then(res => {
                 let hasMore = res.data.page.totalPages > res.data.page.number + 1;
-                this.setState({hasMore: hasMore});
+                this.setState({hasMore: hasMore, page: Object.assign(this.state.page,{totalElements: res.data.page.totalElements})});
                 return res.data._embedded === undefined ? [] : res.data._embedded.order;
             })
-            .then((orders: Order[]) => {
+            .then((orders: OrderSearch[]) => {
                 if (append) {
                     this.setState({orders: this.state.orders.concat(orders), isLoading: false});
                 } else {

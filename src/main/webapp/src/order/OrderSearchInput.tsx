@@ -6,7 +6,7 @@ interface OrderSearchProps {
     currentValue: string
 }
 
-export default class OrderSearch extends React.Component<OrderSearchProps> {
+export default class OrderSearchInput extends React.Component<OrderSearchProps> {
 
     render() {
         return (
