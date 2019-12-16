@@ -12,8 +12,11 @@ import org.hibernate.search.jpa.FullTextQuery
 import org.hibernate.search.jpa.Search
 import org.hibernate.search.query.dsl.QueryBuilder
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.hateoas.CollectionModel
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.web.PagedResourcesAssembler
 import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.PagedModel
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestMapping
@@ -36,8 +39,9 @@ class SearchController {
                @RequestParam(value = "status", required = false) status: List<OrderState>?,
                @RequestParam(value = "page", defaultValue = "0", required = false) page: Int = 0,
                @RequestParam(value = "sort", required = false) sort: String?,
-               @RequestParam(value = "size", defaultValue = "20", required = false) size: Int = 20):
-            ResponseEntity<CollectionModel<EntityModel<Order>>> {
+               @RequestParam(value = "size", defaultValue = "50", required = false) size: Int = 50,
+               @Autowired pagedResourcesAssembler: PagedResourcesAssembler<Order>):
+            ResponseEntity<PagedModel<EntityModel<Order>>> {
 
         val fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 
@@ -47,29 +51,37 @@ class SearchController {
                 .get();
 
         if ((term == null || term.isBlank()) && (status == null || status.isEmpty())) {
-            val results = doSearch(fullTextEntityManager,queryBuilder.all().createQuery(),sort,page,size)
-            return ResponseEntity(orderEntityModelAssembler.toCollectionModel(results), HttpStatus.OK)
+            val fullTextQuery = doSearch(fullTextEntityManager, queryBuilder.all().createQuery(), sort, page, size)
+            return toPagedResponse(fullTextQuery, page, pagedResourcesAssembler)
         }
 
         val finalQuery = BooleanQuery.Builder()
         addSearchByTerm(term, queryBuilder, finalQuery)
         addSearchByStatus(status, queryBuilder, finalQuery)
 
-        val results = doSearch(fullTextEntityManager, finalQuery.build(), sort, page, size)
-        return ResponseEntity(orderEntityModelAssembler.toCollectionModel(results), HttpStatus.OK)
+        val fullTextQuery = doSearch(fullTextEntityManager, finalQuery.build(), sort, page, size)
+        return toPagedResponse(fullTextQuery, page, pagedResourcesAssembler)
     }
 
-    private fun doSearch(fullTextEntityManager: FullTextEntityManager, query: Query, sort: String?, page: Int, size: Int): List<Order> {
+    private fun toPagedResponse(fullTextQuery: FullTextQuery, page: Int,pagedResourcesAssembler: PagedResourcesAssembler<Order>):
+            ResponseEntity<PagedModel<EntityModel<Order>>> {
+
+        val results = fullTextQuery.resultList  as List<Order>
+        val pageImpl = PageImpl(results, PageRequest.of(page, fullTextQuery.maxResults),
+                fullTextQuery.resultSize.toLong())
+        return ResponseEntity(pagedResourcesAssembler.toModel(pageImpl, orderEntityModelAssembler), HttpStatus.OK)
+    }
+
+    private fun doSearch(fullTextEntityManager: FullTextEntityManager, query: Query, sort: String?, page: Int, size: Int): FullTextQuery {
         val jpaQuery = fullTextEntityManager.createFullTextQuery(query, Order::class.java)
         addSort(jpaQuery, sort)
         jpaQuery.setFirstResult(page * size)
         jpaQuery.setMaxResults(size)
-        val results = jpaQuery.resultList as List<Order>
-        return results
+        return jpaQuery
     }
 
-    private fun addSort( jpaQuery: FullTextQuery, sort: String?) {
-        if(sort == null) return
+    private fun addSort(jpaQuery: FullTextQuery, sort: String?) {
+        if (sort == null) return
         val sortValues = sort.split(",")
         val reverse = sortValues.size == 2 && sortValues[1].equals("desc")
         jpaQuery.setSort(Sort(SortField(sortValues[0], SortField.Type.STRING, reverse)))

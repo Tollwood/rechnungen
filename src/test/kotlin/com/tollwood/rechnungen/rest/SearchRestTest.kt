@@ -51,7 +51,7 @@ class SearchRestTest : RestTest() {
                 .headers(givenHeaders())
                 .param("term", "NothingToFind"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", anEmptyMap<String,String>()))
+                .andExpect(jsonPath("$.page.totalElements", `is`(0)))
     }
 
     @Test
@@ -109,6 +109,9 @@ class SearchRestTest : RestTest() {
                 .param("term", ""))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$._embedded.order.length()", `is`(9)))
+                .andExpect(jsonPath("$.page.totalPages").value(1))
+                .andExpect(jsonPath("$.page.number").value(0))
+
     }
 
     @Test
@@ -119,9 +122,38 @@ class SearchRestTest : RestTest() {
                 .param("page", "0")
                 .param("size","2"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.page.size", `is`(2)))
+                .andExpect(jsonPath("$.page.number", `is`(0)))
                 .andExpect(jsonPath("$._embedded.order.length()", `is`(2)))
     }
 
+    @Test
+    fun `empty term with paging third page`() {
+        this.mockMvc.perform(get("/api/search")
+                .headers(givenHeaders())
+                .param("term", "")
+                .param("page", "3")
+                .param("size","2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.page.size", `is`(2)))
+                .andExpect(jsonPath("$._embedded.order.length()", `is`(2)))
+                .andExpect(jsonPath("$.page.totalPages").value(5))
+                .andExpect(jsonPath("$.page.number").value(3))
+    }
+
+    @Test
+    fun `empty term with paging fith page`() {
+        this.mockMvc.perform(get("/api/search")
+                .headers(givenHeaders())
+                .param("term", "")
+                .param("page", "4")
+                .param("size","2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.page.size", `is`(2)))
+                .andExpect(jsonPath("$.page.totalPages").value(5))
+                .andExpect(jsonPath("$.page.number").value(4))
+                .andExpect(jsonPath("$._embedded.order.length()", `is`(1)))
+    }
 
     @Test
     fun `empty term with not existing paging`() {
@@ -131,12 +163,12 @@ class SearchRestTest : RestTest() {
                 .param("page", "10")
                 .param("size","2"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", anEmptyMap<String,String>()))
+                .andExpect(jsonPath("$.page.size", `is`(2)))
     }
 
 
     @Test
-    fun `matchting term with paging`() {
+    fun `b) matchting term with paging`() {
         this.mockMvc.perform(get("/api/search")
                 .headers(givenHeaders())
                 .param("term", "123")

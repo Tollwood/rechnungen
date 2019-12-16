@@ -19,7 +19,8 @@ interface State {
     page: Page,
     isLoading: boolean,
     statusFilter: string[],
-    searchTerm: string
+    searchTerm: string,
+    hasMore: boolean
 }
 
 const options = [
@@ -39,7 +40,8 @@ export default class OrderList extends React.Component<OrderListProps, State> {
             page: new Page('orderId'),
             isLoading: true,
             statusFilter: [],
-            searchTerm: ""
+            searchTerm: "",
+            hasMore: true
         };
 
         // Binds our scroll event handler
@@ -48,7 +50,7 @@ export default class OrderList extends React.Component<OrderListProps, State> {
             if (this.state.isLoading) return;
 
             // Checks that the page has scrolled to the bottom
-            if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+            if ((window.innerHeight + window.scrollY) >= document.documentElement.offsetHeight && this.state.hasMore) {
                 this.scroll();
             }
         }, 100);
@@ -204,6 +206,8 @@ export default class OrderList extends React.Component<OrderListProps, State> {
         this.setState({isLoading: true, searchTerm: searchQuery, statusFilter: statusFilter, page: page});
         API.get('api/search?term=' + searchQuery + status + "&" + PageService.getPageAndSortParams(page))
             .then(res => {
+                let hasMore = res.data.page.totalPages > res.data.page.number + 1;
+                this.setState({hasMore: hasMore});
                 return res.data._embedded === undefined ? [] : res.data._embedded.order;
             })
             .then((orders: Order[]) => {
