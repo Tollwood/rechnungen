@@ -88,11 +88,11 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                         </View>
                         <View style={styles.row}>
                             <Text
-                                style={styles.column2}>{this.props.bill.realEstate ? this.props.bill.realEstate.address.street : ""} {this.props.bill.realEstate ? this.props.bill.realEstate.address.houseNumber : ""}</Text>
+                                style={styles.column2}>{this.props.bill.getRealEstateAddress().street} {this.props.bill.getRealEstateAddress().houseNumber}</Text>
                         </View>
                         <View style={styles.row}>
                             <Text
-                                style={styles.column2}>{this.props.bill.realEstate ? this.props.bill.realEstate.address.zipCode : ""} {this.props.bill.realEstate ? this.props.bill.realEstate.address.city : ""}</Text>
+                                style={styles.column2}>{this.props.bill.getRealEstateAddress().zipCode} {this.props.bill.getRealEstateAddress().city}</Text>
                         </View>
 
                         {this.shouldRender(this.props.bill.order.utilisationUnit) ? this.renderUu() : null}

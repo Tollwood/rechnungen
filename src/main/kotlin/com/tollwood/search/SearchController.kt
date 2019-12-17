@@ -112,7 +112,8 @@ class SearchController {
                     .fuzzy()
                     .withEditDistanceUpTo(2)
                     .withPrefixLength(0)
-                    .onFields("orderId", "name", "billNo", "realEstate.address.city", "realEstate.address.street", "realEstate.address.zipCode")
+                    .onFields("orderId", "name", "billNo", "realEstate.address.city", "realEstate.address.street",
+                            "realEstate.address.zipCode","realEstateAddress.city", "realEstateAddress.street", "realEstateAddress.zipCode")
                     .matching(t)
                     .createQuery(), Occur.MUST)
         }

@@ -2,6 +2,7 @@ import OrderService from "./OrderService";
 import Link from "../common/Links";
 import {OrderStatus} from "./OrderStatus";
 import BillItem from "../billing/BillItem";
+import {Address} from "../common/Address";
 
 export default class Order {
 
@@ -25,5 +26,6 @@ export default class Order {
     billNo: string = '';
     paymentRecievedDate: string = '';
     sum: number = 0;
+    realEstateAddress: Address= new Address();
     _links: {self?: Link, technician?: Link, realEstate?: Link} = {};
 }

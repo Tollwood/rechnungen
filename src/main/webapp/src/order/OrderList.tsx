@@ -68,7 +68,7 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                         <Table.Row>
                             <Table.HeaderCell colSpan={6}>
                                 <OrderSearchInput onSearchChanged={this.searchByTerm.bind(this)}
-                                             currentValue={this.state.searchTerm}/>
+                                                  currentValue={this.state.searchTerm}/>
                             </Table.HeaderCell>
                             <Table.HeaderCell><Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"}
                                                       onClick={this.props.onAdd}
@@ -115,11 +115,13 @@ export default class OrderList extends React.Component<OrderListProps, State> {
     private renderRow(order: OrderSearch) {
         return <Table.Row key={order.orderId} onClick={this.props.onSelect.bind(this, order._links.self!)}>
             <Table.Cell>{order.orderId}</Table.Cell>
-            <Table.Cell><div>
-                <div>{order.realEstate!!.name}</div>
-                <div>{order.realEstate!!.address.street} {order.realEstate!!.address.houseNumber}</div>
-                <div>{order.realEstate!!.address.zipCode} {order.realEstate!!.address.city}</div>
-            </div></Table.Cell>
+            <Table.Cell>
+                <div>
+                    <div>{order.realEstate!!.name}</div>
+                    <div>{order.getRealEstateAddress().street} {order.getRealEstateAddress().houseNumber}</div>
+                    <div>{order.getRealEstateAddress().zipCode} {order.getRealEstateAddress().city}</div>
+                </div>
+            </Table.Cell>
             <Table.Cell>{order.name ? order.name : "-"}</Table.Cell>
             <Table.Cell>{order.sum.toLocaleString('de', {
                 minimumFractionDigits: 2,
@@ -139,7 +141,7 @@ export default class OrderList extends React.Component<OrderListProps, State> {
     private renderRows() {
 
         if (this.state.isLoading) {
-            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(numer => this.placeHolderRow())
+            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => this.placeHolderRow())
         }
         return this.state.orders.map(order => this.renderRow(order))
     }
@@ -213,20 +215,15 @@ export default class OrderList extends React.Component<OrderListProps, State> {
 
     private search(searchQuery: string, statusFilter: string[], page: Page, append: boolean = false) {
         var status = this.computeStatusParams(statusFilter);
-        this.setState({ searchTerm: searchQuery, statusFilter: statusFilter, page: page});
+        this.setState({searchTerm: searchQuery, statusFilter: statusFilter, page: page});
         API.get('api/search?term=' + searchQuery + status + "&" + PageService.getPageAndSortParams(page))
             .then(res => {
                 let hasMore = res.data.page.totalPages > res.data.page.number + 1;
-                this.setState({hasMore: hasMore, page: Object.assign(this.state.page,{totalElements: res.data.page.totalElements})});
+                this.setState({hasMore: hasMore, page: Object.assign(this.state.page, {totalElements: res.data.page.totalElements})});
                 return res.data._embedded === undefined ? [] : res.data._embedded.order;
             })
-            .then((orders: OrderSearch[]) => {
-                if (append) {
-                    this.setState({orders: this.state.orders.concat(orders), isLoading: false});
-                } else {
-                    this.setState({orders: orders, isLoading: false});
-                }
-            })
+            .then((data: any[]) => data.map(value => Object.assign(new OrderSearch(), value)))
+            .then((orders: OrderSearch[]) => this.setState({orders: append ? this.state.orders.concat(orders) : orders, isLoading: false}));
     }
 
     private computeStatusParams(statusFilter: string[]) {

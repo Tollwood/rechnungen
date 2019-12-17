@@ -63,7 +63,15 @@ data class Order(
         val billNo: String? = null,
         val billDate: String? = null,
         val paymentRecievedDate: String? = null,
-        val distance: Int? = 0
+        val distance: Int? = 0,
+
+        @IndexedEmbedded
+        @Embedded
+        @AttributeOverrides(AttributeOverride(name="street", column = Column(name="real_estate_street")),
+                AttributeOverride(name="houseNumber", column = Column(name="real_estate_house_number")),
+                AttributeOverride(name="zipCode", column = Column(name="real_estate_zip_code")),
+                AttributeOverride(name="city", column = Column(name="real_estate_city")))
+        val realEstateAddress: Address? = null
 
 ) :BaseEntity() {
     @JsonProperty("sum")

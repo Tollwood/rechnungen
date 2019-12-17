@@ -4,10 +4,11 @@ import {Checkbox, DropdownItemProps, DropdownProps, Form, Grid, Placeholder} fro
 import Order from "./Order";
 import Employee from "../employees/Employee";
 import RealEstate from "../realestate/RealEstate";
-import RealEstateDetails from "./RealEstateDetails";
+import AddressReadOnly from "./AddressReadOnly";
 import OrderIdInput from "./OrderIdInput";
 import SelectRealEstate from "./SelectRealEstate";
 import Helper from "../common/Helper";
+import NameValue from "../common/NameValue";
 
 interface OrderEditProps {
     order: Order;
@@ -66,6 +67,7 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                 <SelectRealEstate selectedRealestate={this.getCurrentRealEstate()} realestates={this.props.realEstates}
                                   order={this.props.order} onValueChanged={this.updateRealEstate.bind(this)}
                                   errors={this.props.errors}
+                                  handleAddressChange={this.handleAddressChange.bind(this)}
                 />
                 <Grid.Row>
                     <Grid.Column computer={4} tablet={4} mobile={16}>
@@ -138,11 +140,22 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
     }
 
     private getCurrentRealEstate() {
-        return this.props.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === this.props.order.realEstate);
+        return this.getRealEstateBySelfLink(this.props.order.realEstate);
+    }
+
+    private getRealEstateBySelfLink(href?: String) {
+        return this.props.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === href);
     }
 
     private updateRealEstate(realEstate: string) {
         this.props.handleOrderChange('realEstate', realEstate);
+        this.props.handleOrderChange('realEstateAddress', this.getRealEstateBySelfLink(realEstate) !=null? this.getRealEstateBySelfLink(realEstate)!!.address : null);
+    }
+
+    private handleAddressChange(nameValue: NameValue) {
+        const newAddress = Object.assign(this.props.order.realEstateAddress, {[nameValue.name]: nameValue.value});
+        this.props.handleOrderChange('realEstateAddress', newAddress);
+        //errors: ErrorMapper.removeError(this.state.errors, "address."+nameValue.name)
     }
 
     renderReadOnly() {
@@ -171,7 +184,7 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                 <Grid.Row>
                     <Grid.Column computer={8} tablet={8} mobile={16}>
                         <span style={{"fontWeight": "bold", float: "left"}}>Adresse:</span>
-                        <RealEstateDetails realEstate={this.props.selectedRealEstate!}/>
+                        <AddressReadOnly address={this.props.order.realEstateAddress}/>
                     </Grid.Column>
                 </Grid.Row>
                 {!Helper.isEmpty(this.props.order.utilisationUnit) || !Helper.isEmpty(this.props.order.name) || !Helper.isEmpty(this.props.order.phoneNumber ) || !Helper.isEmpty(this.props.order.location) ?

@@ -19,6 +19,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                     <Form.Field>
                         <label>Straße</label>
                         <Form.Input id="street"
+                                    fluid
                                     placeholder='Straße'
                                     value={this.props.address.street}
                                     name='street'
@@ -35,6 +36,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                         <label>Nr.</label>
                         <Form.Input id="houseNumber"
                                     placeholder='Nr.'
+                                    fluid
                                     value={this.props.address.houseNumber}
                                     name='houseNumber'
                                     onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.handleAddressChange({
@@ -52,6 +54,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                         <label>PLZ</label>
                         <Form.Input id="zipCode"
                                     placeholder='PLZ'
+                                    fluid
                                     value={this.props.address.zipCode}
                                     name='zipCode'
                                     onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.handleAddressChange({
@@ -66,6 +69,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                     <Form.Field>
                         <label>Stadt</label>
                         <Form.Input id="city"
+                                    fluid
                                     placeholder='Stadt'
                                     value={this.props.address.city}
                                     name='city'
