@@ -8,7 +8,7 @@ interface Props {
 export default class AddressReadOnly extends React.Component<Props, {}> {
 
     render() {
-        if(this.props.address == null) return;
+        if(this.props.address == null) return null;
 
         return (
             <div >
