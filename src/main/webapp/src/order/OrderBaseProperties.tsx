@@ -184,7 +184,7 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                 <Grid.Row>
                     <Grid.Column computer={8} tablet={8} mobile={16}>
                         <span style={{"fontWeight": "bold", float: "left"}}>Adresse:</span>
-                        <AddressReadOnly address={this.props.order.realEstateAddress}/>
+                        <AddressReadOnly address={this.props.order.realEstateAddress !== null? this.props.order.realEstateAddress : this.props.selectedRealEstate.address}/>
                     </Grid.Column>
                 </Grid.Row>
                 {!Helper.isEmpty(this.props.order.utilisationUnit) || !Helper.isEmpty(this.props.order.name) || !Helper.isEmpty(this.props.order.phoneNumber ) || !Helper.isEmpty(this.props.order.location) ?
