@@ -1,6 +1,6 @@
-package com.tollwood
+package com.tollwood.order
 
-import com.tollwood.jpa.Order
+import com.tollwood.order.jpa.Order
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.data.rest.core.annotation.RepositoryRestResource

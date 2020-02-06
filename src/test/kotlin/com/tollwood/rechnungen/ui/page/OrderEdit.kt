@@ -1,6 +1,6 @@
 package com.tollwood.rechnungen.ui.page
 
-import com.tollwood.jpa.Order
+import com.tollwood.order.jpa.Order
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver

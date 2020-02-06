@@ -1,4 +1,4 @@
-package com.tollwood.jpa
+package com.tollwood.order.jpa
 
 enum class OrderState(val order:Int) {
 

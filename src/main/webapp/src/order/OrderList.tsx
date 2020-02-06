@@ -1,13 +1,13 @@
 import * as React from "react";
 import Helper from "../common/Helper";
-import {Button, Dropdown, DropdownProps, Icon, Label, Placeholder, Table} from "semantic-ui-react";
+import {Dropdown, DropdownProps, Icon, Label, Placeholder, Table} from "semantic-ui-react";
 import {Page} from "../common/Page";
 import {PageService} from "../common/PageService";
 import Link from "../common/Links";
 import OrderSearch from "./OrderSearch";
 import API from "../API";
 import {debounce} from "ts-debounce";
-import OrderSearchInput from "./OrderSearchInput";
+import Search from "./Search";
 
 interface OrderListProps {
     onAdd: () => void,
@@ -65,16 +65,14 @@ export default class OrderList extends React.Component<OrderListProps, State> {
             <React.Fragment>
                 <Table className="order-list" sortable striped>
                     <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan={6}>
-                                <OrderSearchInput onSearchChanged={this.searchByTerm.bind(this)}
-                                                  currentValue={this.state.searchTerm}/>
-                            </Table.HeaderCell>
-                            <Table.HeaderCell><Button floated={"right"} primary icon={{name: "add"}} label={"Neuen Auftrag"}
-                                                      onClick={this.props.onAdd}
-                                                      className={"add"}/>
-                            </Table.HeaderCell>
-                        </Table.Row>
+                        <Search onSearchChanged={this.searchByTerm.bind(this)}
+                                currentValue={this.state.searchTerm}
+                                onAdd={this.props.onAdd}
+                                labelAdd={"Neuen Auftrag"}
+                                searchFieldWidth={6}
+                                addButtondWidth={1}
+                        />
+
                         <Table.Row>
                             <Table.HeaderCell colSpan={1} selectable={false}>
                                 <Label>Treffer: {this.state.page.totalElements}</Label>
@@ -216,7 +214,7 @@ export default class OrderList extends React.Component<OrderListProps, State> {
     private search(searchQuery: string, statusFilter: string[], page: Page, append: boolean = false) {
         var status = this.computeStatusParams(statusFilter);
         this.setState({searchTerm: searchQuery, statusFilter: statusFilter, page: page});
-        API.get('api/search?term=' + searchQuery + status + "&" + PageService.getPageAndSortParams(page))
+        API.get('api/orders/search?term=' + searchQuery + status + "&" + PageService.getPageAndSortParams(page))
             .then(res => {
                 let hasMore = res.data.page.totalPages > res.data.page.number + 1;
                 this.setState({hasMore: hasMore, page: Object.assign(this.state.page, {totalElements: res.data.page.totalElements})});

@@ -1,6 +1,6 @@
-package com.tollwood
+package com.tollwood.realestate
 
-import com.tollwood.jpa.RealEstate
+import com.tollwood.realestate.jpa.RealEstate
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
 import java.util.*

@@ -2,7 +2,7 @@ package com.tollwood
 
 import com.tollwood.jpa.BillItem
 import com.tollwood.jpa.DependentId
-import com.tollwood.jpa.Order
+import com.tollwood.order.jpa.Order
 import com.tollwood.jpa.Service
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate

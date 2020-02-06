@@ -3,8 +3,8 @@ package com.tollwood.rechnungen.rest
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.tollwood.jpa.Order
-import com.tollwood.jpa.OrderState
+import com.tollwood.order.jpa.Order
+import com.tollwood.order.jpa.OrderState
 import com.tollwood.jpa.ServiceOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -12,7 +12,6 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.HttpHeaders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status

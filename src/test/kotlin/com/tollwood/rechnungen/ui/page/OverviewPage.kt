@@ -23,9 +23,9 @@ class OverviewPage {
     @FindBy(className = "header-title")
     private lateinit var title: WebElement
 
-    private val SEARCH_INPUT = By.ByCssSelector(".order-search .search")
-    private val SEARCH_ADD_OPTION = By.ByCssSelector(".order-search .addition")
-    private val SEARCH_OPTIONS = By.ByCssSelector(".order-search .item .text")
+    private val SEARCH_INPUT = By.ByCssSelector(".search .search")
+    private val SEARCH_ADD_OPTION = By.ByCssSelector(".search .addition")
+    private val SEARCH_OPTIONS = By.ByCssSelector(".search .item .text")
 
 
     fun navigateTo() {

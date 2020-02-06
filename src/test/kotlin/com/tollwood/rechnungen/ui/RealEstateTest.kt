@@ -1,7 +1,7 @@
 package com.tollwood.rechnungen.ui
 
 import com.tollwood.jpa.Address
-import com.tollwood.jpa.RealEstate
+import com.tollwood.realestate.jpa.RealEstate
 import io.github.bonigarcia.seljup.SeleniumExtension
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

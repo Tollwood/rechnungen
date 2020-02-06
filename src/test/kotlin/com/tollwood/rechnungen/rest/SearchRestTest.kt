@@ -1,18 +1,16 @@
 package com.tollwood.rechnungen.rest
 
-import com.tollwood.jpa.Order
+import com.tollwood.order.jpa.Order
 import org.hamcrest.Matchers.*
 import org.junit.FixMethodOrder
 import org.junit.jupiter.api.Test
 import org.junit.runners.MethodSorters
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.annotation.Commit
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import javax.persistence.EntityManager
 import javax.transaction.Transactional
 
 
@@ -24,7 +22,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `search without jwt`() {
-        this.mockMvc.perform(get("/api/search")).andExpect(status().isForbidden())
+        this.mockMvc.perform(get("/api/order/search")).andExpect(status().isForbidden())
     }
 
     private var orders: List<Order>? = emptyList()
@@ -47,7 +45,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `search no result`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "NothingToFind"))
                 .andExpect(status().isOk())
@@ -56,7 +54,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `search orderId`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "1234"))
                 .andExpect(status().isOk())
@@ -65,7 +63,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `search billNo`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "B2"))
                 .andExpect(status().isOk())
@@ -74,7 +72,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `search city`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "Barmstedt"))
                 .andExpect(status().isOk())
@@ -83,7 +81,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `search street`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "Geschwister-Scholl-Straße"))
                 .andExpect(status().isOk())
@@ -93,7 +91,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `search plz`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "25355"))
                 .andExpect(status().isOk())
@@ -104,7 +102,7 @@ class SearchRestTest : RestTest() {
     }
     @Test
     fun `empty term`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", ""))
                 .andExpect(status().isOk())
@@ -116,7 +114,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `empty term with paging`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "")
                 .param("page", "0")
@@ -129,7 +127,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `empty term with paging third page`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "")
                 .param("page", "3")
@@ -143,7 +141,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `empty term with paging fith page`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "")
                 .param("page", "4")
@@ -157,7 +155,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `empty term with not existing paging`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "")
                 .param("page", "10")
@@ -169,7 +167,7 @@ class SearchRestTest : RestTest() {
 
     @Test
     fun `b) matchting term with paging`() {
-        this.mockMvc.perform(get("/api/search")
+        this.mockMvc.perform(get("/api/order/search")
                 .headers(givenHeaders())
                 .param("term", "123")
                 .param("page", "0")

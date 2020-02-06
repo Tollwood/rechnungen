@@ -1,4 +1,4 @@
-package com.tollwood.search
+package com.tollwood
 
 import org.hibernate.search.jpa.Search
 import org.springframework.context.ApplicationListener
@@ -9,7 +9,7 @@ import javax.persistence.PersistenceContext
 import javax.transaction.Transactional
 
 @Component
-class OrderHibernateSearchInit : ApplicationListener<ContextRefreshedEvent> {
+class HibernateSearchInit : ApplicationListener<ContextRefreshedEvent> {
 
     @PersistenceContext
     lateinit var entityManager: EntityManager

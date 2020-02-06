@@ -1,7 +1,7 @@
-package com.tollwood.search
+package com.tollwood.order
 
-import com.tollwood.jpa.Order
-import com.tollwood.jpa.OrderState
+import com.tollwood.order.jpa.Order
+import com.tollwood.order.jpa.OrderState
 import org.apache.lucene.search.BooleanClause.Occur
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
@@ -26,7 +26,7 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
 @RestController
-class SearchController {
+class OrderSearchController {
 
     @PersistenceContext
     lateinit var entityManager: EntityManager
@@ -34,7 +34,7 @@ class SearchController {
     @Autowired
     lateinit var orderEntityModelAssembler: OrderEntityModelAssembler
 
-    @RequestMapping("/api/search")
+    @RequestMapping("/api/orders/search")
     fun search(@RequestParam(value = "term", required = false) term: String?,
                @RequestParam(value = "status", required = false) status: List<OrderState>?,
                @RequestParam(value = "page", defaultValue = "0", required = false) page: Int = 0,

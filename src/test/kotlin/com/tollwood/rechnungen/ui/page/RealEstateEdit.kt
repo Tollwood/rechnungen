@@ -1,6 +1,6 @@
 package com.tollwood.rechnungen.ui.page
 
-import com.tollwood.jpa.RealEstate
+import com.tollwood.realestate.jpa.RealEstate
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement

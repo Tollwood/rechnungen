@@ -1,6 +1,6 @@
-package com.tollwood
+package com.tollwood.realestate.jpa
 
-import com.tollwood.jpa.RealEstate
+import com.tollwood.realestate.RealestateResource
 import com.tollwood.validation.ValidationErrors.Companion.alreadyExists
 import com.tollwood.validation.ValidationErrors.Companion.notEmpty
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,8 +1,10 @@
-package com.tollwood.jpa
+package com.tollwood.order.jpa
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.tollwood.jpa.OrderState.ORDER_EDIT
+import com.tollwood.jpa.*
+import com.tollwood.order.jpa.OrderState.ORDER_EDIT
+import com.tollwood.realestate.jpa.RealEstate
 import org.hibernate.search.annotations.Field
 import org.hibernate.search.annotations.Indexed
 import org.hibernate.search.annotations.IndexedEmbedded
@@ -73,7 +75,7 @@ data class Order(
                 AttributeOverride(name="city", column = Column(name="real_estate_city")))
         val realEstateAddress: Address? = null
 
-) :BaseEntity() {
+) : BaseEntity() {
     @JsonProperty("sum")
     fun sum(): Number {
         return this.billItems.map { billItem -> billItem.amount * billItem.price }.sum();

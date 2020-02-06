@@ -1,8 +1,8 @@
-package com.tollwood.search
+package com.tollwood.order
 
 import com.tollwood.jpa.Employee
-import com.tollwood.jpa.Order
-import com.tollwood.jpa.RealEstate
+import com.tollwood.order.jpa.Order
+import com.tollwood.realestate.jpa.RealEstate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks
 import org.springframework.hateoas.EntityModel

@@ -1,18 +1,14 @@
-package com.tollwood
+package com.tollwood.order.jpa
 
-import com.tollwood.jpa.Order
-import com.tollwood.jpa.OrderState
-import com.tollwood.jpa.OrderState.*
+import com.tollwood.order.OrderResource
+import com.tollwood.order.jpa.OrderState.*
 import com.tollwood.validation.ValidationErrors.Companion.alreadyExists
 import com.tollwood.validation.ValidationErrors.Companion.notEmpty
 import com.tollwood.validation.ValidationErrors.Companion.notNull
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.validation.Errors
 import org.springframework.validation.Validator
-import java.util.*
 
 
 @Component("beforeSaveOrderValidtor")

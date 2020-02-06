@@ -1,12 +1,12 @@
 package com.tollwood.rechnungen
 
 import com.tollwood.EmployeeResource
-import com.tollwood.OrderResource
-import com.tollwood.RealestateResource
+import com.tollwood.order.OrderResource
+import com.tollwood.realestate.RealestateResource
 import com.tollwood.ServiceResource
 import com.tollwood.jpa.Address
-import com.tollwood.jpa.Order
-import com.tollwood.jpa.RealEstate
+import com.tollwood.order.jpa.Order
+import com.tollwood.realestate.jpa.RealEstate
 import com.tollwood.jpa.ServiceOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -26,7 +26,7 @@ class TestData {
     @Autowired
     lateinit var serviceResource: ServiceResource
 
-    fun givenOrderPersistedWithRealEstateAndEmployee(order:Order): Order {
+    fun givenOrderPersistedWithRealEstateAndEmployee(order: Order): Order {
         return orderResource.save(order.copy(technician = employeeResource.findAll().first(), realEstate =  realestateResource.findAll().first()))
     }
     fun givenOrderPersisted(orderId: String): Order {

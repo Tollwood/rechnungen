@@ -3,7 +3,7 @@ package com.tollwood.rechnungen.unit
 import com.tollwood.BillService
 import com.tollwood.ServiceResource
 import com.tollwood.jpa.BillItem
-import com.tollwood.jpa.Order
+import com.tollwood.order.jpa.Order
 import com.tollwood.jpa.ServiceOrder
 import com.tollwood.rechnungen.TestData
 import org.assertj.core.api.Assertions.assertThat
