@@ -1,7 +1,7 @@
 package com.tollwood.rechnungen.unit
 
 import com.tollwood.BillService
-import com.tollwood.ServiceResource
+import com.tollwood.service.ServiceResource
 import com.tollwood.jpa.BillItem
 import com.tollwood.order.jpa.Order
 import com.tollwood.jpa.ServiceOrder

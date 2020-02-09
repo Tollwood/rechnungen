@@ -1,6 +1,5 @@
-package com.tollwood
+package com.tollwood.service
 
-import com.tollwood.jpa.Service
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
 import java.util.*

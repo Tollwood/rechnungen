@@ -1,6 +1,6 @@
-package com.tollwood.realestate
+package com.tollwood.service
 
-import com.tollwood.realestate.jpa.RealEstate
+import com.tollwood.realestate.BaseSearchController
 import org.apache.lucene.search.SortField
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.web.PagedResourcesAssembler
@@ -13,38 +13,37 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class RealEstateSearchController : BaseSearchController<RealEstate>() {
+class ServiceSearchController : BaseSearchController<Service>() {
 
     @Autowired
-    lateinit var realEstateEntityModelAssembler: RepresentationModelAssembler<RealEstate, EntityModel<RealEstate>>
+    lateinit var entityModelAssembler: RepresentationModelAssembler<Service, EntityModel<Service>>
 
-    @RequestMapping("/api/realestates/search")
+    @RequestMapping("/api/service/search")
     override fun search(@RequestParam(value = "term", required = false) term: String?,
                         @RequestParam(value = "page", defaultValue = "0", required = false) page: Int,
                         @RequestParam(value = "sort", required = false) sort: String?,
                         @RequestParam(value = "size", defaultValue = "50", required = false) size: Int,
-                        @Autowired pagedResourcesAssembler: PagedResourcesAssembler<RealEstate>): ResponseEntity<PagedModel<EntityModel<RealEstate>>> {
+                        @Autowired pagedResourcesAssembler: PagedResourcesAssembler<Service>): ResponseEntity<PagedModel<EntityModel<Service>>> {
         return super.search(term, page, sort, size, pagedResourcesAssembler)
     }
 
-    override fun getModelAssembler(): RepresentationModelAssembler<RealEstate, EntityModel<RealEstate>> {
-        return realEstateEntityModelAssembler;
+    override fun getModelAssembler(): RepresentationModelAssembler<Service, EntityModel<Service>> {
+        return entityModelAssembler;
     }
 
-    override fun getCurrentClass(): Class<RealEstate> {
-        return RealEstate::class.java
+    override fun getCurrentClass(): Class<Service> {
+        return Service::class.java
     }
 
     override fun getSortFieldType(sortField: String): SortField.Type {
         var sortFieldType = SortField.Type.STRING
-        if (sortField == "distance") {
-            sortFieldType = SortField.Type.INT
+        if (sortField == "price") {
+            sortFieldType = SortField.Type.DOUBLE
         }
         return sortFieldType
     }
 
     override fun getSearchFields(): List<String> {
-        return listOf("name", "address.city", "address.street", "address.zipCode")
+        return listOf("price", "title", "articleNumber")
     }
-
 }

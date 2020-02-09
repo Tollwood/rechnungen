@@ -1,6 +1,5 @@
 package com.tollwood.realestate
 
-import com.tollwood.order.jpa.Order
 import com.tollwood.realestate.jpa.RealEstate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.rest.webmvc.support.RepositoryEntityLinks
@@ -13,5 +12,5 @@ class RealEstateEntityModelAssembler(@Autowired val repositoryEntityLinks: Repos
         EntityModel<RealEstate>> {
     override fun toModel(realEstate: RealEstate): EntityModel<RealEstate> =
             EntityModel(realEstate,
-                    repositoryEntityLinks.linkForItemResource(Order::class.java, realEstate.id as Any).withSelfRel())
+                    repositoryEntityLinks.linkForItemResource(RealEstate::class.java, realEstate.id as Any).withSelfRel())
 }

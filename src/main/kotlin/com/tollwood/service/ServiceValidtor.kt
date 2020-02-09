@@ -1,6 +1,5 @@
-package com.tollwood
+package com.tollwood.service
 
-import com.tollwood.jpa.Service
 import com.tollwood.validation.ValidationErrors
 import com.tollwood.validation.ValidationErrors.Companion.notEmpty
 import com.tollwood.validation.ValidationErrors.Companion.notNull

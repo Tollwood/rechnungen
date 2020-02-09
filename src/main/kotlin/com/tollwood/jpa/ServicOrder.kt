@@ -2,6 +2,7 @@ package com.tollwood.jpa
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.tollwood.order.jpa.Order
+import com.tollwood.service.Service
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 

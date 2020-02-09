@@ -7,7 +7,7 @@ import Search from "../order/Search";
 import API from "../API";
 import {debounce} from "ts-debounce";
 
-interface RealEstateListProps {
+interface Props {
     onAdd: () => void,
     onSelect: (selectedRealEstate: RealEstate) => void,
 }
@@ -20,9 +20,9 @@ interface State {
     isLoading: boolean
 }
 
-export default class RealEstateList extends React.Component<RealEstateListProps, State> {
+export default class RealEstateList extends React.Component<Props, State> {
 
-    constructor(props: RealEstateListProps) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             searchTerm: "",

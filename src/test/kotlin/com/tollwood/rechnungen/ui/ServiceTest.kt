@@ -1,6 +1,6 @@
 package com.tollwood.rechnungen.ui
 
-import com.tollwood.jpa.Service
+import com.tollwood.service.Service
 import io.github.bonigarcia.seljup.SeleniumExtension
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -49,7 +49,7 @@ internal class ServiceTest : UiTest() {
 
     @Test
     fun testAddService() {
-        val newService = Service(1, "99F", "Great Stuff", 2.34,true)
+        val newService = Service(1, "99F", "Great Stuff", 2.34, true)
         overviewPage
                 .expectLoggedIn("admin", "1234")
                 .verifyOverviewPage()

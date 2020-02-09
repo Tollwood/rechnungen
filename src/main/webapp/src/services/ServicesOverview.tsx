@@ -1,10 +1,8 @@
 import * as React from "react";
-import API from "../API";
 import Service from "../order/Service";
 import ServiceEdit from "./ServiceEdit";
 import ServiceList from "./ServiceList";
 import {Page} from "../common/Page";
-import {PageService} from "../common/PageService";
 
 interface ServiceOverviewProps {
 }
@@ -24,22 +22,16 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
         this.state = {services: [], edit: false, selectedItem: new Service(), isLoading: true, page: new Page('articleNumber')};
     }
 
-    componentDidMount(): void {
-        this.refresh(this.state.page);
-    }
 
     render() {
         return (
             <div className={"service-overview"}>
                 {this.state.edit ? null :
-                    <ServiceList services={this.state.services}
+                    <ServiceList
                                  onAdd={this.handleAdd.bind(this)}
                                  onSelect={(service: Service) => {
                                      this.handleSelection(service)
                                  }}
-                                 isLoading={this.state.isLoading}
-                                 page={this.state.page}
-                                 onPageChange={this.refresh.bind(this)}
 
                     />}
                 {!this.state.edit ? null :
@@ -68,21 +60,10 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
 
     private handleDelete() {
         this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service()}));
-        this.refresh(this.state.page);
     }
 
     private handleSave() {
         this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service()}));
-        this.refresh(this.state.page);
     }
 
-    private refresh(page: Page) {
-        this.setState({isLoading: true});
-        API.get('/api/service?'+ PageService.getPageAndSortParams(page))
-            .then(res => {
-                return res.data;
-            })
-            .then(data => this.setState({services: data._embedded.service, page: Object.assign(this.state.page, data.page)}))
-            .finally(() => this.setState({isLoading: false}));
-    }
 }

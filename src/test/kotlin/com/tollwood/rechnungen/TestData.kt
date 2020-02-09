@@ -3,7 +3,7 @@ package com.tollwood.rechnungen
 import com.tollwood.EmployeeResource
 import com.tollwood.order.OrderResource
 import com.tollwood.realestate.RealestateResource
-import com.tollwood.ServiceResource
+import com.tollwood.service.ServiceResource
 import com.tollwood.jpa.Address
 import com.tollwood.order.jpa.Order
 import com.tollwood.realestate.jpa.RealEstate
