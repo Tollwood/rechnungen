@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.tollwood.jpa.*
 import com.tollwood.order.jpa.OrderState.ORDER_EDIT
 import com.tollwood.realestate.jpa.RealEstate
-import org.hibernate.search.annotations.Field
-import org.hibernate.search.annotations.Indexed
-import org.hibernate.search.annotations.IndexedEmbedded
-import org.hibernate.search.annotations.SortableField
+import org.hibernate.search.annotations.*
 import javax.persistence.*
 
 @Indexed

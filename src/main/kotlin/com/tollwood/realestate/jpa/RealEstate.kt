@@ -2,10 +2,8 @@ package com.tollwood.realestate.jpa
 
 import com.tollwood.jpa.Address
 import com.tollwood.jpa.BaseEntity
-import org.hibernate.search.annotations.Field
-import org.hibernate.search.annotations.Indexed
-import org.hibernate.search.annotations.IndexedEmbedded
-import org.hibernate.search.annotations.SortableField
+import org.apache.lucene.analysis.de.GermanAnalyzer
+import org.hibernate.search.annotations.*
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -19,6 +17,7 @@ data class RealEstate (
         @Field
         @SortableField
         @Column(unique = true, nullable = false)
+        @Analyzer( impl = GermanAnalyzer::class)
         val name: String?,
 
         @Embedded

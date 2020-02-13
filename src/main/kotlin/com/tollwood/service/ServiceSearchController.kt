@@ -44,6 +44,6 @@ class ServiceSearchController : BaseSearchController<Service>() {
     }
 
     override fun getSearchFields(): List<String> {
-        return listOf("price", "title", "articleNumber")
+        return listOf("title", "articleNumber")
     }
 }
