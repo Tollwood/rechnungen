@@ -19,6 +19,7 @@ import OrderKmPauschale from "./OrderKmPauschale";
 import Company from "../employees/Company";
 import ErrorMapper from "../ErrorMapper";
 import Link from "../common/Links";
+import DeleteModal from "../DeleteModal";
 
 interface OrderEditProps {
     onSave: () => void;
@@ -34,6 +35,7 @@ interface OrderEditState {
     realEstates: RealEstate[];
     services: Service[];
     errors: Map<string, string>;
+    showDeleteModal: boolean
 }
 
 export default class OrderEdit extends React.Component<OrderEditProps, OrderEditState> {
@@ -46,7 +48,8 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
             technicians: [],
             realEstates: [],
             services: [],
-            errors: new Map<string, string>()
+            errors: new Map<string, string>(),
+            showDeleteModal: false
         }
     }
 
@@ -139,12 +142,17 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                 {this.state.order._links.self !== undefined ?
                                     <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash'
                                             labelPosition='left'
-                                            onClick={this.delete.bind(this)}/> : null
+                                            onClick={this.showDeleteModal.bind(this)}/> : null
                                 }
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
                 </Form>
+                <DeleteModal objectToDelete={"Auftrag"}
+                             show={this.state.showDeleteModal}
+                             onSuccess={this.delete.bind(this)}
+                             onClose={this.hideDeleteModal.bind(this)}
+                />
             </div>
         );
     }
@@ -161,9 +169,18 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.handleOrderChange(name, value);
     }
 
+    private showDeleteModal(){
+        this.setState({showDeleteModal: true});
+    }
+
+    private hideDeleteModal(){
+        this.setState({showDeleteModal: false});
+    }
+
     private delete() {
         // @ts-ignore
         API.delete(this.state.order._links.self.href).then(() => {
+            this.setState({showDeleteModal: false});
             this.props.onDelete();
         });
     }
