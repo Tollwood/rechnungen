@@ -1,7 +1,7 @@
 export default class ErrorMapper {
-    static map(error: any, state: any) {
+    static map(error: any, onError: (errors: Map<string,string>)=>void) {
         if (error.response && error.response.status === 400) {
-            state.setState({errors: new Map(Object.entries(error.response.data))});
+            onError(new Map(Object.entries(error.response.data)));
         }
     }
 

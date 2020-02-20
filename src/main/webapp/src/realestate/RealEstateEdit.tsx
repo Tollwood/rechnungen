@@ -93,15 +93,19 @@ export default class RealEstateEdit extends React.Component<RealEstateEditProps,
             API.post("/api/realestate", this.state.realEstate)
                 .then(() => this.props.onChange())
                 .catch(error => {
-                    ErrorMapper.map(error, this)
+                    ErrorMapper.map(error, this.onError.bind(this))
                 });
         } else {
             API.patch(this.state.realEstate._links.self.href, this.state.realEstate)
                 .then(() => this.props.onChange())
                 .catch(error => {
-                    ErrorMapper.map(error, this)
+                    ErrorMapper.map(error, this.onError.bind(this))
                 });
         }
+    }
+
+    onError(errors: Map<string,string>){
+        this.setState({errors: errors});
     }
 
     private delete() {

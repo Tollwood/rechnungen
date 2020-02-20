@@ -1,9 +1,8 @@
 import * as React from "react";
-import {Button, DropdownItemProps, DropdownProps, Form, Grid} from 'semantic-ui-react'
-import API from "../API";
+import {Button, DropdownProps, Form, Grid} from 'semantic-ui-react'
 import Order from "./Order";
 import Employee from "../employees/Employee";
-import OrderService from "./OrderService";
+import OrderItem from "./OrderItem";
 import ListOrderServices from "./ListOrderServices";
 import RealEstate from "../realestate/RealEstate";
 import Service from "./Service";
@@ -20,8 +19,13 @@ import Company from "../employees/Company";
 import ErrorMapper from "../ErrorMapper";
 import Link from "../common/Links";
 import DeleteModal from "../DeleteModal";
+import {OrderAddButton} from "./OrderAddButton";
+import OrderService from "./OrderService";
+import RealEstateService from "../realestate/RealEstateService";
+import ServiceService from "../services/ServiceService";
+import EmployeeService from "../employees/EmployeeService";
 
-interface OrderEditProps {
+interface Props {
     onSave: () => void;
     onCancelEdit: () => void;
     onDelete: () => void;
@@ -29,7 +33,7 @@ interface OrderEditProps {
     company: Company;
 }
 
-interface OrderEditState {
+interface State {
     order: Order;
     technicians: Employee[];
     realEstates: RealEstate[];
@@ -38,9 +42,9 @@ interface OrderEditState {
     showDeleteModal: boolean
 }
 
-export default class OrderEdit extends React.Component<OrderEditProps, OrderEditState> {
+export default class OrderEdit extends React.Component<Props, State> {
 
-    constructor(props: OrderEditProps) {
+    constructor(props: Props) {
         super(props);
         let order = new Order();
         this.state = {
@@ -54,40 +58,19 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
     }
 
     componentDidMount(): void {
-        this.fetchTechnicians();
-        this.fetchServices();
-        this.fetchRealEstates();
+        EmployeeService.getEmployees((employees => this.setState(Object.assign(this.state, {technicians: employees}))));
+        ServiceService.fetchServices((services) => this.setState({services: services}));
+        RealEstateService.fetchRealEstates((realEstates: RealEstate[]) => {
+            this.setState({realEstates: realEstates})
+        });
         if (this.props.orderLink !== undefined && this.props.orderLink !== null) {
-            this.fetchOrder(this.props.orderLink);
+            OrderService.getOrder(this.props.orderLink, this.onSuccessGetOrder.bind(this));
         }
     }
 
-    componentDidUpdate(prevProps: Readonly<OrderEditProps>, prevState: Readonly<OrderEditState>, snapshot?: any): void {
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
         if (this.props.orderLink !== undefined && this.props.orderLink !== prevProps.orderLink) {
-            this.fetchOrder(this.props.orderLink);
-        }
-    }
-
-    save(continueToNextStep: boolean) {
-        let orderToSave: Order = Object.assign({}, this.state.order);
-        orderToSave.distance = this.state.order.distance === undefined && this.getCurrentRealEstate() !== undefined ? this.getCurrentRealEstate()!!.distance : this.state.order.distance;
-        if (continueToNextStep) {
-            orderToSave.prevStatus = orderToSave.status;
-            orderToSave.status = Helper.nextStatus(this.state.order.status);
-        }
-
-        if (this.state.order._links.self === undefined) {
-            API.post("/api/order", orderToSave)
-                .then(result => result.data)
-                .then((data: any) => Object.assign(new Order(), data))
-                .then((order: Order) => this.onSuccess(order))
-                .catch(error => ErrorMapper.map(error, this));
-        } else {
-            API.patch(this.state.order._links.self!.href, orderToSave)
-                .then(result => result.data)
-                .then((data: any) => Object.assign(new Order(), data))
-                .then((order: Order) => this.onSuccess(order))
-                .catch(error => ErrorMapper.map(error, this));
+            OrderService.getOrder(this.props.orderLink, this.onSuccessGetOrder.bind(this));
         }
     }
 
@@ -100,7 +83,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                           statusChanged={(status: OrderStatus) => this.handleOrderChange('status', status)}/>
                         <OrderBaseProperties order={this.state.order}
                                              selectedTechnician={this.getCurrentTechnician()}
-                                             selectedRealEstate={this.getCurrentRealEstate()}
+                                             selectedRealEstate={OrderService.getCurrentRealEstate(this.state.order, this.state.realEstates)}
                                              handleOrderChange={this.handleOrderChange.bind(this)}
                                              realEstates={this.state.realEstates} technicians={this.state.technicians}
                                              readOnly={this.state.order.status !== 'ORDER_EDIT'}
@@ -117,22 +100,23 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                         <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)}
                                           order={this.state.order}
                                           errors={this.state.errors}/>
-                        {this.shouldRenderBillDetails() ?
+                        {this.state.order.status === 'ORDER_BILL' ?
                             <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}
                                          errors={this.state.errors}/> : null}
                         <BillButton company={this.props.company} order={this.state.order} services={this.state.services}
-                                    technician={this.getCurrentTechnician()} realEstate={this.getCurrentRealEstate()}/>
+                                    technician={this.getCurrentTechnician()}
+                                    realEstate={OrderService.getCurrentRealEstate(this.state.order, this.state.realEstates)}/>
                         <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}
                                          errors={this.state.errors}/>
                         <Grid.Row centered>
                             <Grid.Column width={5} floated='left'>
-                                {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null : <Button.Group>
-                                    <Button primary content='Speichern' onClick={this.save.bind(this, false)} className={"save-bttn"}/>
-                                    <Button.Or text='&'/>
-                                    <Button primary content='Weiter' onClick={this.saveAndContinue.bind(this)} className={"save-bttn"}
-                                            icon={Helper.getStatusIcon(Helper.nextStatus(this.state.order.status))}
-                                            labelPosition={"right"}/>
-                                </Button.Group>}
+                                {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null :
+                                    <OrderAddButton order={this.state.order} realEstates={this.state.realEstates}
+                                                    onSuccess={this.onSuccessSave.bind(this)}
+                                                    onError={(errors: Map<string, string>) => {
+                                                        this.setState({errors: errors})
+                                                    }}
+                                    />}
                             </Grid.Column>
                             <Grid.Column width={5}>
                                 <Button className={"cancel-bttn"} content='Abbrechen' icon='cancel' labelPosition='left'
@@ -142,7 +126,7 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                                 {this.state.order._links.self !== undefined ?
                                     <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash'
                                             labelPosition='left'
-                                            onClick={this.showDeleteModal.bind(this)}/> : null
+                                            onClick={() => this.setState({showDeleteModal: true})}/> : null
                                 }
                             </Grid.Column>
                         </Grid.Row>
@@ -150,11 +134,18 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
                 </Form>
                 <DeleteModal objectToDelete={"Auftrag"}
                              show={this.state.showDeleteModal}
-                             onSuccess={this.delete.bind(this)}
-                             onClose={this.hideDeleteModal.bind(this)}
+                             onSuccess={() => {
+                                 OrderService.delete(this.state.order, this.onDeleteSuccess.bind(this))
+                             }}
+                             onClose={() => this.setState({showDeleteModal: false})}
                 />
             </div>
         );
+    }
+
+    private onDeleteSuccess() {
+        this.setState({showDeleteModal: false});
+        this.props.onDelete();
     }
 
     handleOrderChange(name: string, value: any) {
@@ -169,114 +160,33 @@ export default class OrderEdit extends React.Component<OrderEditProps, OrderEdit
         this.handleOrderChange(name, value);
     }
 
-    private showDeleteModal(){
-        this.setState({showDeleteModal: true});
-    }
-
-    private hideDeleteModal(){
-        this.setState({showDeleteModal: false});
-    }
-
-    private delete() {
-        // @ts-ignore
-        API.delete(this.state.order._links.self.href).then(() => {
-            this.setState({showDeleteModal: false});
-            this.props.onDelete();
-        });
-    }
-
-    private fetchCurrentTechnician(technicianLink: Link) {
-        API.get(technicianLink.href)
-            .then(res => this.handleOrderChange('technician', res.data._links.self.href))
-    }
-
-    private fetchOrder(orderLink: Link) {
-        API.get(orderLink.href)
-            .then(res => res.data)
-            .then((order) => {
-                this.setState(Object.assign(this.state, {order: order}));
-                if (this.state.order._links.realEstate !== undefined) this.fetchCurrentRealEstate(this.state.order._links.realEstate);
-                if (this.state.order._links.technician !== undefined) this.fetchCurrentTechnician(this.state.order._links.technician);
-            });
-    }
-
-    private fetchTechnicians() {
-        API.get('/api/employee')
-            .then(res => res.data)
-            .then((data) => this.setState(Object.assign(this.state, {
-                technicians: data._embedded.employee
-            })));
-    }
-
-    private mapTechnicianToDropdownItems(employees: Employee[]): DropdownItemProps[] {
-        return employees.map((emp: Employee) => {
-            return {key: emp.technicianId, value: emp._links.self!.href, text: this.getDropDownText(emp)}
-        });
-    }
-
-    private getDropDownText(emp: Employee) {
-        return emp.technicianId + " " + emp.firstName + " " + emp.lastName;
-    }
-
-
     private updateStatus(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
         const newOrder = Object.assign(this.state.order, {status: data.value});
         this.setState(Object.assign(this.state, {order: newOrder}))
     }
 
-    private updateOrderServies(orderServices: OrderService[]) {
+    private updateOrderServies(orderServices: OrderItem[]) {
         this.setState(Object.assign(this.state, {order: Object.assign(this.state.order, {services: orderServices})}))
-    }
-
-
-    private fetchServices() {
-        API.get('/api/service')
-            .then(res => {
-                return res.data;
-            })
-            .then(data => {
-                this.setState({services: data._embedded.service});
-            });
-    }
-
-    private fetchRealEstates() {
-        API.get('/api/realestate')
-            .then(res => res.data)
-            .then((data) => {
-                this.setState({
-                    realEstates: data._embedded.realestate
-                })
-            });
-    }
-
-    private fetchCurrentRealEstate(realEstateLink: Link) {
-        API.get(realEstateLink.href)
-            .then(res => {
-                this.handleOrderChange('realEstate', res.data._links.self.href)
-            });
-    }
-
-    private getCurrentRealEstate() {
-        return this.state.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === this.state.order.realEstate);
     }
 
     private getCurrentTechnician() {
         return this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.order.technician);
     }
 
-    private shouldRenderBillDetails() {
-        return this.state.order.status === 'ORDER_BILL';
-    }
-
-    private saveAndContinue() {
-        this.save(true);
-
-    }
-
-    private onSuccess(order: Order) {
+    private onSuccessSave(order: Order) {
         order.technician = this.state.order.technician;
         order.realEstate = this.state.order.realEstate;
         this.setState({order: order});
+    }
+
+    public onSuccessGetOrder(order: Order) {
+        this.setState(Object.assign(this.state, {order: order}));
+        if (this.state.order._links.realEstate !== undefined) RealEstateService.fetchCurrentRealEstate(this.state.order._links.realEstate, (realEstate) => {
+            this.handleOrderChange('realEstate', realEstate._links.self!.href)
+        });
+        if (this.state.order._links.technician !== undefined) {
+            EmployeeService.fetchCurrentTechnician(this.state.order._links.technician, (emp) => this.handleOrderChange('technician', emp._links.self!.href));
+        }
     }
 }
 

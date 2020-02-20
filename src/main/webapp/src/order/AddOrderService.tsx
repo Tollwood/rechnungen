@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent, createRef} from "react";
-import OrderService from "./OrderService";
+import OrderItem from "./OrderItem";
 import {ButtonProps, Dropdown, DropdownProps} from "semantic-ui-react";
 import Service from "./Service";
 import Input from "semantic-ui-react/dist/commonjs/elements/Input";
@@ -9,8 +9,8 @@ import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 
 interface AddOrderServiceProps {
     services: Service[]
-    orderServices: OrderService[]
-    onOrderServicesAdded: (orderServices: OrderService[])=> void
+    orderServices: OrderItem[]
+    onOrderServicesAdded: (orderServices: OrderItem[])=> void
 }
 
 interface AddOrderServiceState {
@@ -70,7 +70,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
 
     private computeAvailableServices( ): {key:string, value:string,text:string}[] {
 
-        const existingServices: string[] = this.props.orderServices.map((os:OrderService) => os._links.service.href);
+        const existingServices: string[] = this.props.orderServices.map((os:OrderItem) => os._links.service.href);
         return this.props.services
             .filter((service: Service) => !existingServices.includes(service._links.self!.href))
             .filter((service: Service) => service.selectable)
@@ -79,7 +79,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
 
     private computeAvailableServicesByTitle( ): {key:string, value:string,text:string}[] {
 
-        const existingServices: string[] = this.props.orderServices.map((os:OrderService) => os._links.service.href);
+        const existingServices: string[] = this.props.orderServices.map((os:OrderItem) => os._links.service.href);
         return this.props.services
             .filter((service: Service) => !existingServices.includes(service._links.self!.href))
             .filter((service: Service) => service.selectable)
@@ -97,7 +97,7 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
 
     private addService(event: React.MouseEvent<HTMLButtonElement>, data: ButtonProps) {
         if(this.state.selectedService){
-            const updatedOrderServices:OrderService[] =  Object.assign(this.props.orderServices);
+            const updatedOrderServices:OrderItem[] =  Object.assign(this.props.orderServices);
             updatedOrderServices.push({amount: this.state.amount as unknown as number, service: this.state.selectedService._links.self!.href, _links: {service: {href:this.state.selectedService._links.self!.href}}});
             this.setState(Object.assign(this.state, {
                 amount:"",

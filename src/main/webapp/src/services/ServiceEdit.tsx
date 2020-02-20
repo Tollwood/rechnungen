@@ -121,15 +121,19 @@ export default class ServiceEdit extends React.Component<Props, State> {
             API.post("/api/service", this.state.service)
                 .then(() => this.props.onSave())
                 .catch(error => {
-                    ErrorMapper.map(error, this)
+                    ErrorMapper.map(error, this.onError.bind(this))
                 });
         } else {
             API.patch(this.state.service._links.self.href, this.state.service)
                 .then(() => this.props.onSave())
                 .catch(error => {
-                    ErrorMapper.map(error, this)
+                    ErrorMapper.map(error, this.onError.bind(this))
                 });
         }
+    }
+
+    onError(errors: Map<string,string>){
+        this.setState({errors: errors});
     }
 
     private delete() {

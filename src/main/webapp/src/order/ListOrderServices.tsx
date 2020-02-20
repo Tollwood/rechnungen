@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent} from "react";
-import OrderService from "./OrderService";
+import OrderItem from "./OrderItem";
 import Service from "./Service";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 import {Button, Table, Grid} from "semantic-ui-react";
@@ -8,8 +8,8 @@ import AddOrderService from "./AddOrderService";
 
 interface ListOrderServicesProps {
     services: Service[]
-    orderServices: OrderService[]
-    onOrderServicesChanged: (orderServices: OrderService[]) => void
+    orderServices: OrderItem[]
+    onOrderServicesChanged: (orderServices: OrderItem[]) => void
 }
 
 interface ListOrderServicesState {
@@ -57,7 +57,7 @@ export default class ListOrderServices extends React.Component<ListOrderServices
         );
     }
 
-    private renderRow(orderService: OrderService) {
+    private renderRow(orderService: OrderItem) {
 
         let serviceData = this.props.services.find(service => service._links.self!.href === orderService._links.service.href);
         if (!serviceData) {
@@ -78,8 +78,8 @@ export default class ListOrderServices extends React.Component<ListOrderServices
         </tr>
     }
 
-    private updateOrderServiceAmount(orderService: OrderService, newValue: string) {
-        const orderServices = this.props.orderServices.map((os: OrderService) => {
+    private updateOrderServiceAmount(orderService: OrderItem, newValue: string) {
+        const orderServices = this.props.orderServices.map((os: OrderItem) => {
             if (os._links.service.href === orderService._links.service.href) {
                 return Object.assign(os, {amount: newValue});
             }
@@ -88,8 +88,8 @@ export default class ListOrderServices extends React.Component<ListOrderServices
         this.props.onOrderServicesChanged(orderServices);
     }
 
-    private removeOrderService(orderService: OrderService) {
+    private removeOrderService(orderService: OrderItem) {
         this.props.onOrderServicesChanged(this.props.orderServices
-            .filter((os: OrderService) => orderService._links.service.href !== os._links.service.href));
+            .filter((os: OrderItem) => orderService._links.service.href !== os._links.service.href));
     }
 }

@@ -164,12 +164,16 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
         if (this.state.employee._links.self === undefined) {
             API.post("/api/employee", this.state.employee)
                 .then(() => this.props.onSave())
-                .catch(errors => ErrorMapper.map(errors, this))
+                .catch(errors => ErrorMapper.map(errors, this.onError.bind(this)))
         } else {
             API.patch(this.state.employee._links.self.href, this.state.employee)
                 .then(() => this.props.onSave())
-                .catch(errors => ErrorMapper.map(errors, this))
+                .catch(errors => ErrorMapper.map(errors, this.onError.bind(this)))
         }
+    }
+
+    onError(errors: Map<string,string>){
+        this.setState({errors: errors});
     }
 
     private delete() {

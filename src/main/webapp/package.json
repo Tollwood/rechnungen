@@ -11,6 +11,7 @@
     "@types/react-dom": "16.9.0",
     "axios": "^0.19.0",
     "react": "^16.9.0",
+    "react-alert": "^6.0.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
     "semantic-ui": "^2.4.2",
@@ -43,6 +44,7 @@
   },
   "proxy": "http://localhost:8090",
   "devDependencies": {
+    "@types/react-alert": "^5.2.0",
     "start-server-and-test": "^1.10.2"
   }
 }
