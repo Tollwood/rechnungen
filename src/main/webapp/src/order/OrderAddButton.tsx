@@ -19,7 +19,7 @@ export function OrderAddButton(props: Props) {
 
     function confirmSuccess(onSuccess: (order: Order) => void) {
         return (order: Order) => {
-            alert.success("Auftrag nicht gespeichert", {timeout: 2000});
+            alert.success("Auftrag gespeichert", {timeout: 2000});
             onSuccess(order);
         }
     }

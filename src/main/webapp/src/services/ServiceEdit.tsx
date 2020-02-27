@@ -6,6 +6,7 @@ import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import Service from "../order/Service";
 import ErrorMapper from "../ErrorMapper";
+import ServiceService from "./ServiceService";
 
 interface Props {
     onSave: () => void;
@@ -93,7 +94,13 @@ export default class ServiceEdit extends React.Component<Props, State> {
                                 </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
-                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)}
+                        <CUDButtons onSave={ServiceService.save}
+                                    onDelete={ServiceService.delete}
+                                    name={"Dienstleistung"}
+                                    object={this.state.service}
+                                    onSuccess={this.props.onSave}
+                                    onCancel={this.props.onCancelEdit}
+                                    onError={this.onError.bind(this)}
                                     canDelete={this.state.service._links.self !== undefined}/>
                     </Grid>
                 </Form>
@@ -116,30 +123,7 @@ export default class ServiceEdit extends React.Component<Props, State> {
         });
     }
 
-    save() {
-        if (this.state.service._links.self === undefined) {
-            API.post("/api/service", this.state.service)
-                .then(() => this.props.onSave())
-                .catch(error => {
-                    ErrorMapper.map(error, this.onError.bind(this))
-                });
-        } else {
-            API.patch(this.state.service._links.self.href, this.state.service)
-                .then(() => this.props.onSave())
-                .catch(error => {
-                    ErrorMapper.map(error, this.onError.bind(this))
-                });
-        }
-    }
-
     onError(errors: Map<string,string>){
         this.setState({errors: errors});
-    }
-
-    private delete() {
-        // @ts-ignore
-        API.delete(this.state.service._links.self.href).then(() => {
-        });
-        this.props.onDelete();
     }
 }

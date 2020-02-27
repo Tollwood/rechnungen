@@ -1,118 +1,75 @@
 import * as React from "react";
-import {ChangeEvent} from "react";
-import {Form, Grid} from 'semantic-ui-react'
-import API from "../API";
+import {ChangeEvent, useState} from "react";
+import {Form, FormInput, Grid} from 'semantic-ui-react'
 import RealEstate from "./RealEstate";
 import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
 import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
+import RealEstateService from "./RealEstateService";
 
 interface RealEstateEditProps {
     onChange: () => void;
     realEstate: RealEstate;
 }
 
-interface RealEstateEditState {
-    realEstate: RealEstate,
-    errors: Map<string, string>
-}
+export default function RealEstateEdit(props: RealEstateEditProps) {
 
-export default class RealEstateEdit extends React.Component<RealEstateEditProps, RealEstateEditState> {
+    const [realEstate, setRealEstate] = useState<RealEstate>(props.realEstate);
+    const [errors, setErrors] = useState(new Map<string, string>());
 
-    constructor(props: RealEstateEditProps) {
-        super(props);
-        this.state = {realEstate: props.realEstate, errors: new Map()}
+    function onChange(event: ChangeEvent<HTMLInputElement>) {
+        setRealEstate({...realEstate, [event.target.name]: event.target.value});
+        setErrors(ErrorMapper.removeError(errors, event.target.name));
     }
 
-    componentDidUpdate(prevProps: Readonly<RealEstateEditProps>, prevState: Readonly<RealEstateEditState>, snapshot?: any): void {
-        if (this.props.realEstate !== prevProps.realEstate) {
-            this.setState({realEstate: this.props.realEstate});
-        }
+    function handleAddressChange(nameValue: NameValue) {
+        setRealEstate({...realEstate, address: {...realEstate.address, [nameValue.name]: nameValue.value}});
+        setErrors(ErrorMapper.removeError(errors, "address." + nameValue.name))
     }
 
-    render() {
-        return (
-            <div className={"realEstate-edit"}>
-                {this.state.realEstate._links === undefined ? <h1>Neue Liegenschaft</h1> : <h1>Liegenschaft Bearbeiten</h1>}
-                <Form>
-                    <Grid>
-                        <Grid.Row>
-                            <Grid.Column width={8}>
-                                <Form.Field>
-                                    <label>Bezeichnung</label>
-                                    <Form.Input id="name"
-                                                placeholder='Bezeichnung'
-                                                value={this.state.realEstate.name}
-                                                name='name'
-                                                onChange={this.handleRealestateChange.bind(this)}
-                                                error={this.state.errors.get('name') ? {content: this.state.errors.get('name')} : null}
-                                    />
-                                </Form.Field>
-                            </Grid.Column>
-                            <Grid.Column width={8}>
-                                <Form.Field>
-                                    <label>Entfernung</label>
-                                    <input id="distance"
-                                           placeholder='Entfernung'
-                                           value={this.state.realEstate.distance}
-                                           name='distance'
-                                           onChange={this.handleRealestateChange.bind(this)}
-                                    />
-                                </Form.Field>
-                            </Grid.Column>
-                        </Grid.Row>
-                        <AddressInput address={this.state.realEstate.address} handleAddressChange={this.handleAddressChange.bind(this)}
-                                      errors={new Map()}/>
-                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onChange} onDelete={this.delete.bind(this)}
-                                    canDelete={this.state.realEstate._links.self !== undefined}/>
-                    </Grid>
-                </Form>
-            </div>
-        );
-    }
-
-    handleRealestateChange(event: ChangeEvent<HTMLInputElement>) {
-        const name: string = event.target.name;
-        this.setState({
-            realEstate: Object.assign(this.state.realEstate, {[name]: event.target.value}),
-            errors: ErrorMapper.removeError(this.state.errors, name)
-        });
-    }
-
-    handleAddressChange(nameValue: NameValue) {
-        const newAddress = Object.assign(this.state.realEstate.address, {[nameValue.name]: nameValue.value});
-        this.setState({
-            realEstate: Object.assign(this.state.realEstate, {address: newAddress}),
-            errors: ErrorMapper.removeError(this.state.errors, "address." + nameValue.name)
-        });
-    }
-
-    save() {
-        if (this.state.realEstate._links.self === undefined) {
-            API.post("/api/realestate", this.state.realEstate)
-                .then(() => this.props.onChange())
-                .catch(error => {
-                    ErrorMapper.map(error, this.onError.bind(this))
-                });
-        } else {
-            API.patch(this.state.realEstate._links.self.href, this.state.realEstate)
-                .then(() => this.props.onChange())
-                .catch(error => {
-                    ErrorMapper.map(error, this.onError.bind(this))
-                });
-        }
-    }
-
-    onError(errors: Map<string,string>){
-        this.setState({errors: errors});
-    }
-
-    private delete() {
-        // @ts-ignore
-        API.delete(this.state.realEstate._links.self.href).then(() => {
-            this.props.onChange();
-        });
-
-    }
+    return (
+        <div className={"realEstate-edit"}>
+            {realEstate._links === undefined ? <h1>Neue Liegenschaft</h1> : <h1>Liegenschaft Bearbeiten</h1>}
+            <Form>
+                <Grid>
+                    <Grid.Row>
+                        <Grid.Column width={8}>
+                            <Form.Field>
+                                <label>Bezeichnung</label>
+                                <FormInput id="name"
+                                           placeholder='Bezeichnung'
+                                           value={realEstate.name}
+                                           name='name'
+                                           onChange={onChange}
+                                           error={errors.get('name') ? {content: errors.get('name')} : null}
+                                />
+                            </Form.Field>
+                        </Grid.Column>
+                        <Grid.Column width={8}>
+                            <Form.Field>
+                                <label>Entfernung</label>
+                                <input id="distance"
+                                       placeholder='Entfernung'
+                                       value={realEstate.distance}
+                                       name='distance'
+                                       onChange={onChange}
+                                />
+                            </Form.Field>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <AddressInput address={realEstate.address} handleAddressChange={handleAddressChange}
+                                  errors={new Map()}/>
+                    <CUDButtons onSave={RealEstateService.save}
+                                name={"Liegenschaft"}
+                                object={realEstate}
+                                onSuccess={props.onChange}
+                                onError={setErrors}
+                                onCancel={props.onChange}
+                                onDelete={RealEstateService.delete}
+                                canDelete={realEstate._links.self !== undefined}/>
+                </Grid>
+            </Form>
+        </div>
+    );
 }

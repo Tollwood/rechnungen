@@ -88,10 +88,10 @@ export default class RealEstateList extends React.Component<Props, State> {
                           onClick={this.props.onSelect.bind(this, realEstate)}>
             <Table.Cell>{realEstate.name}</Table.Cell>
             <Table.Cell>
-                <div>
+                {realEstate.address != null && <div>
                     <div>{realEstate.address.street} {realEstate.address.houseNumber}</div>
                     <div>{realEstate.address.zipCode} {realEstate.address.city}</div>
-                </div>
+                </div>}
             </Table.Cell>
             <Table.Cell>
                 {realEstate.distance}

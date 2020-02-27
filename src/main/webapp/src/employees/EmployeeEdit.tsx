@@ -2,13 +2,13 @@ import Employee from "./Employee";
 import * as React from "react";
 import {ChangeEvent} from "react";
 import {Form} from 'semantic-ui-react'
-import API from "../API";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
 import BankInput from "../common/BankInput";
 import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
+import EmployeeService from "./EmployeeService";
 
 interface EmployeeEditProps {
     onSave: () => void;
@@ -137,7 +137,13 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                                    handleBankDetailsChange={this.handleBankDetailsChange.bind(this)}
                                    errors={ErrorMapper.childError(this.state.errors)}/>
 
-                        <CUDButtons onSave={this.save.bind(this)} onCancel={this.props.onCancelEdit} onDelete={this.delete.bind(this)}
+                        <CUDButtons onSave={EmployeeService.save}
+                                    name={"Mitarbeiter"}
+                                    object={this.state.employee}
+                                    onSuccess={this.props.onSave}
+                                    onError={this.onError.bind(this)}
+                                    onCancel={this.props.onCancelEdit}
+                                    onDelete={EmployeeService.delete}
                                     canDelete={this.state.employee._links.self !== undefined}/>
                     </Grid>
                 </Form>
@@ -160,26 +166,8 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
         this.setState({employee: Object.assign(this.state.employee, {bankDetails: newBankDetails}), errors: ErrorMapper.removeError(this.state.errors, "bankDetails."+event.target.name)});
     }
 
-    save() {
-        if (this.state.employee._links.self === undefined) {
-            API.post("/api/employee", this.state.employee)
-                .then(() => this.props.onSave())
-                .catch(errors => ErrorMapper.map(errors, this.onError.bind(this)))
-        } else {
-            API.patch(this.state.employee._links.self.href, this.state.employee)
-                .then(() => this.props.onSave())
-                .catch(errors => ErrorMapper.map(errors, this.onError.bind(this)))
-        }
-    }
-
     onError(errors: Map<string,string>){
         this.setState({errors: errors});
     }
 
-    private delete() {
-        // @ts-ignore
-        API.delete(this.state.employee._links.self.href).then(() => {
-        });
-        this.props.onCancelEdit();
-    }
 }

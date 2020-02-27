@@ -17,7 +17,7 @@ export default class EmployeeList extends React.Component<EmployeeListProps> {
                 <Button floated={"right"}
                         primary
                         icon={{name: "user icon"}}
-                        label={"Add User"}
+                        label={"Mitarbeiter hinzufügen"}
                         onClick={this.props.onAddEmployee}
                         className={"add"}
                 />
