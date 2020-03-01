@@ -27,8 +27,7 @@ export default class RealEstateService {
                 .then(result => result.data)
                 .then((data: any) => Object.assign(new RealEstate(), data))
                 .then(onSuccess)
-                .catch(error => {
-                    ErrorMapper.map(error, onError)
+                .catch(error => {ErrorMapper.map(error, onError)
                 });
         } else {
             API.patch(realEstate._links.self.href, realEstate)
@@ -43,6 +42,6 @@ export default class RealEstateService {
         // @ts-ignore
         API.delete(realEstate._links.self.href)
             .then(onSuccess)
-            .catch(onError);
+            .catch(error => {ErrorMapper.map(error, onError)});
     }
 }

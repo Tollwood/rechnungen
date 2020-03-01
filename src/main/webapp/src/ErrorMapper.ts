@@ -2,7 +2,10 @@ export default class ErrorMapper {
     static map(error: any, onError: (errors: Map<string,string>)=>void) {
         if (error.response && error.response.status === 400) {
             onError(new Map(Object.entries(error.response.data)));
+            return;
         }
+
+        onError(new Map());
     }
 
     static childError(map: Map<string, string>): Map<string, string> {
