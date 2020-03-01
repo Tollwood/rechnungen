@@ -134,10 +134,10 @@ export default class OrderEdit extends React.Component<Props, State> {
                                         }}/>
                             </Grid.Column>
                             <Grid.Column width={5} floated='right'>
-                                {this.state.order._links.self !== undefined ?
+                                {(this.state.order._links.self !== undefined && this.state.order.status !== "PAYMENT_RECIEVED") &&
                                     <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash'
                                             labelPosition='left'
-                                            onClick={() => this.setState({showDeleteModal: true})}/> : null
+                                            onClick={() => this.setState({showDeleteModal: true})}/>
                                 }
                             </Grid.Column>
                         </Grid.Row>
