@@ -17,7 +17,7 @@ export default class UnsavedChangesModal extends React.Component<Props> {
                 </Modal.Header>
                 <Modal.Content>
                     Ungespeicherte Änderungen gehen verloren.
-                    Wirklich abbrechen?
+                    <div>Wirklich abbrechen?</div>
                 </Modal.Content>
                 <Modal.Actions>
                     <Button primary content={"Ja"} onClick={this.props.onSuccess} />

@@ -24,6 +24,7 @@ import OrderService from "./OrderService";
 import RealEstateService from "../realestate/RealEstateService";
 import ServiceService from "../services/ServiceService";
 import EmployeeService from "../employees/EmployeeService";
+import UnsavedChangesModal from "../UnsavedChangesModal";
 
 interface Props {
     onSave: () => void;
@@ -35,11 +36,13 @@ interface Props {
 
 interface State {
     order: Order;
+    initialState: Order;
     technicians: Employee[];
     realEstates: RealEstate[];
     services: Service[];
     errors: Map<string, string>;
     showDeleteModal: boolean
+    showUnsavedChangesModal: boolean
 }
 
 export default class OrderEdit extends React.Component<Props, State> {
@@ -49,11 +52,13 @@ export default class OrderEdit extends React.Component<Props, State> {
         let order = new Order();
         this.state = {
             order: order,
+            initialState: order,
             technicians: [],
             realEstates: [],
             services: [],
             errors: new Map<string, string>(),
-            showDeleteModal: false
+            showDeleteModal: false,
+            showUnsavedChangesModal: false
         }
     }
 
@@ -120,7 +125,13 @@ export default class OrderEdit extends React.Component<Props, State> {
                             </Grid.Column>
                             <Grid.Column width={5}>
                                 <Button className={"cancel-bttn"} content='Abbrechen' icon='cancel' labelPosition='left'
-                                        onClick={this.props.onCancelEdit}/>
+                                        onClick={()=>{
+                                            if(this.state.initialState !== this.state.order){
+                                                this.setState({showUnsavedChangesModal:true});
+                                            }else {
+                                                this.props.onCancelEdit();
+                                            }
+                                        }}/>
                             </Grid.Column>
                             <Grid.Column width={5} floated='right'>
                                 {this.state.order._links.self !== undefined ?
@@ -138,6 +149,11 @@ export default class OrderEdit extends React.Component<Props, State> {
                                  OrderService.delete(this.state.order, this.onDeleteSuccess.bind(this))
                              }}
                              onClose={() => this.setState({showDeleteModal: false})}
+                />
+                <UnsavedChangesModal name={"Auftrag"}
+                                     show={this.state.showUnsavedChangesModal}
+                                     onSuccess={this.props.onCancelEdit}
+                                     onClose={() => this.setState({showUnsavedChangesModal: false})}
                 />
             </div>
         );
@@ -176,7 +192,7 @@ export default class OrderEdit extends React.Component<Props, State> {
     private onSuccessSave(order: Order) {
         order.technician = this.state.order.technician;
         order.realEstate = this.state.order.realEstate;
-        this.setState({order: order});
+        this.setState({order: order, initialState: order});
     }
 
     public onSuccessGetOrder(order: Order) {
