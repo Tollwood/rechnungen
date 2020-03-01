@@ -1,12 +1,12 @@
 import * as React from "react";
-import {ChangeEvent} from "react";
+import {useState} from "react";
 import {Checkbox, CheckboxProps, Form, Icon} from 'semantic-ui-react'
-import API from "../API";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import Service from "../order/Service";
-import ErrorMapper from "../ErrorMapper";
 import ServiceService from "./ServiceService";
+import ErrorMapper from "../ErrorMapper";
+import {ChangeEvent} from "react";
 
 interface Props {
     onSave: () => void;
@@ -15,115 +15,95 @@ interface Props {
     service: Service;
 }
 
-interface State {
-    service: Service
-    errors: Map<string, string>
-}
+export default function ServiceEdit(props: Props) {
 
-export default class ServiceEdit extends React.Component<Props, State> {
+    const [service, setService] = useState<Service>(props.service);
+    const [initialService, setInitialService] = useState<Service>(props.service);
+    const [errors, setErrors] = useState(new Map<string, string>());
 
-    constructor(props: Props) {
-        super(props);
-        this.state = {service: props.service, errors: new Map<string, string>()}
+    function handleSelectable(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) {
+
+        // @ts-ignore
+        setService({...service, selectable : data.checked});
+        setErrors(ErrorMapper.removeError(errors, "selectable"));
     }
 
-    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
-        if (this.props.service !== prevProps.service) {
-            this.setState({service: this.props.service});
-        }
+    function handleChange(event: ChangeEvent<HTMLInputElement>) {
+        setService({...service, [event.target.name]: event.target.value});
+        setErrors(ErrorMapper.removeError(errors, event.target.name));
     }
 
-    render() {
-        return (
-            <div className={"service-edit"}>
-                <Form>
-                    <Grid>
-                        <Grid.Row>
-                            <Grid.Column width={4}>
-                                <Form.Field>
-                                    <label>Code</label>
-                                    <Form.Input
-                                        id="articleNumber"
-                                        placeholder='Code'
-                                        value={this.state.service.articleNumber}
-                                        name='articleNumber'
-                                        onChange={this.handleChange.bind(this)}
-                                        error={this.state.errors.get('articleNumber') ? {content: this.state.errors.get('articleNumber')} : null}
-                                    />
-                                </Form.Field>
-                            </Grid.Column>
-                            <Grid.Column width={8}>
-                                <Form.Field>
-                                    <label>Bezeichnung</label>
-                                    <Form.Input id="title"
-                                                placeholder='Bezeichnung'
-                                                value={this.state.service.title}
-                                                name='title'
-                                                onChange={this.handleChange.bind(this)}
-                                                error={this.state.errors.get('title') ? {content: this.state.errors.get('title')} : null}
-                                    />
-                                </Form.Field>
-                            </Grid.Column>
-                            <Grid.Column width={4}>
-                                <Form.Field>
-                                    <label>Preis</label>
-                                    <Form.Input
-                                        type={"number"}
-                                        step="0.01"
-                                        id="price"
-                                        placeholder='Preis'
-                                        value={this.state.service.price}
-                                        name='price'
-                                        onChange={this.handleChange.bind(this)}
-                                        icon={<Icon name='eur'/>}
-                                        error={this.state.errors.get('price') ? {content: this.state.errors.get('price')} : null}
-                                    />
-                                </Form.Field>
-                            </Grid.Column>
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Grid.Column>
-                                <Form.Field>
-                                    <Checkbox toggle
-                                              name="selectable"
-                                              id="selectable"
-                                              label="Wählbar"
-                                              checked={this.state.service.selectable}
-                                              onChange={this.handleSelectable.bind(this)}/>
+    return (
+        <div className={"service-edit"}>
+            <Form>
+                <Grid>
+                    <Grid.Row>
+                        <Grid.Column width={4}>
+                            <Form.Field>
+                                <label>Code</label>
+                                <Form.Input
+                                    id="articleNumber"
+                                    placeholder='Code'
+                                    value={service.articleNumber}
+                                    name='articleNumber'
+                                    onChange={handleChange}
+                                    error={errors.get('articleNumber') ? {content: errors.get('articleNumber')} : null}
+                                />
+                            </Form.Field>
+                        </Grid.Column>
+                        <Grid.Column width={8}>
+                            <Form.Field>
+                                <label>Bezeichnung</label>
+                                <Form.Input id="title"
+                                            placeholder='Bezeichnung'
+                                            value={service.title}
+                                            name='title'
+                                            onChange={handleChange}
+                                            error={errors.get('title') ? {content: errors.get('title')} : null}
+                                />
+                            </Form.Field>
+                        </Grid.Column>
+                        <Grid.Column width={4}>
+                            <Form.Field>
+                                <label>Preis</label>
+                                <Form.Input
+                                    type={"number"}
+                                    step="0.01"
+                                    id="price"
+                                    placeholder='Preis'
+                                    value={service.price}
+                                    name='price'
+                                    onChange={handleChange}
+                                    icon={<Icon name='eur'/>}
+                                    error={errors.get('price') ? {content: errors.get('price')} : null}
+                                />
+                            </Form.Field>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Form.Field>
+                                <Checkbox toggle
+                                          name="selectable"
+                                          id="selectable"
+                                          label="Wählbar"
+                                          checked={service.selectable}
+                                          onChange={handleSelectable}/>
 
-                                </Form.Field>
-                            </Grid.Column>
-                        </Grid.Row>
-                        <CUDButtons onSave={ServiceService.save}
-                                    onDelete={ServiceService.delete}
-                                    name={"Dienstleistung"}
-                                    object={this.state.service}
-                                    onSuccess={this.props.onSave}
-                                    onCancel={this.props.onCancelEdit}
-                                    onError={this.onError.bind(this)}
-                                    canDelete={this.state.service._links.self !== undefined}/>
-                    </Grid>
-                </Form>
-            </div>
-        );
-    }
-
-    handleSelectable(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) {
-        this.setState({
-            service: Object.assign(this.state.service, {"selectable": data.value}),
-            errors: ErrorMapper.removeError(this.state.errors, "selectable", )
-        });
-    }
-
-    handleChange(event: ChangeEvent<HTMLInputElement>) {
-        const name: string = event.target.name;
-        this.setState({
-            service: Object.assign(this.state.service, {[name]: event.target.value}),
-            errors: ErrorMapper.removeError(this.state.errors, name)
-        });
-    }
-
-    onError(errors: Map<string,string>){
-        this.setState({errors: errors});
-    }
+                            </Form.Field>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <CUDButtons onSave={ServiceService.save}
+                                onDelete={ServiceService.delete}
+                                name={"Dienstleistung"}
+                                object={service}
+                                initialState={initialService}
+                                onSuccess={props.onSave}
+                                onCancel={props.onCancelEdit}
+                                onError={setErrors}
+                                canDelete={service._links.self !== undefined}/>
+                </Grid>
+            </Form>
+        </div>
+    );
 }

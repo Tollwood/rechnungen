@@ -1,6 +1,8 @@
 import * as React from "react";
+import {useState} from "react";
 import {Button, Form, Grid} from "semantic-ui-react";
 import {useAlert} from "react-alert";
+import UnsavedChangesModal from "../UnsavedChangesModal";
 
 interface Props {
     onSave: (object: any, onSuccess: () => void, onError: (errors: Map<string, string>) => void) => void
@@ -10,12 +12,15 @@ interface Props {
     onCancel: () => void
     onDelete: (object: any, onSuccess: () => void, onError: (errors: Map<string, string>) => void) => void
     onError: (errors: Map<string, string>) => void
+    initialState: any
     canDelete: boolean
 }
 
 export default function CUDButtons(props: Props) {
 
     const alert = useAlert();
+
+    const [showCancelModal, setShowCancelModal] = useState(false);
 
     function confirmSuccess(onSuccess: () => void, action: string) {
         return () => {
@@ -31,6 +36,14 @@ export default function CUDButtons(props: Props) {
         }
     }
 
+    function confirmUnchangedCancel() {
+        if (props.initialState !== props.object) {
+            setShowCancelModal(true);
+        } else {
+            props.onCancel();
+        }
+    }
+
     return <Grid.Row centered>
         <Grid.Column width={5} floated='left'>
             <Form.Button primary content='Speichern' icon='save' labelPosition='left'
@@ -38,7 +51,7 @@ export default function CUDButtons(props: Props) {
                          className={'save-bttn'}/>
         </Grid.Column>
         <Grid.Column width={5}>
-            <Button content='Abbrechen' icon='cancel' labelPosition='left' onClick={props.onCancel} className={'cancel-bttn'}/>
+            <Button content='Abbrechen' icon='cancel' labelPosition='left' onClick={confirmUnchangedCancel} className={'cancel-bttn'}/>
         </Grid.Column>
         <Grid.Column width={5} floated='right'>
             {props.canDelete ?
@@ -46,5 +59,10 @@ export default function CUDButtons(props: Props) {
                         onClick={() => props.onDelete(props.object, confirmSuccess(props.onSuccess, "gelöscht"), confirmError(props.onError, "gelöscht"))}/> : null
             }
         </Grid.Column>
+        <UnsavedChangesModal name={props.name}
+                             show={showCancelModal}
+                             onSuccess={props.onCancel}
+                             onClose={() => setShowCancelModal(false)}
+        />
     </Grid.Row>
 }

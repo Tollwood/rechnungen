@@ -140,6 +140,7 @@ export default class EmployeeEdit extends React.Component<EmployeeEditProps, Emp
                         <CUDButtons onSave={EmployeeService.save}
                                     name={"Mitarbeiter"}
                                     object={this.state.employee}
+                                    initialState={this.state.employee}
                                     onSuccess={this.props.onSave}
                                     onError={this.onError.bind(this)}
                                     onCancel={this.props.onCancelEdit}

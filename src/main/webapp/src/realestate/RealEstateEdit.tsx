@@ -8,13 +8,14 @@ import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
 import RealEstateService from "./RealEstateService";
 
-interface RealEstateEditProps {
+interface Props {
     onChange: () => void;
     realEstate: RealEstate;
 }
 
-export default function RealEstateEdit(props: RealEstateEditProps) {
+export default function RealEstateEdit(props: Props) {
 
+    const [initialRealEstate, setInitialRealEstate] = useState<RealEstate>(props.realEstate);
     const [realEstate, setRealEstate] = useState<RealEstate>(props.realEstate);
     const [errors, setErrors] = useState(new Map<string, string>());
 
@@ -63,6 +64,7 @@ export default function RealEstateEdit(props: RealEstateEditProps) {
                     <CUDButtons onSave={RealEstateService.save}
                                 name={"Liegenschaft"}
                                 object={realEstate}
+                                initialState={initialRealEstate}
                                 onSuccess={props.onChange}
                                 onError={setErrors}
                                 onCancel={props.onChange}
