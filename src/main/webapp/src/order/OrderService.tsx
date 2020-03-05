@@ -41,4 +41,9 @@ export default class OrderService {
     public static getOrder(orderLink: Link, onSuccess: (order: Order) => void) {
         API.get(orderLink.href).then(res => onSuccess(res.data))
     }
+
+    public static getOrdersSync(): Promise<Order[]> {
+         return API.get("api/order")
+            .then(res => res.data._embedded === undefined ? [] : res.data._embedded.order)
+    }
 }

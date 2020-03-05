@@ -16,6 +16,7 @@ import Company from "./employees/Company";
 import ServicesOverview from "./services/ServicesOverview";
 import Link from "./common/Links";
 import BackendAlerts from "./BackendAlerts";
+import StatisticOverview from "./statistic/StatisticOverview";
 
 interface AppState {
     activeOrder?: Link,
@@ -53,7 +54,7 @@ class App extends Component<AppProps, AppState> {
                                 {this.state.activeContent === ContentType.EMPLOYEE ? <EmployeeOverview/> : null}
                                 {this.state.activeContent === ContentType.ORDER ? <OrderOverview company={this.state.company}/> : null}
                                 {this.state.activeContent === ContentType.BILL ? <h1>Rechnungen</h1> : null}
-                                {this.state.activeContent === ContentType.STATISTICS ? <h1>Statistiken</h1> : null}
+                                {this.state.activeContent === ContentType.STATISTICS ? <StatisticOverview/> : null}
                                 {this.state.activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview/> : null}
                                 {this.state.activeContent === ContentType.SERVICES ? <ServicesOverview/> : null}
                                 {this.state.activeContent === ContentType.ORDER_DETAILS ?
