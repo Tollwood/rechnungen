@@ -77,9 +77,8 @@ data class Order(
 ) : BaseEntity() {
     @JsonProperty("sum")
     fun sum(): Number {
-            val df = DecimalFormat("#,##")
-            df.roundingMode = RoundingMode.HALF_EVEN
-            val sum = this.billItems.map { billItem -> billItem.amount * billItem.price }.sum()
-            return df.format(sum).toDouble();
+            return this.billItems.map { billItem -> billItem.amount * billItem.price }.sum().round(2)
     }
+
+    fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
 }
