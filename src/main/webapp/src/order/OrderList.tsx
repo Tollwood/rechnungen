@@ -121,10 +121,7 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                 </div>
             </Table.Cell>
             <Table.Cell>{order.name ? order.name : "-"}</Table.Cell>
-            <Table.Cell>{order.sum.toLocaleString('de', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            })}</Table.Cell>
+            <Table.Cell>{order.sum}</Table.Cell>
             <Table.Cell>{(order.sum * 1.19).toLocaleString('de', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
