@@ -6,6 +6,8 @@ import com.tollwood.jpa.*
 import com.tollwood.order.jpa.OrderState.ORDER_EDIT
 import com.tollwood.realestate.jpa.RealEstate
 import org.hibernate.search.annotations.*
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import javax.persistence.*
 
 @Indexed
@@ -75,6 +77,9 @@ data class Order(
 ) : BaseEntity() {
     @JsonProperty("sum")
     fun sum(): Number {
-        return this.billItems.map { billItem -> billItem.amount * billItem.price }.sum();
+            val df = DecimalFormat("#,##")
+            df.roundingMode = RoundingMode.HALF_EVEN
+            val sum = this.billItems.map { billItem -> billItem.amount * billItem.price }.sum()
+            return df.format(sum).toDouble();
     }
 }

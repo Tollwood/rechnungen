@@ -4,22 +4,23 @@
   "private": true,
   "dependencies": {
     "@david.kucsai/react-pdf-table": "^0.1.1",
-    "@react-pdf/renderer": "^1.6.7",
+    "@react-pdf/renderer": "^1.6.8",
     "@types/jest": "24.0.18",
     "@types/node": "12.7.2",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.9.0",
-    "@types/recharts": "^1.8.6",
-    "axios": "^0.19.0",
-    "react": "^16.9.0",
-    "react-alert": "^6.0.0",
-    "react-dom": "^16.9.0",
+    "@types/recharts": "^1.8.7",
+    "axios": "^0.19.2",
+    "moment": "^2.24.0",
+    "react": "^16.13.0",
+    "react-alert": "^6.0.1",
+    "react-dom": "^16.13.0",
     "react-scripts": "3.1.1",
     "recharts": "^2.0.0-beta.1",
     "semantic-ui": "^2.4.2",
     "semantic-ui-calendar-react": "^0.15.3",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.0",
+    "semantic-ui-react": "^0.88.2",
     "ts-debounce": "^1.0.0",
     "typescript": "3.5.3"
   },
@@ -47,6 +48,6 @@
   "proxy": "http://localhost:8090",
   "devDependencies": {
     "@types/react-alert": "^5.2.0",
-    "start-server-and-test": "^1.10.2"
+    "start-server-and-test": "^1.10.8"
   }
 }

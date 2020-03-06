@@ -1,4 +1,6 @@
+import moment from "moment";
 import * as React from "react";
+import {Moment} from "moment";
 import {useEffect, useState} from "react";
 import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import {Grid} from "semantic-ui-react";
@@ -7,7 +9,7 @@ import Order from "../order/Order";
 import StatisticService from "./StatisticService";
 
 interface Sales {
-    date: Date,
+    date: Moment,
     amount: number
     name?: string
 }
@@ -20,9 +22,8 @@ export default function StatisticOverview() {
     useEffect(() => {
         const fetchData = async () => {
             const orders: Order[] = await OrderService.getOrdersSync();
-            const now = new Date();
-            const endOfthisMonth = new Date(now.getFullYear(), now.getMonth() +1 ,1);
-            const endOfthisMonthAYearAgo = new Date(now.getFullYear()-1, now.getMonth() +2  ,1);
+            const endOfthisMonth = moment().add(1,"month").startOf("month");
+            const endOfthisMonthAYearAgo = moment().subtract(1,"year").add(1,"month");
 
             setMonthlySales(StatisticService.byMonth(StatisticService.getSales(orders,endOfthisMonthAYearAgo,endOfthisMonth),endOfthisMonthAYearAgo,endOfthisMonth));
             setMonthlyBills(StatisticService.byMonth(StatisticService.getPendingBill(orders,endOfthisMonthAYearAgo,endOfthisMonth),endOfthisMonthAYearAgo,endOfthisMonth));
@@ -47,7 +48,7 @@ export default function StatisticOverview() {
                             <YAxis/>
                             <Tooltip/>
                             <Legend/>
-                            <Bar dataKey="amount" fill="#229ad6" name={"Umsatz"}/>
+                            <Bar dataKey="amountUi" fill="#229ad6" name={"Umsatz"}/>
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -67,7 +68,7 @@ export default function StatisticOverview() {
                             <YAxis/>
                             <Tooltip/>
                             <Legend/>
-                            <Bar dataKey="amount" fill="#07355d" name={"offene Rechnungen"}/>
+                            <Bar dataKey="amountUi" fill="#07355d" name={"offene Rechnungen"}/>
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
