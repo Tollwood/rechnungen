@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.tollwood.jpa.*
 import com.tollwood.order.jpa.OrderState.ORDER_EDIT
 import com.tollwood.realestate.jpa.RealEstate
-import org.hibernate.search.annotations.*
+import org.hibernate.search.annotations.Field
+import org.hibernate.search.annotations.Indexed
+import org.hibernate.search.annotations.IndexedEmbedded
+import org.hibernate.search.annotations.SortableField
+import java.math.BigDecimal
 import java.math.RoundingMode
-import java.text.DecimalFormat
 import javax.persistence.*
 
 @Indexed
@@ -80,5 +83,5 @@ data class Order(
             return this.billItems.map { billItem -> billItem.amount * billItem.price }.sum().round(2)
     }
 
-    fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
+    fun Double.round(decimals: Int = 2): Double =  BigDecimal(this).setScale(decimals, RoundingMode.HALF_EVEN).toDouble()
 }

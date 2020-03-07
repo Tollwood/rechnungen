@@ -1,12 +1,13 @@
 import {Moment} from "moment";
+import moment from "moment";
 
-export default interface Statistik {
-    date: Moment,
-    billed?: number
-    billedUi?: string
-    billedCount?: number,
-    paid?: number
-    paidCount?: number
-    paidUi?: string
-    name?: string
+export default class Statistik {
+    date: Moment = moment();
+    billed: number = 0;
+    billedUi: string= "";
+    billedCount: number= 0;
+    paid: number= 0;
+    paidCount: number= 0;
+    paidUi: string= "";
+    name: string ="";
 }

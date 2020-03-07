@@ -1,8 +1,8 @@
 import moment from "moment";
-import * as React from "react";
 import Order from "../order/Order";
 import {Moment} from "moment";
 import Statistik from "./Statistics";
+import OrderStatusStatistics from "./OrderStatusStatistics";
 
 export default class StatisticService {
 
@@ -10,14 +10,14 @@ export default class StatisticService {
         return orders
             .filter(value => value.paymentRecievedDate !== '')
             .filter(value => this.dateBetween(moment(value.paymentRecievedDate,"DD.MM.YYYY") ,startPeriod,endPeriod) )
-            .map(value => ({date: moment(value.paymentRecievedDate,"DD.MM.YYYY"), paid: value.sum }));
+            .map(value => {let s = new Statistik(); s.date = moment(value.paymentRecievedDate,"DD.MM.YYYY"); s.paid = value.sum; return s;});
     }
 
     public static getPendingBill(orders: Order[],startPeriod: Moment, endPeriod: Moment): Statistik[] {
         return orders
             .filter(value => value.billDate !== '' && value.status !=='PAYMENT_RECIEVED' )
             .filter(value => this.dateBetween(moment(value.billDate,"DD.MM.YYYY") ,startPeriod,endPeriod) )
-            .map(value => ({date: moment(value.billDate,"DD.MM.YYYY"), billed: value.sum}));
+            .map(value => {let s = new Statistik(); s.date = moment(value.billDate,"DD.MM.YYYY"); s.billed = value.sum; return s;});
     }
 
     public static byMonth(sales: Statistik[],startPeriod: Moment, endPeriod: Moment): Statistik[] {
@@ -26,7 +26,9 @@ export default class StatisticService {
         let nextMonth =  startPeriod.clone();
         while(nextMonth <= endPeriod){
             const name = nextMonth.format("MM.YYYY");
-            salesByMonth.set(name,{name: name, billed: 0, billedCount: 0, date: nextMonth, billedUi: "0.00", paid: 0, paidCount: 0});
+            let statistik = new Statistik();
+            statistik.name = name;
+            salesByMonth.set(name,statistik);
             nextMonth.add(1,"month");
         }
 
@@ -64,7 +66,7 @@ export default class StatisticService {
     public static total(sales: Statistik[]): Statistik[] {
         const salesByMonth: Map<string, Statistik> = new Map<string, Statistik>();
 
-        salesByMonth.set("total", {billed:0, billedCount: 0 , billedUi:"", name: "", paid: 0, paidCount : 0, paidUi :"", date: moment()});
+        salesByMonth.set("total", new Statistik());
 
         sales.forEach(value => {
 
@@ -72,7 +74,7 @@ export default class StatisticService {
 
                 if(value.billed){
                     existingValue.billed! += value.billed;
-                    existingValue.billedUi = value.billed.toFixed(2);
+                    existingValue.billedUi = existingValue.billed.toFixed(2);
                     existingValue.billedCount! += 1;
                 }
                 if(value.paid){
@@ -89,4 +91,35 @@ export default class StatisticService {
         return value.isBetween(startPeriod,endPeriod,"month","()");
     }
 
+    static getStatusStatistik(orders: Order[]): OrderStatusStatistics {
+        let orderStatusStatistics = {
+            orderEdit: 0,
+            orderExceute: 0,
+            orderBill: 0,
+            orderBillRecieved: 0,
+            paymentRecieved: 0
+        };
+        orders.forEach(value => {
+
+            switch (value.status) {
+                case 'ORDER_EDIT':
+                    orderStatusStatistics.orderEdit += 1;
+                    break;
+                case 'ORDER_EXECUTE':
+                    orderStatusStatistics.orderExceute += 1;
+                    break;
+                case 'ORDER_BILL':
+                    orderStatusStatistics.orderBill += 1;
+                    break;
+                case 'ORDER_BILL_RECIEVED':
+                    orderStatusStatistics.orderBillRecieved += 1;
+                    break;
+                case 'PAYMENT_RECIEVED':
+                    orderStatusStatistics.paymentRecieved += 1;
+                    break;
+
+            }
+        });
+        return orderStatusStatistics;
+    }
 }
