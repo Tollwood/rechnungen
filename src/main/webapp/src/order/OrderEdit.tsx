@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, DropdownProps, Form, Grid} from 'semantic-ui-react'
+import {Button, DropdownProps, Form, Grid, Segment} from 'semantic-ui-react'
 import Order from "./Order";
 import Employee from "../employees/Employee";
 import OrderItem from "./OrderItem";
@@ -81,7 +81,7 @@ export default class OrderEdit extends React.Component<Props, State> {
 
     render() {
         return (
-            <div className="order-edit">
+            <Segment>
                 <Form autoComplete={"off"}>
                     <Grid>
                         <OrderStatusSteps status={this.state.order.status}
@@ -155,7 +155,7 @@ export default class OrderEdit extends React.Component<Props, State> {
                                      onSuccess={this.props.onCancelEdit}
                                      onClose={() => this.setState({showUnsavedChangesModal: false})}
                 />
-            </div>
+            </Segment>
         );
     }
 

@@ -1,7 +1,7 @@
 import Employee from "./Employee";
 import * as React from "react";
 import {ChangeEvent, useState} from "react";
-import {Form} from 'semantic-ui-react'
+import {Form, Segment} from 'semantic-ui-react'
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
@@ -38,7 +38,7 @@ export default function EmployeeEdit(props: Props) {
     }
 
     return (
-        <div className={"employee-edit"}>
+        <Segment>
             <Form>
                 <Grid>
                     <Grid.Row>
@@ -150,6 +150,6 @@ export default function EmployeeEdit(props: Props) {
                                 canDelete={employee._links.self !== undefined}/>
                 </Grid>
             </Form>
-        </div>
+        </Segment>
     );
 }

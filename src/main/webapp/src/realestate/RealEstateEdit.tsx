@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent, useState} from "react";
-import {Form, FormInput, Grid} from 'semantic-ui-react'
+import {Form, FormInput, Grid, Segment} from 'semantic-ui-react'
 import RealEstate from "./RealEstate";
 import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
@@ -30,7 +30,7 @@ export default function RealEstateEdit(props: Props) {
     }
 
     return (
-        <div className={"realEstate-edit"}>
+        <Segment>
             {realEstate._links === undefined ? <h1>Neue Liegenschaft</h1> : <h1>Liegenschaft Bearbeiten</h1>}
             <Form>
                 <Grid>
@@ -72,6 +72,6 @@ export default function RealEstateEdit(props: Props) {
                                 canDelete={realEstate._links.self !== undefined}/>
                 </Grid>
             </Form>
-        </div>
+        </Segment>
     );
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
-import {Checkbox, CheckboxProps, Form, Icon} from 'semantic-ui-react'
+import {Checkbox, CheckboxProps, Form, Icon, Segment} from 'semantic-ui-react'
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import Service from "../order/Service";
@@ -34,7 +34,7 @@ export default function ServiceEdit(props: Props) {
     }
 
     return (
-        <div className={"service-edit"}>
+        <Segment>
             <Form>
                 <Grid>
                     <Grid.Row>
@@ -104,6 +104,6 @@ export default function ServiceEdit(props: Props) {
                                 canDelete={service._links.self !== undefined}/>
                 </Grid>
             </Form>
-        </div>
+        </Segment>
     );
 }
