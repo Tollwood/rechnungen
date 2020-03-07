@@ -116,7 +116,13 @@ export default function StatisticOverview() {
                         </Statistic>
                         <Statistic>
                             <Statistic.Value>
-                                {type === "paidUi" ? totalOpenBills[0] && totalOpenBills[0].paid : totalOpenBills[0] && totalOpenBills[0].billed }
+                                {type === "paidUi" ? totalOpenBills[0] && totalOpenBills[0].paid.toLocaleString('de', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }) : totalOpenBills[0] && totalOpenBills[0].billed.toLocaleString('de', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }) }
                             </Statistic.Value>
                             <Statistic.Label>{type === "paidUi" ? "Gesamtumsatz": "offene Rechnugnen in EUR"}</Statistic.Label>
                         </Statistic>
