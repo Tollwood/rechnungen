@@ -176,11 +176,11 @@ export default function StatisticOverview() {
                                 >
                                     <CartesianGrid strokeDasharray="3 3"/>
                                     <XAxis dataKey="name"/>
-                                    <YAxis height={10000}/>
+                                    <YAxis/>
                                     <Tooltip/>
                                     <Legend/>
-                                    <Bar dataKey="billedUi" fill="#07355d" name={"Offener Betrag in Euro "}/>
                                     <Bar dataKey="paidUi" fill="#229ad6" name={"Umsatz in Euro"}/>
+                                    <Bar dataKey="billedUi" fill="#07355d" name={"Offener Betrag in Euro "}/>
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
