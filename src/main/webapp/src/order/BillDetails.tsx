@@ -2,11 +2,11 @@ import * as React from "react";
 import {ChangeEvent} from "react";
 import Order from "./Order";
 import {DateInput} from "semantic-ui-calendar-react";
-import {Form, Grid} from "semantic-ui-react";
+import {Checkbox, Form, Grid} from "semantic-ui-react";
 
 interface BillDetailsProps {
     order: Order
-    handleOrderChange: (name: string, value: string) => void
+    handleOrderChange: (name: string, value: any) => void
     errors: Map<string,string>
 }
 
@@ -63,9 +63,22 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                             />
                         </Form.Field>
                     </Grid.Column>
+                    <Grid.Column computer={5} tablet={5} mobile={8}>
+                        <Form.Field>
+                            <Checkbox toggle
+                            name={"stornieren"}
+                            label={"Rechnung stornieren"}
+                            checked={this.props.order.canceled}
+                            onChange={this.toggleCancel.bind(this)}/>
+                        </Form.Field>
+                    </Grid.Column>
                 </Grid.Row>
             </React.Fragment>
         );
+    }
+
+    toggleCancel(): void {
+        this.props.handleOrderChange('canceled', !this.props.order.canceled);
     }
 
     handleOrderChange(event: ChangeEvent<HTMLInputElement>) {

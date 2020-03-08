@@ -69,6 +69,9 @@ data class Order(
         val paymentRecievedDate: String? = null,
         val distance: Int? = 0,
 
+
+        val canceled: Boolean = false,
+
         @IndexedEmbedded
         @Embedded
         @AttributeOverrides(AttributeOverride(name="street", column = Column(name="real_estate_street")),

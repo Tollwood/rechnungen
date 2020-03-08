@@ -72,7 +72,7 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
 
                     <View style={styles.text}>
                         <View style={styles.orderRow}>
-                            <Text style={[styles.column3]}>RG. Nr.: {this.props.bill.billNumber}</Text>
+                            <Text style={[styles.column3]}>RG. Nr.: {this.props.bill.billNumber} {this.props.bill.order.canceled? "STORNO": null}</Text>
                             <Text style={[styles.column3]}>Auftrags-ID: {this.props.bill.order.orderId}</Text>
                             <Text style={[styles.column3]}>Monteur / AN: {this.props.bill.technician ? this.props.bill.technician.technicianId : ""}</Text>
                         </View>

@@ -18,6 +18,7 @@ export default class Order {
     secondAppointment?: string;
     smallOrder: boolean = false;
     includeKmFee: boolean = true;
+    canceled: boolean = false;
     status: OrderStatus = "ORDER_EDIT";
     prevStatus?: OrderStatus ;
     services: OrderItem[] = [];
