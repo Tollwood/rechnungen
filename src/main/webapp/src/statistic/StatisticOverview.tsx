@@ -15,18 +15,18 @@ export default function StatisticOverview() {
     const [totalOpenBills, setTotalOpenBills] = useState<Statistik[]>([]);
     const [orderStatistics, setOrderStatistics] = useState<OrderStatusStatistics>(StatisticService.getStatusStatistik([]));
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [type, setType] = useState<string>( "paidUi");
+    const [type, setType] = useState<string>( "paid");
 
     const options = [
         {
-            key: 'billedUi',
+            key: 'billed',
             text: 'Offene Rechnungen',
-            value: 'billedUi',
+            value: 'billed',
         },
         {
-            key: 'paidUi',
+            key: 'paid',
             text: 'Umsätze',
-            value: 'paidUi',
+            value: 'paid',
         }
     ];
 
@@ -110,13 +110,13 @@ export default function StatisticOverview() {
                     <Statistic.Group color={"blue"} size={"small"} widths={2} >
                         <Statistic>
                             <Statistic.Value>
-                                {type === "paidUi" ? totalOpenBills[0] && totalOpenBills[0].paidCount : totalOpenBills[0] && totalOpenBills[0].billedCount }
+                                {type === "paid" ? totalOpenBills[0] && totalOpenBills[0].paidCount : totalOpenBills[0] && totalOpenBills[0].billedCount }
                             </Statistic.Value>
-                            <Statistic.Label>{type === "paidUi" ? "abgeschloßene Aufträge": "offene Rechnugnen"}</Statistic.Label>
+                            <Statistic.Label>{type === "paid" ? "abgeschloßene Aufträge": "offene Rechnugnen"}</Statistic.Label>
                         </Statistic>
                         <Statistic>
                             <Statistic.Value>
-                                {type === "paidUi" ? totalOpenBills[0] && totalOpenBills[0].paid.toLocaleString('de', {
+                                {type === "paid" ? totalOpenBills[0] && totalOpenBills[0].paid.toLocaleString('de', {
                                     minimumFractionDigits: 2,
                                     maximumFractionDigits: 2
                                 }) : totalOpenBills[0] && totalOpenBills[0].billed.toLocaleString('de', {
@@ -124,7 +124,7 @@ export default function StatisticOverview() {
                                     maximumFractionDigits: 2
                                 }) }
                             </Statistic.Value>
-                            <Statistic.Label>{type === "paidUi" ? "Gesamtumsatz": "offene Rechnugnen in EUR"}</Statistic.Label>
+                            <Statistic.Label>{type === "paid" ? "Gesamtumsatz": "offene Rechnugnen in EUR"}</Statistic.Label>
                         </Statistic>
                     </Statistic.Group>
                 </Grid.Column>
@@ -144,7 +144,7 @@ export default function StatisticOverview() {
                                 <YAxis/>
                                 <Tooltip/>
                                 <Legend/>
-                                <Bar dataKey={type} fill="#229ad6" name={type === "paidUi" ? "Umsatz in EUR": "offene Rechnugnen in EUR"}/>
+                                <Bar dataKey={type} fill="#229ad6" name={type === "paid" ? "Umsatz in EUR": "offene Rechnugnen in EUR"}/>
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
