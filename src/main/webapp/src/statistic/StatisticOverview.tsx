@@ -19,14 +19,14 @@ export default function StatisticOverview() {
 
     const options = [
         {
-            key: 'billed',
-            text: 'Offene Rechnungen',
-            value: 'billed',
-        },
-        {
             key: 'paid',
             text: 'Umsätze',
             value: 'paid',
+        },
+        {
+            key: 'billed',
+            text: 'Offene Rechnungen',
+            value: 'billed',
         }
     ];
 

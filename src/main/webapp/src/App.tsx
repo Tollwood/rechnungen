@@ -44,12 +44,12 @@ class App extends Component<AppProps, AppState> {
                     <LoginModal onSuccess={() => this.onLogin()}/>
                     <Grid centered padded>
                         <Grid.Row centered>
-                            <Grid.Column computer={8} tablet={12} mobile={16}>
+                            <Grid.Column computer={12} tablet={12} mobile={16}>
                                 <AppHeader company={this.state.company}/>
                             </Grid.Column>
                         </Grid.Row>
                         <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent}/>
-                        <Grid.Column computer={8} tablet={12} mobile={16}>
+                        <Grid.Column computer={12} tablet={12} mobile={16}>
                             <div id={"content-container"}>
                                 {this.state.activeContent === ContentType.EMPLOYEE ? <EmployeeOverview/> : null}
                                 {this.state.activeContent === ContentType.ORDER ? <OrderOverview company={this.state.company}/> : null}

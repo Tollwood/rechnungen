@@ -33,7 +33,7 @@ export class Menu extends React.Component<Props, State> {
             return (
                 <React.Fragment>
                     <Grid.Row>
-                        <Grid.Column computer={8} tablet={12} mobile={16} textAlign={'center'}>
+                        <Grid.Column computer={12} tablet={12} mobile={16} textAlign={'center'}>
                             <div id={"menu-conainter"}>
                                 <Card.Group itemsPerRow={2}>
                                     {this.state.contents.map((content: Content) => <MenuCard key={content.type} content={content}
@@ -47,7 +47,7 @@ export class Menu extends React.Component<Props, State> {
         } else if (this.state.contents.find((content: Content) => this.props.activeContent === content.type)) {
             return (
                 <Grid.Row>
-                    <Grid.Column computer={8} tablet={12} mobile={16}>
+                    <Grid.Column computer={12} tablet={12} mobile={16}>
                         <h1>
                             <Icon name={this.getContent(this.props.activeContent).icon}/>
                             <span className={"menu-title"}>{this.getContent(this.props.activeContent).title}</span>
