@@ -22,10 +22,17 @@ export default class OrderService {
                 .then(onSuccess)
                 .catch(error => ErrorMapper.map(error, onError));
         } else {
+            orderToSave.services = [];
+            orderToSave.billItems = [];
             API.patch(order._links.self.href, orderToSave)
-                .then(result => result.data)
-                .then((data: any) => Object.assign(new Order(), data))
-                .then(onSuccess)
+                .then(()=>{
+                    orderToSave.services = order.services.map(value => { value.service  = value.service != ""? value._links.service.href :  value.service ;return value;});
+                    API.patch(order._links.self!.href, orderToSave)
+                        .then(result => result.data)
+                        .then((data: any) => Object.assign(new Order(), data))
+                        .then(onSuccess)
+                        .catch(error => ErrorMapper.map(error, onError));
+                })
                 .catch(error => ErrorMapper.map(error, onError));
         }
     }
