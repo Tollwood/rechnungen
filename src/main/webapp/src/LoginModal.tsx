@@ -1,7 +1,7 @@
 import * as React from "react";
 import API from "./API";
 import {JwtTokenInterceptor} from "./jwtTokenInterceptor";
-import {Button, Form, Grid, Label, Modal, Segment} from "semantic-ui-react";
+import {Button, Form, FormProps, Grid, Label, Modal, Segment} from "semantic-ui-react";
 
 interface LoginModalProps {
     onSuccess: () => void
@@ -29,6 +29,7 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
                     <h2 style={{textAlign: "center"}}>Wärmemessdienst Timm</h2>
                     <Segment raised>
                         {this.state.validationfailed ? this.renderError() : null}
+                        <Form onSubmit={this.doLogin.bind(this)}>
                         <Grid centered>
                             <Grid.Row/>
                             <Grid.Row>
@@ -61,9 +62,10 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
                             <Grid.Row>
                                 <Button
                                     name="login"
-                                    label={'Anmelden'} icon={'sign in'} labelPosition={"left"} primary onClick={this.doLogin.bind(this)}/>
+                                    label={'Anmelden'} icon={'sign in'} labelPosition={"left"} primary />
                             </Grid.Row>
                         </Grid>
+                        </Form>
                     </Segment>
                 </Modal.Content>
             </Modal>
@@ -75,7 +77,8 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
         this.setState({[name]: value, validationfailed:false})
     }
 
-    private doLogin() {
+    private doLogin(event: React.FormEvent<HTMLFormElement>, data: FormProps) {
+        event.preventDefault();
         API.post("/authenticate", {
             username: this.state.username,
             password: this.state.password
