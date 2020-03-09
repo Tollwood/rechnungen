@@ -62,7 +62,7 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
                             <Grid.Row>
                                 <Button
                                     name="login"
-                                    label={'Anmelden'} icon={'sign in'} labelPosition={"left"} primary />
+                                    content={'Anmelden'} icon={'sign in'} primary />
                             </Grid.Row>
                         </Grid>
                         </Form>
