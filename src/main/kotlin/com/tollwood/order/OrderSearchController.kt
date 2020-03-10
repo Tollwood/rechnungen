@@ -54,10 +54,11 @@ class OrderSearchController {
             val fullTextQuery = doSearch(fullTextEntityManager, queryBuilder.all().createQuery(), sort, page, size)
             return toPagedResponse(fullTextQuery, page, pagedResourcesAssembler)
         }
+        val cleanTerm = term!!.replace("/","",true)
 
         val finalQuery = BooleanQuery.Builder()
-        addSearchByTerm(term, queryBuilder, finalQuery)
-        addSearchLikeByTerm(term, queryBuilder, finalQuery)
+        addSearchByTerm(cleanTerm, queryBuilder, finalQuery)
+        addSearchLikeByTerm(cleanTerm, queryBuilder, finalQuery)
         addSearchByStatus(status, queryBuilder, finalQuery)
 
         val fullTextQuery = doSearch(fullTextEntityManager, finalQuery.build(), sort, page, size)
