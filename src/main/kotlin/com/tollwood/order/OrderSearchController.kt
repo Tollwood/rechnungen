@@ -129,7 +129,7 @@ class OrderSearchController {
                     .withPrefixLength(0)
                     .onFields("name", "realEstate.address.city", "realEstate.address.street", "realEstateAddress.city", "realEstateAddress.street")
                     .matching(t)
-                    .createQuery(), Occur.MUST)
+                    .createQuery(), Occur.SHOULD)
         }
     }
 }
