@@ -57,16 +57,31 @@ class OrderSearchController {
 
         val finalQuery = BooleanQuery.Builder()
         addSearchByTerm(term, queryBuilder, finalQuery)
+        addSearchLikeByTerm(term, queryBuilder, finalQuery)
         addSearchByStatus(status, queryBuilder, finalQuery)
 
         val fullTextQuery = doSearch(fullTextEntityManager, finalQuery.build(), sort, page, size)
         return toPagedResponse(fullTextQuery, page, pagedResourcesAssembler)
     }
 
-    private fun toPagedResponse(fullTextQuery: FullTextQuery, page: Int,pagedResourcesAssembler: PagedResourcesAssembler<Order>):
+    private fun addSearchLikeByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
+        if (term == null) return
+        val terms = term.split(" ")
+        for (t in terms) {
+            if (t.isBlank()) continue
+            finalQuery.add(queryBuilder
+                    .keyword()
+                    .wildcard()
+                    .onFields("billNo", "orderId", "realEstateAddress.zipCode", "realEstate.address.zipCode")
+                    .matching(t + "*")
+                    .createQuery(), Occur.SHOULD)
+        }
+    }
+
+    private fun toPagedResponse(fullTextQuery: FullTextQuery, page: Int, pagedResourcesAssembler: PagedResourcesAssembler<Order>):
             ResponseEntity<PagedModel<EntityModel<Order>>> {
 
-        val results = fullTextQuery.resultList  as List<Order>
+        val results = fullTextQuery.resultList as List<Order>
         val pageImpl = PageImpl(results, PageRequest.of(page, fullTextQuery.maxResults),
                 fullTextQuery.resultSize.toLong())
         return ResponseEntity(pagedResourcesAssembler.toModel(pageImpl, orderEntityModelAssembler), HttpStatus.OK)
@@ -112,8 +127,7 @@ class OrderSearchController {
                     .fuzzy()
                     .withEditDistanceUpTo(2)
                     .withPrefixLength(0)
-                    .onFields("orderId", "name", "billNo", "realEstate.address.city", "realEstate.address.street",
-                            "realEstate.address.zipCode","realEstateAddress.city", "realEstateAddress.street", "realEstateAddress.zipCode")
+                    .onFields("name", "realEstate.address.city", "realEstate.address.street", "realEstateAddress.city", "realEstateAddress.street")
                     .matching(t)
                     .createQuery(), Occur.MUST)
         }
