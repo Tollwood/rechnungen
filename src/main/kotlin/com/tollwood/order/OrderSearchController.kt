@@ -73,6 +73,7 @@ class OrderSearchController {
                     .keyword()
                     .wildcard()
                     .onFields("billNo", "orderId", "realEstateAddress.zipCode", "realEstate.address.zipCode")
+                    .boostedTo(2f)
                     .matching(t + "*")
                     .createQuery(), Occur.SHOULD)
         }
