@@ -89,6 +89,7 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                                 onClick={() => PageService.sort('orderId', this.state.page, this.sortAndPage.bind(this))}
                             >Auftrags-Id</Table.HeaderCell>
                             <Table.HeaderCell>Liegenschaft</Table.HeaderCell>
+                            <Table.HeaderCell>Adresse</Table.HeaderCell>
                             <Table.HeaderCell>Name</Table.HeaderCell>
                             <Table.HeaderCell>Nettoumsatz</Table.HeaderCell>
                             <Table.HeaderCell>Bruttoumsatz</Table.HeaderCell>
@@ -116,6 +117,10 @@ export default class OrderList extends React.Component<OrderListProps, State> {
             <Table.Cell>
                 <div>
                     <div>{order.realEstate!!.name}</div>
+                </div>
+            </Table.Cell>
+            <Table.Cell>
+                <div>
                     <div>{order.getRealEstateAddress().street} {order.getRealEstateAddress().houseNumber}</div>
                     <div>{order.getRealEstateAddress().zipCode} {order.getRealEstateAddress().city}</div>
                 </div>
@@ -146,6 +151,27 @@ export default class OrderList extends React.Component<OrderListProps, State> {
 
     private placeHolderRow() {
         return <Table.Row>
+            <Table.Cell>
+                <Placeholder>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line/>
+                    </Placeholder.Paragraph>
+                </Placeholder>
+            </Table.Cell>
+            <Table.Cell>
+                <Placeholder>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line/>
+                    </Placeholder.Paragraph>
+                </Placeholder>
+            </Table.Cell>
+            <Table.Cell>
+                <Placeholder>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line/>
+                    </Placeholder.Paragraph>
+                </Placeholder>
+            </Table.Cell>
             <Table.Cell>
                 <Placeholder>
                     <Placeholder.Paragraph>

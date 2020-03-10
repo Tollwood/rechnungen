@@ -128,7 +128,8 @@ class OrderSearchController {
                     .fuzzy()
                     .withEditDistanceUpTo(2)
                     .withPrefixLength(0)
-                    .onFields("name", "realEstate.address.city", "realEstate.address.street", "realEstateAddress.city", "realEstateAddress.street")
+                    .onFields("name", "realEstate.address.city", "realEstate.address.street", "realEstateAddress.city",
+                            "realEstateAddress.street","realEstate.name")
                     .matching(t)
                     .createQuery(), Occur.SHOULD)
         }
