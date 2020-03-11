@@ -59,6 +59,7 @@ class OrderSearchController {
         val finalQuery = BooleanQuery.Builder()
         addSearchByTerm(cleanTerm, queryBuilder, finalQuery)
         addSearchLikeByTerm(cleanTerm, queryBuilder, finalQuery)
+        addExactSearchByTerm(cleanTerm, queryBuilder, finalQuery)
         addSearchByStatus(status, queryBuilder, finalQuery)
 
         val fullTextQuery = doSearch(fullTextEntityManager, finalQuery.build(), sort, page, size)
@@ -73,9 +74,22 @@ class OrderSearchController {
             finalQuery.add(queryBuilder
                     .keyword()
                     .wildcard()
-                    .onFields("billNo", "orderId", "realEstateAddress.zipCode", "realEstate.address.zipCode")
-                    .boostedTo(2f)
-                    .matching(t + "*")
+                    .onFields("billNo", "orderId")
+                    .boostedTo(6f)
+                    .matching("*" + t + "*")
+                    .createQuery(), Occur.SHOULD)
+        }
+    }
+
+    private fun addExactSearchByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
+        if (term == null) return
+        val terms = term.split(" ")
+        for (t in terms) {
+            if (t.isBlank()) continue
+            finalQuery.add(queryBuilder
+                    .keyword()
+                    .onFields( "realEstateAddress.zipCode", "realEstate.address.zipCode")
+                    .matching(t )
                     .createQuery(), Occur.SHOULD)
         }
     }
