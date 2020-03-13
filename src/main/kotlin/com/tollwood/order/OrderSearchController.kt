@@ -58,7 +58,7 @@ class OrderSearchController {
 
         val finalQuery = BooleanQuery.Builder()
         addSearchByTerm(cleanTerm, queryBuilder, finalQuery)
-        addSearchLikeByTerm(cleanTerm, queryBuilder, finalQuery)
+        //addSearchLikeByTerm(cleanTerm, queryBuilder, finalQuery)
         addExactSearchByTerm(cleanTerm, queryBuilder, finalQuery)
         addSearchByStatus(status, queryBuilder, finalQuery)
 
@@ -66,7 +66,7 @@ class OrderSearchController {
         return toPagedResponse(fullTextQuery, page, pagedResourcesAssembler)
     }
 
-    private fun addSearchLikeByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
+    /*private fun addSearchLikeByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
         if (term == null) return
         val terms = term.split(" ")
         for (t in terms) {
@@ -79,7 +79,7 @@ class OrderSearchController {
                     .matching("*" + t + "*")
                     .createQuery(), Occur.SHOULD)
         }
-    }
+    }*/
 
     private fun addExactSearchByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
         if (term == null) return
@@ -88,7 +88,7 @@ class OrderSearchController {
             if (t.isBlank()) continue
             finalQuery.add(queryBuilder
                     .keyword()
-                    .onFields( "realEstateAddress.zipCode", "realEstate.address.zipCode")
+                    .onFields( "realEstateAddress.zipCode", "realEstate.address.zipCode","billNo", "orderId")
                     .matching(t )
                     .createQuery(), Occur.SHOULD)
         }
