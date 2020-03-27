@@ -15,7 +15,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
     render() {
         return <React.Fragment>
             <Grid.Row>
-                <Grid.Column width={12}>
+                <Grid.Column width={12} textAlign={"left"}>
                     <Form.Field>
                         <label>Straße</label>
                         <Form.Input id="street"
@@ -31,7 +31,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                         />
                     </Form.Field>
                 </Grid.Column>
-                <Grid.Column width={4}>
+                <Grid.Column width={4} textAlign={"left"}>
                     <Form.Field>
                         <label>Nr.</label>
                         <Form.Input id="houseNumber"
@@ -49,7 +49,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                 </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-                <Grid.Column width={4}>
+                <Grid.Column width={4} textAlign={"left"}>
                     <Form.Field>
                         <label>PLZ</label>
                         <Form.Input id="zipCode"
@@ -65,7 +65,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                         />
                     </Form.Field>
                 </Grid.Column>
-                <Grid.Column width={12}>
+                <Grid.Column width={12} textAlign={"left"}>
                     <Form.Field>
                         <label>Stadt</label>
                         <Form.Input id="city"
