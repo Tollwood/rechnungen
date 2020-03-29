@@ -58,7 +58,7 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
                         <h2 style={{textAlign: "center"}}>Liegenschaft anpassen</h2>
                         <Segment raised>
                             <Grid >
-                                <AddressInput address={this.props.order.realEstateAddress} handleAddressChange={this.props.handleAddressChange.bind(this)} errors={this.props.errors}/>
+                                <AddressInput readonly={false} address={this.props.order.realEstateAddress} handleAddressChange={this.props.handleAddressChange.bind(this)} errors={this.props.errors}/>
                             </Grid>
                         </Segment>
                     </Modal.Content>

@@ -10,5 +10,10 @@ export default class Company {
     phone: string = "";
     email: string = "";
     bankDetails: BankDetails = new BankDetails();
+    realEstateSupport: boolean = false;
+    employeeSupport: boolean = false;
+    statisticSupport: boolean = false;
+    billingSupport: boolean = false;
+    customerSupport: boolean = false;
     _links: {self?: Link} = {};
 }

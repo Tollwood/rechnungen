@@ -8,8 +8,10 @@ import OrderSearch from "./OrderSearch";
 import API from "../API";
 import {debounce} from "ts-debounce";
 import Search from "./Search";
+import Company from "../employees/Company";
 
 interface OrderListProps {
+    company: Company,
     onAdd: () => void,
     onSelect: (selectedItem: Link) => void,
 }
@@ -88,15 +90,15 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                                 sorted={this.state.page.sort === 'orderId' ? this.state.page.direction : undefined}
                                 onClick={() => PageService.sort('orderId', this.state.page, this.sortAndPage.bind(this))}
                             >Auftrags-Id</Table.HeaderCell>
-                            <Table.HeaderCell>Liegenschaft</Table.HeaderCell>
-                            <Table.HeaderCell>Adresse</Table.HeaderCell>
-                            <Table.HeaderCell>Name</Table.HeaderCell>
-                            <Table.HeaderCell>Nettoumsatz</Table.HeaderCell>
-                            <Table.HeaderCell>Bruttoumsatz</Table.HeaderCell>
-                            <Table.HeaderCell
+                            {this.props.company.realEstateSupport && <Table.HeaderCell>Liegenschaft</Table.HeaderCell>}
+                            {this.props.company.realEstateSupport && <Table.HeaderCell>Adresse</Table.HeaderCell> }
+                            {this.props.company.realEstateSupport && <Table.HeaderCell>Name</Table.HeaderCell> }
+                            {this.props.company.statisticSupport && <Table.HeaderCell>Nettoumsatz</Table.HeaderCell> }
+                            {this.props.company.statisticSupport && <Table.HeaderCell>Bruttoumsatz</Table.HeaderCell> }
+                            {this.props.company.billingSupport && <Table.HeaderCell
                                 sorted={this.state.page.sort === 'billNo' ? this.state.page.direction : undefined}
                                 onClick={() => PageService.sort('billNo', this.state.page, this.sortAndPage.bind(this))}
-                            >RG-Nummer</Table.HeaderCell>
+                            >RG-Nummer</Table.HeaderCell>}
                             <Table.HeaderCell
                                 sorted={this.state.page.sort === 'status' ? this.state.page.direction : undefined}
                                 onClick={() => PageService.sort('status', this.state.page, this.sortAndPage.bind(this))}
@@ -114,27 +116,30 @@ export default class OrderList extends React.Component<OrderListProps, State> {
     private renderRow(order: OrderSearch) {
         return <Table.Row key={order.orderId} onClick={this.props.onSelect.bind(this, order._links.self!)}>
             <Table.Cell>{order.orderId}</Table.Cell>
-            <Table.Cell>
+            {this.props.company.realEstateSupport && <Table.Cell>
                 <div>
                     <div>{order.realEstate!!.name}</div>
                 </div>
-            </Table.Cell>
+            </Table.Cell>}
+            {this.props.company.realEstateSupport &&
             <Table.Cell>
                 <div>
                     <div>{order.getRealEstateAddress().street} {order.getRealEstateAddress().houseNumber}</div>
                     <div>{order.getRealEstateAddress().zipCode} {order.getRealEstateAddress().city}</div>
                 </div>
-            </Table.Cell>
-            <Table.Cell>{order.name ? order.name : "-"}</Table.Cell>
+            </Table.Cell> }
+            {this.props.company.realEstateSupport && <Table.Cell>{order.name ? order.name : "-"}</Table.Cell>}
+            {this.props.company.statisticSupport &&
             <Table.Cell>{order.sum.toLocaleString('de', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
-            })}</Table.Cell>
+            })}</Table.Cell>}
+            {this.props.company.statisticSupport &&
             <Table.Cell>{(order.sum * 1.19).toLocaleString('de', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
-            })}</Table.Cell>
-            <Table.Cell>{order.billNo ? order.billNo : "-"}</Table.Cell>
+            })}</Table.Cell> }
+            {this.props.company.billingSupport && <Table.Cell>{order.billNo ? order.billNo : "-"}</Table.Cell>}
             <Table.Cell><Icon name={Helper.getStatusIcon(order.status)}
                               color={order.status === "PAYMENT_RECIEVED" ? "green" : "grey"}/> {Helper.getStatusName(order.status)}
             </Table.Cell>

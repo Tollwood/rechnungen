@@ -32,7 +32,7 @@ export default class RealEstateService {
         } else {
             API.patch(realEstate._links.self.href, realEstate)
                 .then(result => result.data)
-                .then((data: any) => Object.assign(new Order(), data))
+                .then((data: any) => Object.assign(new Order(""), data))
                 .then(onSuccess)
                 .catch(error => ErrorMapper.map(error, onError));
         }

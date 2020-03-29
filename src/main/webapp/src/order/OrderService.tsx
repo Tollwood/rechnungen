@@ -1,5 +1,4 @@
 import Order from "./Order";
-import Helper from "../common/Helper";
 import API from "../API";
 import ErrorMapper from "../ErrorMapper";
 import RealEstate from "../realestate/RealEstate";
@@ -7,29 +6,23 @@ import Link from "../common/Links";
 
 export default class OrderService {
 
-    public static save(order: Order, realEstates: RealEstate[], continueToNextStep: boolean, onSuccess: (order: Order) => void, onError:(errors: Map<string,string>)=>void): void {
-        let orderToSave: Order = Object.assign({}, order);
-        let currentRealEstate = this.getCurrentRealEstate(order, realEstates);
-        orderToSave.distance = order.distance === undefined && currentRealEstate !== undefined ? currentRealEstate.distance : order.distance;
-        if (continueToNextStep) {
-            orderToSave.prevStatus = orderToSave.status;
-            orderToSave.status = Helper.nextStatus(order.status);
-        }
+    public static save(order: Order, onSuccess: (order: Order) => void, onError: (errors: Map<string, string>) => void): void {
+
         if (order._links.self === undefined) {
-            API.post("/api/order", orderToSave)
+            API.post("/api/order", order)
                 .then(result => result.data)
-                .then((data: any) => Object.assign(new Order(), data))
+                .then((data: any) => Object.assign(new Order(order.company), data))
                 .then(onSuccess)
                 .catch(error => ErrorMapper.map(error, onError));
         } else {
-            orderToSave.services = [];
-            orderToSave.billItems = [];
-            API.patch(order._links.self.href, orderToSave)
-                .then(()=>{
-                    orderToSave.services = order.services.map(value => { value.service  = value.service != ""? value._links.service.href :  value.service ;return value;});
-                    API.patch(order._links.self!.href, orderToSave)
+            order.services = [];
+            order.billItems = [];
+            API.patch(order._links.self.href, order)
+                .then(() => {
+                    order.services = order.services.map(value => { value.service  = value.service != ""? value._links.service.href :  value.service ;return value;});
+                    API.patch(order._links.self!.href, order)
                         .then(result => result.data)
-                        .then((data: any) => Object.assign(new Order(), data))
+                        .then((data: any) => Object.assign(new Order(order.company), data))
                         .then(onSuccess)
                         .catch(error => ErrorMapper.map(error, onError));
                 })
@@ -50,7 +43,7 @@ export default class OrderService {
     }
 
     public static getOrdersSync(): Promise<Order[]> {
-         return API.get("api/order")
+        return API.get("api/order")
             .then(res => res.data._embedded === undefined ? [] : res.data._embedded.order)
     }
 }

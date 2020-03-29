@@ -128,7 +128,7 @@ export default function EmployeeEdit(props: Props) {
                             <h4>Adresse</h4>
                         </Grid.Column>
                     </Grid.Row>
-                    <AddressInput address={employee.address} handleAddressChange={handleAddressChange}
+                    <AddressInput  readonly={false} address={employee.address} handleAddressChange={handleAddressChange}
                                   errors={ErrorMapper.childError(errors)}/>
                     <Grid.Row>
                         <Grid.Column>

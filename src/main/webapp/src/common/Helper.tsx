@@ -1,12 +1,15 @@
 import {OrderStatus} from "../order/OrderStatus";
 import {SemanticICONS} from "semantic-ui-react/dist/commonjs/generic";
+import Company from "../employees/Company";
 
 export default class Helper {
     public static isEmpty(value?: string) {
         return value === null || value === undefined || value.length === 0  || value === '';
     }
 
-    public static  nextStatus(status:OrderStatus): OrderStatus {
+    public static  nextStatus(status:OrderStatus, company: Company): OrderStatus {
+        if(!company.billingSupport && status === 'ORDER_EXECUTE' ) return 'PAYMENT_RECIEVED';
+
         switch (status) {
             case 'ORDER_EDIT': return 'ORDER_EXECUTE';
             case 'ORDER_EXECUTE': return 'ORDER_BILL';

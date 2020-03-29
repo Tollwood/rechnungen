@@ -1,12 +1,11 @@
 import * as React from "react";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import {Checkbox, CheckboxProps, Form, Icon, Segment} from 'semantic-ui-react'
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import Service from "../order/Service";
 import ServiceService from "./ServiceService";
 import ErrorMapper from "../ErrorMapper";
-import {ChangeEvent} from "react";
 
 interface Props {
     onSave: () => void;
@@ -24,7 +23,7 @@ export default function ServiceEdit(props: Props) {
     function handleSelectable(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) {
 
         // @ts-ignore
-        setService({...service, selectable : data.checked});
+        setService({...service, selectable: data.checked});
         setErrors(ErrorMapper.removeError(errors, "selectable"));
     }
 
@@ -76,6 +75,21 @@ export default function ServiceEdit(props: Props) {
                                     onChange={handleChange}
                                     icon={<Icon name='eur'/>}
                                     error={errors.get('price') ? {content: errors.get('price')} : null}
+                                />
+                            </Form.Field>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column width={4}>
+                            <Form.Field>
+                                <label>Beschreibung</label>
+                                <Form.Input
+                                    id="description"
+                                    placeholder='Beschreibung'
+                                    value={service.description}
+                                    name='description'
+                                    onChange={handleChange}
+                                    error={errors.get('description') ? {content: errors.get('description')} : null}
                                 />
                             </Form.Field>
                         </Grid.Column>

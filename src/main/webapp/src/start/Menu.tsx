@@ -3,12 +3,14 @@ import {ContentType} from "./ContentType";
 import {Content} from "./Content";
 import {MenuCard} from "./MenuCard";
 import {Card, Grid, Icon} from "semantic-ui-react";
+import Company from "../employees/Company";
 
 interface State {
     contents: Content[]
 }
 
 interface Props {
+    company: Company,
     activeContent: ContentType,
     onMenuChanges: (content: ContentType) => void
 }
@@ -17,14 +19,22 @@ export class Menu extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        let contents: Content[] = [];
+
+        contents.push(new Content(ContentType.ORDER, "Aufträge", "unordered list", "order-overview-card"));
+
+        if(this.props.company.employeeSupport) {
+            contents.push(new Content(ContentType.EMPLOYEE, "Mitarbeiter", "address card", "employee-overview-card"));
+        }
+        if(this.props.company.realEstateSupport){
+            contents.push(new Content(ContentType.REAL_ESTATE, "Liegenschaften", "home", "realEstate-overview-card"));
+        }
+        contents.push(new Content(ContentType.SERVICES, "Dienstleistungen", "sign language", "service-overview-card"));
+        if(this.props.company.statisticSupport) {
+            contents.push(new Content(ContentType.STATISTICS, "Statistik", "chart line", "dashboard-overview-card"));
+        }
         this.state = {
-            contents: [
-                new Content(ContentType.ORDER, "Aufträge", "unordered list", "order-overview-card"),
-                new Content(ContentType.EMPLOYEE, "Mitarbeiter", "address card", "employee-overview-card"),
-                new Content(ContentType.REAL_ESTATE, "Liegenschaften", "home", "realEstate-overview-card"),
-                new Content(ContentType.SERVICES, "Dienstleistungen", "sign language", "service-overview-card"),
-                new Content(ContentType.STATISTICS, "Statistik", "chart line", "dashboard-overview-card"),
-            ]
+            contents: contents
         }
     }
 

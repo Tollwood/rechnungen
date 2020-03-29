@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.validation.Errors
 import org.springframework.validation.Validator
+import java.util.*
 
 
 @Component("beforeSaveOrderValidtor")
@@ -26,23 +27,35 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
 
     override fun validate(obj: Any, errors: Errors) {
         val order = obj as Order
+        if(order.orderId == null){
+            order.orderId = order.company.billNo.toString()
+            order.company.billNo = order.company.billNo + 1
+        }
+
         notEmpty(order.orderId, "orderId", errors);
         alreadyExists(orderResource.findByOrderId(order.orderId), order.id, "orderId", order.orderId,errors)
-        notEmpty(order.realEstate, "realEstate", errors)
-        notEmpty(order.technician, "technician", errors)
+
+        if(order.company.realEstateSupport){
+            notEmpty(order.realEstate, "realEstate", errors)
+        }
+        if(order.company.employeeSupport){
+            notEmpty(order.technician, "technician", errors)
+        }
 
         if (shouldValidate(ORDER_EXECUTE, order)) {
             notEmpty(order.firstAppointment, "firstAppointment", errors)
             notNull(order.distance, "distance", errors)
         }
 
-        if (shouldValidate(ORDER_BILL, order)) {
-            notEmpty(order.billNo, "billNo", errors)
-            notDefault(order.billNo, "billNo", errors)
-            notEmpty(order.billDate, "billDate", errors)
-        }
-        if(order.billNo != null && !"".equals(order.billNo)){
-            alreadyExists(orderResource.findByBillNo(order.billNo), order.id, "billNo", order.billNo, errors)
+        if(order.company.billingSupport) {
+            if (shouldValidate(ORDER_BILL, order)) {
+                notEmpty(order.billNo, "billNo", errors)
+                notDefault(order.billNo, "billNo", errors)
+                notEmpty(order.billDate, "billDate", errors)
+            }
+            if(order.billNo != null && !"".equals(order.billNo)){
+                alreadyExists(orderResource.findByBillNo(order.billNo), order.id, "billNo", order.billNo, errors)
+            }
         }
 
         if (shouldValidate(ORDER_BILL_RECIEVED, order)) {

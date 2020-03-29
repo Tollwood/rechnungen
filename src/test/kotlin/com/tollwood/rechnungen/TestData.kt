@@ -1,10 +1,12 @@
 package com.tollwood.rechnungen
 
+import com.tollwood.CompanyResource
 import com.tollwood.EmployeeResource
 import com.tollwood.order.OrderResource
 import com.tollwood.realestate.RealestateResource
 import com.tollwood.service.ServiceResource
 import com.tollwood.jpa.Address
+import com.tollwood.jpa.Company
 import com.tollwood.order.jpa.Order
 import com.tollwood.realestate.jpa.RealEstate
 import com.tollwood.jpa.ServiceOrder
@@ -24,6 +26,9 @@ class TestData {
     lateinit var realestateResource: RealestateResource
 
     @Autowired
+    lateinit var companyResource: CompanyResource
+
+    @Autowired
     lateinit var serviceResource: ServiceResource
 
     fun givenOrderPersistedWithRealEstateAndEmployee(order: Order): Order {
@@ -34,13 +39,15 @@ class TestData {
     }
 
     fun givenOrder(orderId: String): Order {
-        return Order(orderId = orderId, technician = employeeResource.findAll().first(), realEstate = realestateResource.findAll().first())
+        return Order(orderId = orderId, technician = employeeResource.findAll().first(), realEstate = realestateResource.findAll().first
+        (), company = companyResource.getCurrent())
     }
 
     fun givenOrderWithBill(orderId: String): Order {
         val technician = employeeResource.findAll().first()
         val realEstate = realestateResource.findAll().first()
-        return Order(orderId = orderId, technician = technician, realEstate = realEstate, billNo = orderId + "-bill")
+        return Order(orderId = orderId, technician = technician, realEstate = realEstate, billNo = orderId + "-bill",company
+        = companyResource.getCurrent())
     }
 
     fun givenRealEstatePersisted(): RealEstate {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, DropdownProps, Form, Grid, Segment} from 'semantic-ui-react'
+import {Button, DropdownProps, Form, Grid, Segment, Container} from 'semantic-ui-react'
 import Order from "./Order";
 import Employee from "../employees/Employee";
 import OrderItem from "./OrderItem";
@@ -25,6 +25,7 @@ import RealEstateService from "../realestate/RealEstateService";
 import ServiceService from "../services/ServiceService";
 import EmployeeService from "../employees/EmployeeService";
 import UnsavedChangesModal from "../UnsavedChangesModal";
+import CustomerDetails from "../customer/CustomerDetails";
 
 interface Props {
     onSave: () => void;
@@ -49,7 +50,7 @@ export default class OrderEdit extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        let order = new Order();
+        let order = new Order(this.props.company._links.self!.href);
         this.state = {
             order: order,
             initialState: order,
@@ -81,63 +82,86 @@ export default class OrderEdit extends React.Component<Props, State> {
 
     render() {
         return (
-            <Segment>
+            <Container text>
                 <Form autoComplete={"off"}>
                     <Grid>
-                        <OrderStatusSteps status={this.state.order.status}
-                                          statusChanged={(status: OrderStatus) => this.handleOrderChange('status', status)}/>
+                        <OrderStatusSteps
+                            company={this.props.company}
+                            status={this.state.order.status}
+                            statusChanged={(status: OrderStatus) => this.handleOrderChange('status', status)}/>
                         <OrderBaseProperties order={this.state.order}
+                                             company={this.props.company}
                                              selectedTechnician={this.getCurrentTechnician()}
                                              selectedRealEstate={OrderService.getCurrentRealEstate(this.state.order, this.state.realEstates)}
                                              handleOrderChange={this.handleOrderChange.bind(this)}
                                              realEstates={this.state.realEstates} technicians={this.state.technicians}
                                              readOnly={this.state.order.status !== 'ORDER_EDIT'}
                                              errors={this.state.errors}/>
-
-                        <OrderAppointments handleOrderChange={this.handleOrderChange.bind(this)}
-                                           order={this.state.order}
-                                           errors={this.state.errors}/>
+                        {this.props.company.customerSupport &&
+                            <Grid.Row>
+                                <Grid.Column width={16}>
+                                    <Form.Field>
+                                        <label>Kunde</label>
+                                            <CustomerDetails  readonly={this.state.order.status !== 'ORDER_EDIT'} customer={this.state.order.customer} onChange={this.handleOrderChange.bind(this)} errors={this.state.errors}/>
+                                    </Form.Field>
+                                </Grid.Column>
+                            </Grid.Row>
+                        }
+                        <OrderAppointments
+                            company={this.props.company}
+                            handleOrderChange={this.handleOrderChange.bind(this)}
+                            order={this.state.order}
+                            errors={this.state.errors}/>
                         {this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE' ?
                             <ListOrderServices services={this.state.services}
                                                orderServices={this.state.order.services ? this.state.order.services : []}
                                                onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
                             : null}
+                        {this.props.company.realEstateSupport &&
                         <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)}
                                           order={this.state.order}
                                           errors={this.state.errors}/>
-                        {this.state.order.status === 'ORDER_BILL' ?
-                            <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}
-                                         errors={this.state.errors}/> : null}
+                        }
+                        {this.state.order.status === 'ORDER_BILL' &&
+                        <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}
+                                     errors={this.state.errors}/>}
+                        {this.props.company.billingSupport &&
                         <BillButton company={this.props.company} order={this.state.order} services={this.state.services}
                                     technician={this.getCurrentTechnician()}
                                     realEstate={OrderService.getCurrentRealEstate(this.state.order, this.state.realEstates)}/>
-                        <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}
+                        }
+                        {this.props.company.billingSupport &&
+                        <PaymentRecieved order={this.state.order}
+                                         handleOrderChange={this.handleOrderChange.bind(this)}
                                          errors={this.state.errors}/>
+                        }
                         <Grid.Row centered>
                             <Grid.Column width={5} floated='left'>
-                                {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null :
-                                    <OrderAddButton order={this.state.order} realEstates={this.state.realEstates}
-                                                    onSuccess={this.onSuccessSave.bind(this)}
-                                                    onError={(errors: Map<string, string>) => {
-                                                        this.setState({errors: errors})
-                                                    }}
+                                {this.state.order.status === Helper.nextStatus(this.state.order.status, this.props.company) ? null :
+                                    <OrderAddButton
+                                        company={this.props.company}
+                                        order={this.state.order} realEstates={this.state.realEstates}
+                                        onSuccess={this.onSuccessSave.bind(this)}
+                                        onError={(errors: Map<string, string>) => {
+                                            this.setState({errors: errors})
+                                        }}
                                     />}
                             </Grid.Column>
                             <Grid.Column width={5}>
                                 <Button className={"cancel-bttn"} content='Abbrechen' icon='cancel' labelPosition='left'
-                                        onClick={()=>{
-                                            if(this.state.initialState !== this.state.order){
-                                                this.setState({showUnsavedChangesModal:true});
-                                            }else {
+                                        onClick={() => {
+                                            if (this.state.initialState !== this.state.order) {
+                                                this.setState({showUnsavedChangesModal: true});
+                                            } else {
                                                 this.props.onCancelEdit();
                                             }
                                         }}/>
                             </Grid.Column>
                             <Grid.Column width={5} floated='right'>
                                 {(this.state.order._links.self !== undefined && this.state.order.status !== "PAYMENT_RECIEVED") &&
-                                    <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash'
-                                            labelPosition='left'
-                                            onClick={() => this.setState({showDeleteModal: true})}/>
+                                <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash'
+                                        labelPosition='left'
+                                        onClick={() => this.setState({showDeleteModal: true})}/>
                                 }
                             </Grid.Column>
                         </Grid.Row>
@@ -155,7 +179,7 @@ export default class OrderEdit extends React.Component<Props, State> {
                                      onSuccess={this.props.onCancelEdit}
                                      onClose={() => this.setState({showUnsavedChangesModal: false})}
                 />
-            </Segment>
+            </Container>
         );
     }
 

@@ -3,6 +3,7 @@ import Link from "../common/Links";
 import {OrderStatus} from "./OrderStatus";
 import BillItem from "../billing/BillItem";
 import {Address} from "../common/Address";
+import Customer from "../customer/Customer";
 
 export default class Order {
 
@@ -13,7 +14,7 @@ export default class Order {
     phoneNumber?: string;
     technician?: string;
     realEstate?: string;
-    distance?: number;
+    distance: number = 0;
     firstAppointment?: string;
     secondAppointment?: string;
     smallOrder: boolean = false;
@@ -27,6 +28,14 @@ export default class Order {
     billNo: string = '';
     paymentRecievedDate: string = '';
     sum: number = 0;
+    company: String;
+    customer: Customer = new Customer();
     realEstateAddress: Address= new Address();
     _links: {self?: Link, technician?: Link, realEstate?: Link} = {};
+
+    constructor(company: String) {
+        this.company = company;
+
+    }
+
 }

@@ -3,8 +3,10 @@ import {Form, Grid} from 'semantic-ui-react'
 import Order from "./Order";
 import {DateInput} from "semantic-ui-calendar-react";
 import Helper from "../common/Helper";
+import Company from "../employees/Company";
 
 interface OrderEditProps {
+    company: Company
     handleOrderChange: (name: string, value: any) => void
     order: Order;
     errors: Map<string,string>
@@ -42,6 +44,7 @@ export default class OrderAppointments extends React.Component<OrderEditProps, {
                         />
                     </Form.Field>
                 </Grid.Column>
+                {this.props.company.realEstateSupport &&
                 <Grid.Column computer={8} tablet={8} mobile={16}>
                     <Form.Field>
                         <label>Zweiter Termin</label>
@@ -57,6 +60,7 @@ export default class OrderAppointments extends React.Component<OrderEditProps, {
                         />
                     </Form.Field>
                 </Grid.Column>
+                }
             </Grid.Row>
         );
     }

@@ -20,10 +20,13 @@ data class Order(
         @GeneratedValue(strategy = GenerationType.AUTO)
         override val id: Long? = null,
 
+        @ManyToOne
+        val company : Company,
+
         @Column(unique = true)
         @Field
         @SortableField
-        val orderId: String?,
+        var orderId: String?,
 
         @ManyToOne
         @JoinColumn(foreignKey = ForeignKey(name = "ORDER_REAL_ESTATE_FK"))
@@ -78,7 +81,19 @@ data class Order(
                 AttributeOverride(name="houseNumber", column = Column(name="real_estate_house_number")),
                 AttributeOverride(name="zipCode", column = Column(name="real_estate_zip_code")),
                 AttributeOverride(name="city", column = Column(name="real_estate_city")))
-        val realEstateAddress: Address? = null
+        val realEstateAddress: Address? = null,
+
+        @Embedded
+        @AttributeOverrides(
+                AttributeOverride(name="salutation", column = Column(name="customer_salutation")),
+                AttributeOverride(name="firstName", column = Column(name="customer_firstname")),
+                AttributeOverride(name="lastName", column = Column(name="customer_lastname")),
+                AttributeOverride(name="phoneNumber", column = Column(name="customer_phonenumber")),
+                AttributeOverride(name="address.street", column = Column(name="customer_street")),
+                AttributeOverride(name="address.houseNumber", column = Column(name="customer_house_number")),
+                AttributeOverride(name="address.zipCode", column = Column(name="customer_zip_code")),
+                AttributeOverride(name="address.city", column = Column(name="customer_city")))
+        val customer: Customer? = null
 
 ) : BaseEntity() {
     @JsonProperty("sum")

@@ -3,14 +3,16 @@ import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 import {OrderStatus} from "./OrderStatus";
 import {Grid, Step} from "semantic-ui-react";
 import Helper from "../common/Helper";
+import Company from "../employees/Company";
 
-interface OrderStatusStepsProps {
+interface Props {
+    company: Company
     status: OrderStatus
     statusChanged: (newStatus: OrderStatus) => void
 }
 
 
-export default class OrderStatusSteps extends React.Component<OrderStatusStepsProps, {}> {
+export default class OrderStatusSteps extends React.Component<Props, {}> {
 
     render() {
         return (
@@ -31,14 +33,15 @@ export default class OrderStatusSteps extends React.Component<OrderStatusStepsPr
                                 <Step.Title>Durchführen</Step.Title>
                             </Step.Content>
                         </Step>
-                        <Step active={this.props.status === 'ORDER_BILL'}
-                              onClick={() => this.props.statusChanged('ORDER_BILL')}
-                              disabled={this.props.status === 'ORDER_EDIT' || this.props.status === 'ORDER_EXECUTE'}>
+                        {this.props.company.billingSupport && <Step active={this.props.status === 'ORDER_BILL'}
+                                                                    onClick={() => this.props.statusChanged('ORDER_BILL')}
+                                                                    disabled={this.props.status === 'ORDER_EDIT' || this.props.status === 'ORDER_EXECUTE'}>
                             <Icon name={Helper.getStatusIcon('ORDER_BILL')}/>
                             <Step.Content>
                                 <Step.Title>Rechnung</Step.Title>
                             </Step.Content>
-                        </Step>
+                        </Step>}
+                        {this.props.company.billingSupport &&
                         <Step active={this.props.status === 'ORDER_BILL_RECIEVED'}
                               onClick={() => this.props.statusChanged('ORDER_BILL_RECIEVED')}
                               disabled={this.props.status === 'ORDER_EDIT' || this.props.status === 'ORDER_EXECUTE' || this.props.status === 'ORDER_BILL'}>
@@ -47,6 +50,7 @@ export default class OrderStatusSteps extends React.Component<OrderStatusStepsPr
                                 <Step.Title>Bezahlt?</Step.Title>
                             </Step.Content>
                         </Step>
+                        }
                         <Step active={this.props.status === 'PAYMENT_RECIEVED'}
                               disabled={this.orderComplete()}>
                             <Icon name={Helper.getStatusIcon('PAYMENT_RECIEVED')} color={this.orderComplete()? "green": "grey"} disabled={!this.orderComplete()}/>

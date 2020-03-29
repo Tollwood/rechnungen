@@ -8,6 +8,7 @@ interface RealEstateListProps {
     address: Address
     handleAddressChange: (nameValue: NameValue) => void
     errors: Map<string, string>
+    readonly : boolean
 }
 
 export default class AddressInput extends React.Component<RealEstateListProps> {
@@ -19,6 +20,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                     <Form.Field>
                         <label>Straße</label>
                         <Form.Input id="street"
+                                    disabled={this.props.readonly}
                                     fluid
                                     placeholder='Straße'
                                     value={this.props.address.street}
@@ -35,6 +37,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                     <Form.Field>
                         <label>Nr.</label>
                         <Form.Input id="houseNumber"
+                                    disabled={this.props.readonly}
                                     placeholder='Nr.'
                                     fluid
                                     value={this.props.address.houseNumber}
@@ -53,6 +56,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                     <Form.Field>
                         <label>PLZ</label>
                         <Form.Input id="zipCode"
+                                    disabled={this.props.readonly}
                                     placeholder='PLZ'
                                     fluid
                                     value={this.props.address.zipCode}
@@ -70,6 +74,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                         <label>Stadt</label>
                         <Form.Input id="city"
                                     fluid
+                                    disabled={this.props.readonly}
                                     placeholder='Stadt'
                                     value={this.props.address.city}
                                     name='city'

@@ -8,6 +8,7 @@ import API from "../API";
 import Search from "../order/Search";
 
 interface Props {
+    company: String,
     onAdd: () => void,
     onSelect: (selectedService: Service) => void,
 }
@@ -63,7 +64,7 @@ export default class ServiceList extends React.Component<Props, State> {
                 this.setState({hasMore: hasMore, page: Object.assign(this.state.page, {totalElements: res.data.page.totalElements})});
                 return res.data._embedded === undefined ? [] : res.data._embedded.service;
             })
-            .then((data: any[]) => data.map(value => Object.assign(new Service(), value)))
+            .then((data: any[]) => data.map(value => Object.assign(new Service(this.props.company), value)))
             .then((services: Service[]) => this.setState({
                 services: append ? this.state.services.concat(services) : services,
                 isLoading: false

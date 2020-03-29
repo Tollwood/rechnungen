@@ -27,7 +27,9 @@ export default class OrderOverview extends React.Component<OrderOverviewProps, O
             <React.Fragment>
                 <div className={"order-overview"}>
                     {this.state.edit ? null :
-                        <OrderList onAdd={this.handleAdd.bind(this)}
+                        <OrderList
+                            company={this.props.company}
+                            onAdd={this.handleAdd.bind(this)}
                                    onSelect={(orderLink: Link) => {
                                        this.handleSelection(orderLink)
                                    }}

@@ -59,7 +59,7 @@ export default function RealEstateEdit(props: Props) {
                             </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
-                    <AddressInput address={realEstate.address} handleAddressChange={handleAddressChange}
+                    <AddressInput readonly={false} address={realEstate.address} handleAddressChange={handleAddressChange}
                                   errors={new Map()}/>
                     <CUDButtons onSave={RealEstateService.save}
                                 name={"Liegenschaft"}

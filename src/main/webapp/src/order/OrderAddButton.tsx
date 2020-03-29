@@ -5,8 +5,10 @@ import RealEstate from "../realestate/RealEstate";
 import Order from "./Order";
 import OrderService from "./OrderService";
 import Helper from "../common/Helper";
+import Company from "../employees/Company";
 
 interface Props {
+    company: Company,
     order: Order,
     realEstates: RealEstate[],
     onSuccess: (order: Order) => void
@@ -32,7 +34,12 @@ export function OrderAddButton(props: Props) {
     }
 
     function saveAndConfimr(order: Order, realEstates: RealEstate[], continueToNextStep: boolean, onSuccess: (order: Order) => void, onError: (error: Map<string, string>) => void) {
-        OrderService.save(order, realEstates, continueToNextStep, confirmSuccess(onSuccess), confirmError(onError));
+        let orderToSave: Order = Object.assign({}, order);
+        if (continueToNextStep) {
+            orderToSave.prevStatus = orderToSave.status;
+            orderToSave.status = Helper.nextStatus(order.status, props.company);
+        }
+        OrderService.save(orderToSave, confirmSuccess(onSuccess), confirmError(onError));
     }
 
     return <Button.Group>
@@ -45,7 +52,7 @@ export function OrderAddButton(props: Props) {
             <Button primary content='Weiter'
                     onClick={() => saveAndConfimr(props.order, props.realEstates, true, props.onSuccess, props.onError)}
                     className={"save-bttn"}
-                    icon={Helper.getStatusIcon(Helper.nextStatus(props.order.status))}/>}
+                    icon={Helper.getStatusIcon(Helper.nextStatus(props.order.status, props.company))}/>}
             labelPosition={"right"}/>
         </Button.Group>
     </Button.Group>

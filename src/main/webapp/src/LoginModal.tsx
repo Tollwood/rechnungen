@@ -2,9 +2,10 @@ import * as React from "react";
 import API from "./API";
 import {JwtTokenInterceptor} from "./jwtTokenInterceptor";
 import {Button, Form, FormProps, Grid, Label, Modal, Segment} from "semantic-ui-react";
+import Company from "./employees/Company";
 
 interface LoginModalProps {
-    onSuccess: () => void
+    company: Company
 }
 
 interface LoginModalSate {
@@ -26,7 +27,7 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
         return (
             <Modal open={this.state.requiuresAuthorization} dimmer={'blurring'} size={"mini"} name="loginModal">
                 <Modal.Content>
-                    <h2 style={{textAlign: "center"}}>Wärmemessdienst Timm</h2>
+                    <h2 style={{textAlign: "center"}}>{this.props.company.name}</h2>
                     <Segment raised>
                         {this.state.validationfailed ? this.renderError() : null}
                         <Form onSubmit={this.doLogin.bind(this)}>
@@ -88,7 +89,6 @@ export default class LoginModal extends React.Component<LoginModalProps, LoginMo
                 let interceptor = new JwtTokenInterceptor(data.jwttoken);
                 API.interceptors.request.use(interceptor.intercept.bind(interceptor));
                 this.setState({requiuresAuthorization: false});
-                this.props.onSuccess();
             })
             .catch( (error) => {
                 this.setState({validationfailed:true})
