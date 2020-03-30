@@ -11,7 +11,7 @@ interface Props {
 export default function OrderConfirm(props: Props) {
     function renderItem(service: OrderCount) {
         return <List.Item>
-            <Image src='/broetchen.jpg' avatar/>
+            <Image src={service.service.image} avatar/>
             <List.Content>
                 <List.Header as='a'>{service.amount} x {service.service.title}</List.Header>
                 <List.Description as='a'>{service.service.description}</List.Description>
