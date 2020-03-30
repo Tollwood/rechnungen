@@ -40,14 +40,14 @@ class TestData {
 
     fun givenOrder(orderId: String): Order {
         return Order(orderId = orderId, technician = employeeResource.findAll().first(), realEstate = realestateResource.findAll().first
-        (), company = companyResource.getCurrent())
+        (), company = companyResource.getCurrent(1))
     }
 
     fun givenOrderWithBill(orderId: String): Order {
         val technician = employeeResource.findAll().first()
         val realEstate = realestateResource.findAll().first()
         return Order(orderId = orderId, technician = technician, realEstate = realEstate, billNo = orderId + "-bill",company
-        = companyResource.getCurrent())
+        = companyResource.getCurrent(1))
     }
 
     fun givenRealEstatePersisted(): RealEstate {

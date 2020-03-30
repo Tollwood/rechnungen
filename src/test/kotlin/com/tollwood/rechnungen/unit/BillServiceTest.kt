@@ -42,7 +42,7 @@ class BillServiceTest {
     @Test
     fun `empty order`() {
         // given
-        val order = Order(orderId = "1234")
+        val order = Order(orderId = "1234",company = testData.companyResource.getCurrent(1))
 
         // when
         val billItems = billService.computeBillItems(order)
@@ -58,7 +58,7 @@ class BillServiceTest {
     fun `order with distance`(distance: Int, expectedCode: String, price: Double) {
 
         // given
-        val order = Order(orderId = "1234", realEstate = testData.givenRealEstate(distance))
+        val order = Order(orderId = "1234", realEstate = testData.givenRealEstate(distance),company = testData.companyResource.getCurrent(1))
         val realPrice = serviceResource.findByArticleNumber(expectedCode).get().price!! * price
 
         // when
@@ -73,7 +73,7 @@ class BillServiceTest {
     @Test
     fun `without km inclueded`() {
         // given
-        val order = Order(orderId = "1234", realEstate = testData.givenRealEstate(99), includeKmFee = false)
+        val order = Order(orderId = "1234", realEstate = testData.givenRealEstate(99), includeKmFee = false,company = testData.companyResource.getCurrent(1))
 
         // when
         val billItems = billService.computeBillItems(order)
@@ -85,7 +85,7 @@ class BillServiceTest {
 
     @Test
     fun `with services`() {
-        val order = Order(id = 1, orderId = "1234")
+        val order = Order(id = 1, orderId = "1234",company = testData.companyResource.getCurrent(1))
         // given
         val serviceOrders = Lists.newArrayList<ServiceOrder>()
 

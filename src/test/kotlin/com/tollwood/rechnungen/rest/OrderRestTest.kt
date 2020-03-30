@@ -280,7 +280,7 @@ class OrderRestTest : RestTest() {
 
         val newOrder = Order(orderId = orderId, technician = testData.employeeResource.findById(1).get(), realEstate = testData
                 .realestateResource.findById(2)
-                .get(),company = testData.companyResource.getCurrent())
+                .get(),company = testData.companyResource.getCurrent(1))
 
 
         val json: JsonNode = objectMapper.valueToTree(newOrder)
