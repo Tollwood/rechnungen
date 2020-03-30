@@ -11,7 +11,8 @@ import {
     Image,
     Input,
     InputOnChangeData,
-    Segment
+    Segment,
+    Responsive
 } from "semantic-ui-react";
 import CustomerDetails from "./customer/CustomerDetails";
 import ServiceService from "./services/ServiceService";
@@ -94,7 +95,7 @@ export default function Home() {
                 </Card.Description>
             </Card.Content>
             <Card.Content extra>
-                <Input style={{width: "80px"}} value={serviceCount.amount}
+                <Input style={{width: "70px"}} value={serviceCount.amount}
                        onChange={(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
                            updateCount(parseInt(data.value), serviceCount.index!)
                        }}/>
@@ -162,9 +163,21 @@ export default function Home() {
                     Produkte auswählen
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 1}>
-                    <Card.Group itemsPerRow={3}>
-                        {services.map(service => renderItem(service))}
-                    </Card.Group>
+                    <Responsive maxWidth={480}>
+                        <Card.Group itemsPerRow={1} >
+                            {services.map(service => renderItem(service))}
+                        </Card.Group>
+                    </Responsive>
+                    <Responsive  minWidth={481} maxWidth={720}>
+                        <Card.Group itemsPerRow={2} >
+                            {services.map(service => renderItem(service))}
+                        </Card.Group>
+                    </Responsive>
+                    <Responsive  minWidth={721}>
+                        <Card.Group itemsPerRow={3} >
+                            {services.map(service => renderItem(service))}
+                        </Card.Group>
+                    </Responsive>
                 </Accordion.Content>
             </Accordion>
             <Button primary content={"Jetzt bestellen"} floated={"right"} disabled={isBasketEmpty()} onClick={onOrder}/>
