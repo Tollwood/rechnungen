@@ -5,6 +5,7 @@ import BillItem from "../billing/BillItem";
 import Employee from "../employees/Employee";
 import RealEstate from "../realestate/RealEstate";
 import {Address} from "../common/Address";
+import Customer from "../customer/Customer";
 
 export default class OrderSearch {
 
@@ -29,6 +30,7 @@ export default class OrderSearch {
     paymentRecievedDate: string = '';
     sum: number = 0;
     realEstateAddress?: Address;
+    customer? : Customer;
     _links: { self?: Link, technician?: Link, realEstate?: Link } = {};
 
     public getRealEstateAddress(): Address {

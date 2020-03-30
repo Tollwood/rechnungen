@@ -93,6 +93,8 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                             {this.props.company.realEstateSupport && <Table.HeaderCell>Liegenschaft</Table.HeaderCell>}
                             {this.props.company.realEstateSupport && <Table.HeaderCell>Adresse</Table.HeaderCell> }
                             {this.props.company.realEstateSupport && <Table.HeaderCell>Name</Table.HeaderCell> }
+                            {this.props.company.customerSupport && <Table.HeaderCell>Datum</Table.HeaderCell> }
+                            {this.props.company.customerSupport && <Table.HeaderCell>Name</Table.HeaderCell> }
                             {this.props.company.statisticSupport && <Table.HeaderCell>Nettoumsatz</Table.HeaderCell> }
                             {this.props.company.statisticSupport && <Table.HeaderCell>Bruttoumsatz</Table.HeaderCell> }
                             {this.props.company.billingSupport && <Table.HeaderCell
@@ -129,6 +131,8 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                 </div>
             </Table.Cell> }
             {this.props.company.realEstateSupport && <Table.Cell>{order.name ? order.name : "-"}</Table.Cell>}
+            {this.props.company.customerSupport && <Table.Cell>{order.firstAppointment}</Table.Cell>}
+            {this.props.company.customerSupport && <Table.Cell>{order.customer ? order.customer.firstName + " " + order.customer.lastName : "-"}</Table.Cell>}
             {this.props.company.statisticSupport &&
             <Table.Cell>{order.sum.toLocaleString('de', {
                 minimumFractionDigits: 2,

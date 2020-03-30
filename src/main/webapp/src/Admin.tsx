@@ -39,7 +39,11 @@ export class Admin extends Component<Props, State> {
     }
 
     componentDidMount(): void {
-        CompanyService.get(((company => this.setState({company: company}))));
+        document.title = "Admin";
+        CompanyService.get(((company => {
+            document.title = company.name;
+            this.setState({company: company})
+        })));
     }
 
     render() {

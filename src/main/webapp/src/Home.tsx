@@ -36,6 +36,7 @@ export default function Home() {
     const [errors, setErrors] = useState<Map<string, string>>(new Map());
 
     useEffect(() => {
+        document.title = "Bestellungen";
         CompanyService.get((result) => setCompany(result));
         ServiceService.fetchServices((result) => {
             setServices(result.map((s, index) => {
