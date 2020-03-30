@@ -1,5 +1,4 @@
 import Link from "../common/Links";
-import Company from "../employees/Company";
 
 export default class Service {
     articleNumber: string = "";
@@ -8,6 +7,7 @@ export default class Service {
     price: number = 0;
     selectable: boolean =true;
     company: String;
+    image: String = "/products/placeholder.jpg";
     _links: {self?: Link} = {};
 
     constructor(company: String) {

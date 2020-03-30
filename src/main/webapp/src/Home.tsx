@@ -80,11 +80,14 @@ export default function Home() {
 
     function renderItem(serviceCount: OrderCount) {
         return <Card>
-            <Image src='/broetchen.jpg' style={{width: "200px"}} wrapped centered/>
+            <Image src={serviceCount.service.image} style={{width: "200px"}} wrapped centered/>
             <Card.Content>
                 <Card.Header>{serviceCount.service.title}</Card.Header>
                 <Card.Meta>
-                    <span className='date'>{serviceCount.service.price} €</span>
+                    <span className='date'>{serviceCount.service.price.toLocaleString('de', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })} €</span>
                 </Card.Meta>
                 <Card.Description>
                     {serviceCount.service.description}

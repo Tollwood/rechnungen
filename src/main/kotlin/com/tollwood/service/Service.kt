@@ -42,5 +42,7 @@ data class Service(
         @NotNull
         val company: Company,
 
+        val image: String? = "",
+
         @NotNull
         val selectable: Boolean) : BaseEntity()
