@@ -28,7 +28,17 @@ import ErrorMapper from "./ErrorMapper";
 export default function Home() {
 
     const [services, setServices] = useState<OrderCount[]>([]);
-    const [wishDate, setWishDate] = useState<string>("");
+
+    function tomorrow() {
+        var tomorrow = new Date();
+        tomorrow.setDate(new Date().getDate() + 1);
+        var dd = String(tomorrow.getDate()).padStart(2, '0');
+        var mm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = tomorrow.getFullYear();
+        return dd + '.' + mm + '.' + yyyy;
+    }
+
+    const [wishDate, setWishDate] = useState<string>(tomorrow());
     const [completed, setCompleted] = useState<boolean>(false);
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [company, setCompany] = useState<Company>(new Company());
