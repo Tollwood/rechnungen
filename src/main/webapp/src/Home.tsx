@@ -12,7 +12,8 @@ import {
     Input,
     InputOnChangeData,
     Segment,
-    Responsive
+    Responsive,
+    Message
 } from "semantic-ui-react";
 import CustomerDetails from "./customer/CustomerDetails";
 import ServiceService from "./services/ServiceService";
@@ -59,6 +60,9 @@ export default function Home() {
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>, data: AccordionTitleProps) {
         setActiveIndex(activeIndex === data.index ? -1 : data.index as number);
+        if(data.index === 1){
+            setErrors(ErrorMapper.removeError(errors,"services"));
+        }
     }
 
 
@@ -106,17 +110,15 @@ export default function Home() {
         </Card>;
     }
 
-    function isBasketEmpty() {
-        return services.filter(value => value.amount > 0).length === 0;
-    }
-
     function onOrder() {
         let order = new Order(company._links.self!.href);
         order.services = services.filter(value => value.amount > 0).map((value) => {return {amount: value.amount, service: value.service._links.self!.href, _links : {service: value.service._links.self!} }});
         order.status = "ORDER_EXECUTE";
         order.firstAppointment = wishDate;
         order.customer = customer;
-        OrderService.save(order, () => setCompleted(true), () => {
+        OrderService.save(order, () => setCompleted(true), (errors: Map<string,string>) => {
+            setErrors(errors);
+            setActiveIndex(0);
         });
     }
 
@@ -125,7 +127,8 @@ export default function Home() {
     }
 
     function renderOrderEntry() {
-        return <Container text>c
+        return <Container text>
+            <Form>
             <Image src='/SassLogo.png' style={{width: "600px"}} centered/>
             <Segment>Am Vortag bestellen und ganz gemütlich ohne Wartezeit am nächsten Tag abholen. </Segment>
             <Accordion fluid styled>
@@ -138,10 +141,11 @@ export default function Home() {
                     Bestellung auf
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 0}>
-                    <CustomerDetails readonly={false} customer={customer} onChange={onCustomerChange} errors={errors}/>
+                    <CustomerDetails readonly={false} customer={customer} onChange={onCustomerChange} errors={ErrorMapper.childError(errors)}/>
                     <Form.Field>
                         <label>Abholdatum</label>
                         <DateInput
+                            id="firstAppointment"
                             dateFormat={"DD.MM.YYYY"}
                             minDate={'01.01.1990'}
                             hideMobileKeyboard={true}
@@ -161,6 +165,9 @@ export default function Home() {
                 >
                     <Icon name='dropdown'/>
                     Produkte auswählen
+                    { errors.get('services') && <Message negative>
+                        <p>Bittw wählen Sie mindestens ein Produkt aus</p>
+                    </Message>}
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 1}>
                     <Responsive maxWidth={480}>
@@ -180,7 +187,8 @@ export default function Home() {
                     </Responsive>
                 </Accordion.Content>
             </Accordion>
-            <Button primary content={"Jetzt bestellen"} floated={"right"} disabled={isBasketEmpty()} onClick={onOrder}/>
+            <Button primary content={"Jetzt bestellen"} floated={"right"} onClick={onOrder}/>
+            </Form>
         </Container>
     }
 

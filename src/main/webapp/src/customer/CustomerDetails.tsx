@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent} from "react";
-import {Form, Grid, Segment} from "semantic-ui-react";
+import {DropdownProps, Form, Grid, Segment} from "semantic-ui-react";
 import Customer from "./Customer";
 import AddressInput from "../common/AddressInput";
 import NameValue from "../common/NameValue";
@@ -15,24 +15,28 @@ interface Props {
 export default function CustomerDetails(props: Props) {
 
 
+    const salutations  = [{key: 'Familie', text: "Familie", value: 'Familie'},
+        {key: 'Herr', text: "Herr", value: 'Herr'},
+        {key: 'Frau', text: "Frau", value: 'Frau'}];
+
     return <Segment>
         <Grid>
             <Grid.Row>
-                <Grid.Column width={4} textAlign={"left"}>
+                <Grid.Column computer={4} tablet={4} mobile={16}  textAlign={"left"}>
                     <Form.Field>
                         <label>Anrede</label>
-                        <Form.Input id="salutation"
-                                    disabled={props.readonly}
-                                    fluid
-                                    placeholder='Anrede'
-                                    value={props.customer.salutation}
-                                    name='salutation'
-                                    onChange={onChange}
-                                    error={props.errors.get('salutation') ? {content: props.errors.get('salutation')} : null}
+                        <Form.Dropdown id="salutation"
+                                       disabled={props.readonly}
+                                       fluid
+                                       selection
+                                       options={salutations}
+                                       value={props.customer.salutation == null ? "Familie": props.customer.salutation}
+                                       onChange={onSalutationChange}
+                                       error={props.errors.get('salutation') ? {content: props.errors.get('salutation')} : null}
                         />
                     </Form.Field>
                 </Grid.Column>
-                <Grid.Column width={6} textAlign={"left"}>
+                <Grid.Column computer={6} tablet={6} mobile={16} textAlign={"left"}>
                     <Form.Field>
                         <label>Vorname</label>
                         <Form.Input id="firstName"
@@ -46,7 +50,7 @@ export default function CustomerDetails(props: Props) {
                         />
                     </Form.Field>
                 </Grid.Column>
-                <Grid.Column width={6} textAlign={"left"}>
+                <Grid.Column computer={6} tablet={6} mobile={16}  textAlign={"left"}>
                     <Form.Field>
                         <label>Nachname</label>
                         <Form.Input id="lastName"
@@ -62,7 +66,7 @@ export default function CustomerDetails(props: Props) {
                 </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-                <Grid.Column textAlign={"left"}>
+                <Grid.Column computer={16} tablet={16} mobile={16}  textAlign={"left"}>
                     <label>Telefon</label>
                     <Form.Input id="phoneNumber"
                                 disabled={props.readonly}
@@ -79,6 +83,10 @@ export default function CustomerDetails(props: Props) {
         </Grid>
     </Segment>;
 
+    function onSalutationChange(event: ChangeEvent<DropdownProps>) {
+        let newCustomer = { ...props.customer, [event.target.name]: event.target.value};
+        props.onChange("customer", newCustomer);
+    }
 
     function onChange(event: ChangeEvent<HTMLInputElement>) {
         let newCustomer = { ...props.customer, [event.target.name]: event.target.value};

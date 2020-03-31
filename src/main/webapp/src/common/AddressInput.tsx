@@ -52,7 +52,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                 </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-                <Grid.Column width={4} textAlign={"left"}>
+                <Grid.Column computer={4} tablet={4} mobile={16}  textAlign={"left"}>
                     <Form.Field>
                         <label>PLZ</label>
                         <Form.Input id="zipCode"
@@ -69,7 +69,7 @@ export default class AddressInput extends React.Component<RealEstateListProps> {
                         />
                     </Form.Field>
                 </Grid.Column>
-                <Grid.Column width={12} textAlign={"left"}>
+                <Grid.Column computer={12} tablet={12} mobile={16}  textAlign={"left"}>
                     <Form.Field>
                         <label>Stadt</label>
                         <Form.Input id="city"

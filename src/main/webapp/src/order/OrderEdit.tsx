@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, DropdownProps, Form, Grid, Segment, Container} from 'semantic-ui-react'
+import {Button, Container, DropdownProps, Form, Grid} from 'semantic-ui-react'
 import Order from "./Order";
 import Employee from "../employees/Employee";
 import OrderItem from "./OrderItem";

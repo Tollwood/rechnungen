@@ -14,6 +14,12 @@ class ValidationErrors() {
             }
         }
 
+        fun notEmpty(input: List<Any>?, field: String, errors: Errors) {
+            if (input == null || input.size == 0) {
+                errors.rejectValue(field, "notEmpty", "Pflichtfeld")
+            }
+        }
+
         fun notEmpty(input: String?, field: String, errors: Errors) {
             if (input == null || input.trim { it <= ' ' }.length == 0) {
                 errors.rejectValue(field, "notEmpty", "Pflichtfeld")

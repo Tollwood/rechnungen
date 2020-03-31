@@ -38,11 +38,22 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
         if(order.company.realEstateSupport){
             notEmpty(order.realEstate, "realEstate", errors)
         }
+
+        if(order.company.customerSupport){
+            if(order.customer == null){
+                errors.rejectValue("order.customer", "required", "Pflichtfeld")
+            }else {
+                notEmpty(order.customer.lastName, "customer.lastName", errors)
+                notEmpty(order.customer.phoneNumber, "customer.phoneNumber", errors)
+            }
+        }
+
         if(order.company.employeeSupport){
             notEmpty(order.technician, "technician", errors)
         }
 
         if (shouldValidate(ORDER_EXECUTE, order)) {
+            notEmpty(order.services, "services", errors)
             notEmpty(order.firstAppointment, "firstAppointment", errors)
             notNull(order.distance, "distance", errors)
         }
