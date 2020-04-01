@@ -11,9 +11,11 @@ import {
     Image,
     Input,
     InputOnChangeData,
-    Segment,
+    Menu,
+    Message,
     Responsive,
-    Message
+    Segment,
+    Visibility
 } from "semantic-ui-react";
 import CustomerDetails from "./customer/CustomerDetails";
 import ServiceService from "./services/ServiceService";
@@ -26,6 +28,7 @@ import OrderCount from "./OrderCount";
 import {DateInput} from "semantic-ui-calendar-react";
 import Customer from "./customer/Customer";
 import ErrorMapper from "./ErrorMapper";
+import Statistic from "semantic-ui-react/dist/commonjs/views/Statistic";
 
 export default function Home() {
 
@@ -47,6 +50,9 @@ export default function Home() {
     const [customer, setCustomer] = useState<Customer>(new Customer());
     const [errors, setErrors] = useState<Map<string, string>>(new Map());
 
+    const [productCount, setProductCount] = useState<number>(0);
+    const [totalPrice, setTotalPrice] = useState<number>(0);
+    const [menuFixed, setMenuFixed] = useState<boolean>(false);
     useEffect(() => {
         document.title = "Bestellungen";
         CompanyService.get((result) => setCompany(result));
@@ -60,8 +66,8 @@ export default function Home() {
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>, data: AccordionTitleProps) {
         setActiveIndex(activeIndex === data.index ? -1 : data.index as number);
-        if(data.index === 1){
-            setErrors(ErrorMapper.removeError(errors,"services"));
+        if (data.index === 1) {
+            setErrors(ErrorMapper.removeError(errors, "services"));
         }
     }
 
@@ -69,6 +75,8 @@ export default function Home() {
     function updateCount(value: number, index: number) {
         const list = services.map((serviceCount, i) => {
             if (i === index) {
+                setProductCount(productCount + value - serviceCount.amount);
+                setTotalPrice((totalPrice + value * serviceCount.service.price - serviceCount.amount * serviceCount.service.price));
                 serviceCount.amount = value;
                 return serviceCount;
             } else {
@@ -112,82 +120,120 @@ export default function Home() {
 
     function onOrder() {
         let order = new Order(company._links.self!.href);
-        order.services = services.filter(value => value.amount > 0).map((value) => {return {amount: value.amount, service: value.service._links.self!.href, _links : {service: value.service._links.self!} }});
+        order.services = services.filter(value => value.amount > 0).map((value) => {
+            return {amount: value.amount, service: value.service._links.self!.href, _links: {service: value.service._links.self!}}
+        });
         order.status = "ORDER_EXECUTE";
         order.firstAppointment = wishDate;
         order.customer = customer;
-        OrderService.save(order, () => setCompleted(true), (errors: Map<string,string>) => {
+        OrderService.save(order, () => setCompleted(true), (errors: Map<string, string>) => {
             setErrors(errors);
             setActiveIndex(0);
         });
     }
 
-    function handleDateChange(e: any, data: {value: string}) {
+    function handleDateChange(e: any, data: { value: string }) {
         setWishDate(data.value);
     }
 
     function renderOrderEntry() {
+
         return <Container text>
+            <Message
+                warning
+                header='Aktuell sind noch keine Bestellungen möglich'
+                content='Diese Seite befindet sich noch in der Entwicklung. Aktuell werden keine Bestellungen bearbeitet.'
+            />
             <Form>
-            <Image src='/SassLogo.png' style={{width: "600px"}} centered/>
-            <Segment>Am Vortag bestellen und ganz gemütlich ohne Wartezeit am nächsten Tag abholen. </Segment>
-            <Accordion fluid styled>
-                <Accordion.Title
-                    active={activeIndex === 0}
-                    index={0}
-                    onClick={handleClick}
-                >
-                    <Icon name='dropdown'/>
-                    Bestellung auf
-                </Accordion.Title>
-                <Accordion.Content active={activeIndex === 0}>
-                    <CustomerDetails readonly={false} customer={customer} onChange={onCustomerChange} errors={ErrorMapper.childError(errors)}/>
-                    <Form.Field>
-                        <label>Abholdatum</label>
-                        <DateInput
-                            id="firstAppointment"
-                            dateFormat={"DD.MM.YYYY"}
-                            minDate={'01.01.1990'}
-                            hideMobileKeyboard={true}
-                            name="firstAppointment"
-                            placeholder="Abohldatum wählen"
-                            value={wishDate ? wishDate : ''}
-                            iconPosition="left"
-                            onChange={handleDateChange}
-                            error={errors.get('firstAppointment') ? {content: errors.get('firstAppointment')} : null}
-                        />
-                    </Form.Field>
-                </Accordion.Content>
-                <Accordion.Title
-                    active={activeIndex === 1}
-                    index={1}
-                    onClick={handleClick}
-                >
-                    <Icon name='dropdown'/>
-                    Produkte auswählen
-                    { errors.get('services') && <Message negative>
-                        <p>Bittw wählen Sie mindestens ein Produkt aus</p>
-                    </Message>}
-                </Accordion.Title>
-                <Accordion.Content active={activeIndex === 1}>
-                    <Responsive maxWidth={480}>
-                        <Card.Group itemsPerRow={1} >
-                            {services.map(service => renderItem(service))}
-                        </Card.Group>
-                    </Responsive>
-                    <Responsive  minWidth={481} maxWidth={720}>
-                        <Card.Group itemsPerRow={2} >
-                            {services.map(service => renderItem(service))}
-                        </Card.Group>
-                    </Responsive>
-                    <Responsive  minWidth={721}>
-                        <Card.Group itemsPerRow={3} >
-                            {services.map(service => renderItem(service))}
-                        </Card.Group>
-                    </Responsive>
-                </Accordion.Content>
-            </Accordion>
-            <Button primary content={"Jetzt bestellen"} floated={"right"} onClick={onOrder}/>
+                <Image src={company.logo} style={{width: "600px"}} centered/>
+                <Segment>Am Vortag bestellen und ganz gemütlich ohne Wartezeit am nächsten Tag abholen. </Segment>
+                <Accordion fluid styled>
+                    <Accordion.Title
+                        active={activeIndex === 0}
+                        index={0}
+                        onClick={handleClick}
+                    >
+                        <Icon name='dropdown'/>
+                        Bestellung auf
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 0}>
+                        <CustomerDetails readonly={false} customer={customer} onChange={onCustomerChange}
+                                         errors={ErrorMapper.childError(errors)}/>
+                        <Form.Field>
+                            <label>Abholdatum</label>
+                            <DateInput
+                                id="firstAppointment"
+                                dateFormat={"DD.MM.YYYY"}
+                                minDate={'01.01.1990'}
+                                hideMobileKeyboard={true}
+                                name="firstAppointment"
+                                placeholder="Abohldatum wählen"
+                                value={wishDate ? wishDate : ''}
+                                iconPosition="left"
+                                onChange={handleDateChange}
+                                error={errors.get('firstAppointment') ? {content: errors.get('firstAppointment')} : null}
+                            />
+                        </Form.Field>
+                    </Accordion.Content>
+                    <Accordion.Title
+                        active={activeIndex === 1}
+                        index={1}
+                        onClick={handleClick}
+                    >
+                        <Icon name='dropdown'/>
+                        Produkte auswählen
+                        {errors.get('services') && <Message negative>
+                            <p>Bittw wählen Sie mindestens ein Produkt aus</p>
+                        </Message>}
+                    </Accordion.Title>
+                    <Accordion.Content active={activeIndex === 1}>
+                        <Visibility
+                            onBottomPassed={() => setMenuFixed(true)}
+                            onBottomVisible={() => setMenuFixed(false)}
+                            once={false}
+                        >
+                            <Menu
+                                fixed={menuFixed ? 'top' : undefined}
+                                widths={4}
+                                borderless
+                            >
+                                <Menu.Item>
+                                    <Image src={company.logo} style={{width: "70px"}} />
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <Statistic horizontal label='Produkte' value={productCount} size={"mini"}/>
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <Statistic horizontal label='€ Gesamt' value={totalPrice.toLocaleString('de', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    })} size={"mini"}/>
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <Button primary content={"Jetzt bestellen"} icon ={"cart"} floated={"right"} onClick={onOrder}/>
+                                </Menu.Item>
+                            </Menu>
+
+                        </Visibility>
+                        <Responsive maxWidth={480}>
+                            <Card.Group itemsPerRow={1}>
+
+                                {services.map(service => renderItem(service))}
+                            </Card.Group>
+                        </Responsive>
+                        <Responsive minWidth={481} maxWidth={720}>
+                            <Card.Group itemsPerRow={2}>
+                                {services.map(service => renderItem(service))}
+                            </Card.Group>
+                        </Responsive>
+                        <Responsive minWidth={721}>
+                            <Card.Group itemsPerRow={3}>
+                                {services.map(service => renderItem(service))}
+                            </Card.Group>
+                        </Responsive>
+                    </Accordion.Content>
+                </Accordion>
+                {!menuFixed && <Button primary content={"Jetzt bestellen"} icon ={"cart"} floated={"right"} onClick={onOrder}/>}
             </Form>
         </Container>
     }

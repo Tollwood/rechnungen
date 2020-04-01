@@ -1,6 +1,6 @@
 import * as React from "react";
 import OrderItem from "./order/OrderItem";
-import {Grid, Image, List, Segment, Container} from "semantic-ui-react";
+import {Grid, Image, List, Segment, Container, Message} from "semantic-ui-react";
 import Service from "./order/Service";
 import OrderCount from "./OrderCount";
 
@@ -25,6 +25,11 @@ export default function OrderConfirm(props: Props) {
             <Grid.Row>
                 <Grid.Column width={12} textAlign={"center"}>
                     <h1>Vielen Dank für Ihre Bestellung</h1>
+                    <Message
+                        warning
+                        header='Aktuell sind noch keine Bestellungen möglich'
+                        content='Diese Seite befindet sich noch in der Entwicklung. Aktuell werden keine Bestellungen bearbeitet.'
+                    />
                 </Grid.Column>
             </Grid.Row>
 
