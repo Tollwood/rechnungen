@@ -85,14 +85,14 @@ tasks.create<NpmTask>("appNpmBuild"){
 	dependsOn("appNpmInstall")
 }
 
-/*tasks.create<Copy>("copywebapp") {
+tasks.create<Copy>("copywebapp") {
 	from("src/main/webapp/build")
 	into("build/resources/main/static/.")
 	dependsOn("appNpmBuild")
 }
-*/
+
 tasks.named("compileKotlin") {
-	dependsOn("appNpmBuild")
+	dependsOn("copywebapp")
 }
 
 idea {
