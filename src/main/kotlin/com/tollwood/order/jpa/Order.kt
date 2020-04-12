@@ -1,7 +1,10 @@
 package com.tollwood.order.jpa
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.tollwood.company.Company
 import com.tollwood.jpa.*
 import com.tollwood.order.jpa.OrderState.ORDER_EDIT
 import com.tollwood.realestate.jpa.RealEstate

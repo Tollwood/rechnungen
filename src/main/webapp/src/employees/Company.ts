@@ -7,6 +7,7 @@ export default class Company {
     address: Address = new Address();
     billNo: number = 0;
     logo: string = "";
+    thankYouImage: string = "";
     phone: string = "";
     email: string = "";
     bankDetails: BankDetails = new BankDetails();

@@ -2,6 +2,7 @@ import Link from "../common/Links";
 import API from "../API";
 import Employee from "./Employee";
 import ErrorMapper from "../ErrorMapper";
+import Company from "./Company";
 
 
 export default class EmployeeService {
@@ -17,14 +18,14 @@ export default class EmployeeService {
             .then((data) => onSuccess(data._embedded.employee));
     }
 
-    public static save(employee: Employee, onSuccess: () => void, onError: (errors: Map<string, string>) => void) {
+    public static save(employee: Employee, company: Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void) {
         if (employee._links.self === undefined) {
             API.post("/api/employee", employee)
                 .then(onSuccess)
                 .catch(errors => ErrorMapper.map(errors, onError))
         } else {
             API.patch(employee._links.self.href, employee)
-                .then( onSuccess)
+                .then(onSuccess)
                 .catch(errors => ErrorMapper.map(errors, onError))
         }
     }

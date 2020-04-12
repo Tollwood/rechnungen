@@ -14,5 +14,4 @@ interface OrderResource : PagingAndSortingRepository<Order, Long> {
     fun findByOrderId(@Param("orderId") orderId: String?): Optional<Order>
     fun findByBillNo(@Param("billNo") billNo: String?): Optional<Order>
     fun findById(@PathVariable("id") id: Long?): Order
-
 }

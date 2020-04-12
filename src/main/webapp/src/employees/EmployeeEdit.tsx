@@ -9,8 +9,10 @@ import BankInput from "../common/BankInput";
 import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
 import EmployeeService from "./EmployeeService";
+import Company from "./Company";
 
 interface Props {
+    company: Company;
     onSave: () => void;
     onCancelEdit: () => void;
     employee: Employee;
@@ -18,7 +20,7 @@ interface Props {
 
 export default function EmployeeEdit(props: Props) {
 
-    const [initialEmployee, setInitialEmploye] = useState<Employee>(props.employee);
+    const [initialEmployee] = useState<Employee>(props.employee);
     const [employee, setEmploye] = useState<Employee>(props.employee);
     const [errors, setErrors] = useState(new Map<string, string>());
 
@@ -140,6 +142,7 @@ export default function EmployeeEdit(props: Props) {
                                errors={ErrorMapper.childError(errors)}/>
 
                     <CUDButtons onSave={EmployeeService.save}
+                                company={props.company}
                                 name={"Mitarbeiter"}
                                 object={employee}
                                 initialState={initialEmployee}

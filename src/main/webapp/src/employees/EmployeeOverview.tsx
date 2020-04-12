@@ -3,17 +3,22 @@ import * as React from "react";
 import EmployeeList from "./EmployeeList";
 import EmployeeEdit from "./EmployeeEdit";
 import API from "../API";
+import Company from "./Company";
+
+interface Props {
+    company:Company
+}
 
 interface EmployeeOverviewState {
-    employees: Employee[]
+        employees: Employee[]
     selectedEmployee: Employee,
     editEmployee: boolean,
     isLoading: boolean
 }
 
-export default class EmployeeOverview extends React.Component<{}, EmployeeOverviewState> {
+export default class EmployeeOverview extends React.Component<Props, EmployeeOverviewState> {
 
-    constructor(props: {}) {
+    constructor(props: Props) {
         super(props);
         this.state = {employees: [], editEmployee: false, selectedEmployee: new Employee(), isLoading: true};
     }
@@ -33,7 +38,7 @@ export default class EmployeeOverview extends React.Component<{}, EmployeeOvervi
                                   }}
                                   isLoading={this.state.isLoading}/>}
                 {!this.state.editEmployee ? null :
-                    <EmployeeEdit employee={this.state.selectedEmployee}
+                    <EmployeeEdit company={this.props.company} employee={this.state.selectedEmployee}
                                   onCancelEdit={this.handleCancelEdit.bind(this)}
                                   onSave={this.handleSavedEmployee.bind(this)}
                     />}

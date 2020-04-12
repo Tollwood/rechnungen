@@ -3,9 +3,10 @@ import Service from "../order/Service";
 import ServiceEdit from "./ServiceEdit";
 import ServiceList from "./ServiceList";
 import {Page} from "../common/Page";
+import Company from "../employees/Company";
 
 interface ServiceOverviewProps {
-    company: String,
+    company: Company,
 }
 
 interface ServiceOverviewState {
@@ -20,7 +21,7 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
 
     constructor(props: ServiceOverviewProps) {
         super(props);
-        this.state = {services: [], edit: false, selectedItem: new Service(this.props.company), isLoading: true, page: new Page('articleNumber')};
+        this.state = {services: [], edit: false, selectedItem: new Service(this.props.company._links.self!.href), isLoading: true, page: new Page('articleNumber')};
     }
 
 
@@ -38,6 +39,7 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
                     />}
                 {!this.state.edit ? null :
                     <ServiceEdit
+                        company={this.props.company}
                         service={this.state.selectedItem}
                         onCancelEdit={this.handleCancelEdit.bind(this)}
                         onSave={this.handleSave.bind(this)}
@@ -49,7 +51,7 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
     }
 
     private handleAdd() {
-        this.setState(Object.assign(this.state, {edit: true, selectedItem: new Service(this.props.company)}))
+        this.setState(Object.assign(this.state, {edit: true, selectedItem: new Service(this.props.company._links.self!.href)}))
     }
 
     private handleSelection(selectedItem: Service) {
@@ -57,15 +59,15 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
     }
 
     private handleCancelEdit() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service(this.props.company)}))
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service(this.props.company._links.self!.href)}))
     }
 
     private handleDelete() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service(this.props.company)}));
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service(this.props.company._links.self!.href)}));
     }
 
     private handleSave() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service(this.props.company)}));
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service(this.props.company._links.self!.href)}));
     }
 
 }

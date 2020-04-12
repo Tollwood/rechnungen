@@ -3,6 +3,7 @@ import Link from "../common/Links";
 import RealEstate from "./RealEstate";
 import ErrorMapper from "../ErrorMapper";
 import Order from "../order/Order";
+import Company from "../employees/Company";
 
 export default class RealEstateService {
 
@@ -21,7 +22,7 @@ export default class RealEstateService {
             });
     }
 
-    public static save(realEstate: RealEstate, onSuccess: (realEstate: RealEstate) => void, onError: (errors: Map<string, string>) => void) {
+    public static save(realEstate: RealEstate, company:Company, onSuccess: (realEstate: RealEstate) => void, onError: (errors: Map<string, string>) => void) {
         if (realEstate._links.self === undefined) {
             API.post("/api/realestate", realEstate)
                 .then(result => result.data)

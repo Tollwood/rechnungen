@@ -7,15 +7,17 @@ import AddressInput from "../common/AddressInput";
 import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
 import RealEstateService from "./RealEstateService";
+import Company from "../employees/Company";
 
 interface Props {
     onChange: () => void;
+    company:Company;
     realEstate: RealEstate;
 }
 
 export default function RealEstateEdit(props: Props) {
 
-    const [initialRealEstate, setInitialRealEstate] = useState<RealEstate>(props.realEstate);
+    const [initialRealEstate] = useState<RealEstate>(props.realEstate);
     const [realEstate, setRealEstate] = useState<RealEstate>(props.realEstate);
     const [errors, setErrors] = useState(new Map<string, string>());
 
@@ -62,6 +64,7 @@ export default function RealEstateEdit(props: Props) {
                     <AddressInput readonly={false} address={realEstate.address} handleAddressChange={handleAddressChange}
                                   errors={new Map()}/>
                     <CUDButtons onSave={RealEstateService.save}
+                                company={props.company}
                                 name={"Liegenschaft"}
                                 object={realEstate}
                                 initialState={initialRealEstate}

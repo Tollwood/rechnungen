@@ -1,5 +1,6 @@
-package com.tollwood.jpa
+package com.tollwood.company
 
+import com.tollwood.jpa.Address
 import javax.persistence.*
 
 @Entity(name = "COMPANY")
@@ -11,6 +12,7 @@ data class Company(
         var billNo: Long = 0,
         val name: String,
         val logo: String,
+        val thankYouImage: String?,
         @Embedded
         val address: Address,
         val phone: String,

@@ -1,12 +1,11 @@
 package com.tollwood.rechnungen
 
-import com.tollwood.CompanyResource
+import com.tollwood.company.CompanyResource
 import com.tollwood.EmployeeResource
 import com.tollwood.order.OrderResource
 import com.tollwood.realestate.RealestateResource
 import com.tollwood.service.ServiceResource
 import com.tollwood.jpa.Address
-import com.tollwood.jpa.Company
 import com.tollwood.order.jpa.Order
 import com.tollwood.realestate.jpa.RealEstate
 import com.tollwood.jpa.ServiceOrder

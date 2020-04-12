@@ -2,15 +2,20 @@ import * as React from "react";
 import RealEstate from "./RealEstate";
 import RealEstateList from "./RealEstateList";
 import RealEstateEdit from "./RealEstateEdit";
+import Company from "../employees/Company";
+
+interface Props {
+    company:Company
+}
 
 interface RealEstateOverviewState {
     selectedItem: RealEstate,
     edit: boolean,
 }
 
-export default class RealEstateOverview extends React.Component<{}, RealEstateOverviewState> {
+export default class RealEstateOverview extends React.Component<Props, RealEstateOverviewState> {
 
-    constructor(props: {}) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             edit: false,
@@ -29,6 +34,7 @@ export default class RealEstateOverview extends React.Component<{}, RealEstateOv
                     />}
                 {!this.state.edit ? null :
                     <RealEstateEdit realEstate={this.state.selectedItem}
+                                    company={this.props.company}
                                     onChange={this.handleChange.bind(this)}
                     />}
             </div>

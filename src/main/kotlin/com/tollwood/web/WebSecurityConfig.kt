@@ -1,11 +1,9 @@
 package com.tollwood.web
 
-import com.fasterxml.jackson.annotation.JsonSetter
-import com.fasterxml.jackson.annotation.Nulls
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpMethod.POST
 import org.springframework.security.authentication.AuthenticationManager
@@ -19,10 +17,12 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.CorsConfigurationSource
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import java.util.*
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+
+
+
 
 
 @Configuration
@@ -57,16 +57,29 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity
+                //.requiresChannel().anyRequest().requiresSecure()
+                //.and()
                 .headers().frameOptions().sameOrigin().and() // only needed for h2 endpoint
                 .csrf().disable()
                 .cors()
                 .and()
-                .authorizeRequests().antMatchers(GET, "/api/service/**", "/authenticate", "/api/company/**").permitAll()
+                .authorizeRequests().antMatchers(GET, "/api/service/**", "/authenticate", "/api/company/**", "/api/category/**").permitAll()
                 .and()
-                .authorizeRequests().antMatchers(POST, "/api/order").permitAll()
+                .authorizeRequests().antMatchers(POST, "/api/order","/api/category/**").permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/api/**").authenticated()
+                .authorizeRequests().antMatchers("/api/**").permitAll()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         httpSecurity.addFilterBefore(jwtRequestFilter!!, UsernamePasswordAuthenticationFilter::class.java)
+    }
+
+
+    @Bean
+    @Profile("local")
+    fun corsConfigurer(): WebMvcConfigurer? {
+        return object : WebMvcConfigurer {
+            override fun addCorsMappings(registry: CorsRegistry) {
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000/")
+            }
+        }
     }
 }

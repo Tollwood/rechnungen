@@ -6,8 +6,10 @@ import CUDButtons from "../common/CUDButtons";
 import Service from "../order/Service";
 import ServiceService from "./ServiceService";
 import ErrorMapper from "../ErrorMapper";
+import Company from "../employees/Company";
 
 interface Props {
+    company:Company;
     onSave: () => void;
     onCancelEdit: () => void;
     onDelete: () => void;
@@ -17,7 +19,7 @@ interface Props {
 export default function ServiceEdit(props: Props) {
 
     const [service, setService] = useState<Service>(props.service);
-    const [initialService, setInitialService] = useState<Service>(props.service);
+    const [initialService] = useState<Service>(props.service);
     const [errors, setErrors] = useState(new Map<string, string>());
 
     function handleSelectable(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) {
@@ -108,6 +110,7 @@ export default function ServiceEdit(props: Props) {
                         </Grid.Column>
                     </Grid.Row>
                     <CUDButtons onSave={ServiceService.save}
+                                company={props.company}
                                 onDelete={ServiceService.delete}
                                 name={"Dienstleistung"}
                                 object={service}

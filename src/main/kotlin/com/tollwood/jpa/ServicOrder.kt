@@ -18,8 +18,8 @@ data class ServiceOrder(
         @ManyToOne
         val service: Service,
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    val order: Order
+        @JsonBackReference
+        @ManyToOne
+        @JoinColumn(name = "order_id")
+        val order: Order
 )

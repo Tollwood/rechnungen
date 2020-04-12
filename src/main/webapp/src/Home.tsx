@@ -1,152 +1,189 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {
-    Accordion,
-    AccordionTitleProps,
-    Button,
-    Card,
-    Container,
-    Form,
-    Icon,
-    Image,
-    Input,
-    InputOnChangeData,
-    Menu,
-    Message,
-    Responsive,
-    Segment,
-    Visibility
-} from "semantic-ui-react";
-import CustomerDetails from "./customer/CustomerDetails";
+import {Accordion, AccordionTitleProps, Container, Form, Icon, Message, Segment} from "semantic-ui-react";
 import ServiceService from "./services/ServiceService";
-import OrderConfirm from "./OrderConfirm";
 import Company from "./employees/Company";
 import CompanyService from "./order/CompanyService";
 import OrderService from "./order/OrderService";
 import Order from "./order/Order";
-import OrderCount from "./OrderCount";
-import {DateInput} from "semantic-ui-calendar-react";
-import Customer from "./customer/Customer";
 import ErrorMapper from "./ErrorMapper";
-import Statistic from "semantic-ui-react/dist/commonjs/views/Statistic";
+import Category from "./category/Category";
+import CustomerDetails from "./customer/CustomerDetails";
+import Basket from "./Basket";
+import OrderConfirm from "./OrderConfirm";
+import CategoryService from "./category/CategoryService";
+import CategoryAccordion from "./CategoryAccordion";
+import Wishdate from "./WhishDate";
+import OrderCount from "./OrderCount";
+import {DateUtil} from "./common/DateUtil";
+import OrderSummaryModal from "./OrderSummaryModal";
 
 export default function Home() {
 
-    const [services, setServices] = useState<OrderCount[]>([]);
-
-    function tomorrow() {
-        var tomorrow = new Date();
-        tomorrow.setDate(new Date().getDate() + 1);
-        var dd = String(tomorrow.getDate()).padStart(2, '0');
-        var mm = String(tomorrow.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = tomorrow.getFullYear();
-        return dd + '.' + mm + '.' + yyyy;
-    }
-
-    const [wishDate, setWishDate] = useState<string>(tomorrow());
+    const [orderCount, setOrderCount] = useState<Map<string, OrderCount[]>>(new Map());
+    const [order, setOrder] = useState<Order>(new Order(""));
+    const [errors, setErrors] = useState<Map<string, string>>(new Map());
     const [completed, setCompleted] = useState<boolean>(false);
+
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [company, setCompany] = useState<Company>(new Company());
-    const [customer, setCustomer] = useState<Customer>(new Customer());
-    const [errors, setErrors] = useState<Map<string, string>>(new Map());
 
     const [productCount, setProductCount] = useState<number>(0);
     const [totalPrice, setTotalPrice] = useState<number>(0);
-    const [menuFixed, setMenuFixed] = useState<boolean>(false);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [fetchedCategories, setfetchedCategories] = useState<string[]>([]);
+
+    const [showOrderSummaryModal, setShowOrderSummaryModal] = useState<boolean>(false);
+    const [allowOrders, setAllowOrders] = useState<boolean>(true);
+
     useEffect(() => {
-        document.title = "Bestellungen";
-        CompanyService.get((result) => setCompany(result));
-        ServiceService.fetchServices((result) => {
-            setServices(result.map((s, index) => {
-                return {service: s, amount: 0, index: index};
-            }));
-        });
+        CompanyService.get((result: Company) => {
+            setOrder({...order, company: result._links.self!.href, firstAppointment: DateUtil.tomorrowAsString()});
+            setCompany(result);
+        }).then(() => CategoryService.get((categories1 => {
+            setCategories(categories1);
+            categories1.map(value => fetchServicesForCategory(value));
+
+        })));
     }, []);
 
+    useEffect(() => {
+
+        if(order.firstAppointment === undefined){
+            setAllowOrders(true);
+            return;
+        }
+
+        let wishdate = DateUtil.stringToDate(order.firstAppointment);
+        let today = new Date();
+        let inFuture= today.getDate() < wishdate.getDate();
+
+        // no orders in the past
+        if(!inFuture){
+            setAllowOrders(false);
+            return;
+        }
+
+        let isNextDay = DateUtil.isNextDay(today, wishdate);
+
+        let day = today.getDay();
+        let hours = today.getHours();
+
+        // no orders on sunday
+        if (isNextDay && [0].includes(day)) {
+            setAllowOrders(false);
+            return;
+        }
+
+        // no orders after 16 oclock mon-fri
+        if (    isNextDay &&  hours >= 16 && [1, 2, 3, 4, 5].includes(day)) {
+            setAllowOrders(false);
+            return;
+        }
+
+        // no orders after 11 oclock on saturday (for sunday and monday)
+        if (hours >= 11 && [6].includes(day) && (isNextDay || today.getDate() + 2 === wishdate.getDate())) {
+            setAllowOrders(false);
+            return;
+        }
+
+        setAllowOrders(true);
+
+    }, [order.firstAppointment]);
+
+    function fetchServicesForCategory(category: Category) {
+        ServiceService.fetchServicesFromUrl(category._links.services!.href).then(value => setOrderCount(orderCount.set(category.name, value.map(s => {
+            return {service: s, amount: 0};
+        }))));
+        setfetchedCategories(fetchedCategories.concat(category.name));
+    }
 
     function handleClick(event: React.MouseEvent<HTMLDivElement>, data: AccordionTitleProps) {
         setActiveIndex(activeIndex === data.index ? -1 : data.index as number);
-        if (data.index === 1) {
-            setErrors(ErrorMapper.removeError(errors, "services"));
-        }
     }
 
+    function updateCount(category: Category, updatedOrderCount: OrderCount) {
 
-    function updateCount(value: number, index: number) {
-        const list = services.map((serviceCount, i) => {
-            if (i === index) {
-                setProductCount(productCount + value - serviceCount.amount);
-                setTotalPrice((totalPrice + value * serviceCount.service.price - serviceCount.amount * serviceCount.service.price));
-                serviceCount.amount = value;
+        const list = orderCount.get(category.name)!.map((serviceCount, i) => {
+            if (serviceCount.service.articleNumber === updatedOrderCount.service.articleNumber) {
+                setProductCount(productCount + updatedOrderCount.amount - serviceCount.amount);
+                setTotalPrice((totalPrice + updatedOrderCount.amount * serviceCount.service.price - serviceCount.amount * serviceCount.service.price));
+                serviceCount.amount = updatedOrderCount.amount;
                 return serviceCount;
             } else {
                 return serviceCount;
             }
         });
-        setServices(list)
+        setOrderCount(orderCount.set(category.name, list));
     }
 
     function onCustomerChange(name: string, value: any) {
-        setCustomer(value);
+        setOrder({...order, customer: value});
         setErrors(ErrorMapper.removeError(errors, name));
     }
 
-    function renderItem(serviceCount: OrderCount) {
-        return <Card>
-            <Image src={serviceCount.service.image} style={{width: "200px"}} wrapped centered/>
-            <Card.Content>
-                <Card.Header>{serviceCount.service.title}</Card.Header>
-                <Card.Meta>
-                    <span className='date'>{serviceCount.service.price.toLocaleString('de', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    })} €</span>
-                </Card.Meta>
-                <Card.Description>
-                    {serviceCount.service.description}
-                </Card.Description>
-            </Card.Content>
-            <Card.Content extra>
-                <Input style={{width: "70px"}} value={serviceCount.amount}
-                       onChange={(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
-                           updateCount(parseInt(data.value), serviceCount.index!)
-                       }}/>
-                <Button icon={"plus"} onClick={() => updateCount(serviceCount.amount + 1, serviceCount.index!)}/>
-                <Button icon={"minus"}
-                        onClick={() => updateCount(serviceCount.amount > 0 ? serviceCount.amount - 1 : 0, serviceCount.index!)}/>
-            </Card.Content>
-        </Card>;
-    }
-
     function onOrder() {
-        let order = new Order(company._links.self!.href);
-        order.services = services.filter(value => value.amount > 0).map((value) => {
+
+        let orderCounts: OrderCount[] = Array.from<OrderCount[]>(orderCount.values()).reduce((previousValue, currentValue) => previousValue.concat(currentValue), []);
+        order.services = orderCounts.filter(value => value.amount > 0).map((value) => {
             return {amount: value.amount, service: value.service._links.self!.href, _links: {service: value.service._links.self!}}
         });
         order.status = "ORDER_EXECUTE";
-        order.firstAppointment = wishDate;
-        order.customer = customer;
         OrderService.save(order, () => setCompleted(true), (errors: Map<string, string>) => {
             setErrors(errors);
             setActiveIndex(0);
         });
     }
 
-    function handleDateChange(e: any, data: { value: string }) {
-        setWishDate(data.value);
+    function handleCategoryClick(category: Category, index: number) {
+        setActiveIndex(activeIndex === index ? -1 : index);
+    }
+
+    function renderCategories() {
+        let index: number = 1;
+        return categories
+            .filter(category => (category.name === "Sonntagsbrötchen" && DateUtil.isSundayOrder(order.firstAppointment)) || (category.name !== "Sonntagsbrötchen" && !DateUtil.isSundayOrder(order.firstAppointment)))
+            .map(category => <CategoryAccordion index={index++} activeIndex={activeIndex}
+                                                orderCount={orderCount.get(category.name) ? orderCount.get(category.name)! : []}
+                                                category={category}
+                                                handleCategoryClick={handleCategoryClick} updateCount={updateCount}/>);
+    }
+
+    function validateOrder(): Map<string, string> {
+
+        let errors = new Map();
+        if (order.customer.lastName === undefined) {
+            errors.set("customer.lastName", "Pflichtfeld");
+        }
+        if (order.customer.phoneNumber === undefined) {
+            errors.set("customer.phoneNumber", "Pflichtfeld");
+        }
+        if (orderCounts.filter(value => value.amount > 0).length === 0) {
+            errors.set("services", "Pflichtfeld");
+        }
+        return errors
     }
 
     function renderOrderEntry() {
 
         return <Container text>
-            <Message
-                warning
-                header='Aktuell sind noch keine Bestellungen möglich'
-                content='Diese Seite befindet sich noch in der Entwicklung. Aktuell werden keine Bestellungen bearbeitet.'
-            />
             <Form>
-                <Image src={company.logo} style={{width: "600px"}} centered/>
-                <Segment>Am Vortag bestellen und ganz gemütlich ohne Wartezeit am nächsten Tag abholen. </Segment>
+                <Message info>
+                    <Message.Header>Aktuell sind noch keine Bestellungen möglich</Message.Header>
+                    <p>Diese Seite befindet sich noch in der Entwicklung. Aktuell werden keine Bestellungen bearbeitet.</p>
+                </Message>
+                <Segment>Am Vortag bis 16 Uhr<sup>*</sup> bestellen und ganz gemütlich am nächsten Tag abholen.</Segment>
+                <Basket productCount={productCount} totalPrice={totalPrice} company={company} onOrder={() => {
+                    let newErrors = validateOrder();
+                    if(newErrors.size === 0){
+                        setShowOrderSummaryModal(true)
+                    }else {
+                        setErrors(newErrors);
+                        setActiveIndex(0);
+                    }
+                }}
+                        errors={errors}
+                        allowOrders={allowOrders}/>
                 <Accordion fluid styled>
                     <Accordion.Title
                         active={activeIndex === 0}
@@ -157,92 +194,31 @@ export default function Home() {
                         Bestellung auf
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
-                        <CustomerDetails readonly={false} customer={customer} onChange={onCustomerChange}
+                        <CustomerDetails readonly={false} customer={order.customer} onChange={onCustomerChange}
                                          errors={ErrorMapper.childError(errors)}/>
-                        <Form.Field>
-                            <label>Abholdatum</label>
-                            <DateInput
-                                id="firstAppointment"
-                                dateFormat={"DD.MM.YYYY"}
-                                minDate={'01.01.1990'}
-                                hideMobileKeyboard={true}
-                                name="firstAppointment"
-                                placeholder="Abohldatum wählen"
-                                value={wishDate ? wishDate : ''}
-                                iconPosition="left"
-                                onChange={handleDateChange}
-                                error={errors.get('firstAppointment') ? {content: errors.get('firstAppointment')} : null}
-                            />
-                        </Form.Field>
                     </Accordion.Content>
-                    <Accordion.Title
-                        active={activeIndex === 1}
-                        index={1}
-                        onClick={handleClick}
-                    >
-                        <Icon name='dropdown'/>
-                        Produkte auswählen
-                        {errors.get('services') && <Message negative>
-                            <p>Bittw wählen Sie mindestens ein Produkt aus</p>
+                    <Accordion.Title>
+                        <Wishdate handleDateChange={(date: string) => setOrder({...order, firstAppointment: date})} errors={errors}/>
+                        {!allowOrders && <Message info>
+                            <Message.Header>Bestellung zum {order.firstAppointment} leider nicht möglich.</Message.Header>
+                            <p>Bitte wählen Sie ein späteren Abholtermin damit wir Ihnen die gewohnte Frische garantieren können.</p>
+                            <p>Sie können Montag - Freitag bis 16 uhr und Samstags bis 11 Uhr für den Folgetag bestellen.</p>
+                            <p>Bestellungen für Montag geben Sie bitte ebenfalls bis Samstag 11 Uhr auf. </p>
                         </Message>}
                     </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 1}>
-                        <Visibility
-                            onBottomPassed={() => setMenuFixed(true)}
-                            onBottomVisible={() => setMenuFixed(false)}
-                            once={false}
-                        >
-                            <Menu
-                                fixed={menuFixed ? 'top' : undefined}
-                                widths={4}
-                                borderless
-                            >
-                                <Menu.Item>
-                                    <Image src={company.logo} style={{width: "70px"}} />
-                                </Menu.Item>
-                                <Menu.Item>
-                                    <Statistic horizontal label='Produkte' value={productCount} size={"mini"}/>
-                                </Menu.Item>
-                                <Menu.Item>
-                                    <Statistic horizontal label='€ Gesamt' value={totalPrice.toLocaleString('de', {
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2
-                                    })} size={"mini"}/>
-                                </Menu.Item>
-                                <Menu.Item>
-                                    <Button primary content={"Jetzt bestellen"} icon ={"cart"} floated={"right"} onClick={onOrder}/>
-                                </Menu.Item>
-                            </Menu>
-
-                        </Visibility>
-                        <Responsive maxWidth={480}>
-                            <Card.Group itemsPerRow={1}>
-
-                                {services.map(service => renderItem(service))}
-                            </Card.Group>
-                        </Responsive>
-                        <Responsive minWidth={481} maxWidth={720}>
-                            <Card.Group itemsPerRow={2}>
-                                {services.map(service => renderItem(service))}
-                            </Card.Group>
-                        </Responsive>
-                        <Responsive minWidth={721}>
-                            <Card.Group itemsPerRow={3}>
-                                {services.map(service => renderItem(service))}
-                            </Card.Group>
-                        </Responsive>
-                    </Accordion.Content>
+                    {renderCategories()}
                 </Accordion>
-                {!menuFixed && <Button primary content={"Jetzt bestellen"} icon ={"cart"} floated={"right"} onClick={onOrder}/>}
             </Form>
+            <OrderSummaryModal onSuccess={onOrder} onClose={() => setShowOrderSummaryModal(false)} show={showOrderSummaryModal}
+                               orderCounts={orderCounts.filter(value => value.amount > 0)} customer={order.customer}
+                               wishdate={order.firstAppointment!}/>
         </Container>
     }
 
-    function renderOrderCompleted() {
-        return <OrderConfirm services={services.filter(value => value.amount > 0)}/>
-    }
-
-    return completed ? renderOrderCompleted() : renderOrderEntry()
+    let orderCounts: OrderCount[] = Array.from<OrderCount[]>(orderCount.values()).reduce((previousValue, currentValue) => previousValue.concat(currentValue), []);
+    return completed ?
+        <OrderConfirm customer={order.customer} wishdate={order.firstAppointment!} services={orderCounts.filter(value => value.amount > 0)}
+                      company={company}/> : renderOrderEntry()
 
 
 }

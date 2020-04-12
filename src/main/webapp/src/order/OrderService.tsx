@@ -3,15 +3,25 @@ import API from "../API";
 import ErrorMapper from "../ErrorMapper";
 import RealEstate from "../realestate/RealEstate";
 import Link from "../common/Links";
+import Company from "../employees/Company";
 
 export default class OrderService {
 
     public static save(order: Order, onSuccess: (order: Order) => void, onError: (errors: Map<string, string>) => void): void {
 
+        function companyAsString(company: String | Company): string {
+             if ("string" !== typeof  company){
+                return  (company as Company)._links.self!.href;
+            }else {
+                 return company;
+             }
+        }
+
+        order.company = companyAsString(order.company);
         if (order._links.self === undefined) {
             API.post("/api/order", order)
                 .then(result => result.data)
-                .then((data: any) => Object.assign(new Order(order.company), data))
+                .then((data: any) => Object.assign(new Order(companyAsString(order.company)), data))
                 .then(onSuccess)
                 .catch(error => ErrorMapper.map(error, onError));
         } else {
@@ -19,10 +29,10 @@ export default class OrderService {
             order.billItems = [];
             API.patch(order._links.self.href, order)
                 .then(() => {
-                    order.services = order.services.map(value => { value.service  = value.service != ""? value._links.service.href :  value.service ;return value;});
+                    order.services = order.services.map(value => { value.service  = value.service !== ""? value._links.service.href :  value.service ;return value;});
                     API.patch(order._links.self!.href, order)
                         .then(result => result.data)
-                        .then((data: any) => Object.assign(new Order(order.company), data))
+                        .then((data: any) => Object.assign(new Order(order.company as string), data))
                         .then(onSuccess)
                         .catch(error => ErrorMapper.map(error, onError));
                 })

@@ -36,7 +36,7 @@ export default function CustomerDetails(props: Props) {
                         />
                     </Form.Field>
                 </Grid.Column>
-                <Grid.Column computer={6} tablet={6} mobile={16} textAlign={"left"}>
+                { (props.readonly && props.customer.firstName !== undefined || !props.readonly )&& <Grid.Column computer={6} tablet={6} mobile={16} textAlign={"left"}>
                     <Form.Field>
                         <label>Vorname</label>
                         <Form.Input id="firstName"
@@ -49,7 +49,7 @@ export default function CustomerDetails(props: Props) {
                                     error={props.errors.get('firstName') ? {content: props.errors.get('firstName')} : null}
                         />
                     </Form.Field>
-                </Grid.Column>
+                </Grid.Column>}
                 <Grid.Column computer={6} tablet={6} mobile={16}  textAlign={"left"}>
                     <Form.Field>
                         <label>Nachname</label>
@@ -79,7 +79,14 @@ export default function CustomerDetails(props: Props) {
                     />
                 </Grid.Column>
             </Grid.Row>
-            <AddressInput readonly={props.readonly} address={props.customer.address} handleAddressChange={handleAddressChange} errors={props.errors}/>
+            {(props.readonly &&
+                (props.customer.address.street !== ""
+                    || props.customer.address.houseNumber !== ""
+                    || props.customer.address.zipCode !== ""
+                    || props.customer.address.city !== "")|| !props.readonly) &&
+            <AddressInput readonly={props.readonly} address={props.customer.address} handleAddressChange={handleAddressChange}
+                          errors={props.errors}/>
+            }
         </Grid>
     </Segment>;
 
