@@ -6,9 +6,10 @@ import UnsavedChangesModal from "../UnsavedChangesModal";
 import Company from "../employees/Company";
 
 interface Props {
-    onSave: (object: any, company:Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void) => void
+    onSave: (object: any, company:Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void, additionalArguments: any) => void
     company:Company
     object: any
+    additionalArgument?: any
     name: string
     onSuccess: () => void
     onCancel: () => void
@@ -49,7 +50,7 @@ export default function CUDButtons(props: Props) {
     return <Grid.Row centered>
         <Grid.Column width={5} floated='left'>
             <Form.Button primary content='Speichern' icon='save' labelPosition='left'
-                         onClick={() => props.onSave(props.object, props.company, confirmSuccess(props.onSuccess, "gepeichert"), confirmError(props.onError, "gepeichert"))}
+                         onClick={() => props.onSave(props.object, props.company, confirmSuccess(props.onSuccess, "gepeichert"), confirmError(props.onError, "gepeichert"), props.additionalArgument)}
                          className={'save-bttn'}/>
         </Grid.Column>
         <Grid.Column width={5}>

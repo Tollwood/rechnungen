@@ -7,4 +7,9 @@ export default class CategoryService {
         API.get('/api/category')
             .then(res => onSuccess( res.data._embedded.category));
     }
+
+    public static getFromUrl(url:string, onSuccess: (categories: Category[]) => void)  {
+        API.get(url)
+            .then(res => onSuccess( res.data._embedded.category));
+    }
 }

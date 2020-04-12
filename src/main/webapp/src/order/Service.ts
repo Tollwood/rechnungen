@@ -9,7 +9,7 @@ export default class Service {
     selectable: boolean =true;
     company: String | Company;
     image: String = "";
-    _links: {self?: Link} = {};
+    _links: {self?: Link, categories?: Link} = {};
 
     constructor(company: String) {
         this.company = company;

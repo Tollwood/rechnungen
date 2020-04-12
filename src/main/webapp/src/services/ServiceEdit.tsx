@@ -1,15 +1,16 @@
 import * as React from "react";
-import {ChangeEvent, useState} from "react";
-import {Checkbox, CheckboxProps, Form, Icon, Segment} from 'semantic-ui-react'
+import {ChangeEvent, useEffect, useState} from "react";
+import {Checkbox, CheckboxProps, DropdownItemProps, DropdownProps, Form, Icon, Segment} from 'semantic-ui-react'
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import Service from "../order/Service";
 import ServiceService from "./ServiceService";
 import ErrorMapper from "../ErrorMapper";
 import Company from "../employees/Company";
+import CategoryService from "../category/CategoryService";
 
 interface Props {
-    company:Company;
+    company: Company;
     onSave: () => void;
     onCancelEdit: () => void;
     onDelete: () => void;
@@ -21,6 +22,23 @@ export default function ServiceEdit(props: Props) {
     const [service, setService] = useState<Service>(props.service);
     const [initialService] = useState<Service>(props.service);
     const [errors, setErrors] = useState(new Map<string, string>());
+    const [categories, setCategories] = useState<DropdownItemProps[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+    useEffect(() => {
+        CategoryService.get((categories1 => {
+            let options = categories1.map(value => {
+                return {key: value._links.self!.href, text: value.name, value: value._links.self!.href}
+            });
+            setCategories(options);
+        }));
+
+        if (service._links.self !== undefined) {
+            CategoryService.getFromUrl(service._links.self!.href + "/categories", (value) => {
+                setSelectedCategories(value.map(value1 => value1._links.self!.href))
+            });
+        }
+    }, []);
 
     function handleSelectable(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) {
 
@@ -32,6 +50,10 @@ export default function ServiceEdit(props: Props) {
     function handleChange(event: ChangeEvent<HTMLInputElement>) {
         setService({...service, [event.target.name]: event.target.value});
         setErrors(ErrorMapper.removeError(errors, event.target.name));
+    }
+
+    function handleCategoriesChanged(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        setSelectedCategories(data.value as string[])
     }
 
     return (
@@ -109,11 +131,20 @@ export default function ServiceEdit(props: Props) {
                             </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Form.Field>
+                                <label>Kategorien</label>
+                                <Form.Dropdown placeholder='Kategorien' fluid multiple selection options={categories} value={selectedCategories} onChange={handleCategoriesChanged}/>
+                            </Form.Field>
+                        </Grid.Column>
+                    </Grid.Row>
                     <CUDButtons onSave={ServiceService.save}
                                 company={props.company}
                                 onDelete={ServiceService.delete}
                                 name={"Dienstleistung"}
                                 object={service}
+                                additionalArgument={selectedCategories}
                                 initialState={initialService}
                                 onSuccess={props.onSave}
                                 onCancel={props.onCancelEdit}
