@@ -92,7 +92,9 @@ tasks.create<Copy>("copywebapp") {
 }
 
 tasks.named("compileKotlin") {
-	dependsOn("copywebapp")
+	if (project.hasProperty("build_frontend")) {
+		dependsOn("copywebapp")
+	}
 }
 
 idea {

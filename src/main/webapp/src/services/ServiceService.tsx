@@ -21,7 +21,7 @@ export default class ServiceService {
     }
 
     public static save(service: Service, company: Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void, categories?: string[]) {
-        service.image = service.image === "" ? '/products/' + company.name + '/placeholder.png' : service.image;
+        service.image = service.image === "" ? '/services/' + company.name + '/placeholder.png' : service.image;
 
         service.company = company._links.self!.href;
         if (service._links.self === undefined) {

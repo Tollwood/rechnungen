@@ -25,7 +25,7 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
     fun computeBillItems(order: Order): List<BillItem> {
         val billItems = ArrayList<BillItem>()
         basePrice(order)?.let { billItems.add(it) }
-        addDistanceItem(order)?.let { billItems.addAll(it) }
+        addDistanceItem(order).let { billItems.addAll(it) }
         smallOrder(order)?.let { billItems.add(it) }
 
         order.services
@@ -67,11 +67,8 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
 
     private fun getDistanceItem(order: Order, code: String, distance: Int = 1): BillItem {
         val service: Optional<Service> = serviceResource.findByArticleNumber(code)
-        if (service.isPresent) {
             return BillItem(id = DependentId(service.get().articleNumber ?: "", order.id), amount = distance, serviceName = service.get().title,
                     price = service.get().price ?: 0.0, order = order);
-        }
-        return throw IllegalStateException("Service Item with code: " + code + " not found")
     }
 
     private fun basePrice(order: Order): BillItem? {
