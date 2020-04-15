@@ -1,0 +1,1 @@
+ALTER TABLE  CATEGORY ADD COLUMN  active boolean default true;

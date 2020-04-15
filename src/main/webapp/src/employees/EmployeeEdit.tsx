@@ -141,8 +141,7 @@ export default function EmployeeEdit(props: Props) {
                                handleBankDetailsChange={handleBankDetailsChange}
                                errors={ErrorMapper.childError(errors)}/>
 
-                    <CUDButtons onSave={EmployeeService.save}
-                                company={props.company}
+                    <CUDButtons onSave={(onSuccess, onError)=> {EmployeeService.save(employee,props.company,onSuccess,onError)}}
                                 name={"Mitarbeiter"}
                                 object={employee}
                                 initialState={initialEmployee}

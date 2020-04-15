@@ -8,6 +8,7 @@ import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
 import RealEstateService from "./RealEstateService";
 import Company from "../employees/Company";
+import EmployeeService from "../employees/EmployeeService";
 
 interface Props {
     onChange: () => void;
@@ -63,8 +64,7 @@ export default function RealEstateEdit(props: Props) {
                     </Grid.Row>
                     <AddressInput readonly={false} address={realEstate.address} handleAddressChange={handleAddressChange}
                                   errors={new Map()}/>
-                    <CUDButtons onSave={RealEstateService.save}
-                                company={props.company}
+                    <CUDButtons onSave={(onSuccess, onError)=> {RealEstateService.save(realEstate,props.company,onSuccess,onError)}}
                                 name={"Liegenschaft"}
                                 object={realEstate}
                                 initialState={initialRealEstate}

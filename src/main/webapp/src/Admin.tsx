@@ -17,6 +17,7 @@ import Link from "./common/Links";
 import BackendAlerts from "./BackendAlerts";
 import StatisticOverview from "./statistic/StatisticOverview";
 import CompanyService from "./order/CompanyService";
+import CategoryOverview from "./category/CategoryOverview";
 
 interface State {
     activeOrder?: Link,
@@ -65,6 +66,7 @@ export class Admin extends Component<Props, State> {
                                 {this.state.activeContent === ContentType.STATISTICS ? <StatisticOverview/> : null}
                                 {this.state.activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview company={this.state.company}  /> : null}
                                 {this.state.activeContent === ContentType.SERVICES ? <ServicesOverview company={this.state.company}/> : null}
+                                {this.state.activeContent === ContentType.CATEGORIES ? <CategoryOverview company={this.state.company}/> : null}
                                 {this.state.activeContent === ContentType.ORDER_DETAILS ?
                                     <OrderEdit company={this.state.company}
                                                onSave={this.closeOrder.bind(this)}

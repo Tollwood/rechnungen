@@ -1,5 +1,7 @@
 import API from "../API";
 import Category from "./Category";
+import Company from "../employees/Company";
+import ErrorMapper from "../ErrorMapper";
 
 export default class CategoryService {
 
@@ -11,5 +13,33 @@ export default class CategoryService {
     public static getFromUrl(url:string, onSuccess: (categories: Category[]) => void)  {
         API.get(url)
             .then(res => onSuccess( res.data._embedded.category));
+    }
+
+    static delete(category: Category, onSuccess: () => void, onError: (errors: Map<string, string>) => void) {
+        // @ts-ignore
+        API.delete(category._links.self.href)
+            .then(onSuccess)
+            .catch(error => {
+                ErrorMapper.map(error, onError)
+            });
+    }
+
+    static save(category: Category, company: Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void) {
+        category.services = [];
+        category.company = company._links.self!.href;
+        if (category._links.self === undefined) {
+            API.post("/api/category", category)
+                .then(result => result.data)
+                .then((data: any) => Object.assign(new Category(company._links.self!.href), data))
+                .then(onSuccess)
+                .catch(error => {ErrorMapper.map(error, onError)
+                });
+        } else {
+            API.patch(category._links.self.href, category)
+                .then(result => result.data)
+                .then((data: any) => Object.assign(new Category(company._links.self!.href), data))
+                .then(onSuccess)
+                .catch(error => ErrorMapper.map(error, onError));
+        }
     }
 }

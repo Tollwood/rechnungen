@@ -1,0 +1,33 @@
+import * as React from "react";
+import {Button, Form, Image, Input, Icon} from "semantic-ui-react";
+import {ChangeEvent, useState} from "react";
+import {InputFile} from "semantic-ui-react-input-file/src/InputFile";
+
+interface Props {
+    onFileChange: (file: File) => void
+}
+
+export default function ImageUpload(props: Props) {
+
+    const [file, setFile] = useState();
+
+    function onFileChangeHandler(e: ChangeEvent<HTMLInputElement>){
+        e.preventDefault();
+        props.onFileChange(e.target.files![0]);
+        setFile(URL.createObjectURL(e.target.files![0]));
+    }
+
+    return <Form.Field>
+        <label>Neues Bild</label>
+        {file !== undefined && <Image src={file} style={{width: "200px"}} wrapped centered/> }
+        <InputFile
+            button={{ label: "Bild auswählen" }}
+            input={{
+                id: 'input-control-id',
+                accept: 'image/*',
+                onChange: onFileChangeHandler
+            }}
+        />
+
+    </Form.Field>
+}

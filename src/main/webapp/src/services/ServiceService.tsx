@@ -20,16 +20,21 @@ export default class ServiceService {
             });
     }
 
-    public static save(service: Service, company: Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void, categories?: string[]) {
+    public static save(service: Service, company: Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void, categories?: string[], image?: File) {
         service.image = service.image === "" ? '/services/' + company.name + '/placeholder.png' : service.image;
 
         service.company = company._links.self!.href;
         if (service._links.self === undefined) {
             API.post("/api/service", service)
                 .then(() => {
-                    if (categories) {
+                    if(image && categories){
+                        ServiceService.addImage(service._links.self!.href + "/image", image, ()=>{
+                            ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
+                        });
+                    }else if(image && categories === undefined){
+                        ServiceService.addImage(service._links.self!.href + "/image", image, onSuccess);
+                    } else if (categories && image === undefined) {
                         ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
-
                     } else {
                         onSuccess()
                     }
@@ -40,9 +45,14 @@ export default class ServiceService {
         } else {
             API.patch(service._links.self.href, service)
                 .then(() => {
-                    if (categories) {
+                    if(image && categories){
+                        ServiceService.addImage(service._links.self!.href + "/image", image, ()=>{
+                            ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
+                        });
+                    }else if(image && categories === undefined){
+                        ServiceService.addImage(service._links.self!.href + "/image", image, onSuccess);
+                    } else if (categories && image === undefined) {
                         ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
-
                     } else {
                         onSuccess()
                     }
@@ -71,4 +81,12 @@ export default class ServiceService {
             });
     }
 
+    private static addImage(url: string, image: File, onSuccess: () => void) {
+        const formData = new FormData();
+        formData.append('file', image);
+        API.post(url, formData)
+            .then(res => {
+                onSuccess()
+            })
+    }
 }

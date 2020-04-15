@@ -142,6 +142,7 @@ export default function Home() {
     function renderCategories() {
         let index: number = 1;
         return categories
+            .filter( category => category.active)
             .filter(category => (category.name === "Sonntagsbrötchen" && DateUtil.isSundayOrder(order.firstAppointment)) || (category.name !== "Sonntagsbrötchen" && !DateUtil.isSundayOrder(order.firstAppointment)))
             .map(category => <CategoryAccordion index={index++} activeIndex={activeIndex}
                                                 orderCount={orderCount.get(category.name) ? orderCount.get(category.name)! : []}

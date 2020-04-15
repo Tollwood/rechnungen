@@ -29,7 +29,7 @@ class ServiceImageUploadController {
     lateinit var serviceResource: ServiceResource
 
 
-    @PostMapping(value = ["/api/service/{id}/image_upload"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    @PostMapping(value = ["/api/service/{id}/image"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun uploadFile(@RequestParam file: MultipartFile, @PathVariable("id") id: String ): ResponseEntity<*> {
         val companyName: String = companyResource.getCurrent(2).shortName;
         val service: Service = serviceResource.findById(id.toLong()).get()
@@ -37,6 +37,8 @@ class ServiceImageUploadController {
             val bytes = file.bytes
             val path: Path = Paths.get(uploadfolder +"/"+ companyName + "/services/"+ service.id +getFileExtension(file.originalFilename))
             Files.write(path, bytes)
+            service.image = companyName + "/services/"+ service.id.toString() + getFileExtension(file.originalFilename)
+            serviceResource.save(service)
             logger.info(String.format("File name '%s' uploaded successfully.", file.originalFilename))
         } catch (e: IOException) {
             e.printStackTrace()

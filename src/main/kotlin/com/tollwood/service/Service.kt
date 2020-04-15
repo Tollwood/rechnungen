@@ -43,7 +43,7 @@ data class Service(
         @NotNull
         val company: Company,
 
-        val image: String? = "",
+        var image: String? = "",
 
         @ManyToMany(cascade = [CascadeType.ALL])
         @JoinTable(name = "service_category",

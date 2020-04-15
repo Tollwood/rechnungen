@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent, useEffect, useState} from "react";
-import {Checkbox, CheckboxProps, DropdownItemProps, DropdownProps, Form, Icon, Segment} from 'semantic-ui-react'
+import {Checkbox, CheckboxProps, DropdownItemProps, DropdownProps, Form, Icon, Image, Segment} from 'semantic-ui-react'
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import Service from "../order/Service";
@@ -8,6 +8,7 @@ import ServiceService from "./ServiceService";
 import ErrorMapper from "../ErrorMapper";
 import Company from "../employees/Company";
 import CategoryService from "../category/CategoryService";
+import ImageUpload from "./ImageUpload";
 
 interface Props {
     company: Company;
@@ -24,6 +25,7 @@ export default function ServiceEdit(props: Props) {
     const [errors, setErrors] = useState(new Map<string, string>());
     const [categories, setCategories] = useState<DropdownItemProps[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [selectedImage, setSelectedImage] = useState<File>();
 
     useEffect(() => {
         CategoryService.get((categories1 => {
@@ -135,16 +137,29 @@ export default function ServiceEdit(props: Props) {
                         <Grid.Column>
                             <Form.Field>
                                 <label>Kategorien</label>
-                                <Form.Dropdown placeholder='Kategorien' fluid multiple selection options={categories} value={selectedCategories} onChange={handleCategoriesChanged}/>
+                                <Form.Dropdown placeholder='Kategorien' fluid multiple selection options={categories}
+                                               value={selectedCategories} onChange={handleCategoriesChanged}/>
                             </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
-                    <CUDButtons onSave={ServiceService.save}
-                                company={props.company}
+                    <Grid.Row>
+                        <Grid.Column width={8}>
+                            <Form.Field>
+                                <label>Aktuelles Bild</label>
+                                <Image src={props.service.image} style={{width: "200px"}} wrapped centered/>
+                            </Form.Field>
+                        </Grid.Column>
+                        <Grid.Column width={8}>
+                            <ImageUpload onFileChange={setSelectedImage}></ImageUpload>
+
+                        </Grid.Column>
+                    </Grid.Row>
+                    <CUDButtons onSave={(onSuccess, onError) => {
+                        ServiceService.save(service, props.company, onSuccess, onError, selectedCategories, selectedImage)
+                    }}
+                                object={service}
                                 onDelete={ServiceService.delete}
                                 name={"Dienstleistung"}
-                                object={service}
-                                additionalArgument={selectedCategories}
                                 initialState={initialService}
                                 onSuccess={props.onSave}
                                 onCancel={props.onCancelEdit}

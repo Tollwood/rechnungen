@@ -6,6 +6,7 @@ export enum ContentType {
     SERVICES,
     NONE,
     STATISTICS,
-    REAL_ESTATE
+    REAL_ESTATE,
+    CATEGORIES
 
 }
