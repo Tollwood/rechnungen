@@ -40,7 +40,7 @@ export default function ServiceEdit(props: Props) {
                 setSelectedCategories(value.map(value1 => value1._links.self!.href))
             });
         }
-    }, []);
+    }, [service._links]);
 
     function handleSelectable(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) {
 

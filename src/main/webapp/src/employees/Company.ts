@@ -4,6 +4,7 @@ import BankDetails from "./BankDetails";
 
 export default class Company {
     name: string = "";
+    shortName: string = "";
     address: Address = new Address();
     billNo: number = 0;
     logo: string = "";

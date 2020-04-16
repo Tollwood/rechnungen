@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {Accordion, AccordionTitleProps, Container, Form, Icon, Message, Segment} from "semantic-ui-react";
+import {Accordion, AccordionTitleProps, Container, Form, Icon, Image, Message, Segment} from "semantic-ui-react";
 import ServiceService from "./services/ServiceService";
 import Company from "./employees/Company";
 import CompanyService from "./order/CompanyService";
@@ -129,7 +129,7 @@ export default function Home() {
             return {amount: value.amount, service: value.service._links.self!.href, _links: {service: value.service._links.self!}}
         });
         order.status = "ORDER_EXECUTE";
-        OrderService.save(order, () => setCompleted(true), (errors: Map<string, string>) => {
+        OrderService.save(order, company,() => setCompleted(true), (errors: Map<string, string>) => {
             setErrors(errors);
             setActiveIndex(0);
         });
@@ -169,6 +169,7 @@ export default function Home() {
 
         return <Container text>
             <Form>
+                <Image src={company.logo} wrapped centered/>
                 <Message info>
                     <Message.Header>Aktuell sind noch keine Bestellungen möglich</Message.Header>
                     <p>Diese Seite befindet sich noch in der Entwicklung. Aktuell werden keine Bestellungen bearbeitet.</p>

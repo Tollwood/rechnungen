@@ -33,24 +33,24 @@ export function OrderAddButton(props: Props) {
         }
     }
 
-    function saveAndConfimr(order: Order, realEstates: RealEstate[], continueToNextStep: boolean, onSuccess: (order: Order) => void, onError: (error: Map<string, string>) => void) {
+    function saveAndConfimr(order: Order, company: Company, realEstates: RealEstate[], continueToNextStep: boolean, onSuccess: (order: Order) => void, onError: (error: Map<string, string>) => void) {
         let orderToSave: Order = Object.assign({}, order);
         if (continueToNextStep) {
             orderToSave.prevStatus = orderToSave.status;
             orderToSave.status = Helper.nextStatus(order.status, props.company);
         }
-        OrderService.save(orderToSave, confirmSuccess(onSuccess), confirmError(onError));
+        OrderService.save(orderToSave,company, confirmSuccess(onSuccess), confirmError(onError));
     }
 
     return <Button.Group>
 
         <Button.Group>
             <Button primary content='Speichern'
-                    onClick={() => saveAndConfimr(props.order, props.realEstates, false, props.onSuccess, props.onError)}
+                    onClick={() => saveAndConfimr(props.order, props.company, props.realEstates, false, props.onSuccess, props.onError)}
                     className={"save-bttn"}/>
             <Button.Or text='&'/>
             <Button primary content='Weiter'
-                    onClick={() => saveAndConfimr(props.order, props.realEstates, true, props.onSuccess, props.onError)}
+                    onClick={() => saveAndConfimr(props.order, props.company, props.realEstates, true, props.onSuccess, props.onError)}
                     className={"save-bttn"}
                     icon={Helper.getStatusIcon(Helper.nextStatus(props.order.status, props.company))}/>}
             labelPosition={"right"}/>

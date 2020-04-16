@@ -19,7 +19,7 @@ export default function OrderSummaryModal(props:Props) {
                     Bitte überprüfen Sie Ihre Bestellung
                 </Modal.Header>
                 <Modal.Content>
-                    <OrderSummary orderCounts={props.orderCounts} customer={props.customer} wishDate={props.wishdate}/>
+                    <OrderSummary orderCounts={props.orderCounts} customer={props.customer} wishDate={props.wishdate} completed={false}/>
                 </Modal.Content>
                 <Modal.Actions>
                     <Button onClick={props.onClose}>Abbrechen</Button>

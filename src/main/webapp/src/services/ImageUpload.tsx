@@ -1,6 +1,6 @@
 import * as React from "react";
-import {Button, Form, Image, Input, Icon} from "semantic-ui-react";
 import {ChangeEvent, useState} from "react";
+import {Form, Image} from "semantic-ui-react";
 import {InputFile} from "semantic-ui-react-input-file/src/InputFile";
 
 interface Props {

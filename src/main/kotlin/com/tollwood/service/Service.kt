@@ -45,7 +45,7 @@ data class Service(
 
         var image: String? = "",
 
-        @ManyToMany(cascade = [CascadeType.ALL])
+        @ManyToMany
         @JoinTable(name = "service_category",
                 joinColumns = [JoinColumn(name = "service_id", referencedColumnName = "id")],
                 inverseJoinColumns = [JoinColumn(name = "category_id",

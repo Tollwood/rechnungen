@@ -2,7 +2,6 @@ import API from "../API";
 import Link from "../common/Links";
 import RealEstate from "./RealEstate";
 import ErrorMapper from "../ErrorMapper";
-import Order from "../order/Order";
 import Company from "../employees/Company";
 
 export default class RealEstateService {

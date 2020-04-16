@@ -20,20 +20,20 @@ export default class ServiceService {
             });
     }
 
-    public static save(service: Service, company: Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void, categories?: string[], image?: File) {
-        service.image = service.image === "" ? '/services/' + company.name + '/placeholder.png' : service.image;
+    public static save(service: Service, company: Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void, categories: string[], image?: File) {
+        service.image = service.image === "" ? '/'+ company.shortName+ '/services' + '/placeholder.png' : service.image;
 
         service.company = company._links.self!.href;
         if (service._links.self === undefined) {
             API.post("/api/service", service)
                 .then(() => {
-                    if(image && categories){
+                    if(image !== undefined && categories.length > 0){
                         ServiceService.addImage(service._links.self!.href + "/image", image, ()=>{
                             ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
                         });
-                    }else if(image && categories === undefined){
+                    }else if(image !== undefined && categories.length === 0){
                         ServiceService.addImage(service._links.self!.href + "/image", image, onSuccess);
-                    } else if (categories && image === undefined) {
+                    } else if (categories.length > 0 && image === undefined) {
                         ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
                     } else {
                         onSuccess()

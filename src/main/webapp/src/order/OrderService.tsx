@@ -7,26 +7,15 @@ import Company from "../employees/Company";
 
 export default class OrderService {
 
-    public static save(order: Order, onSuccess: (order: Order) => void, onError: (errors: Map<string, string>) => void): void {
-
-        function companyAsString(company: String | Company): string {
-             if ("string" !== typeof  company){
-                return  (company as Company)._links.self!.href;
-            }else {
-                 return company;
-             }
-        }
-
-        order.company = companyAsString(order.company);
+    public static save(order: Order, company: Company,  onSuccess: (order: Order) => void, onError: (errors: Map<string, string>) => void): void {
+        order.company = company._links.self!.href;
         if (order._links.self === undefined) {
             API.post("/api/order", order)
                 .then(result => result.data)
-                .then((data: any) => Object.assign(new Order(companyAsString(order.company)), data))
+                .then((data: any) => Object.assign(new Order(company._links.self!.href), data))
                 .then(onSuccess)
                 .catch(error => ErrorMapper.map(error, onError));
         } else {
-            order.services = [];
-            order.billItems = [];
             API.patch(order._links.self.href, order)
                 .then(() => {
                     order.services = order.services.map(value => { value.service  = value.service !== ""? value._links.service.href :  value.service ;return value;});

@@ -8,7 +8,6 @@ import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
 import RealEstateService from "./RealEstateService";
 import Company from "../employees/Company";
-import EmployeeService from "../employees/EmployeeService";
 
 interface Props {
     onChange: () => void;

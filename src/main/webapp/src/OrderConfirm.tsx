@@ -13,16 +13,6 @@ interface Props {
 }
 
 export default function OrderConfirm(props: Props) {
-    function renderItem(service: OrderCount) {
-        return <List.Item>
-            <Image src={service.service.image} avatar/>
-            <List.Content>
-                <List.Header as='a'>{service.amount} x {service.service.title}</List.Header>
-                <List.Description as='a'>{service.service.description}</List.Description>
-            </List.Content>
-        </List.Item>;
-    }
-
     return <Container text>
         <Image src={props.company.logo} style={{width: "600px"}} centered/>
         <h1>Vielen Dank für Ihre Bestellung</h1>
@@ -31,7 +21,7 @@ export default function OrderConfirm(props: Props) {
             header='Aktuell sind noch keine Bestellungen möglich'
             content='Diese Seite befindet sich noch in der Entwicklung. Aktuell werden keine Bestellungen bearbeitet.'
         />
-        <OrderSummary wishDate={props.wishdate} customer={props.customer} orderCounts={props.services}/>
+        <OrderSummary wishDate={props.wishdate} customer={props.customer} orderCounts={props.services} completed={true}/>
         <p>
         {props.company.thankYouImage && <Image src={props.company.thankYouImage} centered style={{marginTop: "30px"}}/>}
         </p>

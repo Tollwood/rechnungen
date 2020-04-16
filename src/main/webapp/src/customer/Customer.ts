@@ -1,7 +1,7 @@
 import {Address} from "../common/Address";
 
 export default class Customer{
-    salutation?: string;
+    salutation: string = "Familie";
     firstName?: string;
     lastName?: string;
     phoneNumber?: string;
