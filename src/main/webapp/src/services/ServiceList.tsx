@@ -53,12 +53,11 @@ export default class ServiceList extends React.Component<Props, State> {
     private searchByTerm(searchTerm: string) {
         let page = this.state.page;
         page.number = 0;
+        this.setState({searchTerm: searchTerm, page: page});
         this.search(searchTerm, page)
     }
 
     private search(searchQuery: string, page: Page, append: boolean = false) {
-
-        this.setState({searchTerm: searchQuery, page: page});
         API.get('api/service/search?term=' + searchQuery + "&" + PageService.getPageAndSortParams(page))
             .then(res => {
                 let hasMore = res.data.page.totalPages > res.data.page.number + 1;
@@ -75,12 +74,16 @@ export default class ServiceList extends React.Component<Props, State> {
     private scroll() {
         let page = this.state.page;
         page.number += 1;
+        this.setState({searchTerm: this.state.searchTerm, page: page});
         this.search(this.state.searchTerm, page, true)
     }
 
     private sortAndPage(page: Page) {
         this.setState({isLoading: true, page: page});
-        this.search(this.state.searchTerm, page);
+        let fullPage = page;
+        fullPage.size  = page.size * (page.number + 1);
+        fullPage.number = 0;
+        this.search(this.state.searchTerm, fullPage);
     }
 
     render() {

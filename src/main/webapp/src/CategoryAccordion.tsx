@@ -27,7 +27,17 @@ export default function CategoryAccordion(props: Props) {
         <Accordion.Content active={props.activeIndex === props.index}>
             <Responsive maxWidth={480}>
                 <Card.Group itemsPerRow={1}>
-                    {props.orderCount.map(service => <ServiceCard orderCount={service} updateCount={ (updatedCount)=> props.updateCount(props.category, updatedCount)}/>)}
+                    {props.orderCount
+                        .sort((a, b) => {
+                            if (a.service.title < b.service.title) {
+                                return -1;
+                            }
+                            if (b.service.title < a.service.title) {
+                                return 1;
+                            }
+                            return 0;
+                        })
+                        .map(service => <ServiceCard orderCount={service} updateCount={ (updatedCount)=> props.updateCount(props.category, updatedCount)}/>)}
                 </Card.Group>
             </Responsive>
             <Responsive minWidth={481} maxWidth={720}>
