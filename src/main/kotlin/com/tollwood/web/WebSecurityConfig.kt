@@ -18,11 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.servlet.config.annotation.CorsRegistry
-
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-
-
-
 
 
 @Configuration
@@ -57,8 +53,8 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity
-                //.requiresChannel().anyRequest().requiresSecure()
-                //.and()
+                .requiresChannel().anyRequest().requiresSecure()
+                .and()
                 .headers().frameOptions().sameOrigin().and() // only needed for h2 endpoint
                 .csrf().disable()
                 .cors()

@@ -32,6 +32,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-devtools")
 	compile("org.springframework.boot:spring-boot-starter-data-rest")
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile("org.springframework.boot:spring-boot-configuration-processor")
 	compile("com.h2database:h2")
 	compile("org.hibernate:hibernate-search-orm:5.11.4.Final")
 
