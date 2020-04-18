@@ -21,7 +21,6 @@ class TenantInterceptor : HandlerInterceptorAdapter() {
         val host = URI(request.requestURL.toString()).host
         val subdomain = host.removeSuffix(hostname)
 
-        logger.info("subdomain: {0}", subdomain.substringBefore(".", "No Subdomain"))
         ThreadTenantStorage.tenantId = subdomain.substringBefore(".", ThreadTenantStorage.tenantId)
         return true
     }
