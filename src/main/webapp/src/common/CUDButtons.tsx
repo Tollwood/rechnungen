@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
-import {Button, Form, Grid} from "semantic-ui-react";
+import {Button, Form, Grid, Responsive} from "semantic-ui-react";
 import {useAlert} from "react-alert";
 import UnsavedChangesModal from "../UnsavedChangesModal";
 
@@ -45,19 +45,33 @@ export default function CUDButtons(props: Props) {
     }
 
     return <Grid.Row centered>
-        <Grid.Column width={5} floated='left'>
-            <Form.Button primary content='Speichern' icon='save' labelPosition='left'
-                         onClick={() => props.onSave(confirmSuccess(props.onSuccess, "gepeichert"), confirmError(props.onError, "gepeichert"))}
-                         className={'save-bttn'}/>
-        </Grid.Column>
-        <Grid.Column width={5}>
-            <Button content='Abbrechen' icon='cancel' labelPosition='left' onClick={confirmUnchangedCancel} className={'cancel-bttn'}/>
-        </Grid.Column>
-        <Grid.Column width={5} floated='right'>
-            {props.canDelete ?
-                <Button floated={"right"} color={"red"} content={"Löschen"} icon='trash' labelPosition='left' className={'delete-bttn'}
-                        onClick={() => props.onDelete(props.object, confirmSuccess(props.onSuccess, "gelöscht"), confirmError(props.onError, "gelöscht"))}/> : null
-            }
+        <Grid.Column width={16}>
+            <Responsive minWidth={481}>
+                <Button.Group widths={props.canDelete ? 3 : 2}>
+                    <Button primary content='Speichern' icon='save' labelPosition='left'
+                                 onClick={() => props.onSave(confirmSuccess(props.onSuccess, "gepeichert"), confirmError(props.onError, "gepeichert"))}
+                                 className={'save-bttn'}/>
+                    <Button content='Abbrechen' icon='cancel' labelPosition='left' onClick={confirmUnchangedCancel}
+                            className={'cancel-bttn'}/>
+                    {props.canDelete ?
+                        <Button floated={"right"} color={"red"} content={"Löschen"} icon='trash' labelPosition='left'
+                                className={'delete-bttn'}
+                                onClick={() => props.onDelete(props.object, confirmSuccess(props.onSuccess, "gelöscht"), confirmError(props.onError, "gelöscht"))}/> : null
+                    }
+                </Button.Group>
+            </Responsive>
+            <Responsive maxWidth={480}>
+                <Button.Group widths={props.canDelete ? 2 : 1}>
+                    <Button primary content='Speichern' icon='save' labelPosition='left'
+                                 onClick={() => props.onSave(confirmSuccess(props.onSuccess, "gepeichert"), confirmError(props.onError, "gepeichert"))}
+                                 className={'save-bttn'}/>
+                    {props.canDelete ?
+                        <Button floated={"right"} color={"red"} content={"Löschen"} icon='trash' labelPosition='left'
+                                className={'delete-bttn'}
+                                onClick={() => props.onDelete(props.object, confirmSuccess(props.onSuccess, "gelöscht"), confirmError(props.onError, "gelöscht"))}/> : null
+                    }
+                </Button.Group>
+            </Responsive>
         </Grid.Column>
         <UnsavedChangesModal name={props.name}
                              show={showCancelModal}
