@@ -63,7 +63,7 @@ export default function ServiceEdit(props: Props) {
             <Form>
                 <Grid>
                     <Grid.Row>
-                        <Grid.Column width={4}>
+                        <Grid.Column computer={4} tablet={4} mobile={16}>
                             <Form.Field>
                                 <label>Code</label>
                                 <Form.Input
@@ -76,7 +76,7 @@ export default function ServiceEdit(props: Props) {
                                 />
                             </Form.Field>
                         </Grid.Column>
-                        <Grid.Column width={8}>
+                        <Grid.Column computer={8} tablet={8} mobile={16}>
                             <Form.Field>
                                 <label>Bezeichnung</label>
                                 <Form.Input id="title"
@@ -88,7 +88,7 @@ export default function ServiceEdit(props: Props) {
                                 />
                             </Form.Field>
                         </Grid.Column>
-                        <Grid.Column width={4}>
+                        <Grid.Column computer={4} tablet={4} mobile={16}>
                             <Form.Field>
                                 <label>Preis</label>
                                 <Form.Input
@@ -106,7 +106,7 @@ export default function ServiceEdit(props: Props) {
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <Grid.Column width={4}>
+                        <Grid.Column computer={4} tablet={4} mobile={16}>
                             <Form.Field>
                                 <label>Beschreibung</label>
                                 <Form.Input
