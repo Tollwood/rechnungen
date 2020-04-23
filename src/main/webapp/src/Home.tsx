@@ -140,7 +140,7 @@ export default function Home() {
     }
 
     function renderCategories() {
-        let index: number = 1;
+        let index: number = 0;
         return categories
             .filter( category => category.active)
             .filter(category => (category.name === "Sonntagsbrötchen" && DateUtil.isSundayOrder(order.firstAppointment)) || (category.name !== "Sonntagsbrötchen" && !DateUtil.isSundayOrder(order.firstAppointment)))
@@ -186,19 +186,9 @@ export default function Home() {
                 }}
                         errors={errors}
                         allowOrders={allowOrders}/>
+                <CustomerDetails readonly={false} customer={order.customer} onChange={onCustomerChange}
+                                 errors={ErrorMapper.childError(errors)}/>
                 <Accordion fluid styled>
-                    <Accordion.Title
-                        active={activeIndex === 0}
-                        index={0}
-                        onClick={handleClick}
-                    >
-                        <Icon name='dropdown'/>
-                        Bestellung auf
-                    </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 0}>
-                        <CustomerDetails readonly={false} customer={order.customer} onChange={onCustomerChange}
-                                         errors={ErrorMapper.childError(errors)}/>
-                    </Accordion.Content>
                     <Accordion.Title>
                         <Wishdate handleDateChange={(date: string) => setOrder({...order, firstAppointment: date})} errors={errors}/>
                         {!allowOrders && <Message info>

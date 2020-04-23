@@ -100,14 +100,6 @@ export default function CustomerDetails(props: Props) {
                         />
                     </Grid.Column>
                 </Grid.Row>
-                {(props.readonly &&
-                    (props.customer.address.street !== ""
-                        || props.customer.address.houseNumber !== ""
-                        || props.customer.address.zipCode !== ""
-                        || props.customer.address.city !== "") || !props.readonly) &&
-                <AddressInput readonly={props.readonly} address={props.customer.address} handleAddressChange={handleAddressChange}
-                              errors={props.errors}/>
-                }
             </Grid>
         </Segment>;
     }
