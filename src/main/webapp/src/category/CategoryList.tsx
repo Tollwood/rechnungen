@@ -64,7 +64,7 @@ export default class CategoryList extends React.Component<Props, State> {
                 this.setState({hasMore: hasMore, page: Object.assign(this.state.page, {totalElements: res.data.page.totalElements})});
                 return res.data._embedded === undefined ? [] : res.data._embedded.category;
             })
-            .then((data: any[]) => data.map(value => Object.assign(new Category(this.props.company._links.self!.href), value)))
+            .then((data: any[]) => data.map(value => Object.assign(new Category(), value)))
             .then((categories: Category[]) => this.setState({
                 categories: append ? this.state.categories.concat(categories) : categories,
                 isLoading: false

@@ -21,7 +21,7 @@ export default class CategoryOverview extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = {categories: [], edit: false, selectedItem: new Category(this.props.company._links.self!.href), isLoading: true, page: new Page('name')};
+        this.state = {categories: [], edit: false, selectedItem: new Category(), isLoading: true, page: new Page('name')};
     }
 
     render() {
@@ -50,7 +50,7 @@ export default class CategoryOverview extends React.Component<Props, State> {
     }
 
     private handleAdd() {
-        this.setState(Object.assign(this.state, {edit: true, selectedItem: new Category(this.props.company._links.self!.href)}))
+        this.setState(Object.assign(this.state, {edit: true, selectedItem: new Category()}))
     }
 
     private handleSelection(selectedItem: Category) {
@@ -58,15 +58,15 @@ export default class CategoryOverview extends React.Component<Props, State> {
     }
 
     private handleCancelEdit() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Category(this.props.company._links.self!.href)}))
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Category()}))
     }
 
     private handleDelete() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Category(this.props.company._links.self!.href)}));
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Category()}));
     }
 
     private handleSave() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Category(this.props.company._links.self!.href)}));
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Category()}));
     }
 
 }

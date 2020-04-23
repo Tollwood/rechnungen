@@ -22,8 +22,6 @@ export default class ServiceService {
 
     public static save(service: Service, company: Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void, categories: string[], image?: File) {
         service.image = service.image === "" ? '/'+ company.shortName+ '/services' + '/placeholder.png' : service.image;
-
-        service.company = company._links.self!.href;
         if (service._links.self === undefined) {
             API.post("/api/service", service)
                 .then(() => {
@@ -85,8 +83,6 @@ export default class ServiceService {
         const formData = new FormData();
         formData.append('file', image);
         API.post(url, formData)
-            .then(res => {
-                onSuccess()
-            })
+            .then(onSuccess)
     }
 }

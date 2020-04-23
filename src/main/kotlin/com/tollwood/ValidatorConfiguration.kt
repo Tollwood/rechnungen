@@ -1,9 +1,9 @@
 package com.tollwood
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener
 import org.springframework.beans.factory.InitializingBean
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener
 import org.springframework.validation.Validator
 import java.util.*
 

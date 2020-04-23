@@ -31,24 +31,15 @@ class SearchRestTest : RestTest() {
     @Commit
     fun `a) persist Data`() {
         orders = listOf(
-                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "1", billNo = "B1",company = testData
-                        .companyResource.getCurrent(1))),
-                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "2", billNo = "B2",company = testData
-                        .companyResource.getCurrent(1))),
-                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "3", billNo = "B3",company = testData
-                        .companyResource.getCurrent(1))),
-                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "4",company = testData
-                        .companyResource.getCurrent(1))),
-                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "5",company = testData
-                        .companyResource.getCurrent(1))),
-                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "1234",company = testData
-                        .companyResource.getCurrent(1))),
-                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "234",company = testData
-                        .companyResource.getCurrent(1))),
-                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "12345",company = testData
-                        .companyResource.getCurrent(1))),
-                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "34",company = testData
-                        .companyResource.getCurrent(1)))
+                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "1", billNo = "B1")),
+                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "2", billNo = "B2")),
+                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "3", billNo = "B3")),
+                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "4")),
+                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "5")),
+                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "1234")),
+                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "234")),
+                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "12345")),
+                testData.givenOrderPersistedWithRealEstateAndEmployee(Order(orderId = "34"))
         )
     }
 

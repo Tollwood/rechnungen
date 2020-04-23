@@ -1,11 +1,11 @@
 package com.tollwood.rechnungen.unit
 
 import com.tollwood.BillService
-import com.tollwood.service.ServiceResource
 import com.tollwood.jpa.BillItem
-import com.tollwood.order.jpa.Order
 import com.tollwood.jpa.ServiceOrder
+import com.tollwood.order.jpa.Order
 import com.tollwood.rechnungen.TestData
+import com.tollwood.service.ServiceResource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.util.Lists
 import org.junit.jupiter.api.Test
@@ -42,7 +42,7 @@ class BillServiceTest {
     @Test
     fun `empty order`() {
         // given
-        val order = Order(orderId = "1234",company = testData.companyResource.getCurrent(1))
+        val order = Order(orderId = "1234")
 
         // when
         val billItems = billService.computeBillItems(order)
@@ -58,7 +58,7 @@ class BillServiceTest {
     fun `order with distance`(distance: Int, expectedCode: String, price: Double) {
 
         // given
-        val order = Order(orderId = "1234", realEstate = testData.givenRealEstate(distance),company = testData.companyResource.getCurrent(1))
+        val order = Order(orderId = "1234", realEstate = testData.givenRealEstate(distance))
         val realPrice = serviceResource.findByArticleNumber(expectedCode).get().price!! * price
 
         // when
@@ -73,7 +73,7 @@ class BillServiceTest {
     @Test
     fun `without km inclueded`() {
         // given
-        val order = Order(orderId = "1234", realEstate = testData.givenRealEstate(99), includeKmFee = false,company = testData.companyResource.getCurrent(1))
+        val order = Order(orderId = "1234", realEstate = testData.givenRealEstate(99), includeKmFee = false)
 
         // when
         val billItems = billService.computeBillItems(order)
@@ -85,7 +85,7 @@ class BillServiceTest {
 
     @Test
     fun `with services`() {
-        val order = Order(id = 1, orderId = "1234",company = testData.companyResource.getCurrent(1))
+        val order = Order(id = 1, orderId = "1234")
         // given
         val serviceOrders = Lists.newArrayList<ServiceOrder>()
 
@@ -112,7 +112,7 @@ class BillServiceTest {
             assertThat(billItem.price).isEqualTo(so.service.price)
             assertThat(billItem.serviceName).isEqualTo(so.service.title)
             assertThat(billItem.amount).isEqualTo(so.amount)
-            assertThat(billItem.order.id).isEqualTo(so.order!!.id)
+            assertThat(billItem.order.id).isEqualTo(so.order.id)
         }
     }
 

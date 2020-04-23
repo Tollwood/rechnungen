@@ -22,10 +22,6 @@ data class Category(
         @Analyzer( impl = GermanAnalyzer::class)
         val name: String,
 
-        @ManyToOne
-        @NotNull
-        val company: Company,
-
         @ManyToMany(mappedBy = "categories")
         val services: List<Service>,
 

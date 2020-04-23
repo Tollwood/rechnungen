@@ -21,7 +21,7 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
 
     constructor(props: ServiceOverviewProps) {
         super(props);
-        this.state = {services: [], edit: false, selectedItem: new Service(this.props.company._links.self!.href), isLoading: true, page: new Page('articleNumber')};
+        this.state = {services: [], edit: false, selectedItem: new Service(), isLoading: true, page: new Page('articleNumber')};
     }
 
 
@@ -51,7 +51,7 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
     }
 
     private handleAdd() {
-        this.setState(Object.assign(this.state, {edit: true, selectedItem: new Service(this.props.company._links.self!.href)}))
+        this.setState(Object.assign(this.state, {edit: true, selectedItem: new Service()}))
     }
 
     private handleSelection(selectedItem: Service) {
@@ -59,15 +59,15 @@ export default class ServicesOverview extends React.Component<ServiceOverviewPro
     }
 
     private handleCancelEdit() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service(this.props.company._links.self!.href)}))
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service()}))
     }
 
     private handleDelete() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service(this.props.company._links.self!.href)}));
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service()}));
     }
 
     private handleSave() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service(this.props.company._links.self!.href)}));
+        this.setState(Object.assign(this.state, {edit: false, selectedItem: new Service()}));
     }
 
 }

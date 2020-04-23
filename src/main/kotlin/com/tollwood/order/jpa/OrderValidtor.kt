@@ -1,5 +1,6 @@
 package com.tollwood.order.jpa
 
+import com.tollwood.company.CompanyResource
 import com.tollwood.order.OrderResource
 import com.tollwood.order.jpa.OrderState.*
 import com.tollwood.validation.ValidationErrors.Companion.alreadyExists
@@ -9,17 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.validation.Errors
 import org.springframework.validation.Validator
-import java.util.*
 
 
 @Component("beforeSaveOrderValidtor")
-class BeforeSaveOrderValidtor(@Autowired orderResource: OrderResource) : OrderValidtor(orderResource)
+class BeforeSaveOrderValidtor(@Autowired orderResource: OrderResource, @Autowired companyResource: CompanyResource) : OrderValidtor
+(orderResource, companyResource)
 
 
 @Component("beforeCreateOrderValidtor")
-class BeforeCreateOrderValidtor(@Autowired orderResource: OrderResource) : OrderValidtor(orderResource)
+class BeforeCreateOrderValidtor(@Autowired orderResource: OrderResource, @Autowired companyResource: CompanyResource) : OrderValidtor(orderResource, companyResource)
 
-open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validator {
+open class OrderValidtor(@Autowired val orderResource: OrderResource, @Autowired val companyResource: CompanyResource) : Validator {
 
     override fun supports(clazz: Class<*>): Boolean {
         return Order::class.java == clazz
@@ -27,28 +28,29 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
 
     override fun validate(obj: Any, errors: Errors) {
         val order = obj as Order
-        if(order.orderId == null){
-            order.orderId = order.company.billNo.toString()
-            order.company.billNo = order.company.billNo + 1
+        val company = companyResource.getCurrent()
+        if (order.orderId == null) {
+            order.orderId = company.billNo.toString()
+            company.billNo = company.billNo + 1
         }
 
         notEmpty(order.orderId, "orderId", errors);
-        alreadyExists(orderResource.findByOrderId(order.orderId), order.id, "orderId", order.orderId,errors)
+        alreadyExists(orderResource.findByOrderId(order.orderId), order.id, "orderId", order.orderId, errors)
 
-        if(order.company.realEstateSupport){
+        if (company.realEstateSupport) {
             notEmpty(order.realEstate, "realEstate", errors)
         }
 
-        if(order.company.customerSupport){
-            if(order.customer == null){
+        if (company.customerSupport) {
+            if (order.customer == null) {
                 errors.rejectValue("order.customer", "required", "Pflichtfeld")
-            }else {
+            } else {
                 notEmpty(order.customer.lastName, "customer.lastName", errors)
                 notEmpty(order.customer.phoneNumber, "customer.phoneNumber", errors)
             }
         }
 
-        if(order.company.employeeSupport){
+        if (company.employeeSupport) {
             notEmpty(order.technician, "technician", errors)
         }
 
@@ -58,13 +60,13 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
             notNull(order.distance, "distance", errors)
         }
 
-        if(order.company.billingSupport) {
+        if (company.billingSupport) {
             if (shouldValidate(ORDER_BILL, order)) {
                 notEmpty(order.billNo, "billNo", errors)
                 notDefault(order.billNo, "billNo", errors)
                 notEmpty(order.billDate, "billDate", errors)
             }
-            if(order.billNo != null && !"".equals(order.billNo)){
+            if (order.billNo != null && !"".equals(order.billNo)) {
                 alreadyExists(orderResource.findByBillNo(order.billNo), order.id, "billNo", order.billNo, errors)
             }
         }
@@ -75,7 +77,7 @@ open class OrderValidtor(@Autowired val orderResource: OrderResource) : Validato
     }
 
     private fun shouldValidate(stateToValidate: OrderState, order: Order): Boolean {
-        val orderStatus = order.prevStatus?: order.status;
+        val orderStatus = order.prevStatus ?: order.status;
         return stateToValidate.order <= orderStatus.order
     }
 

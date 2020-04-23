@@ -1,10 +1,8 @@
 package com.tollwood.service
 
 import com.fasterxml.jackson.annotation.JsonBackReference
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.tollwood.company.Category
 import com.tollwood.jpa.BaseEntity
-import com.tollwood.company.Company
 import org.apache.lucene.analysis.de.GermanAnalyzer
 import org.hibernate.search.annotations.Analyzer
 import org.hibernate.search.annotations.Field
@@ -38,10 +36,6 @@ data class Service(
         @Field
         @SortableField
         val price: Double? = null,
-
-        @ManyToOne
-        @NotNull
-        val company: Company,
 
         var image: String? = "",
 

@@ -31,7 +31,7 @@ class ServiceImageUploadController {
 
     @PostMapping(value = ["/api/service/{id}/image"], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun uploadFile(@RequestParam file: MultipartFile, @PathVariable("id") id: String ): ResponseEntity<*> {
-        val companyName: String = companyResource.getCurrent(2).shortName;
+        val companyName: String = companyResource.getCurrent().shortName;
         val service: Service = serviceResource.findById(id.toLong()).get()
         try { // Get the file and save it somewhere
             val bytes = file.bytes

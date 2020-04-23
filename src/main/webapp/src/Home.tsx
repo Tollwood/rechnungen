@@ -21,7 +21,7 @@ import OrderSummaryModal from "./OrderSummaryModal";
 export default function Home() {
 
     const [orderCount, setOrderCount] = useState<Map<string, OrderCount[]>>(new Map());
-    const [order, setOrder] = useState<Order>(new Order(""));
+    const [order, setOrder] = useState<Order>(new Order());
     const [errors, setErrors] = useState<Map<string, string>>(new Map());
     const [completed, setCompleted] = useState<boolean>(false);
 
@@ -38,7 +38,7 @@ export default function Home() {
 
     useEffect(() => {
         CompanyService.get((result: Company) => {
-            setOrder({...order, company: result._links.self!.href, firstAppointment: DateUtil.tomorrowAsString()});
+            setOrder({...order, firstAppointment: DateUtil.tomorrowAsString()});
             setCompany(result);
         }).then(() => CategoryService.get((categories1 => {
             setCategories(categories1);

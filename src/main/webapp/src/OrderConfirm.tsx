@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Container, Image, List, Message} from "semantic-ui-react";
+import {Container, Image, Message} from "semantic-ui-react";
 import OrderCount from "./OrderCount";
 import Company from "./employees/Company";
 import {OrderSummary} from "./order/OrderSummary";

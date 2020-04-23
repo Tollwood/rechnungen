@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
-import {Button, Form, Grid, Responsive} from "semantic-ui-react";
+import {Button, Grid, Responsive} from "semantic-ui-react";
 import {useAlert} from "react-alert";
 import UnsavedChangesModal from "../UnsavedChangesModal";
 

@@ -8,11 +8,10 @@ import Company from "../employees/Company";
 export default class OrderService {
 
     public static save(order: Order, company: Company,  onSuccess: (order: Order) => void, onError: (errors: Map<string, string>) => void): void {
-        order.company = company._links.self!.href;
         if (order._links.self === undefined) {
             API.post("/api/order", order)
                 .then(result => result.data)
-                .then((data: any) => Object.assign(new Order(company._links.self!.href), data))
+                .then((data: any) => Object.assign(new Order(), data))
                 .then(onSuccess)
                 .catch(error => ErrorMapper.map(error, onError));
         } else {
@@ -21,7 +20,7 @@ export default class OrderService {
                     order.services = order.services.map(value => { value.service  = value.service !== ""? value._links.service.href :  value.service ;return value;});
                     API.patch(order._links.self!.href, order)
                         .then(result => result.data)
-                        .then((data: any) => Object.assign(new Order(order.company as string), data))
+                        .then((data: any) => Object.assign(new Order(), data))
                         .then(onSuccess)
                         .catch(error => ErrorMapper.map(error, onError));
                 })

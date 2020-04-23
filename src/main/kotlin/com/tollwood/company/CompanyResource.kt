@@ -8,8 +8,7 @@ import org.springframework.data.rest.core.annotation.RestResource
 @RepositoryRestResource(collectionResourceRel = "company", path = "company")
 interface CompanyResource : PagingAndSortingRepository<Company, Long> {
 
-    @Query("Select c from COMPANY c Where c.id = :id")
-    @RestResource(path = "/company/{id}")
-    fun getCurrent(id : Long ): Company
-
+    @Query("Select c from COMPANY c Where c.id = 1")
+    @RestResource(path = "/company")
+    fun getCurrent(): Company
 }

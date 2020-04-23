@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image} from '@react-pdf/renderer';
+import {Image, StyleSheet, Text, View} from '@react-pdf/renderer';
 import Company from "../employees/Company";
 import React, {Component} from 'react';
 

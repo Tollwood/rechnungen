@@ -50,7 +50,7 @@ export default class OrderEdit extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        let order = new Order(this.props.company._links.self!.href);
+        let order = new Order();
         this.state = {
             order: order,
             initialState: order,

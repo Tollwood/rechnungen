@@ -26,18 +26,17 @@ export default class CategoryService {
 
     static save(category: Category, company: Company, onSuccess: () => void, onError: (errors: Map<string, string>) => void) {
         category.services = [];
-        category.company = company._links.self!.href;
         if (category._links.self === undefined) {
             API.post("/api/category", category)
                 .then(result => result.data)
-                .then((data: any) => Object.assign(new Category(company._links.self!.href), data))
+                .then((data: any) => Object.assign(new Category(), data))
                 .then(onSuccess)
                 .catch(error => {ErrorMapper.map(error, onError)
                 });
         } else {
             API.patch(category._links.self.href, category)
                 .then(result => result.data)
-                .then((data: any) => Object.assign(new Category(company._links.self!.href), data))
+                .then((data: any) => Object.assign(new Category(), data))
                 .then(onSuccess)
                 .catch(error => ErrorMapper.map(error, onError));
         }

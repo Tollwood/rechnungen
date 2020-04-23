@@ -3,7 +3,7 @@ import {ChangeEvent} from "react";
 import OrderItem from "./OrderItem";
 import Service from "./Service";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
-import {Button, Table, Grid} from "semantic-ui-react";
+import {Button, Grid, Table} from "semantic-ui-react";
 import AddOrderService from "./AddOrderService";
 
 interface ListOrderServicesProps {

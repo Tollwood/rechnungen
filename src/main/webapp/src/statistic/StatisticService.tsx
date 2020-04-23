@@ -1,6 +1,5 @@
-import moment from "moment";
+import moment, {Moment} from "moment";
 import Order from "../order/Order";
-import {Moment} from "moment";
 import Statistik from "./Statistics";
 import OrderStatusStatistics from "./OrderStatusStatistics";
 

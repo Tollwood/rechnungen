@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
-import {Button, Image, Menu, Responsive, Visibility, Message} from "semantic-ui-react";
+import {Button, Image, Menu, Message, Responsive, Visibility} from "semantic-ui-react";
 import Statistic from "semantic-ui-react/dist/commonjs/views/Statistic";
 import Company from "./employees/Company";
 
