@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent} from "react";
-import {DropdownProps, Form, Grid, Segment} from "semantic-ui-react";
+import {DropdownProps, Form, Grid, Icon, Segment} from "semantic-ui-react";
 import Customer from "./Customer";
 import AddressInput from "../common/AddressInput";
 import NameValue from "../common/NameValue";
@@ -98,6 +98,11 @@ export default function CustomerDetails(props: Props) {
                                     onChange={onChange}
                                     error={props.errors.get('phoneNumber') ? {content: props.errors.get('phoneNumber')} : null}
                         />
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column computer={16} tablet={16} mobile={16} textAlign={"left"}>
+                        <Icon name="protect"/><label>Personenbezogene Daten werden ausschließlich zur Bearbeitung Ihrer Bestellung erfasst</label>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>

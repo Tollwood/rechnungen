@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {Accordion, AccordionTitleProps, Container, Form, Icon, Image, Message, Segment} from "semantic-ui-react";
+import {Accordion, Container, Form, Image, Message, Segment} from "semantic-ui-react";
 import ServiceService from "./services/ServiceService";
 import Company from "./employees/Company";
 import CompanyService from "./order/CompanyService";
@@ -17,6 +17,7 @@ import Wishdate from "./WhishDate";
 import OrderCount from "./OrderCount";
 import {DateUtil} from "./common/DateUtil";
 import OrderSummaryModal from "./OrderSummaryModal";
+import HomeFooter from "./HomeFooter";
 
 export default function Home() {
 
@@ -25,7 +26,7 @@ export default function Home() {
     const [errors, setErrors] = useState<Map<string, string>>(new Map());
     const [completed, setCompleted] = useState<boolean>(false);
 
-    const [activeIndex, setActiveIndex] = useState<number>(0);
+    const [activeIndex, setActiveIndex] = useState<number>(-1);
     const [company, setCompany] = useState<Company>(new Company());
 
     const [productCount, setProductCount] = useState<number>(0);
@@ -43,7 +44,6 @@ export default function Home() {
         }).then(() => CategoryService.get((categories1 => {
             setCategories(categories1);
             categories1.map(value => fetchServicesForCategory(value));
-
         })));
     }, []);
 
@@ -98,10 +98,6 @@ export default function Home() {
         setfetchedCategories(fetchedCategories.concat(category.name));
     }
 
-    function handleClick(event: React.MouseEvent<HTMLDivElement>, data: AccordionTitleProps) {
-        setActiveIndex(activeIndex === data.index ? -1 : data.index as number);
-    }
-
     function updateCount(category: Category, updatedOrderCount: OrderCount) {
 
         const list = orderCount.get(category.name)!.map((serviceCount, i) => {
@@ -131,7 +127,6 @@ export default function Home() {
         order.status = "ORDER_EXECUTE";
         OrderService.save(order, company,() => setCompleted(true), (errors: Map<string, string>) => {
             setErrors(errors);
-            setActiveIndex(0);
         });
     }
 
@@ -145,7 +140,17 @@ export default function Home() {
             .filter( category => category.active)
             .filter(category => (category.name === "Sonntagsbrötchen" && DateUtil.isSundayOrder(order.firstAppointment)) || (category.name !== "Sonntagsbrötchen" && !DateUtil.isSundayOrder(order.firstAppointment)))
             .map(category => <CategoryAccordion index={index++} activeIndex={activeIndex}
-                                                orderCount={orderCount.get(category.name) ? orderCount.get(category.name)!.filter(value => value.service.selectable) : []}
+                                                orderCount={orderCount.get(category.name) ? orderCount.get(category.name)!
+                                                    .filter(value => value.service.selectable)
+                                                    .sort((a, b) => {
+                                                        if (a.service.title < b.service.title) {
+                                                            return -1;
+                                                        }
+                                                        if (b.service.title < a.service.title) {
+                                                            return 1;
+                                                        }
+                                                        return 0;
+                                                    }): []}
                                                 category={category}
                                                 handleCategoryClick={handleCategoryClick} updateCount={updateCount}/>);
     }
@@ -181,7 +186,6 @@ export default function Home() {
                         setShowOrderSummaryModal(true)
                     }else {
                         setErrors(newErrors);
-                        setActiveIndex(0);
                     }
                 }}
                         errors={errors}
@@ -200,6 +204,7 @@ export default function Home() {
                     </Accordion.Title>
                     {renderCategories()}
                 </Accordion>
+                <HomeFooter></HomeFooter>
             </Form>
             <OrderSummaryModal onSuccess={onOrder} onClose={() => setShowOrderSummaryModal(false)} show={showOrderSummaryModal}
                                orderCounts={orderCounts.filter(value => value.amount > 0)} customer={order.customer}
