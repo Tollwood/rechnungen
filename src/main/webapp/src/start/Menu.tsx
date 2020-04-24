@@ -31,6 +31,7 @@ export class Menu extends React.Component<Props, State> {
         }
         contents.push(new Content(ContentType.SERVICES, "Dienstleistungen", "sign language", "service-overview-card"));
         contents.push(new Content(ContentType.CATEGORIES, "Kategorien", "object group", "categories-overview-card"));
+        contents.push(new Content(ContentType.COMPANY, "Firma", "building", "company-edit-card"));
         if(this.props.company.statisticSupport) {
             contents.push(new Content(ContentType.STATISTICS, "Statistik", "chart line", "dashboard-overview-card"));
         }

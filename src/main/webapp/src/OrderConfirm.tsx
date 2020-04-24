@@ -22,7 +22,7 @@ export default function OrderConfirm(props: Props) {
             content='Diese Seite befindet sich noch in der Entwicklung. Aktuell werden keine Bestellungen bearbeitet.'
         />
         <OrderSummary wishDate={props.wishdate} customer={props.customer} orderCounts={props.services} completed={true}/>
-        <p>
+        <p style={{padding: "5px"}}>
         {props.company.thankYouImage && <Image src={props.company.thankYouImage} centered style={{marginTop: "30px"}}/>}
         </p>
     </Container>

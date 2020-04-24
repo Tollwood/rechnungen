@@ -12,8 +12,8 @@ data class Company(
         var billNo: Long = 0,
         val name: String,
         val shortName: String,
-        val logo: String,
-        val thankYouImage: String?,
+        var logo: String,
+        var thankYouImage: String?,
         @Embedded
         val address: Address,
         val phone: String,

@@ -1,6 +1,6 @@
 import './App.css';
 import * as React from "react";
-import {Component} from "react";
+import {useEffect, useState} from "react";
 import EmployeeOverview from "./employees/EmployeeOverview";
 import 'semantic-ui/dist/semantic.min.css';
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
@@ -13,79 +13,62 @@ import OrderOverview from "./order/OrderOverview";
 import LoginModal from './LoginModal';
 import Company from "./employees/Company";
 import ServicesOverview from "./services/ServicesOverview";
-import Link from "./common/Links";
 import BackendAlerts from "./BackendAlerts";
 import StatisticOverview from "./statistic/StatisticOverview";
 import CompanyService from "./order/CompanyService";
 import CategoryOverview from "./category/CategoryOverview";
+import CompanyEdit from "./CompanyEdit";
 
-interface State {
-    activeOrder?: Link,
-    activeContent: ContentType,
-    company: Company
-}
+export function Admin() {
 
-interface Props {
-}
+    const [activeContent, setActiveContent] = useState<ContentType>(ContentType.NONE);
+    const [company, setCompany] = useState<Company>(new Company());
 
-export class Admin extends Component<Props, State> {
-
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            activeContent: ContentType.NONE,
-            company: new Company()
-        };
-    }
-
-    componentDidMount(): void {
+    useEffect(() => {
         document.title = "Admin";
         CompanyService.get(((company => {
             document.title = company.name;
-            this.setState({company: company})
+            setCompany(company);
         })));
+    }, []);
+
+    function closeOrder() {
+        setActiveContent(ContentType.NONE);
     }
 
-    render() {
-        return (
-            <BackendAlerts>
-                <React.Fragment>
-                    <LoginModal company={this.state.company}/>
-                    <Grid centered padded>
-                        <Grid.Row centered>
-                            <Grid.Column computer={12} tablet={12} mobile={16}>
-                                <AppHeader company={this.state.company}/>
-                            </Grid.Column>
-                        </Grid.Row>
-                        <Menu onMenuChanges={this.changeActiveContent.bind(this)} activeContent={this.state.activeContent} company={this.state.company}/>
-                        <Grid.Column computer={12} tablet={12} mobile={16}>
-                            <div id={"content-container"}>
-                                {this.state.activeContent === ContentType.EMPLOYEE ? <EmployeeOverview company={this.state.company} /> : null}
-                                {this.state.activeContent === ContentType.ORDER ? <OrderOverview company={this.state.company}/> : null}
-                                {this.state.activeContent === ContentType.BILL ? <h1>Rechnungen</h1> : null}
-                                {this.state.activeContent === ContentType.STATISTICS ? <StatisticOverview/> : null}
-                                {this.state.activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview company={this.state.company}  /> : null}
-                                {this.state.activeContent === ContentType.SERVICES ? <ServicesOverview company={this.state.company}/> : null}
-                                {this.state.activeContent === ContentType.CATEGORIES ? <CategoryOverview company={this.state.company}/> : null}
-                                {this.state.activeContent === ContentType.ORDER_DETAILS ?
-                                    <OrderEdit company={this.state.company}
-                                               onSave={this.closeOrder.bind(this)}
-                                               onCancelEdit={this.closeOrder.bind(this)}
-                                               onDelete={this.closeOrder.bind(this)}
-                                               orderLink={this.state.activeOrder}/> : null}
-                            </div>
-                        </Grid.Column>
-                    </Grid>
-                </React.Fragment>
-            </BackendAlerts>
-        );
+    function closeCompany() {
+        setActiveContent(ContentType.NONE);
+        CompanyService.get(setCompany);
     }
 
-    private changeActiveContent(content: ContentType): void {
-        this.setState(Object.assign(this.state, {activeContent: content}));
-    }
-
-    private closeOrder() {
-        this.setState(Object.assign(this.state, {activeContent: ContentType.NONE, activeOrder: null}));
-    }
+    return (
+        <BackendAlerts>
+            <React.Fragment>
+                <LoginModal company={company}/>
+                <Grid centered padded>
+                    <AppHeader company={company}/>
+                    <Menu onMenuChanges={setActiveContent} activeContent={activeContent} company={company}/>
+                    <Grid.Column computer={12} tablet={12} mobile={16}>
+                        <div id={"content-container"}>
+                            {activeContent === ContentType.EMPLOYEE ? <EmployeeOverview company={company}/> : null}
+                            {activeContent === ContentType.ORDER ? <OrderOverview company={company}/> : null}
+                            {activeContent === ContentType.BILL ? <h1>Rechnungen</h1> : null}
+                            {activeContent === ContentType.STATISTICS ? <StatisticOverview/> : null}
+                            {activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview company={company}/> : null}
+                            {activeContent === ContentType.SERVICES ? <ServicesOverview company={company}/> : null}
+                            {activeContent === ContentType.CATEGORIES ? <CategoryOverview company={company}/> : null}
+                            {activeContent === ContentType.COMPANY ?
+                                <CompanyEdit company={company} onChange={setCompany} onClose={closeCompany}/> : null}
+                            {activeContent === ContentType.ORDER_DETAILS ?
+                                <OrderEdit company={company}
+                                           onSave={closeOrder}
+                                           onCancelEdit={closeOrder}
+                                           onDelete={closeOrder}
+                                /> : null}
+                        </div>
+                    </Grid.Column>
+                </Grid>
+            </React.Fragment>
+        </BackendAlerts>
+    );
 }

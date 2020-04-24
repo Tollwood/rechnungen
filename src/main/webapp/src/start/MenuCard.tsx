@@ -12,7 +12,7 @@ export class MenuCard extends React.Component<{content: Content, onClick: (conte
                 console.log("click");
                 this.props.onClick(this.props.content.type)}}>
                 <Card.Header textAlign={'center'} >
-                    <Icon name={this.props.content.icon} size='massive' />
+                    <Icon name={this.props.content.icon} size='massive' style={{margin: "5px"}} />
                 </Card.Header>
                 <Card.Content textAlign={'center'}>
                     <span>{this.props.content.title}</span>

@@ -19,7 +19,7 @@ export default function ImageUpload(props: Props) {
 
     return <Form.Field>
         <label>Neues Bild</label>
-        {file !== undefined && <Image src={file} style={{width: "200px"}} wrapped centered/> }
+        {file !== undefined && <span style={{margin:"5px"}}><Image src={file} style={{width: "200px"}} wrapped centered/></span> }
         <InputFile
             button={{ label: "Bild auswählen" }}
             input={{
