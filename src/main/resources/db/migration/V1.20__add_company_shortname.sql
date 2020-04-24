@@ -1,0 +1,1 @@
+ALTER TABLE  COMPANY ADD COLUMN  short_name varchar(255);

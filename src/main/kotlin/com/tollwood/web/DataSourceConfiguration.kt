@@ -24,7 +24,7 @@ class DataSourceConfiguration(private val dataSourceProperties: DataSourceProper
                 .values) {
             val source = dataSource as DataSource
             val flyway = Flyway.configure().dataSource(source).load()
-            flyway.migrate()
+           flyway.repair()
         }
     }
 
