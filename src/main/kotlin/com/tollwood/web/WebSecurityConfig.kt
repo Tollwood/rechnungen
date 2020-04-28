@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.filter.ForwardedHeaderFilter
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
@@ -50,11 +51,12 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         return super.authenticationManagerBean()
     }
 
+    @Bean
+    fun  forwardHeaderFilter(): ForwardedHeaderFilter = ForwardedHeaderFilter()
+
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity
-                .requiresChannel().anyRequest().requiresSecure()
-                .and()
                 .headers().frameOptions().sameOrigin().and() // only needed for h2 endpoint
                 .csrf().disable()
                 .cors()
