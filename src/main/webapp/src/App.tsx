@@ -1,49 +1,48 @@
 import './App.css';
 import * as React from "react";
-import {Component} from "react";
+import {useEffect, useState} from "react";
 import 'semantic-ui/dist/semantic.min.css';
-import {ContentType} from "./start/ContentType";
 import Company from "./employees/Company";
 import BackendAlerts from "./BackendAlerts";
 import {Admin} from "./Admin";
-import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Home from "./Home";
+import OrderConfirm from "./OrderConfirm";
+import CompanyService from "./order/CompanyService";
+import Order from "./order/Order";
+import OrderCount from "./OrderCount";
 
-interface AppState {
-    activeOrder?: Link,
-    activeContent: ContentType,
-    company: Company
-}
+function App() {
+    const [company, setCompany] = useState<Company>(new Company());
+    const [order, setOrder] = useState<Order>(new Order());
+    const [orderCount, setOrderCount] = useState<OrderCount[]>([]);
 
-interface AppProps {
-}
+    useEffect(() => {
+        CompanyService.get((result: Company) => {
+            setCompany(result);
+        })
+    }, []);
 
-class App extends Component<AppProps, AppState> {
-
-    constructor(props: AppProps) {
-        super(props);
-        this.state = {
-            activeContent: ContentType.NONE,
-            company: new Company()
-        };
-    }
-
-    render() {
-        return (
-            <BackendAlerts>
-                <Router>
-                    <Switch>
-                        <Route path="/admin">
-                            <Admin/>
-                        </Route>
-                        <Route path="/">
-                            <Home/>
-                        </Route>
-                    </Switch>
-                </Router>
-            </BackendAlerts>
-        );
-    }
+    return <BackendAlerts>
+        <Router>
+            <Switch>
+                <Route path="/admin">
+                    <Admin/>
+                </Route>
+                <Route path="/completed">
+                    <OrderConfirm customer={order.customer} wishdate={order.firstAppointment!}
+                                  services={orderCount.filter(value => value.amount > 0)}
+                                  company={company}/>
+                </Route>
+                <Route path="/">
+                    <Home company={company} onOrderCompleted={(order:Order, orderCount: OrderCount[])=> {
+                        setOrder(order);
+                        setOrderCount(orderCount);
+                    }}/>
+                </Route>
+            </Switch>
+        </Router>
+    </BackendAlerts>
 }
 
 export default App;

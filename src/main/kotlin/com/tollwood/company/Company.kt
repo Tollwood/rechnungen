@@ -21,5 +21,6 @@ data class Company(
         val realEstateSupport: Boolean,
         val employeeSupport: Boolean,
         val billingSupport: Boolean,
-        val customerSupport: Boolean
+        val customerSupport: Boolean,
+        val publicOrder: Boolean
 )

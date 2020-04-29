@@ -17,5 +17,6 @@ export default class Company {
     statisticSupport: boolean = false;
     billingSupport: boolean = false;
     customerSupport: boolean = false;
+    publicOrder : boolean = false;
     _links: {self?: Link} = {};
 }
