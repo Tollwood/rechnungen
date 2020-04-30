@@ -59,7 +59,7 @@ export default function PublicOrder(props: Props) {
 
         let wishdate = DateUtil.stringToDate(order.firstAppointment);
         let today = new Date();
-        let inFuture = today.getDate() < wishdate.getDate();
+        let inFuture = today < wishdate;
 
         // no orders in the past
         if (!inFuture) {

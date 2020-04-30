@@ -3,7 +3,6 @@ package com.tollwood.web
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpMethod.POST
 import org.springframework.security.authentication.AuthenticationManager
@@ -18,8 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.filter.ForwardedHeaderFilter
-import org.springframework.web.servlet.config.annotation.CorsRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 
 @Configuration
@@ -57,7 +54,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity
-                .headers().frameOptions().sameOrigin().and() // only needed for h2 endpoint
+                //.headers().frameOptions().sameOrigin().and() // only needed for h2 endpoint
                 .csrf().disable()
                 .cors()
                 .and()
@@ -68,16 +65,5 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .authorizeRequests().antMatchers("/api/**").permitAll()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         httpSecurity.addFilterBefore(jwtRequestFilter!!, UsernamePasswordAuthenticationFilter::class.java)
-    }
-
-
-    @Bean
-    @Profile("local")
-    fun corsConfigurer(): WebMvcConfigurer? {
-        return object : WebMvcConfigurer {
-            override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:3000/","https://*.barmstedt.shop")
-            }
-        }
     }
 }

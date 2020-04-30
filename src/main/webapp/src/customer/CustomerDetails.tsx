@@ -2,7 +2,6 @@ import * as React from "react";
 import {ChangeEvent} from "react";
 import {DropdownProps, Form, Grid, Icon, Segment} from "semantic-ui-react";
 import Customer from "./Customer";
-import AddressInput from "../common/AddressInput";
 import NameValue from "../common/NameValue";
 
 interface Props {

@@ -19,7 +19,7 @@ class API {
 
 
     requestHandler = (request: AxiosRequestConfig) => {
-        if(this.tenant !== undefined && this.tenant != "" ){
+        if(this.tenant !== undefined && this.tenant !== "" ){
             request.headers['X-tenant'] = this.tenant;
         }
 

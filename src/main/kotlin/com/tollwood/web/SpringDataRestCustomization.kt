@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component
 class SpringDataRestCustomization : RepositoryRestConfigurer {
     override fun configureRepositoryRestConfiguration(config: RepositoryRestConfiguration) {
         config.corsRegistry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
+                .allowCredentials(true)
+                .allowedHeaders("*")
+                .allowedOrigins("*")
+                .allowedMethods("*")
     }
 }
