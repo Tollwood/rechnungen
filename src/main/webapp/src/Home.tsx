@@ -12,8 +12,8 @@ interface Props {
 
 export default function Home(props: Props) {
     return <Container text>
-        <td dangerouslySetInnerHTML={{__html: props.company.homeHeader}} />
+        <div dangerouslySetInnerHTML={{__html: props.company.homeHeader}} />
         {props.company.publicOrder && <PublicOrder company={props.company} onOrderCompleted={props.onOrderCompleted}/>}
-        <td dangerouslySetInnerHTML={{__html: props.company.homeFooter}} />
+        <div dangerouslySetInnerHTML={{__html: props.company.homeFooter}} />
     </Container>
 }
