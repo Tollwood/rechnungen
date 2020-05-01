@@ -22,5 +22,7 @@ data class Company(
         val employeeSupport: Boolean,
         val billingSupport: Boolean,
         val customerSupport: Boolean,
-        val publicOrder: Boolean
+        val publicOrder: Boolean,
+        val homeHeader: String,
+        val homeFooter: String
 )

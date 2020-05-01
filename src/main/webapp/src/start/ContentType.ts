@@ -8,5 +8,6 @@ export enum ContentType {
     STATISTICS,
     REAL_ESTATE,
     CATEGORIES,
+    HOME,
     COMPANY
 }

@@ -18,5 +18,7 @@ export default class Company {
     billingSupport: boolean = false;
     customerSupport: boolean = false;
     publicOrder : boolean = false;
+    homeHeader: string = "";
+    homeFooter: string = "";
     _links: {self?: Link} = {};
 }

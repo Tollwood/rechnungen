@@ -18,6 +18,7 @@ import StatisticOverview from "./statistic/StatisticOverview";
 import CompanyService from "./order/CompanyService";
 import CategoryOverview from "./category/CategoryOverview";
 import CompanyEdit from "./CompanyEdit";
+import HomeEdit from "./HomeEdit";
 
 export function Admin() {
 
@@ -57,6 +58,7 @@ export function Admin() {
                             {activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview company={company}/> : null}
                             {activeContent === ContentType.SERVICES ? <ServicesOverview company={company}/> : null}
                             {activeContent === ContentType.CATEGORIES ? <CategoryOverview company={company}/> : null}
+                            {activeContent === ContentType.HOME ? <HomeEdit company={company} onClose={closeCompany}/> : null}
                             {activeContent === ContentType.COMPANY ?
                                 <CompanyEdit company={company} onChange={setCompany} onClose={closeCompany}/> : null}
                             {activeContent === ContentType.ORDER_DETAILS ?
