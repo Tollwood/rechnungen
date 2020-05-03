@@ -1,5 +1,6 @@
 package com.tollwood.company
 
+import CategoryServiceOrder
 import com.tollwood.service.Service
 import org.apache.lucene.analysis.de.GermanAnalyzer
 import org.hibernate.search.annotations.Analyzer
@@ -26,5 +27,8 @@ data class Category(
         val services: List<Service>,
 
         @NotNull
-        val active: Boolean
+        val active: Boolean,
+
+        @ElementCollection
+        val categoryServiceOrder: List<CategoryServiceOrder>
 )

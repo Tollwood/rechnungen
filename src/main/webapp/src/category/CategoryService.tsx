@@ -15,6 +15,10 @@ export default class CategoryService {
             .then(res => onSuccess( res.data._embedded.category));
     }
 
+    public static getSingleFromUrl(url:string, onSuccess: (category: Category) => void)  {
+        API.get(url)
+            .then(res => onSuccess( res.data));
+    }
     static delete(category: Category, onSuccess: () => void, onError: (errors: Map<string, string>) => void) {
         // @ts-ignore
         API.delete(category._links.self.href)

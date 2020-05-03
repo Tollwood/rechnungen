@@ -4,7 +4,7 @@ import OrderCount from "./OrderCount";
 
 interface Props {
     orderCount: OrderCount,
-    updateCount: (updatedOrderCount: OrderCount)=>void
+    updateCount?: (updatedOrderCount: OrderCount)=>void
 }
 
 export default function ServiceCard(props: Props) {
@@ -23,15 +23,21 @@ export default function ServiceCard(props: Props) {
                 {props.orderCount.service.description}
             </Card.Description>
         </Card.Content>
+        {props.updateCount !== undefined &&
         <Card.Content extra>
             <Input style={{width: "70px"}} value={props.orderCount.amount}
                    onChange={(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
-                       props.updateCount({amount: parseInt(data.value), service: props.orderCount.service});
+                       props.updateCount!({amount: parseInt(data.value), service: props.orderCount.service});
                    }}/>
-            <Button icon={"plus"} onClick={() => props.updateCount({amount: props.orderCount.amount + 1,  service: props.orderCount.service})}/>
+            <Button icon={"plus"}
+                    onClick={() => props.updateCount!({amount: props.orderCount.amount + 1, service: props.orderCount.service})}/>
             <Button icon={"minus"}
-                    onClick={() => props.updateCount({amount: props.orderCount.amount > 0 ? props.orderCount.amount - 1 : 0, service: props.orderCount.service})}/>
+                    onClick={() => props.updateCount!({
+                        amount: props.orderCount.amount > 0 ? props.orderCount.amount - 1 : 0,
+                        service: props.orderCount.service
+                    })}/>
         </Card.Content>
+        }
     </Card>;
 
 }

@@ -39,7 +39,7 @@ export default class CategoryOverview extends React.Component<Props, State> {
                 {!this.state.edit ? null :
                     <CategoryEdit
                         company={this.props.company}
-                        category={this.state.selectedItem}
+                        categoryUrl={this.state.selectedItem._links.self == undefined? undefined: this.state.selectedItem._links.self!.href}
                         onCancelEdit={this.handleCancelEdit.bind(this)}
                         onSave={this.handleSave.bind(this)}
                         onDelete={this.handleDelete.bind(this)}

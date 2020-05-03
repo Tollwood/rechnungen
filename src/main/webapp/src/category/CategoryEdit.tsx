@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {Checkbox, CheckboxProps, Form, Segment} from 'semantic-ui-react'
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
@@ -7,20 +7,36 @@ import ErrorMapper from "../ErrorMapper";
 import Company from "../employees/Company";
 import CategoryService from "./CategoryService";
 import Category from "./Category";
+import CategoryServices from "./CategoryServices";
+import Service from "../order/Service";
+import ServiceService from "../services/ServiceService";
 
 interface Props {
     company: Company;
     onSave: () => void;
     onCancelEdit: () => void;
     onDelete: () => void;
-    category: Category;
+    categoryUrl?: string;
 }
 
 export default function CategoryEdit(props: Props) {
 
-    const [category, setCategory] = useState<Category>(props.category);
-    const [initialCategory] = useState<Category>(props.category);
+    const [category, setCategory] = useState<Category>(new Category());
+    const [services, setServices] = useState<Service[]>([]);
+
     const [errors, setErrors] = useState(new Map<string, string>());
+
+    useEffect(() => {
+        if (props.categoryUrl !== undefined) {
+            CategoryService.getSingleFromUrl(props.categoryUrl, setCategory);
+        }
+    }, [props.categoryUrl]);
+
+    useEffect(() => {
+        if (category._links.services !== undefined && services.length === 0) {
+            ServiceService.fetchServicesFromUrl(category._links.services!.href).then(setServices);
+        }
+    }, [category]);
 
     function handleActive(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) {
         // @ts-ignore
@@ -65,13 +81,19 @@ export default function CategoryEdit(props: Props) {
                             </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column>
+                            <CategoryServices category={category} services={services} onChange={setCategory}/>
+                        </Grid.Column>
+                    </Grid.Row>
+
                     <CUDButtons onSave={(onSuccess, onError) => {
                         CategoryService.save(category, props.company, onSuccess, onError)
                     }}
                                 object={category}
                                 onDelete={CategoryService.delete}
                                 name={"Kategorie"}
-                                initialState={initialCategory}
+                                initialState={category}
                                 onSuccess={props.onSave}
                                 onCancel={props.onCancelEdit}
                                 onError={setErrors}

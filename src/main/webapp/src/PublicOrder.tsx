@@ -155,15 +155,12 @@ export default function PublicOrder(props: Props) {
             .map(category => <CategoryAccordion index={index++} activeIndex={activeIndex}
                                                 orderCount={orderCount.get(category.name) ? orderCount.get(category.name)!
                                                     .filter(value => value.service.selectable)
-                                                    .sort((a, b) => {
-                                                        if (a.service.title < b.service.title) {
-                                                            return -1;
-                                                        }
-                                                        if (b.service.title < a.service.title) {
-                                                            return 1;
-                                                        }
-                                                        return 0;
-                                                    }) : []}
+                                                    .map((value) => {
+                                                        let newIndex = category.categoryServiceOrder.findIndex(value1 => value1.href === value.service._links.self!.href);
+                                                        return {id: newIndex, service: value}
+                                                    })
+                                                    .sort( (a, b) =>  ((a.id < b.id) ? -1 : ((a.id > b.id) ? 1 : 0)))
+                                                    .map(value => value.service): []}
                                                 category={category}
                                                 handleCategoryClick={handleCategoryClick} updateCount={updateCount}/>);
     }
