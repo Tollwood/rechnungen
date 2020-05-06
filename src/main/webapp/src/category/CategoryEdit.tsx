@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent, useEffect, useState} from "react";
-import {Checkbox, CheckboxProps, Divider, Form, Segment} from 'semantic-ui-react'
+import {Checkbox, CheckboxProps, Form, Segment} from 'semantic-ui-react'
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import ErrorMapper from "../ErrorMapper";

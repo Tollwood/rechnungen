@@ -29,7 +29,7 @@ export class Menu extends React.Component<Props, State> {
         if(this.props.company.realEstateSupport){
             contents.push(new Content(ContentType.REAL_ESTATE, "Liegenschaften", "home", "realEstate-overview-card"));
         }
-        contents.push(new Content(ContentType.SERVICES, "Dienstleistungen", "sign language", "service-overview-card"));
+        contents.push(new Content(ContentType.SERVICES, "Produkte", "sign language", "service-overview-card"));
         contents.push(new Content(ContentType.CATEGORIES, "Kategorien", "object group", "categories-overview-card"));
         contents.push(new Content(ContentType.COMPANY, "Firma", "building", "company-edit-card"));
         contents.push(new Content(ContentType.HOME, "Homepage", "edit outline", "hompage-edit-card"));

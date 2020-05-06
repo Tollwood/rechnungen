@@ -28,7 +28,7 @@ export default class ListOrderServices extends React.Component<ListOrderServices
             <React.Fragment>
                 <Grid.Row>
                     <Grid.Column computer={8} tablet={8} mobile={16}>
-                        <h2>Dienstleistungen</h2>
+                        <h2>Produkte</h2>
                     </Grid.Column>
                 </Grid.Row>
             <Grid.Row>

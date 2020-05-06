@@ -24,15 +24,16 @@ export default class ServiceService {
         service.image = service.image === "" ? '/'+ company.shortName+ '/services' + '/placeholder.png' : service.image;
         if (service._links.self === undefined) {
             API.post("/api/service", service)
-                .then(() => {
+                .then((result: any) => Object.assign(new Service(), result.data))
+                .then((savedService: Service) => {
                     if(image !== undefined && categories.length > 0){
-                        ServiceService.addImage(service._links.self!.href + "/image", image, ()=>{
-                            ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
+                        ServiceService.addImage(savedService._links.self!.href + "/image", image, ()=>{
+                            ServiceService.addCategories(savedService._links.self!.href + "/categories", categories, onSuccess)
                         });
                     }else if(image !== undefined && categories.length === 0){
-                        ServiceService.addImage(service._links.self!.href + "/image", image, onSuccess);
+                        ServiceService.addImage(savedService._links.self!.href + "/image", image, onSuccess);
                     } else if (categories.length > 0 && image === undefined) {
-                        ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
+                        ServiceService.addCategories(savedService._links.self!.href + "/categories", categories, onSuccess)
                     } else {
                         onSuccess()
                     }
@@ -42,15 +43,16 @@ export default class ServiceService {
                 });
         } else {
             API.patch(service._links.self.href, service)
-                .then(() => {
+                .then((data: any) => Object.assign(new Service(), data))
+                .then((savedService : Service) => {
                     if(image && categories){
-                        ServiceService.addImage(service._links.self!.href + "/image", image, ()=>{
-                            ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
+                        ServiceService.addImage(savedService._links.self!.href + "/image", image, ()=>{
+                            ServiceService.addCategories(savedService._links.self!.href + "/categories", categories, onSuccess)
                         });
                     }else if(image && categories === undefined){
-                        ServiceService.addImage(service._links.self!.href + "/image", image, onSuccess);
+                        ServiceService.addImage(savedService._links.self!.href + "/image", image, onSuccess);
                     } else if (categories && image === undefined) {
-                        ServiceService.addCategories(service._links.self!.href + "/categories", categories, onSuccess)
+                        ServiceService.addCategories(savedService._links.self!.href + "/categories", categories, onSuccess)
                     } else {
                         onSuccess()
                     }

@@ -35,7 +35,7 @@ class ServiceOverview(private var driver: WebDriver) {
 
     fun verifyPageContent(): ServiceOverview {
         title.isDisplayed
-        assertThat(title.text, equalTo("Dienstleistungen"))
+        assertThat(title.text, equalTo("Produkte"))
         return this
     }
 
