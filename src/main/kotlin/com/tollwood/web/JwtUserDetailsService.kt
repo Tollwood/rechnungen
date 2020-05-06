@@ -1,5 +1,7 @@
 package com.tollwood.web
 
+import com.tollwood.EmployeeResource
+import com.tollwood.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.User
@@ -15,17 +17,12 @@ import java.util.*
 class JwtUserDetailsService : UserDetailsService {
 
     @Autowired
-    private lateinit var bcryptEncoder: PasswordEncoder
-
-    @Value("\${user.username}")
-    private lateinit var defaultUsername: String
-
-    @Value("\${user.password}")
-    private lateinit var defaultPassword: String
+    private lateinit var userResource: UserRepository
 
     override fun loadUserByUsername(username: String): UserDetails {
-        if (defaultUsername.equals(username)) {
-            return User(defaultUsername, bcryptEncoder.encode(defaultPassword), Collections.emptyList())
+        val user = userResource.findByUsername(username)
+        if (user.isPresent()) {
+            return User(user.get().username, user.get().password, Collections.emptyList())
         } else {
             throw UsernameNotFoundException("User not found");
         }

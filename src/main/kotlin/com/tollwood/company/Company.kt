@@ -1,9 +1,12 @@
 package com.tollwood.company
 
 import com.tollwood.jpa.Address
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import javax.persistence.*
 
 @Entity(name = "COMPANY")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 data class Company(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)

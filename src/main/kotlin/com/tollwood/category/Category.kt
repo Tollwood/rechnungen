@@ -3,6 +3,7 @@ package com.tollwood.company
 import CategoryServiceOrder
 import com.tollwood.service.Service
 import org.apache.lucene.analysis.de.GermanAnalyzer
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.search.annotations.Analyzer
 import org.hibernate.search.annotations.Field
 import org.hibernate.search.annotations.Indexed
@@ -12,6 +13,8 @@ import javax.validation.constraints.NotNull
 
 @Indexed
 @Entity(name = "CATEGORY")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class Category(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)

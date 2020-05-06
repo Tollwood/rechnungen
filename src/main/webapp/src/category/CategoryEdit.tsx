@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent, useEffect, useState} from "react";
-import {Checkbox, CheckboxProps, Form, Segment} from 'semantic-ui-react'
+import {Checkbox, CheckboxProps, Divider, Form, Segment} from 'semantic-ui-react'
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import ErrorMapper from "../ErrorMapper";
@@ -52,41 +52,44 @@ export default function CategoryEdit(props: Props) {
     return (
         <Segment>
             <Form>
-                <Grid>
+                <Grid divided>
                     <Grid.Row>
-                        <Grid.Column width={4}>
-                            <Form.Field>
-                                <label>Name</label>
-                                <Form.Input
-                                    id="name"
-                                    placeholder='Name'
-                                    value={category.name}
-                                    name='name'
-                                    onChange={handleChange}
-                                    error={errors.get('name') ? {content: errors.get('name')} : null}
-                                />
-                            </Form.Field>
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Form.Field>
-                                <Checkbox toggle
-                                          name="active"
-                                          id="active"
-                                          label="Aktiv"
-                                          checked={category.active}
-                                          onChange={handleActive}/>
+                        <Grid.Column width={8}>
+                            <Grid>
+                                <Grid.Row>
+                                    <Grid.Column width={4}>
+                                        <Form.Field>
+                                            <label>Name</label>
+                                            <Form.Input
+                                                id="name"
+                                                placeholder='Name'
+                                                value={category.name}
+                                                name='name'
+                                                onChange={handleChange}
+                                                error={errors.get('name') ? {content: errors.get('name')} : null}
+                                            />
+                                        </Form.Field>
+                                    </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Form.Field>
+                                            <Checkbox toggle
+                                                      name="active"
+                                                      id="active"
+                                                      label="Aktiv"
+                                                      checked={category.active}
+                                                      onChange={handleActive}/>
 
-                            </Form.Field>
+                                        </Form.Field>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
                         </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column>
+                        <Grid.Column width={8}>
                             <CategoryServices category={category} services={services} onChange={setCategory}/>
                         </Grid.Column>
                     </Grid.Row>
-
                     <CUDButtons onSave={(onSuccess, onError) => {
                         CategoryService.save(category, props.company, onSuccess, onError)
                     }}

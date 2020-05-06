@@ -33,9 +33,9 @@ export default function HomeEdit(props: Props) {
             <Grid.Column>
                 <Form.Field>
                     <Checkbox toggle
-                              name="selectable"
-                              id="selectable"
-                              label="Wählbar"
+                              name="publicOrder"
+                              id="publicOrder"
+                              label="Vorbestellungen erlauben"
                               checked={company.publicOrder}
                               onChange={handleSelectable}/>
 

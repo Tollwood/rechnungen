@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference
 import com.tollwood.company.Category
 import com.tollwood.jpa.BaseEntity
 import org.apache.lucene.analysis.de.GermanAnalyzer
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import org.hibernate.search.annotations.Analyzer
 import org.hibernate.search.annotations.Field
 import org.hibernate.search.annotations.Indexed
@@ -15,6 +16,8 @@ import javax.validation.constraints.NotNull
 
 @Indexed
 @Entity(name = "SERVICE")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class Service(
         @Id
         @GeneratedValue(strategy = AUTO)

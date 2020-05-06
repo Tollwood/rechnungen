@@ -35,6 +35,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-configuration-processor")
 	compile("com.h2database:h2")
 	compile("org.hibernate:hibernate-search-orm:5.11.4.Final")
+	compile("org.hibernate:hibernate-ehcache:5.4.12.Final")
 
 	compile ("org.postgresql:postgresql:9.4.1212")
 	compile ("com.zaxxer:HikariCP:2.6.0")

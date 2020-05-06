@@ -54,7 +54,8 @@ export default function CategoryServices(props: Props) {
     }
 
     return <React.Fragment>
-        <h4>Dienstleistungen</h4>
+        <h1>Dienstleistungen</h1>
+        <h5>Reihenfolge via drag and drop festlegen. Funktioniert nicht auf dem Handy</h5>
         <RLDD
             cssClasses="list-container"
             items={services}
