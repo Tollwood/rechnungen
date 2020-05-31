@@ -57,10 +57,11 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                     <View style={styles.text}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text>{this.props.bill.technician ? this.props.bill.technician.firstName : ""} {this.props.bill.technician ? this.props.bill.technician.lastName : ""}</Text>
-                            <Text>{this.props.company.address.city}, am {this.props.bill.billDate}</Text>
+                            <Text>{this.props.bill.technician ? this.props.bill.technician.address.city: this.props.company.address.city}, am {this.props.bill.billDate}</Text>
                         </View>
-                        <Text>{this.props.company.address.street} {this.props.company.address.houseNumber}</Text>
-                        <Text>{this.props.company.address.zipCode} {this.props.company.address.city}</Text>
+                        <Text>{this.props.bill.technician ? this.props.bill.technician.address.street: this.props.company.address.street} {this.props.bill.technician ?
+                            this.props.bill.technician.address.houseNumber : this.props.company.address.houseNumber}</Text>
+                        <Text>{this.props.bill.technician ?this.props.bill.technician.address.zipCode: this.props.company.address.zipCode} {this.props.bill.technician ? this.props.bill.technician.address.city: this.props.company.address.city}</Text>
                     </View>
                     <View style={styles.text}>
                         <Text>An</Text>
