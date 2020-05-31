@@ -68,12 +68,12 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                 <Table className="order-list" sortable striped>
                     <Table.Header>
                         <Search onSearchChanged={this.searchByTerm.bind(this)}
-                                currentValue={this.state.searchTerm}
-                                onAdd={this.props.onAdd}
-                                labelAdd={"Neuen Auftrag"}
-                                searchFieldWidth={6}
-                                addButtondWidth={1}
-                        />
+                                             currentValue={this.state.searchTerm}
+                                             onAdd={this.props.onAdd}
+                                             labelAdd={"Neuen Auftrag"}
+                                             searchFieldWidth={3}
+                                             addButtondWidth={1}
+                />
 
                         <Table.Row>
                             <Table.HeaderCell colSpan={1} selectable={false}>
@@ -93,8 +93,14 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                             {this.props.company.realEstateSupport && <Table.HeaderCell>Liegenschaft</Table.HeaderCell>}
                             {this.props.company.realEstateSupport && <Table.HeaderCell>Adresse</Table.HeaderCell> }
                             {this.props.company.realEstateSupport && <Table.HeaderCell>Name</Table.HeaderCell> }
-                            {this.props.company.customerSupport && <Table.HeaderCell>Datum</Table.HeaderCell> }
-                            {this.props.company.customerSupport && <Table.HeaderCell>Name</Table.HeaderCell> }
+                            {this.props.company.customerSupport && <Table.HeaderCell
+                                sorted={this.state.page.sort === 'firstAppointment' ? this.state.page.direction : undefined}
+                                onClick={() => PageService.sort('firstAppointment', this.state.page, this.sortAndPage.bind(this))}
+                            >Datum</Table.HeaderCell> }
+                            {this.props.company.customerSupport && <Table.HeaderCell
+                                sorted={this.state.page.sort === 'customer.lastName' ? this.state.page.direction : undefined}
+                                onClick={() => PageService.sort('customer.lastName', this.state.page, this.sortAndPage.bind(this))}
+                            >Name</Table.HeaderCell> }
                             {this.props.company.statisticSupport && <Table.HeaderCell>Nettoumsatz</Table.HeaderCell> }
                             {this.props.company.statisticSupport && <Table.HeaderCell>Bruttoumsatz</Table.HeaderCell> }
                             {this.props.company.billingSupport && <Table.HeaderCell

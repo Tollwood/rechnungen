@@ -62,7 +62,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .and()
                 .authorizeRequests().antMatchers(POST, "/api/order","/api/category/**").permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/api/**").permitAll()
+                .authorizeRequests().antMatchers("/api/**").authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         httpSecurity.addFilterBefore(jwtRequestFilter!!, UsernamePasswordAuthenticationFilter::class.java)
     }

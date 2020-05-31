@@ -1,5 +1,6 @@
 package com.tollwood.realestate
 
+import com.tollwood.SearchSessionFactory.Companion.getFulltextSession
 import org.apache.lucene.search.BooleanClause.Occur
 import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query

@@ -27,8 +27,7 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
         addDistanceItem(order).let { billItems.addAll(it) }
         smallOrder(order)?.let { billItems.add(it) }
 
-        order.services
-                .map { serviceOrder ->
+        order.services.map { serviceOrder ->
                     BillItem(id = DependentId(serviceOrder.service.articleNumber ?: "", order.id),
                             amount = serviceOrder.amount,
                             serviceName = serviceOrder.service.title,

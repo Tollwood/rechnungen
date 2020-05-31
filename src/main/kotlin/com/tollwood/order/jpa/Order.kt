@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.tollwood.jpa.*
 import com.tollwood.order.jpa.OrderState.ORDER_EDIT
 import com.tollwood.realestate.jpa.RealEstate
-import org.hibernate.search.annotations.Field
-import org.hibernate.search.annotations.Indexed
-import org.hibernate.search.annotations.IndexedEmbedded
-import org.hibernate.search.annotations.SortableField
+import org.hibernate.search.annotations.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 import javax.persistence.*
@@ -21,8 +18,10 @@ data class Order(
         override val id: Long? = null,
 
         @Column(unique = true)
-        @Field
-        @SortableField
+        @Fields(value = [Field(name = "orderId_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+                Field(name = "orderId", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "orderId")
         var orderId: String?,
 
         @ManyToOne
@@ -34,11 +33,18 @@ data class Order(
         @JoinColumn(foreignKey = ForeignKey(name = "ORDER_EMPLOYEE_FK"))
         val technician: Employee? = null,
 
+        @Fields(value = [Field(name = "firstAppointment_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+                Field(name = "firstAppointment", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "firstAppointment")
         val firstAppointment: String? = null,
         val secondAppointment: String? = null,
 
         val utilisationUnit: String? = null,
-        @Field
+        @Fields(value = [Field(name = "name_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+            Field(name = "name", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "name")
         val name: String? = null,
         val location: String? = null,
         val phoneNumber: String? = null,
@@ -53,8 +59,10 @@ data class Order(
         var billItems: List<BillItem> = emptyList(),
 
         @Enumerated(EnumType.STRING)
-        @Field
-        @SortableField
+        @Fields(value = [Field(name = "status_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+                Field(name = "status", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "status")
         val status: OrderState = ORDER_EDIT,
 
         @Enumerated(EnumType.STRING)
@@ -62,8 +70,10 @@ data class Order(
 
         val includeKmFee: Boolean = true,
 
-        @Field
-        @SortableField
+        @Fields(value = [Field(name = "billNo_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+                Field(name = "billNo", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "billNo")
         val billNo: String? = null,
         val billDate: String? = null,
         val paymentRecievedDate: String? = null,
@@ -80,6 +90,7 @@ data class Order(
                 AttributeOverride(name="city", column = Column(name="real_estate_city")))
         val realEstateAddress: Address? = null,
 
+        @IndexedEmbedded
         @Embedded
         @AttributeOverrides(
                 AttributeOverride(name="salutation", column = Column(name="customer_salutation")),

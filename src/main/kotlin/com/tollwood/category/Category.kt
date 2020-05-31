@@ -4,10 +4,7 @@ import CategoryServiceOrder
 import com.tollwood.service.Service
 import org.apache.lucene.analysis.de.GermanAnalyzer
 import org.hibernate.annotations.CacheConcurrencyStrategy
-import org.hibernate.search.annotations.Analyzer
-import org.hibernate.search.annotations.Field
-import org.hibernate.search.annotations.Indexed
-import org.hibernate.search.annotations.SortableField
+import org.hibernate.search.annotations.*
 import javax.persistence.*
 import javax.validation.constraints.NotNull
 
@@ -20,10 +17,11 @@ data class Category(
         @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,
 
-        @Field
-        @SortableField
+        @Fields(value = [Field(name = "name_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+                Field(name = "name", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "name")
         @NotNull
-        @Analyzer( impl = GermanAnalyzer::class)
         val name: String,
 
         @ManyToMany(mappedBy = "categories")

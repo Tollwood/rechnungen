@@ -44,7 +44,7 @@ class RealEstateSearchController : BaseSearchController<RealEstate>() {
     }
 
     override fun getSearchFields(): List<String> {
-        return listOf("name", "address.city", "address.street", "address.zipCode")
+        return listOf("name_Search", "address.city_Search", "address.street_Search", "address.zipCode_Search")
     }
 
 }

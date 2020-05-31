@@ -38,7 +38,7 @@ class JwtRequestFilter : OncePerRequestFilter() {
             }
 
         } else {
-            logger.warn("JWT Token does not begin with Bearer String")
+            logger.debug("Unauthorized Request.Authorization Header:  " + requestTokenHeader )
         }
         // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().authentication == null) {

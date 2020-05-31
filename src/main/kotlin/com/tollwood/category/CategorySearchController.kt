@@ -42,6 +42,6 @@ class CategorySearchController : BaseSearchController<Category>() {
     }
 
     override fun getSearchFields(): List<String> {
-        return listOf("name")
+        return listOf("name_Search")
     }
 }

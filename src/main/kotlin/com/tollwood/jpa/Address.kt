@@ -1,24 +1,25 @@
 package com.tollwood.jpa
 
-import org.apache.lucene.analysis.de.GermanAnalyzer
-import org.hibernate.search.annotations.Analyzer
-import org.hibernate.search.annotations.Field
-import org.hibernate.search.annotations.SortableField
+import org.hibernate.search.annotations.*
 import javax.persistence.Embeddable
 
 @Embeddable
 data class Address (
-        @Field
-        @SortableField
-        @Analyzer( impl = GermanAnalyzer::class)
+        @Fields(value = [Field(name = "street_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+                Field(name = "street", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "street")
         val street: String,
 
         val houseNumber: String,
-        @Field
-        @SortableField
+        @Fields(value = [Field(name = "zipCode_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+                Field(name = "zipCode", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "zipCode")
         val zipCode: String,
-        @Field
-        @SortableField
-        @Analyzer( impl = GermanAnalyzer::class)
+        @Fields(value = [Field(name = "city_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+                Field(name = "city", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "city")
         val city: String
 )

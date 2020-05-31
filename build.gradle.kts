@@ -27,6 +27,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
 
 	compile("org.springframework.boot:spring-boot-devtools")
@@ -36,9 +37,12 @@ dependencies {
 	compile("com.h2database:h2")
 	compile("org.hibernate:hibernate-search-orm:5.11.4.Final")
 	compile("org.hibernate:hibernate-ehcache:5.4.12.Final")
+	compile("io.micrometer:micrometer-core")
+	compile("io.micrometer:micrometer-registry-influx")
+//	compile("com.fasterxml.jackson.module:jackson-module-kotlin")
 
 	compile ("org.postgresql:postgresql:9.4.1212")
-	compile ("com.zaxxer:HikariCP:2.6.0")
+	compile ("com.zaxxer:HikariCP")
 	compile("org.flywaydb:flyway-core")
 
 	testCompile("io.github.bonigarcia:selenium-jupiter:3.3.0")

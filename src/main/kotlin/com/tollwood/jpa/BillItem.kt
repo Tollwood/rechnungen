@@ -35,7 +35,7 @@ data class BillItem(
 
 
 @Embeddable
-class DependentId(
+data class DependentId(
         @NotNull
         val code: String,
         val orderId: Long?

@@ -14,10 +14,11 @@ data class RealEstate (
         @GeneratedValue(strategy = GenerationType.AUTO)
         override val id: Long? = null,
 
-        @Field
-        @SortableField
+        @Fields(value = [Field(name = "name_Search", store = Store.YES, analyze = Analyze.YES, analyzer = Analyzer(definition =
+        "de")),
+                Field(name = "name", store = Store.YES, analyze = Analyze.YES, normalizer = Normalizer(definition = "lowercase"))])
+        @SortableField(forField = "name")
         @Column(unique = true, nullable = false)
-        @Analyzer( impl = GermanAnalyzer::class)
         val name: String?,
 
         @Embedded

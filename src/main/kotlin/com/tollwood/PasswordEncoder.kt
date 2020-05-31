@@ -2,7 +2,7 @@ package com.tollwood
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
-fun mainx(args: Array<String>) {
+fun mainx() {
     val bCryptPasswordEncoder = BCryptPasswordEncoder()
     val bcryptencodedPassword = bCryptPasswordEncoder.encode("1234")
     println(bcryptencodedPassword)
