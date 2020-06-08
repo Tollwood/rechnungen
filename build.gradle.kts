@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	val kotlinVersion = "1.3.61"
     id("com.moowork.node") version "1.3.1"
-    id("org.springframework.boot") version "2.2.6.RELEASE"
+    id("org.springframework.boot") version "2.2.7.RELEASE"
 	id("io.spring.dependency-management") version "1.0.8.RELEASE"
 	id("org.jetbrains.kotlin.plugin.jpa") version kotlinVersion
 	id ("org.jetbrains.kotlin.plugin.allopen") version kotlinVersion

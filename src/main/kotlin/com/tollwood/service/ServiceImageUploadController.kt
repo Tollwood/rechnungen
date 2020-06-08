@@ -13,6 +13,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.UUID
 
 
 @CrossOrigin("*")
@@ -37,7 +38,7 @@ class ServiceImageUploadController {
             val bytes = file.bytes
             val path: Path = Paths.get(uploadfolder +"/"+ companyName + "/services/"+ service.id +getFileExtension(file.originalFilename))
             Files.write(path, bytes)
-            service.image = companyName + "/services/"+ service.id.toString() + getFileExtension(file.originalFilename)
+            service.image = companyName + "/services/"+ service.id.toString() + UUID.randomUUID()+ getFileExtension(file.originalFilename)
             serviceResource.save(service)
             logger.info(String.format("File name '%s' uploaded successfully.", file.originalFilename))
         } catch (e: IOException) {
