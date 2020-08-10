@@ -14,6 +14,7 @@ export default class Order {
     technician?: string;
     realEstate?: string;
     distance?: number;
+    taxRate: number = 0.19;
     firstAppointment?: string;
     secondAppointment?: string;
     smallOrder: boolean = false;

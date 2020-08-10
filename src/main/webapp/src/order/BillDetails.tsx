@@ -63,13 +63,25 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                             />
                         </Form.Field>
                     </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column computer={5} tablet={5} mobile={8}>
+                        <label>Steuersatz: </label>
+                        <Form.Input id="taxRate"
+                                    placeholder='Steuersatz z.B. 0.16'
+                                    value={this.props.order.taxRate ? this.props.order.taxRate : ''}
+                                    name='taxRate'
+                                    onChange={this.handleOrderChange.bind(this)}
+                                    error={this.props.errors.get('taxRate') ? {content: this.props.errors.get('taxRate')} : null}
+                        />
+                    </Grid.Column>
                     <Grid.Column computer={5} tablet={5} mobile={8}>
                         <Form.Field>
                             <Checkbox toggle
-                            name={"stornieren"}
-                            label={"Rechnung stornieren"}
-                            checked={this.props.order.canceled}
-                            onChange={this.toggleCancel.bind(this)}/>
+                                      name={"stornieren"}
+                                      label={"Rechnung stornieren"}
+                                      checked={this.props.order.canceled}
+                                      onChange={this.toggleCancel.bind(this)}/>
                         </Form.Field>
                     </Grid.Column>
                 </Grid.Row>
