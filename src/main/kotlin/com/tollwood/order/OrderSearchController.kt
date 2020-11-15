@@ -58,40 +58,32 @@ class OrderSearchController {
 
         val finalQuery = BooleanQuery.Builder()
         addSearchByTerm(cleanTerm, queryBuilder, finalQuery)
-        //addSearchLikeByTerm(cleanTerm, queryBuilder, finalQuery)
-        addExactSearchByTerm(cleanTerm, queryBuilder, finalQuery)
+        addSearchLikeByTerm(cleanTerm, queryBuilder, finalQuery)
+        //addExactSearchByTerm(cleanTerm, queryBuilder, finalQuery)
         addSearchByStatus(status, queryBuilder, finalQuery)
 
         val fullTextQuery = doSearch(fullTextEntityManager, finalQuery.build(), sort, page, size)
         return toPagedResponse(fullTextQuery, page, pagedResourcesAssembler)
     }
 
-    /*private fun addSearchLikeByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
-        if (term == null) return
-        val terms = term.split(" ")
-        for (t in terms) {
-            if (t.isBlank()) continue
+    private fun addSearchLikeByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
+        if (term == null || term.isBlank()) return
             finalQuery.add(queryBuilder
                     .keyword()
                     .wildcard()
-                    .onFields("billNo", "orderId")
-                    .boostedTo(6f)
-                    .matching("*" + t + "*")
+                    .onFields("billNo", "orderId","name",  "realEstate.address.street","realEstate.name",
+                            "realEstateAddress.street")
+                    .matching("*$term*")
                     .createQuery(), Occur.SHOULD)
-        }
-    }*/
+    }
 
     private fun addExactSearchByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
-        if (term == null) return
-        val terms = term.split(" ")
-        for (t in terms) {
-            if (t.isBlank()) continue
+        if (term == null || term.isBlank()) return
             finalQuery.add(queryBuilder
                     .keyword()
-                    .onFields( "realEstateAddress.zipCode", "realEstate.address.zipCode","billNo", "orderId")
-                    .matching(t )
+                    .onFields( "billNo", "orderId")
+                    .matching(term )
                     .createQuery(), Occur.SHOULD)
-        }
     }
 
     private fun toPagedResponse(fullTextQuery: FullTextQuery, page: Int, pagedResourcesAssembler: PagedResourcesAssembler<Order>):
@@ -143,8 +135,8 @@ class OrderSearchController {
                     .fuzzy()
                     .withEditDistanceUpTo(2)
                     .withPrefixLength(0)
-                    .onFields("name", "realEstate.address.city", "realEstate.address.street", "realEstateAddress.city",
-                            "realEstateAddress.street","realEstate.name")
+                    .onFields("name",  "realEstate.address.street","realEstate.name",
+                            "realEstateAddress.street")
                     .matching(t)
                     .createQuery(), Occur.SHOULD)
         }
