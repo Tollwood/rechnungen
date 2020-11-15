@@ -82,6 +82,16 @@ class OrderSearchController {
                     .matching("*$term*")
                     .createQuery(), Occur.SHOULD)
     }
+    private fun addSearchOrderId(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
+        if (term == null || term.isBlank()) return
+        finalQuery.add(queryBuilder
+                .keyword()
+                .wildcard()
+                .onFields("orderId")
+                .boostedTo(4f)
+                .matching("*$term*")
+                .createQuery(), Occur.SHOULD)
+    }
 
     private fun addExactSearchByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
         if (term == null || term.isBlank()) return
