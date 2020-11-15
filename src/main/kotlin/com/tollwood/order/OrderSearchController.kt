@@ -7,6 +7,7 @@ import org.apache.lucene.search.BooleanQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.Sort
 import org.apache.lucene.search.SortField
+import org.hibernate.search.FullTextSession
 import org.hibernate.search.jpa.FullTextEntityManager
 import org.hibernate.search.jpa.FullTextQuery
 import org.hibernate.search.jpa.Search
@@ -33,6 +34,12 @@ class OrderSearchController {
 
     @Autowired
     lateinit var orderEntityModelAssembler: OrderEntityModelAssembler
+
+    @RequestMapping("/api/orders/index")
+    fun index(){
+        val fullTextEntityManager = Search.getFullTextEntityManager(entityManager)
+        fullTextEntityManager.createIndexer().startAndWait()
+    }
 
     @RequestMapping("/api/orders/search")
     fun search(@RequestParam(value = "term", required = false) term: String?,
