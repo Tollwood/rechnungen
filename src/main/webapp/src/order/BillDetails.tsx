@@ -3,6 +3,7 @@ import {ChangeEvent} from "react";
 import Order from "./Order";
 import {DateInput} from "semantic-ui-calendar-react";
 import {Checkbox, Form, Grid} from "semantic-ui-react";
+import OrderTaxRate from "./OrderTaxRate";
 
 interface BillDetailsProps {
     order: Order
@@ -73,6 +74,9 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                         </Form.Field>
                     </Grid.Column>
                 </Grid.Row>
+                <OrderTaxRate handleOrderChange={this.props.handleOrderChange.bind(this)}
+                                order={this.props.order}
+                                errors={this.props.errors}/> 
             </React.Fragment>
         );
     }

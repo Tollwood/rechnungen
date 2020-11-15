@@ -14,12 +14,12 @@ export default class BillTotal extends Component<{bill: Bill}, {}> {
                         style={[styles.column2, styles.sum, {marginTop: 12}]}>{this.sumBill(1)+" €"}</Text>
                 </View>
                 <View style={[styles.row]}>
-                    <Text style={[styles.column2, {marginLeft: 270, marginTop: 2}]}>zzgl. 19% Mehrwertsteuer</Text>
-                    <Text style={[styles.column2, styles.sum]}>{this.sumBill(0.19)+" €"}</Text>
+                    <Text style={[styles.column2, {marginLeft: 270, marginTop: 2}]}>zzgl. {this.props.bill.order.taxRate * 100}% Mehrwertsteuer</Text>
+                    <Text style={[styles.column2, styles.sum]}>{this.sumBill(this.props.bill.order.taxRate)+" €"}</Text>
                 </View>
                 <View style={[styles.row]}>
                     <Text style={[styles.column2, styles.bold, {marginLeft: 270, marginTop: 2}]}>Total</Text>
-                    <Text style={[styles.column2, styles.sum, styles.bold]}>{this.sumBill(1.19)+" €"}</Text>
+                    <Text style={[styles.column2, styles.sum, styles.bold]}>{this.sumBill(1 +(this.props.bill.order.taxRate))+" €"}</Text>
                 </View>
             </View>
 

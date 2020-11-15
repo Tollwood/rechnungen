@@ -44,6 +44,8 @@ data class Order(
         val phoneNumber: String? = null,
         val smallOrder: Boolean = false,
 
+        val taxRate: Double? = null,
+
         @OneToMany(cascade = [CascadeType.ALL])
         @JsonManagedReference
         val services: List<ServiceOrder> = emptyList(),
