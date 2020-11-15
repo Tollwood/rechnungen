@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Button, Input, InputOnChangeData, Table} from "semantic-ui-react";
-
+import { useDebounceCallback} from '@react-hook/debounce'
+import { useState } from "react";
 
 interface Props {
     onSearchChanged: (searchTerm: string) => void
@@ -11,31 +12,38 @@ interface Props {
     addButtondWidth: number
 }
 
-export default class Search extends React.Component<Props> {
+const Search: React.FC<Props> = (props:Props) => {
 
-    render() {
+    const [value,setValue] = useState<string>(props.currentValue);
+    const debounce = useDebounceCallback((value)=> props.onSearchChanged(value),500,false)
+
+    React.useEffect(()=>{
+        debounce(value);
+    },[value]);
+    
+    
         return <React.Fragment>
             <Table.Row>
-                <Table.HeaderCell colSpan={this.props.searchFieldWidth}>
+                <Table.HeaderCell colSpan={props.searchFieldWidth}>
                     <Input className="search"
                            icon='search'
                            placeholder='Suchen ...'
                            fluid
-                           value={this.props.currentValue}
-                           onChange={this.handleSearchChange.bind(this)}
+                           value={value}
+                           onChange={(e,data) => setValue(data.value)}
                     />
                 </Table.HeaderCell>
-                <Table.HeaderCell colSpan={this.props.addButtondWidth}>
-                    <Button floated={"right"} primary icon={{name: "add"}} label={this.props.labelAdd}
-                                          onClick={this.props.onAdd}
+                <Table.HeaderCell colSpan={props.addButtondWidth}>
+                    <Button floated={"right"} primary icon={{name: "add"}} label={props.labelAdd}
+                                          onClick={props.onAdd}
                                           className={"add"}/>
                 </Table.HeaderCell>
             </Table.Row>
         </React.Fragment>;
-    }
+    
 
-    private handleSearchChange(event: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) {
-        this.props.onSearchChanged(data.value)
-    }
+    
 
 }
+
+export default Search;
