@@ -71,8 +71,7 @@ class OrderSearchController {
             finalQuery.add(queryBuilder
                     .keyword()
                     .wildcard()
-                    .onFields("billNo", "orderId","name",  "realEstate.address.street","realEstate.name",
-                            "realEstateAddress.street")
+                    .onFields("billNo", "orderId","name",  "realEstate.address.street","realEstate.name","realEstateAddress.street")
                     .matching("*$term*")
                     .createQuery(), Occur.SHOULD)
     }
