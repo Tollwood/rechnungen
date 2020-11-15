@@ -66,9 +66,22 @@ class OrderSearchController {
         val finalQuery = BooleanQuery.Builder()
         addSearchLikeByTerm(cleanTerm, queryBuilder, finalQuery)
         addSearchByStatus(status, queryBuilder, finalQuery)
+        addStreetSearchByTerm(cleanTerm, queryBuilder, finalQuery)
 
         val fullTextQuery = doSearch(fullTextEntityManager, finalQuery.build(), sort, page, size)
         return toPagedResponse(fullTextQuery, page, pagedResourcesAssembler)
+    }
+
+    private fun addStreetSearchByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
+        if (term == null || term.isBlank()) return
+        finalQuery.add(queryBuilder
+                .keyword()
+                .fuzzy()
+                .withEditDistanceUpTo(2)
+                .withPrefixLength(0)
+                .onFields("realEstate.address.street","realEstateAddress.street")
+                .matching("${term.toLowerCase()}")
+                .createQuery(), Occur.SHOULD)
     }
 
     private fun addSearchLikeByTerm(term: String?, queryBuilder: QueryBuilder, finalQuery: BooleanQuery.Builder) {
@@ -76,8 +89,8 @@ class OrderSearchController {
             finalQuery.add(queryBuilder
                     .keyword()
                     .wildcard()
-                    .onFields("billNo","orderId", "name",  "realEstate.address.street","realEstate.name","realEstateAddress.street")
-                    .matching("*$term*")
+                    .onFields("billNo","orderId", "name",  "realEstate.name")
+                    .matching("*${term.toLowerCase()}*")
                     .createQuery(), Occur.SHOULD)
     }
 
