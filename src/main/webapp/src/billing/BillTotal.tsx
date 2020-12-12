@@ -19,7 +19,7 @@ export default class BillTotal extends Component<{bill: Bill}, {}> {
                 </View>
                 <View style={[styles.row]}>
                     <Text style={[styles.column2, styles.bold, {marginLeft: 270, marginTop: 2}]}>Total</Text>
-                    <Text style={[styles.column2, styles.sum, styles.bold]}>{this.sumBill(1 +(this.props.bill.order.taxRate))+" €"}</Text>
+                    <Text style={[styles.column2, styles.sum, styles.bold]}>{this.sumBill(1 + this.props.bill.order.taxRate)+" €"}</Text>
                 </View>
             </View>
 

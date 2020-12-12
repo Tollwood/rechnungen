@@ -16,6 +16,7 @@ export default class OrderSearch {
     technician?: Employee;
     realEstate?: RealEstate;
     distance?: number;
+    taxRate: number = 0;
     firstAppointment?: string;
     secondAppointment?: string;
     smallOrder: boolean = false;

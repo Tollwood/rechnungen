@@ -130,7 +130,7 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             })}</Table.Cell>
-            <Table.Cell>{(order.sum * 1.19).toLocaleString('de', {
+            <Table.Cell>{(order.sum * (1 + order.taxRate)).toLocaleString('de', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             })}</Table.Cell>

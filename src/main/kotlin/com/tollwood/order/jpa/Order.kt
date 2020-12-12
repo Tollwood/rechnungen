@@ -71,6 +71,7 @@ data class Order(
         val paymentRecievedDate: String? = null,
         val distance: Int? = 0,
 
+        val taxRate: Double? = 0.0,
 
         val canceled: Boolean = false,
 
