@@ -5,5 +5,6 @@ export default class Service {
     title: string = "";
     price: number = 0;
     selectable: boolean =true;
+    serviceCatalogId:number= -1;
     _links: {self?: Link} = {}
 }

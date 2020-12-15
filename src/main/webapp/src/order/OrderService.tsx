@@ -26,7 +26,7 @@ export default class OrderService {
             orderToSave.billItems = [];
             API.patch(order._links.self.href, orderToSave)
                 .then(()=>{
-                    orderToSave.services = order.services.map(value => { value.service  = value.service != ""? value._links.service.href :  value.service ;return value;});
+                    orderToSave.services = order.services.map(value => { value.service  = value.service !== ""? value._links.service.href :  value.service ;return value;});
                     API.patch(order._links.self!.href, orderToSave)
                         .then(result => result.data)
                         .then((data: any) => Object.assign(new Order(), data))

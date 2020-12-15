@@ -9,7 +9,6 @@ export class MenuCard extends React.Component<{content: Content, onClick: (conte
         return (
 
             <Card className={this.props.content.className} onClick={ ()=>{
-                console.log("click");
                 this.props.onClick(this.props.content.type)}}>
                 <Card.Header textAlign={'center'} >
                     <Icon name={this.props.content.icon} size='massive' />

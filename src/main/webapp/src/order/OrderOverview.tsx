@@ -3,67 +3,51 @@ import OrderList from "./OrderList";
 import OrderEdit from "./OrderEdit";
 import Company from "../employees/Company";
 import Link from "../common/Links";
+import { useState } from "react";
+import ClientTemplate from "../clientTemplate/ClientTemplate";
 
-interface OrderOverviewProps {
+interface Props {
     company: Company
+    clientTemplates: ClientTemplate[]
 }
 
-interface OrderOverviewState {
-    selectedItem?: Link,
-    edit: boolean
-}
+ const  OrderOverview: React.FC<Props> = (props:Props)=> {
 
-export default class OrderOverview extends React.Component<OrderOverviewProps, OrderOverviewState> {
+    const [selectedItem,setSelectedItem] = useState<Link>();
+    const [edit,setEdit] = useState<boolean>(false);
 
-    constructor(props: OrderOverviewProps) {
-        super(props);
-        this.state = {
-            edit: false
-        };
+
+    const handleSelection = (selectedOrderLink?: Link) => {
+        setEdit( true);
+        setSelectedItem(selectedOrderLink);
     }
 
-    render() {
+    const stopEdit = ()=>  {
+        setEdit( false);
+        setSelectedItem(undefined);
+    }
+   
         return (
             <React.Fragment>
                 <div className={"order-overview"}>
-                    {this.state.edit ? null :
-                        <OrderList onAdd={this.handleAdd.bind(this)}
-                                   onSelect={(orderLink: Link) => {
-                                       this.handleSelection(orderLink)
-                                   }}
+                    {edit ? null :
+                        <OrderList onAdd={()=>setEdit(true)}
+                                   onSelect={handleSelection}
                         />}
-                    {!this.state.edit ? null :
+                    {!edit ? null :
                         <OrderEdit
-                            company={this.props.company}
-                            orderLink={this.state.selectedItem}
-                            onCancelEdit={this.handleCancelEdit.bind(this)}
-                            onSave={this.handleSave.bind(this)}
-                            onDelete={this.handleDelete.bind(this)}
+                            company={props.company}
+                            clientTemplates={props.clientTemplates}
+                            orderLink={selectedItem}
+                            onCancelEdit={stopEdit}
+                            onSave={stopEdit}
+                            onDelete={stopEdit}
                         />}
                 </div>
             </React.Fragment>
 
         );
-    }
-
-    private handleAdd() {
-        this.setState(Object.assign(this.state, {edit: true, selectedItem: null}))
-    }
-
-    private handleSelection(selectedOrderLink?: Link) {
-        this.setState(Object.assign(this.state, {edit: true, selectedItem: selectedOrderLink}))
-    }
-
-    private handleCancelEdit() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: null}));
-    }
-
-    private handleDelete() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: null}));
-    }
-
-    private handleSave() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: null}));
-    }
+   
 }
 
+export default OrderOverview;

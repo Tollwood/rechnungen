@@ -64,8 +64,6 @@ export default class EmployeeOverview extends React.Component<{}, EmployeeOvervi
         this.setState({isLoading: true});
         API.get('/api/employee')
             .then(res => {
-                console.log(res);
-                console.log(res.data);
                 return res.data;
             })
             .then(data => this.setState({employees: data._embedded.employee}))

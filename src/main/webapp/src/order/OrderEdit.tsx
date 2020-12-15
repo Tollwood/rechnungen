@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, DropdownProps, Form, Grid, Segment} from 'semantic-ui-react'
+import {Button, Form, Grid, Segment} from 'semantic-ui-react'
 import Order from "./Order";
 import Employee from "../employees/Employee";
 import OrderItem from "./OrderItem";
@@ -25,7 +25,7 @@ import RealEstateService from "../realestate/RealEstateService";
 import ServiceService from "../services/ServiceService";
 import EmployeeService from "../employees/EmployeeService";
 import UnsavedChangesModal from "../UnsavedChangesModal";
-import OrderTaxRate from "./OrderTaxRate";
+import ClientTemplate from "../clientTemplate/ClientTemplate";
 
 interface Props {
     onSave: () => void;
@@ -33,177 +33,162 @@ interface Props {
     onDelete: () => void;
     orderLink?: Link;
     company: Company;
+    clientTemplates:ClientTemplate[]
 }
 
-interface State {
-    order: Order;
-    initialState: Order;
-    technicians: Employee[];
-    realEstates: RealEstate[];
-    services: Service[];
-    errors: Map<string, string>;
-    showDeleteModal: boolean
-    showUnsavedChangesModal: boolean
-}
+ const  OrderEdit: React.FC<Props> = (props:Props) =>{
+              
+            const [order,setOrder] = React.useState<Order>(new Order());
+            const [initialState,setInitialState] = React.useState<Order>(new Order());
+            const [technicians,setTechnicians] = React.useState<Employee[]>([]);
+            const [services,setServices] = React.useState<Service[]>([]);
+            const [realEstates,setRealEstates] = React.useState<RealEstate[]>([]);
+            const [showDeleteModal,setShowDeleteModal] = React.useState<boolean>(false);
+            const [showUnsavedChangesModal,setShowUnsavedChangesModal] = React.useState<boolean>(false);
+            const [errors,setErrors] = React.useState< Map<string, string>>(new Map<string, string>());
+                        
+        
+            React.useEffect(()=>{
+                EmployeeService.getEmployees(setTechnicians);
+                ServiceService.fetchServices(setServices);
+                RealEstateService.fetchRealEstates(setRealEstates);
+            }
+            ,[]);
+            
+            React.useEffect(()=>{
+                const link = props.orderLink;
+                if (link !== undefined && link !== null) {
+                    OrderService.getOrder(link, setOrder);
+                }
+            },[props.orderLink]);
+            
+            React.useEffect(()=>{
+                if (order._links.realEstate !== undefined){
+                    RealEstateService.fetchCurrentRealEstate(order._links.realEstate, (realEstate) => {
+                       if(order._links.technician !== undefined){
+                        EmployeeService.fetchCurrentTechnician(order._links.technician, (emp) => {
+                            setOrder({...order,realEstate:realEstate._links.self!.href, technician:emp._links.self!.href});
+                        });
+                       }
+                       else{
+                        setOrder({...order,realEstate:realEstate._links.self!.href});
+                       }
+                    });
+                }
+            },[order._links]);
 
-export default class OrderEdit extends React.Component<Props, State> {
-
-    constructor(props: Props) {
-        super(props);
-        let order = new Order();
-        this.state = {
-            order: order,
-            initialState: order,
-            technicians: [],
-            realEstates: [],
-            services: [],
-            errors: new Map<string, string>(),
-            showDeleteModal: false,
-            showUnsavedChangesModal: false
-        }
-    }
-
-    componentDidMount(): void {
-        EmployeeService.getEmployees((employees => this.setState(Object.assign(this.state, {technicians: employees}))));
-        ServiceService.fetchServices((services) => this.setState({services: services}));
-        RealEstateService.fetchRealEstates((realEstates: RealEstate[]) => {
-            this.setState({realEstates: realEstates})
-        });
-        if (this.props.orderLink !== undefined && this.props.orderLink !== null) {
-            OrderService.getOrder(this.props.orderLink, this.onSuccessGetOrder.bind(this));
-        }
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any): void {
-        if (this.props.orderLink !== undefined && this.props.orderLink !== prevProps.orderLink) {
-            OrderService.getOrder(this.props.orderLink, this.onSuccessGetOrder.bind(this));
-        }
-    }
-
-    render() {
+            
         return (
             <Segment>
                 <Form autoComplete={"off"}>
                     <Grid>
-                        <OrderStatusSteps status={this.state.order.status}
-                                          statusChanged={(status: OrderStatus) => this.handleOrderChange('status', status)}/>
-                        <OrderBaseProperties order={this.state.order}
-                                             selectedTechnician={this.getCurrentTechnician()}
-                                             selectedRealEstate={OrderService.getCurrentRealEstate(this.state.order, this.state.realEstates)}
-                                             handleOrderChange={this.handleOrderChange.bind(this)}
-                                             realEstates={this.state.realEstates} technicians={this.state.technicians}
-                                             readOnly={this.state.order.status !== 'ORDER_EDIT'}
-                                             errors={this.state.errors}/>
+                        <OrderStatusSteps status={order.status}
+                                          statusChanged={(status: OrderStatus) => handleOrderChange('status', status)}/>
+                        <OrderBaseProperties order={order}
+                                            clientTemplates={props.clientTemplates}
+                                             selectedTechnician={getCurrentTechnician()}
+                                             selectedRealEstate={OrderService.getCurrentRealEstate(order, realEstates)}
+                                             handleOrderChange={handleOrderChange}
+                                             realEstates={realEstates}
+                                             updateRealEstate={(realEstate:RealEstate) => setOrder({...order,realEstate:realEstate._links.self!.href, realEstateAddress: realEstate.address })}
+                                              technicians={technicians}
+                                             readOnly={order.status !== 'ORDER_EDIT'}
+                                             updateClent={(clientTemplate)=>{
+                                                 setOrder({...order,clientName: clientTemplate.name,clientAddress:clientTemplate.address,serviceCatalogId:clientTemplate.serviceCatalogId})
+                                             }}
+                                             errors={errors}/>
 
-                        <OrderAppointments handleOrderChange={this.handleOrderChange.bind(this)}
-                                           order={this.state.order}
-                                           errors={this.state.errors}/>
-                        {this.state.order.status === 'ORDER_EDIT' || this.state.order.status === 'ORDER_EXECUTE' ?
-                            <ListOrderServices services={this.state.services}
-                                               orderServices={this.state.order.services ? this.state.order.services : []}
-                                               onOrderServicesChanged={this.updateOrderServies.bind(this)}/>
+                        <OrderAppointments handleOrderChange={handleOrderChange}
+                                           order={order}
+                                           errors={errors}/>
+                        {order.status === 'ORDER_EDIT' || order.status === 'ORDER_EXECUTE' ?
+                            <ListOrderServices order={order} services={services}
+                                               orderServices={order.services ? order.services : []}
+                                               onOrderServicesChanged={updateOrderServies}
+                                               onCatalogChanged={(serviceCatalogId:number) => handleOrderChange("serviceCatalogId", serviceCatalogId)}/>
                             : null}
-                        <OrderKmPauschale handleOrderChange={this.handleOrderChange.bind(this)}
-                                          order={this.state.order}
-                                          errors={this.state.errors}/>
-                        {this.state.order.status === 'ORDER_BILL' ?
-                            <BillDetails order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}
-                                         errors={this.state.errors}/> : null}
-                        <BillButton company={this.props.company} order={this.state.order} services={this.state.services}
-                                    technician={this.getCurrentTechnician()}
-                                    realEstate={OrderService.getCurrentRealEstate(this.state.order, this.state.realEstates)}/>
-                        <PaymentRecieved order={this.state.order} handleOrderChange={this.handleOrderChange.bind(this)}
-                                         errors={this.state.errors}/>
+                        <OrderKmPauschale handleOrderChange={handleOrderChange}
+                                          order={order}
+                                          errors={errors}/>
+                        {order.status === 'ORDER_BILL' ?
+                            <BillDetails order={order} handleOrderChange={handleOrderChange}
+                                         errors={errors}/> : null}
+                        <BillButton company={props.company} order={order} services={services}
+                                    technician={getCurrentTechnician()}
+                                    realEstate={OrderService.getCurrentRealEstate(order, realEstates)}/>
+                        <PaymentRecieved order={order} handleOrderChange={handleOrderChange}
+                                         errors={errors}/>
                         <Grid.Row centered>
                             <Grid.Column width={5} floated='left'>
-                                {this.state.order.status === Helper.nextStatus(this.state.order.status) ? null :
-                                    <OrderAddButton order={this.state.order} realEstates={this.state.realEstates}
-                                                    onSuccess={this.onSuccessSave.bind(this)}
+                                {order.status === Helper.nextStatus(order.status) ? null :
+                                    <OrderAddButton order={order} realEstates={realEstates}
+                                                    onSuccess={onSuccessSave}
                                                     onError={(errors: Map<string, string>) => {
-                                                        this.setState({errors: errors})
+                                                        setErrors(errors)
                                                     }}
                                     />}
                             </Grid.Column>
                             <Grid.Column width={5}>
                                 <Button className={"cancel-bttn"} content='Abbrechen' icon='cancel' labelPosition='left'
                                         onClick={()=>{
-                                            if(this.state.initialState !== this.state.order){
-                                                this.setState({showUnsavedChangesModal:true});
+                                            if(initialState !== order){
+                                                setShowUnsavedChangesModal(true);
                                             }else {
-                                                this.props.onCancelEdit();
+                                                props.onCancelEdit();
                                             }
                                         }}/>
                             </Grid.Column>
                             <Grid.Column width={5} floated='right'>
-                                {(this.state.order._links.self !== undefined && this.state.order.status !== "PAYMENT_RECIEVED") &&
+                                {(order._links.self !== undefined && order.status !== "PAYMENT_RECIEVED") &&
                                     <Button className={"delete-bttn"} floated={"right"} color={"red"} content={"Löschen"} icon='trash'
                                             labelPosition='left'
-                                            onClick={() => this.setState({showDeleteModal: true})}/>
+                                            onClick={() => setShowDeleteModal(true)}/>
                                 }
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
                 </Form>
                 <DeleteModal objectToDelete={"Auftrag"}
-                             show={this.state.showDeleteModal}
+                             show={showDeleteModal}
                              onSuccess={() => {
-                                 OrderService.delete(this.state.order, this.onDeleteSuccess.bind(this))
+                                 OrderService.delete(order, onDeleteSuccess)
                              }}
-                             onClose={() => this.setState({showDeleteModal: false})}
+                             onClose={() => setShowDeleteModal(false)}
                 />
                 <UnsavedChangesModal name={"Auftrag"}
-                                     show={this.state.showUnsavedChangesModal}
-                                     onSuccess={this.props.onCancelEdit}
-                                     onClose={() => this.setState({showUnsavedChangesModal: false})}
+                                     show={showUnsavedChangesModal}
+                                     onSuccess={props.onCancelEdit}
+                                     onClose={() => setShowUnsavedChangesModal(false)}
                 />
             </Segment>
         );
+    
+
+    function onDeleteSuccess() {
+        setShowDeleteModal( false);
+        props.onDelete();
     }
 
-    private onDeleteSuccess() {
-        this.setState({showDeleteModal: false});
-        this.props.onDelete();
+    function handleOrderChange(name: string, value: any) {
+        setOrder({...order, [name]: value});
+        setErrors( ErrorMapper.removeError(errors, name));
     }
 
-    handleOrderChange(name: string, value: any) {
-        this.setState({
-            order: Object.assign(this.state.order, {[name]: value}),
-            errors: ErrorMapper.removeError(this.state.errors, name)
-        });
+    function updateOrderServies(orderServices: OrderItem[]) {
+        setOrder({...order, services: orderServices});
     }
 
-    // @ts-ignore
-    handleDateChange(e: React.SyntheticEvent<HTMLElement>, {name, value}) {
-        this.handleOrderChange(name, value);
+    function getCurrentTechnician() {
+        return technicians.find((technician: Employee) => technician._links.self!.href === order.technician);
     }
 
-    private updateStatus(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        const newOrder = Object.assign(this.state.order, {status: data.value});
-        this.setState(Object.assign(this.state, {order: newOrder}))
-    }
-
-    private updateOrderServies(orderServices: OrderItem[]) {
-        this.setState(Object.assign(this.state, {order: Object.assign(this.state.order, {services: orderServices})}))
-    }
-
-    private getCurrentTechnician() {
-        return this.state.technicians.find((technician: Employee) => technician._links.self!.href === this.state.order.technician);
-    }
-
-    private onSuccessSave(order: Order) {
-        order.technician = this.state.order.technician;
-        order.realEstate = this.state.order.realEstate;
-        this.setState({order: order, initialState: order});
-    }
-
-    public onSuccessGetOrder(order: Order) {
-        this.setState(Object.assign(this.state, {order: order}));
-        if (this.state.order._links.realEstate !== undefined) RealEstateService.fetchCurrentRealEstate(this.state.order._links.realEstate, (realEstate) => {
-            this.handleOrderChange('realEstate', realEstate._links.self!.href)
-        });
-        if (this.state.order._links.technician !== undefined) {
-            EmployeeService.fetchCurrentTechnician(this.state.order._links.technician, (emp) => this.handleOrderChange('technician', emp._links.self!.href));
-        }
+    function onSuccessSave(savedOrder: Order) {
+        savedOrder.technician = order.technician;
+        savedOrder.realEstate = order.realEstate;
+        setOrder(savedOrder);
+        setInitialState(savedOrder);
+        
     }
 }
 
+export default OrderEdit;

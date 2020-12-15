@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ChangeEvent} from "react";
-import {Checkbox, Form, Grid} from 'semantic-ui-react'
+import {Form, Grid} from 'semantic-ui-react'
 import Order from "./Order";
 
 interface Props {

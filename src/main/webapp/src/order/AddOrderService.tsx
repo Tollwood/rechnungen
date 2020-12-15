@@ -41,7 +41,6 @@ export default class AddOrderService extends React.Component<AddOrderServiceProp
                          search
                          openOnFocus={false}
                          selectOnNavigation={false}
-                         icon='none'
                          options={this.computeAvailableServices()}
                          onChange={this.selectService.bind(this)}
                          placeholder=''

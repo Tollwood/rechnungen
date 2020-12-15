@@ -18,7 +18,7 @@ interface Props {
 
 export default function EmployeeEdit(props: Props) {
 
-    const [initialEmployee, setInitialEmploye] = useState<Employee>(props.employee);
+    const [initialEmployee] = useState<Employee>(props.employee);
     const [employee, setEmploye] = useState<Employee>(props.employee);
     const [errors, setErrors] = useState(new Map<string, string>());
 

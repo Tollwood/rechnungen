@@ -1,26 +1,16 @@
 import * as React from "react";
 import Helper from "../common/Helper";
-import {Dropdown, DropdownProps, Icon, Label, Placeholder, Table} from "semantic-ui-react";
+import {Dropdown, DropdownProps, Icon, Pagination, PaginationProps, Placeholder, Table} from "semantic-ui-react";
 import {Page} from "../common/Page";
 import {PageService} from "../common/PageService";
 import Link from "../common/Links";
 import OrderSearch from "./OrderSearch";
 import API from "../API";
-import {debounce} from "ts-debounce";
 import Search from "./Search";
 
 interface OrderListProps {
     onAdd: () => void,
     onSelect: (selectedItem: Link) => void,
-}
-
-interface State {
-    orders: OrderSearch[],
-    page: Page,
-    isLoading: boolean,
-    statusFilter: string[],
-    searchTerm: string,
-    hasMore: boolean
 }
 
 const options = [
@@ -30,63 +20,51 @@ const options = [
     {key: 'ORDER_BILL_RECIEVED', text: Helper.getStatusName('ORDER_BILL_RECIEVED'), value: 'ORDER_BILL_RECIEVED'},
     {key: 'PAYMENT_RECIEVED', text: Helper.getStatusName('PAYMENT_RECIEVED'), value: 'PAYMENT_RECIEVED'}
 ];
-export default class OrderList extends React.Component<OrderListProps, State> {
+const  OrderList:React.FC<OrderListProps> = (props:OrderListProps)=> {
 
 
-    constructor(props: OrderListProps) {
-        super(props);
-        this.state = {
-            orders: [],
-            page: new Page('orderId'),
-            isLoading: true,
-            statusFilter: [],
-            searchTerm: "",
-            hasMore: true
-        };
+    const [orders,setOrders] = React.useState<OrderSearch[]>([]);
 
-        // Binds our scroll event handler
-        window.onscroll = debounce(() => {
-
-            if (this.state.isLoading) return;
-
-            // Checks that the page has scrolled to the bottom
-            if ((window.innerHeight + window.scrollY) >= document.documentElement.offsetHeight && this.state.hasMore) {
-                this.scroll();
-            }
-        }, 100);
+    const [searchTerm,setSearchTerm] = React.useState<string>("");            
+    const [page,setPage] = React.useState<Page>(new Page('orderId')); 
+    const [totalPages,setTotalPages] = React.useState<number>(100);
+    const [activePage,setActivePage] = React.useState<number>(1);
+    const [statusFilter,setStatusFilter] = React.useState<string[]>([]);
+    const [isLoading,setIsLoading] = React.useState<boolean>(true);
+    
+    
+    function handlePaginationChange(data: PaginationProps){
+            setActivePage(data.activePage as number);
     }
+    
+    React.useEffect(()=>{
+        search();
+    },[searchTerm,statusFilter,page,activePage]);
+        
 
-    componentDidMount(): void {
-        this.search(this.state.searchTerm, this.state.statusFilter, this.state.page);
-    }
-
-    render() {
         return (
             <React.Fragment>
                 <Table className="order-list" sortable striped>
                     <Table.Header>
-                        <Search onSearchChanged={this.searchByTerm.bind(this)}
-                                currentValue={this.state.searchTerm}
-                                onAdd={this.props.onAdd}
+                        <Search onSearchChanged={searchByTerm}
+                                currentValue={searchTerm}
+                                onAdd={props.onAdd}
                                 labelAdd={"Neuen Auftrag"}
                                 searchFieldWidth={6}
                                 addButtondWidth={1}
                         />
 
                         <Table.Row>
-                            <Table.HeaderCell colSpan={1} selectable={false}>
-                                <Label>Treffer: {this.state.page.totalElements}</Label>
-                            </Table.HeaderCell>
                             <Table.HeaderCell colSpan={6}>
                                 <Dropdown placeholder='Nach Status Filtern' fluid multiple selection search closeOnChange
                                           options={options}
-                                          onChange={this.updateStatusFilter.bind(this)}/>
+                                          onChange={updateStatusFilter}/>
                             </Table.HeaderCell>
                         </Table.Row>
                         <Table.Row>
                             <Table.HeaderCell
-                                sorted={this.state.page.sort === 'orderId' ? this.state.page.direction : undefined}
-                                onClick={() => PageService.sort('orderId', this.state.page, this.sortAndPage.bind(this))}
+                                sorted={page.sort === 'orderId' ? page.direction : undefined}
+                                onClick={() => PageService.sort('orderId', page, sortAndPage)}
                             >Auftrags-Id</Table.HeaderCell>
                             <Table.HeaderCell>Liegenschaft</Table.HeaderCell>
                             <Table.HeaderCell>Adresse</Table.HeaderCell>
@@ -94,25 +72,32 @@ export default class OrderList extends React.Component<OrderListProps, State> {
                             <Table.HeaderCell>Nettoumsatz</Table.HeaderCell>
                             <Table.HeaderCell>Bruttoumsatz</Table.HeaderCell>
                             <Table.HeaderCell
-                                sorted={this.state.page.sort === 'billNo' ? this.state.page.direction : undefined}
-                                onClick={() => PageService.sort('billNo', this.state.page, this.sortAndPage.bind(this))}
+                                sorted={page.sort === 'billNo' ? page.direction : undefined}
+                                onClick={() => PageService.sort('billNo', page, sortAndPage)}
                             >RG-Nummer</Table.HeaderCell>
                             <Table.HeaderCell
-                                sorted={this.state.page.sort === 'status' ? this.state.page.direction : undefined}
-                                onClick={() => PageService.sort('status', this.state.page, this.sortAndPage.bind(this))}
+                                sorted={page.sort === 'status' ? page.direction : undefined}
+                                onClick={() => PageService.sort('status', page, sortAndPage)}
                             >Status</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {this.renderRows()}
+                        {renderRows()}
                     </Table.Body>
+                    <Table.Footer>
+                    <Pagination
+                    activePage={activePage}
+                    onPageChange={(a, data)=>handlePaginationChange(data)}
+                    totalPages={totalPages}
+                    />
+                    </Table.Footer>
                 </Table>
             </React.Fragment>
-        )
-    }
+        );
+    
 
-    private renderRow(order: OrderSearch) {
-        return <Table.Row key={order.orderId} onClick={this.props.onSelect.bind(this, order._links.self!)}>
+        function renderRow(order: OrderSearch) {
+        return <Table.Row key={order.orderId} onClick={()=>props.onSelect(order._links.self!)}>
             <Table.Cell>{order.orderId}</Table.Cell>
             <Table.Cell>
                 <div>
@@ -141,116 +126,45 @@ export default class OrderList extends React.Component<OrderListProps, State> {
         </Table.Row>;
     }
 
-    private renderRows() {
+    function renderRows() {
 
-        if (this.state.isLoading) {
-            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => this.placeHolderRow())
+        if (isLoading) {
+            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n, i) => placeHolderRow(i))
         }
-        return this.state.orders.map(order => this.renderRow(order))
+        return orders.map(order => renderRow(order))
+    }
+    function sortAndPage(page: Page) {
+        setPage(page);
     }
 
-    private placeHolderRow() {
-        return <Table.Row>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-        </Table.Row>;
+    function updateStatusFilter(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        filterByStatus(data.value as string[]);
     }
 
-    private sortAndPage(page: Page) {
-        this.setState({isLoading: true, page: page});
-        this.search(this.state.searchTerm, this.state.statusFilter, page);
+    function searchByTerm(searchTerm: string) {
+        setActivePage(1);
+        setSearchTerm(searchTerm);
     }
 
-    private updateStatusFilter(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        this.filterByStatus(data.value as string[]);
+    function filterByStatus(statusFilter: string[]) {
+        setActivePage(1);
+        setStatusFilter(statusFilter);
     }
 
-    private scroll() {
-        let page = this.state.page;
-        page.number += 1;
-        this.search(this.state.searchTerm, this.state.statusFilter, page, true)
-    }
 
-    private searchByTerm(searchTerm: string) {
-        let page = this.state.page;
-        page.number = 0;
-        this.search(searchTerm, this.state.statusFilter, page)
-    }
-
-    private filterByStatus(statusFilter: string[]) {
-        let page = this.state.page;
-        page.number = 0;
-        this.search(this.state.searchTerm, statusFilter, page)
-    }
-
-    private search(searchQuery: string, statusFilter: string[], page: Page, append: boolean = false) {
-        var status = this.computeStatusParams(statusFilter);
-        this.setState({searchTerm: searchQuery, statusFilter: statusFilter, page: page});
-        API.get('api/orders/search?term=' + searchQuery + status + "&" + PageService.getPageAndSortParams(page))
+    function search() {
+        var status = computeStatusParams(statusFilter);
+        API.get('/api/orders/search?term=' + searchTerm + status + "&" + PageService.getPageAndSortParams({...page,number: activePage - 1}))
             .then(res => {
-                let hasMore = res.data.page.totalPages > res.data.page.number + 1;
-                this.setState({hasMore: hasMore, page: Object.assign(this.state.page, {totalElements: res.data.page.totalElements})});
+                setTotalPages(res.data.page.totalPages)
+                setIsLoading(false);
                 return res.data._embedded === undefined ? [] : res.data._embedded.order;
             })
             .then((data: any[]) => data.map(value => Object.assign(new OrderSearch(), value)))
-            .then((orders: OrderSearch[]) => this.setState({orders: append ? this.state.orders.concat(orders) : orders, isLoading: false}));
+            .then((orders: OrderSearch[]) => setOrders(orders));
     }
 
-    private computeStatusParams(statusFilter: string[]) {
+    function computeStatusParams(statusFilter: string[]) {
         var statusParams = "";
         if (statusFilter.length > 0) {
             statusParams = "&status=" + statusFilter.join("&status=");
@@ -258,3 +172,66 @@ export default class OrderList extends React.Component<OrderListProps, State> {
         return statusParams
     }
 }
+
+
+const placeHolderRow= (index:number)=> {
+    return <Table.Row key={index}>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+    </Table.Row>;
+}
+export default OrderList;

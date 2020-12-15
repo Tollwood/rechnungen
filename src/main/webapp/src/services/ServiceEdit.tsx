@@ -18,7 +18,7 @@ interface Props {
 export default function ServiceEdit(props: Props) {
 
     const [service, setService] = useState<Service>(props.service);
-    const [initialService, setInitialService] = useState<Service>(props.service);
+    const [initialService] = useState<Service>(props.service);
     const [errors, setErrors] = useState(new Map<string, string>());
 
     function handleSelectable(event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, Input, InputOnChangeData, Table} from "semantic-ui-react";
+import {Button, Input,  Table} from "semantic-ui-react";
 import { useDebounceCallback} from '@react-hook/debounce'
 import { useState } from "react";
 
@@ -19,7 +19,7 @@ const Search: React.FC<Props> = (props:Props) => {
 
     React.useEffect(()=>{
         debounce(value);
-    },[value]);
+    },[value,debounce]);
     
     
         return <React.Fragment>

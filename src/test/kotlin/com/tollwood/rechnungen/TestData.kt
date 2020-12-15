@@ -3,7 +3,7 @@ package com.tollwood.rechnungen
 import com.tollwood.EmployeeResource
 import com.tollwood.order.OrderResource
 import com.tollwood.realestate.RealestateResource
-import com.tollwood.service.ServiceResource
+import com.tollwood.service.ServiceCatalogResource
 import com.tollwood.jpa.Address
 import com.tollwood.order.jpa.Order
 import com.tollwood.realestate.jpa.RealEstate
@@ -24,7 +24,7 @@ class TestData {
     lateinit var realestateResource: RealestateResource
 
     @Autowired
-    lateinit var serviceResource: ServiceResource
+    lateinit var serviceResource: ServiceCatalogResource
 
     fun givenOrderPersistedWithRealEstateAndEmployee(order: Order): Order {
         return orderResource.save(order.copy(technician = employeeResource.findAll().first(), realEstate =  realestateResource.findAll().first()))

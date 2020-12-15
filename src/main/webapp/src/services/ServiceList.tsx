@@ -1,170 +1,185 @@
 import * as React from "react";
 import Service from "../order/Service";
-import {Icon, Placeholder, Table} from "semantic-ui-react";
+import {DropdownItemProps, DropdownProps, Form, Icon, Placeholder, Table} from "semantic-ui-react";
 import {Page} from "../common/Page";
 import {PageService} from "../common/PageService";
 import {debounce} from "ts-debounce";
 import API from "../API";
 import Search from "../order/Search";
+import { useEffect, useState } from "react";
+import ClientTemplate from "../clientTemplate/ClientTemplate";
 
 interface Props {
-    onAdd: () => void,
+    onAdd: (selectedClientTemplate:ClientTemplate) => void,
     onSelect: (selectedService: Service) => void,
+    clientTemplates: ClientTemplate[]
 }
 
-interface State {
-    services: Service[],
-    searchTerm: string
-    page: Page,
-    hasMore: boolean,
-    isLoading: boolean
-}
+const ServiceList:React.FC<Props> =  (props:Props) => {
 
-export default class ServiceList extends React.Component<Props, State> {
+    const [selectedClientTemplate,setSelectedClientTemplate] = useState<ClientTemplate>();
+    const [searchTerm,setSearchTerm] = useState<string>("");
+    const [page,setPage] = useState<Page>(new Page('articleNumber'));
+    const [hasMore,setHasMore] = useState<boolean>(true);
+    const [isLoading,setIsLoading] = useState<boolean>(true);
+    const [services,setServices] = useState<Service[]>([]);
+    
+    // Binds our scroll event handler
+window.onscroll = debounce(() => {
 
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            searchTerm: "",
-            page: new Page('articleNumber'),
-            hasMore: true,
-            services: [],
-            isLoading: true
-        };
+    if (isLoading) return;
 
-        // Binds our scroll event handler
-        window.onscroll = debounce(() => {
+    // Checks that the page has scrolled to the bottom
+    if ((window.innerHeight + window.scrollY) >= document.documentElement.offsetHeight && hasMore) {
+        scroll();
+    }
+}, 100);
 
-            if (this.state.isLoading) return;
-
-            // Checks that the page has scrolled to the bottom
-            if ((window.innerHeight + window.scrollY) >= document.documentElement.offsetHeight && this.state.hasMore) {
-                this.scroll();
-            }
-        }, 100);
+    useEffect(()=>{
+       if(selectedClientTemplate){
+        search();
+       }
+    },[selectedClientTemplate, searchTerm,page]);        
+            
+    function  sortAndPage(newPage: Page) {
+        setIsLoading(true);
+        setServices([]);
+        setPage(newPage);
+    }
+    
+    function scroll(){
+        setPage({...page, number: page.number+1})
     }
 
-    componentDidMount(): void {
-        this.search(this.state.searchTerm, this.state.page);
+    function renderRows() {
+
+        if (isLoading) {
+            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(placeHolderRow)
+        }
+        return services.filter((s:Service) => s.serviceCatalogId === (selectedClientTemplate? selectedClientTemplate.serviceCatalogId: -1)).map(service => renderRow(service,props.onSelect))
     }
 
-    private searchByTerm(searchTerm: string) {
-        let page = this.state.page;
-        page.number = 0;
-        this.search(searchTerm, page)
+    function searchByTerm (searchTerm: string) {
+        setPage({...page, number:0})
+        setSearchTerm(searchTerm);
     }
 
-    private search(searchQuery: string, page: Page, append: boolean = false) {
-
-        this.setState({searchTerm: searchQuery, page: page});
-        API.get('api/service/search?term=' + searchQuery + "&" + PageService.getPageAndSortParams(page))
+    function search () {
+      
+        API.get('api/service/search?term=' + searchTerm + "&" + PageService.getPageAndSortParams(page))
             .then(res => {
                 let hasMore = res.data.page.totalPages > res.data.page.number + 1;
-                this.setState({hasMore: hasMore, page: Object.assign(this.state.page, {totalElements: res.data.page.totalElements})});
+                setHasMore(hasMore);
                 return res.data._embedded === undefined ? [] : res.data._embedded.service;
             })
             .then((data: any[]) => data.map(value => Object.assign(new Service(), value)))
-            .then((services: Service[]) => this.setState({
-                services: append ? this.state.services.concat(services) : services,
-                isLoading: false
-            }));
+            .then((services: Service[]) => {
+                setServices(prev => [...services]);
+                setIsLoading(false);
+            }
+                );
+    }
+    
+    function mapCLientToDropdownItems(): DropdownItemProps[] {
+        return props.clientTemplates.map((client: ClientTemplate, index:number) => {
+            return {key: client.name, value: index, text: client.name}
+        });
     }
 
-    private scroll() {
-        let page = this.state.page;
-        page.number += 1;
-        this.search(this.state.searchTerm, page, true)
+    function updateClient(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        const selected = props.clientTemplates[data.value as number];
+        setSelectedClientTemplate(selected);
     }
 
-    private sortAndPage(page: Page) {
-        this.setState({isLoading: true, page: page});
-        this.search(this.state.searchTerm, page);
+    if(!selectedClientTemplate){
+        return <React.Fragment>
+            <Form.Dropdown id="client"
+                                           selection
+                                           options={mapCLientToDropdownItems()}
+                                           value={selectedClientTemplate}
+                                           onChange={updateClient}
+                                           
+                            />
+        </React.Fragment>
     }
 
-    render() {
         return (
             <React.Fragment>
                 <Table className="ui compact celled table selectable service-list" sortable >
                     <Table.Header>
-                        <Search onSearchChanged={this.searchByTerm.bind(this)} currentValue={this.state.searchTerm} onAdd={this.props.onAdd}
+                        <Search onSearchChanged={searchByTerm} currentValue={searchTerm} onAdd={()=>props.onAdd(selectedClientTemplate)}
                                 labelAdd={"Neuen Service"}
                                 searchFieldWidth={3}
                                 addButtondWidth={1}/>
                         <Table.Row>
                             <Table.HeaderCell
-                                sorted={this.state.page.sort === 'articleNumber' ? this.state.page.direction : undefined}
-                                onClick={() => PageService.sort('articleNumber', this.state.page, this.sortAndPage.bind(this))}
+                                sorted={page.sort === 'articleNumber' ? page.direction : undefined}
+                                onClick={() => PageService.sort('articleNumber', page, sortAndPage)}
                             >Artikelnummer</Table.HeaderCell>
                             <Table.HeaderCell
-                                sorted={this.state.page.sort === 'title' ? this.state.page.direction : undefined}
-                                onClick={() => PageService.sort('title', this.state.page, this.sortAndPage.bind(this))}
+                                sorted={page.sort === 'title' ? page.direction : undefined}
+                                onClick={() => PageService.sort('title', page, sortAndPage)}
                             >Bezeichnung</Table.HeaderCell>
                             <Table.HeaderCell
-                                sorted={this.state.page.sort === 'price' ? this.state.page.direction : undefined}
-                                onClick={() => PageService.sort('price', this.state.page, this.sortAndPage.bind(this))}
+                                sorted={page.sort === 'price' ? page.direction : undefined}
+                                onClick={() => PageService.sort('price', page, sortAndPage)}
                             >Preis</Table.HeaderCell>
                             <Table.HeaderCell>Selektierbar</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {this.renderRows()}
+                        {renderRows()}
                     </Table.Body>
                 </Table>
             </React.Fragment>
         )
 
-    }
-
-    private renderRow(service: Service) {
-        return <Table.Row key={service.articleNumber} onClick={this.props.onSelect.bind(this, service)}>
-            <Table.Cell>{service.articleNumber}</Table.Cell>
-            <Table.Cell>{service.title}</Table.Cell>
-            <Table.Cell>{service.price.toLocaleString('de', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            })}</Table.Cell>
-            <Table.Cell>{service.selectable ? <Icon name={'check'}/> : null}</Table.Cell>
-        </Table.Row>;
-    }
-
-    private renderRows() {
-
-        if (this.state.isLoading) {
-            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(numer => this.placeHolderRow())
         }
-        return this.state.services.map(service => this.renderRow(service))
-    }
 
-    private placeHolderRow() {
-        return <Table.Row>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-            <Table.Cell>
-                <Placeholder>
-                    <Placeholder.Paragraph>
-                        <Placeholder.Line/>
-                    </Placeholder.Paragraph>
-                </Placeholder>
-            </Table.Cell>
-        </Table.Row>;
-    }
+const renderRow = (service: Service, onSelect: (service:Service)=> void) =>{
+    return <Table.Row key={service.articleNumber} onClick={()=>onSelect(service)}>
+        <Table.Cell>{service.articleNumber}</Table.Cell>
+        <Table.Cell>{service.title}</Table.Cell>
+        <Table.Cell>{service.price.toLocaleString('de', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}</Table.Cell>
+        <Table.Cell>{service.selectable ? <Icon name={'check'}/> : null}</Table.Cell>
+    </Table.Row>;
 }
+
+
+const placeHolderRow = () =>{
+    return <Table.Row>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+        <Table.Cell>
+            <Placeholder>
+                <Placeholder.Paragraph>
+                    <Placeholder.Line/>
+                </Placeholder.Paragraph>
+            </Placeholder>
+        </Table.Cell>
+    </Table.Row>;
+};
+
+export default ServiceList;

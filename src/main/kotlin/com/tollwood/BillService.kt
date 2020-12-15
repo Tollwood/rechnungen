@@ -24,7 +24,9 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
 
     fun computeBillItems(order: Order): List<BillItem> {
         val billItems = ArrayList<BillItem>()
-        basePrice(order)?.let { billItems.add(it) }
+        if(order.clientName =="BRUNATA Wärmemesser Hagen GmbH & Co KG") {
+            basePrice(order)?.let { billItems.add(it) }
+        }
         addDistanceItem(order)?.let { billItems.addAll(it) }
         smallOrder(order)?.let { billItems.add(it) }
 

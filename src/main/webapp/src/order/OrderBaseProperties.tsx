@@ -9,34 +9,53 @@ import OrderIdInput from "./OrderIdInput";
 import SelectRealEstate from "./SelectRealEstate";
 import Helper from "../common/Helper";
 import NameValue from "../common/NameValue";
+import ClientTemplate from "../clientTemplate/ClientTemplate";
 
 interface OrderEditProps {
     order: Order;
     selectedTechnician?: Employee;
     selectedRealEstate?: RealEstate;
     handleOrderChange: (name: string, value: any) => void
+    updateClent: (clientTemplate:ClientTemplate) => void
+    updateRealEstate: (realEstate:RealEstate) => void
     technicians: Employee[];
     realEstates: RealEstate[];
     readOnly: boolean;
     errors: Map<string,string>
+    clientTemplates: ClientTemplate[]
 }
 
-export default class OrderBaseProperties extends React.Component<OrderEditProps, {}> {
+ const OrderBaseProperties:React.FC<OrderEditProps> = (props:OrderEditProps) =>{
+    
+    console.log(props.order);
+    
+    return props.readOnly ? renderReadOnly() : renderEdit();
+    
+    function renderEdit() {
+        const clients = props.clientTemplates;
 
-    render() {
-        return this.props.readOnly ? this.renderReadOnly() : this.renderEdit();
-    }
-
-    renderEdit() {
         return (
             <React.Fragment>
                 <Grid.Row>
                     <Grid.Column computer={4} tablet={4} mobile={8}>
                         <Form.Field>
                             <label>Auftrags-ID</label>
-                            <OrderIdInput existing={this.props.order._links.self !== undefined} orderId={this.props.order.orderId}
-                                          onChange={this.handleOrderChange.bind(this)}
-                                          errors={this.props.errors}
+                            <OrderIdInput existing={props.order._links.self !== undefined} orderId={props.order.orderId}
+                                          onChange={handleOrderChange}
+                                          errors={props.errors}
+                            />
+                        </Form.Field>
+                    </Grid.Column>
+                    <Grid.Column computer={6} tablet={6} mobile={8}>
+                        <Form.Field>
+                            <label>Auftraggeber </label>
+                            <Form.Dropdown id="client"
+                                           selection
+                                           search
+                                           value={clients.find(c => c.name === props.order.clientName) ? clients.indexOf(clients.find(c => c.name === props.order.clientName)!) : undefined}
+                                           options={mapCLientToDropdownItems(clients)}
+                                           onChange={updateClient}
+                                           error={props.errors.get('client') ? {content: props.errors.get('client')} : null}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -46,10 +65,10 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                             <Form.Dropdown id="technician"
                                            selection
                                            search
-                                           options={this.mapTechnicianToDropdownItems(this.props.technicians)}
-                                           value={this.props.order.technician}
-                                           onChange={this.updateTechnician.bind(this)}
-                                           error={this.props.errors.get('technician') ? {content: this.props.errors.get('technician')} : null}
+                                           options={mapTechnicianToDropdownItems(props.technicians)}
+                                           value={props.order.technician}
+                                           onChange={updateTechnician}
+                                           error={props.errors.get('technician') ? {content: props.errors.get('technician')} : null}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -60,14 +79,14 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                         <Checkbox toggle
                                   name={"smallOrder"}
                                   label={"Kleinauftrag"}
-                                  checked={this.props.order.smallOrder}
-                                  onChange={this.toggleSmallOrder.bind(this)}/>
+                                  checked={props.order.smallOrder}
+                                  onChange={toggleSmallOrder}/>
                     </Grid.Column>
                 </Grid.Row>
-                <SelectRealEstate selectedRealestate={this.getCurrentRealEstate()} realestates={this.props.realEstates}
-                                  order={this.props.order} onValueChanged={this.updateRealEstate.bind(this)}
-                                  errors={this.props.errors}
-                                  handleAddressChange={this.handleAddressChange.bind(this)}
+                <SelectRealEstate selectedRealestate={getCurrentRealEstate()} realestates={props.realEstates}
+                                  order={props.order} onValueChanged={updateRealEstate}
+                                  errors={props.errors}
+                                  handleAddressChange={handleAddressChange}
                 />
                 <Grid.Row>
                     <Grid.Column computer={4} tablet={4} mobile={16}>
@@ -75,9 +94,9 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                             <label>Nutzungseinheit </label>
                             <Form.Input id="utilisationUnit"
                                         placeholder='Nutzungseinheit'
-                                        value={this.props.order.utilisationUnit}
+                                        value={props.order.utilisationUnit}
                                         name='utilisationUnit'
-                                        onChange={this.handleOrderChange.bind(this)}
+                                        onChange={handleOrderChange}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -85,9 +104,9 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                         <Form.Field>
                             <Form.Input id="name"
                                         placeholder='Name'
-                                        value={this.props.order.name}
+                                        value={props.order.name}
                                         name='name'
-                                        onChange={this.handleOrderChange.bind(this)}
+                                        onChange={handleOrderChange}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -96,9 +115,9 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                             <Form.Input
                                 id="phoneNumber"
                                 placeholder='Telefonnummer'
-                                value={this.props.order.phoneNumber}
+                                value={props.order.phoneNumber}
                                 name='phoneNumber'
-                                onChange={this.handleOrderChange.bind(this)}
+                                onChange={handleOrderChange}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -109,9 +128,9 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
                             <label>Lage </label>
                             <Form.Input id="location"
                                         placeholder='Lage'
-                                        value={this.props.order.location}
+                                        value={props.order.location}
                                         name='location'
-                                        onChange={this.handleOrderChange.bind(this)}
+                                        onChange={handleOrderChange}
                             />
                         </Form.Field>
                     </Grid.Column>
@@ -120,91 +139,104 @@ export default class OrderBaseProperties extends React.Component<OrderEditProps,
         );
     }
 
-    handleOrderChange(event: ChangeEvent<HTMLInputElement>) {
-        this.props.handleOrderChange(event.target.name, event.target.value);
+    function handleOrderChange(event: ChangeEvent<HTMLInputElement>) {
+        props.handleOrderChange(event.target.name, event.target.value);
     }
 
-    toggleSmallOrder(): void {
-        this.props.handleOrderChange('smallOrder', !this.props.order.smallOrder);
+    function toggleSmallOrder(): void {
+        props.handleOrderChange('smallOrder', !props.order.smallOrder);
     }
 
-    private mapTechnicianToDropdownItems(employees: Employee[]): DropdownItemProps[] {
+    function  mapTechnicianToDropdownItems(employees: Employee[]): DropdownItemProps[] {
         return employees.map((emp: Employee) => {
             let text = emp.technicianId + " " + emp.firstName + " " + emp.lastName;
             return {key: emp.technicianId, value: emp._links.self!.href, text: text}
         });
     }
 
-    private updateTechnician(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        this.props.handleOrderChange('technician', data.value);
+    function  updateTechnician(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        props.handleOrderChange('technician', data.value);
     }
 
-    private getCurrentRealEstate() {
-        return this.getRealEstateBySelfLink(this.props.order.realEstate);
+    function  mapCLientToDropdownItems(clients: ClientTemplate[]): DropdownItemProps[] {
+        return clients.map((client: ClientTemplate, index:number) => {
+            return {key: client.name, value: index, text: client.name}
+        });
     }
 
-    private getRealEstateBySelfLink(href?: String) {
-        return this.props.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === href);
+    function  updateClient(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+        const clientTemplate = props.clientTemplates[data.value as number];    
+               
+        props.updateClent( clientTemplate);
+        
     }
 
-    private updateRealEstate(realEstate: string) {
-        this.props.handleOrderChange('realEstate', realEstate);
-        this.props.handleOrderChange('realEstateAddress', this.getRealEstateBySelfLink(realEstate) !=null? this.getRealEstateBySelfLink(realEstate)!!.address : null);
+    function  getCurrentRealEstate() {
+        return getRealEstateBySelfLink(props.order.realEstate);
     }
 
-    private handleAddressChange(nameValue: NameValue) {
-        const newAddress = Object.assign(this.props.order.realEstateAddress, {[nameValue.name]: nameValue.value});
-        this.props.handleOrderChange('realEstateAddress', newAddress);
+    function  getRealEstateBySelfLink(href?: String) {
+        return props.realEstates.find((realEstate: RealEstate) => realEstate._links.self!.href === href);
+    }
+
+    function  updateRealEstate(realEstate: string) {
+        props.updateRealEstate(getRealEstateBySelfLink(realEstate)!!)
+    }
+
+    function  handleAddressChange(nameValue: NameValue) {
+        const newAddress = {...props.order.realEstateAddress, [nameValue.name]: nameValue.value};
+        props.handleOrderChange('realEstateAddress', newAddress);
         //errors: ErrorMapper.removeError(this.state.errors, "address."+nameValue.name)
     }
 
-    renderReadOnly() {
-        if (this.props.selectedTechnician === undefined || this.props.selectedRealEstate === undefined) {
+    function renderReadOnly() {
+        
+        if (props.selectedTechnician === undefined || props.selectedRealEstate === undefined) {
             return PlaceholderExamplePlaceholder();
         }
         return (
             <React.Fragment>
                 <Grid.Row>
-                    <Grid.Column computer={this.props.order.smallOrder === true ? 4 : 8}
-                                 tablet={this.props.order.smallOrder === true ? 4 : 8}
-                                 mobile={this.props.order.smallOrder === true ? 8 : 16}>
+                    <Grid.Column computer={props.order.smallOrder === true ? 4 : 8}
+                                 tablet={props.order.smallOrder === true ? 4 : 8}
+                                 mobile={props.order.smallOrder === true ? 8 : 16}>
                         <span style={{"fontWeight": "bold"}}>Auftrags-ID:</span>
-                        <span> {this.props.order.orderId}</span>
+                        <span> {props.order.orderId}</span>
                     </Grid.Column>
-                    {this.props.order.smallOrder === true ?
+                    {props.order.smallOrder === true ?
                         <Grid.Column computer={4} tablet={4} mobile={8}>
                             <div style={{"fontWeight": "bold"}}><label>Kleinauftrag</label></div>
                         </Grid.Column>
                         : null}
                     <Grid.Column computer={8} tablet={8} mobile={16}>
                         <span style={{"fontWeight": "bold"}}>Monteuer:</span>
-                        <span> {this.props.selectedTechnician!.technicianId} {this.props.selectedTechnician!.firstName} {this.props.selectedTechnician!.lastName}</span>
+                        <span> {props.selectedTechnician!.technicianId} {props.selectedTechnician!.firstName} {props.selectedTechnician!.lastName}</span>
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
                     <Grid.Column computer={8} tablet={8} mobile={16}>
                         <span style={{"fontWeight": "bold", float: "left"}}>Adresse:</span>
-                        <AddressReadOnly address={this.props.order.realEstateAddress !== null? this.props.order.realEstateAddress : this.props.selectedRealEstate.address}/>
+                        <AddressReadOnly address={props.order.realEstateAddress !== null? props.order.realEstateAddress : props.selectedRealEstate.address}/>
                     </Grid.Column>
                 </Grid.Row>
-                {!Helper.isEmpty(this.props.order.utilisationUnit) || !Helper.isEmpty(this.props.order.name) || !Helper.isEmpty(this.props.order.phoneNumber ) || !Helper.isEmpty(this.props.order.location) ?
+                {!Helper.isEmpty(props.order.utilisationUnit) || !Helper.isEmpty(props.order.name) || !Helper.isEmpty(props.order.phoneNumber ) || !Helper.isEmpty(props.order.location) ?
                     <Grid.Row>
-                        {!Helper.isEmpty(this.props.order.utilisationUnit) || !Helper.isEmpty(this.props.order.name) ?
+                        {!Helper.isEmpty(props.order.utilisationUnit) || !Helper.isEmpty(props.order.name) ?
                             <Grid.Column width={6}>
-                                {!Helper.isEmpty(this.props.order.utilisationUnit)? <span style={{"fontWeight": "bold"}}>Nutzungseinheit:</span> : <span style={{"fontWeight": "bold"}}>Name:</span> }
-                                {Helper.isEmpty(this.props.order.utilisationUnit) ? null : <span> {this.props.order.utilisationUnit}</span>}
-                                {!Helper.isEmpty(this.props.order.utilisationUnit) && (!Helper.isEmpty(this.props.order.name) ) ?
+                                {!Helper.isEmpty(props.order.utilisationUnit)? <span style={{"fontWeight": "bold"}}>Nutzungseinheit:</span> : <span style={{"fontWeight": "bold"}}>Name:</span> }
+                                {Helper.isEmpty(props.order.utilisationUnit) ? null : <span> {props.order.utilisationUnit}</span>}
+                                {!Helper.isEmpty(props.order.utilisationUnit) && (!Helper.isEmpty(props.order.name) ) ?
                                     <span> -</span> : null}
-                                {Helper.isEmpty(this.props.order.name) ? null : <span> {this.props.order.name}</span>}
+                                {Helper.isEmpty(props.order.name) ? null : <span> {props.order.name}</span>}
                             </Grid.Column> : null}
-                        {Helper.isEmpty(this.props.order.phoneNumber) ? null :
+                        {Helper.isEmpty(props.order.phoneNumber) ? null :
                             <Grid.Column width={5}>
-                                <span style={{"fontWeight": "bold"}}>Telefon:</span><span> {this.props.order.phoneNumber}</span>
+                                <span style={{"fontWeight": "bold"}}>Telefon:</span><span> {props.order.phoneNumber}</span>
                             </Grid.Column>
                         }
-                        {Helper.isEmpty(this.props.order.location) ? null :
+                        {Helper.isEmpty(props.order.location) ? null :
                             <Grid.Column width={5}>
-                                <span style={{"fontWeight": "bold"}}>Lage: </span><span>{this.props.order.location}</span>
+                                <span style={{"fontWeight": "bold"}}>Lage: </span><span>{props.order.location}</span>
                             </Grid.Column>
                         }
                     </Grid.Row> : null
@@ -234,3 +266,5 @@ const PlaceholderExamplePlaceholder = () => (
     </Grid.Row>
 
 )
+
+export default OrderBaseProperties;

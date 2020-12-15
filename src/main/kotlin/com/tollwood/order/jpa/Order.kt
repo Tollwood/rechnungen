@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.tollwood.jpa.*
 import com.tollwood.order.jpa.OrderState.ORDER_EDIT
 import com.tollwood.realestate.jpa.RealEstate
+import com.tollwood.serviceCatalog.ServiceCatalog
 import org.hibernate.search.annotations.Field
 import org.hibernate.search.annotations.Indexed
 import org.hibernate.search.annotations.IndexedEmbedded
@@ -44,12 +45,19 @@ data class Order(
         val phoneNumber: String? = null,
         val smallOrder: Boolean = false,
 
-        val taxRate: Double? = null,
+        val clientName: String,
+        @Embedded
+        @AttributeOverrides(AttributeOverride(name="street", column = Column(name="client_street")),
+                AttributeOverride(name="houseNumber", column = Column(name="client_house_number")),
+                AttributeOverride(name="zipCode", column = Column(name="client_zip_code")),
+                AttributeOverride(name="city", column = Column(name="client_city")))
+        val clientAddress: Address,
 
         @OneToMany(cascade = [CascadeType.ALL])
         @JsonManagedReference
         val services: List<ServiceOrder> = emptyList(),
 
+        val serviceCatalogId: Long,
         @OneToMany(cascade = [CascadeType.ALL], mappedBy = "order", fetch = FetchType.EAGER)
         @JsonManagedReference
         var billItems: List<BillItem> = emptyList(),

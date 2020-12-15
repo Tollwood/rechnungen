@@ -65,9 +65,9 @@ export default class Billpdf extends Component<{ bill: Bill, company: Company },
                     </View>
                     <View style={styles.text}>
                         <Text>An</Text>
-                        <Text>BRUNATA Wärmemesser Hagen GmbH & Co KG</Text>
-                        <Text>Doberanerweg 10</Text>
-                        <Text>22143 Hamburg</Text>
+                        <Text>{this.props.bill.order.clientName}</Text>
+                        <Text>{`${this.props.bill.order.clientAddress.street} ${this.props.bill.order.clientAddress.houseNumber}`}</Text>
+                        <Text>{`${this.props.bill.order.clientAddress.zipCode} ${this.props.bill.order.clientAddress.city}`}</Text>
                     </View>
 
 

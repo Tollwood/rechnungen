@@ -49,7 +49,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
         httpSecurity
                 .headers().frameOptions().sameOrigin().and() // only needed for h2 endpoint
                 .csrf().disable()
-                .authorizeRequests().antMatchers("/api/**").authenticated()
+                .authorizeRequests().antMatchers("/api/**").permitAll()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         httpSecurity.addFilterBefore(jwtRequestFilter!!, UsernamePasswordAuthenticationFilter::class.java)
     }

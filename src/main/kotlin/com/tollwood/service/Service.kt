@@ -18,7 +18,7 @@ data class Service(
         @Id
         @GeneratedValue(strategy = AUTO)
         override val id: Long,
-
+        val serviceCatalogId: Long,
         @Field
         @SortableField
         @NotNull

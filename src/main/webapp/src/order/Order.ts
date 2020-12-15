@@ -29,5 +29,8 @@ export default class Order {
     paymentRecievedDate: string = '';
     sum: number = 0;
     realEstateAddress: Address= new Address();
+    clientName?: string;
+    clientAddress: Address= new Address();
+    serviceCatalogId?: number;
     _links: {self?: Link, technician?: Link, realEstate?: Link} = {};
 }

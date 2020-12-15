@@ -15,7 +15,7 @@ interface Props {
 
 export default function RealEstateEdit(props: Props) {
 
-    const [initialRealEstate, setInitialRealEstate] = useState<RealEstate>(props.realEstate);
+    const [initialRealEstate] = useState<RealEstate>(props.realEstate);
     const [realEstate, setRealEstate] = useState<RealEstate>(props.realEstate);
     const [errors, setErrors] = useState(new Map<string, string>());
 
