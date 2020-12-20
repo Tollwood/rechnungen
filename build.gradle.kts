@@ -91,9 +91,9 @@ tasks.create<Copy>("copywebapp") {
 	dependsOn("appNpmBuild")
 }
 
-tasks.named("compileKotlin") {
-	dependsOn("copywebapp")
-}
+//tasks.named("compileKotlin") {
+	//	dependsOn("copywebapp")
+//}
 
 idea {
 	module {

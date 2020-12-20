@@ -2,20 +2,21 @@ import * as React from "react";
 import Service from "../order/Service";
 import ServiceEdit from "./ServiceEdit";
 import ServiceList from "./ServiceList";
-import ClientTemplate from "../clientTemplate/ClientTemplate";
 import { useState } from "react";
+import ServiceCatlog from "../order/ServiceCatalog";
 
 interface Props {
-    clientTemplates: ClientTemplate[]
+    serviceCatalogs: ServiceCatlog[]
 }
 
 const ServicesOverview: React.FC<Props>=(props:Props)=> {
 
     const [selectedItem,setSelectedItem] = useState<Service>();
-    
-    function handleAdd(clientTemplate:ClientTemplate) {
+    const [selectedServiceCatlog,setSelectedServiceCatlog] = useState<ServiceCatlog>();
+
+    function handleAdd() {
         const service = new Service();
-        service.serviceCatalogId = clientTemplate.serviceCatalogId;
+        service.serviceCatalogId = selectedServiceCatlog!.idValue;
         setSelectedItem(service);
     }
 
@@ -35,11 +36,13 @@ const ServicesOverview: React.FC<Props>=(props:Props)=> {
                         onDelete={handleCancelEdit}
                     />: 
                     <ServiceList
-                    clientTemplates={props.clientTemplates}
+                    serviceCatalogs={props.serviceCatalogs}
                                  onAdd={handleAdd}
                                  onSelect={(service: Service) => {
                                      handleSelection(service)
                                  }}
+                                 onProductCatalogSelect={setSelectedServiceCatlog}
+                                 selectedServiceCatalog={selectedServiceCatlog}
 
                     />}
                 

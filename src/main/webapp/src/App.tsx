@@ -16,6 +16,7 @@ import Link from "./common/Links";
 import BackendAlerts from "./BackendAlerts";
 import StatisticOverview from "./statistic/StatisticOverview";
 import ClientTemplate from './clientTemplate/ClientTemplate';
+import ServiceCatalog from './order/ServiceCatalog';
 
 interface AppState {
     activeOrder?: Link,
@@ -32,6 +33,7 @@ const App: React.FC = ()=> {
     const [activeOrder,setActiveOrder] = useState<Link>(); 
     const [company,setCompany] = useState<Company>(); 
     const [clientTemplates,setClientTemplates] = useState<ClientTemplate[]>([]); 
+    const [serviceCatalogs,setServiceCatalogs] = useState<ServiceCatalog[]>([]); 
 
     React.useEffect(()=>{
         API.get('/api/company/1')
@@ -44,6 +46,12 @@ const App: React.FC = ()=> {
 
         .then(res => res.data._embedded === undefined ? [] : res.data._embedded.clientTemplate)
         .then(setClientTemplates)
+    },[]);
+    React.useEffect(()=>{
+        API.get('/api/service-catalog')
+
+        .then(res => res.data._embedded === undefined ? [] : res.data._embedded.serviceCatalog)
+        .then(setServiceCatalogs)
     },[]);
 
     const closeOrder= ()=> {
@@ -72,7 +80,7 @@ const App: React.FC = ()=> {
                                 {activeContent === ContentType.BILL ? <h1>Rechnungen</h1> : null}
                                 {activeContent === ContentType.STATISTICS ? <StatisticOverview/> : null}
                                 {activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview /> : null}
-                                {activeContent === ContentType.SERVICES ? <ServicesOverview clientTemplates={clientTemplates}/> : null}
+                                {activeContent === ContentType.SERVICES ? <ServicesOverview serviceCatalogs={serviceCatalogs}/> : null}
                                 {activeContent === ContentType.ORDER_DETAILS ?
                                     <OrderEdit company={company}
                                                clientTemplates={clientTemplates}

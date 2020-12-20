@@ -7,17 +7,19 @@ import {debounce} from "ts-debounce";
 import API from "../API";
 import Search from "../order/Search";
 import { useEffect, useState } from "react";
-import ClientTemplate from "../clientTemplate/ClientTemplate";
+import ServiceCatlog from "../order/ServiceCatalog";
 
 interface Props {
-    onAdd: (selectedClientTemplate:ClientTemplate) => void,
+    onAdd: () => void,
     onSelect: (selectedService: Service) => void,
-    clientTemplates: ClientTemplate[]
+    onProductCatalogSelect:(serviceCatalog?:ServiceCatlog)=>void,
+    selectedServiceCatalog?:ServiceCatlog,
+    serviceCatalogs: ServiceCatlog[]
 }
 
 const ServiceList:React.FC<Props> =  (props:Props) => {
 
-    const [selectedClientTemplate,setSelectedClientTemplate] = useState<ClientTemplate>();
+    const {selectedServiceCatalog} = props;
     const [searchTerm,setSearchTerm] = useState<string>("");
     const [page,setPage] = useState<Page>(new Page('articleNumber'));
     const [hasMore,setHasMore] = useState<boolean>(true);
@@ -36,10 +38,10 @@ window.onscroll = debounce(() => {
 }, 100);
 
     useEffect(()=>{
-       if(selectedClientTemplate){
+       if(selectedServiceCatalog){
         search();
        }
-    },[selectedClientTemplate, searchTerm,page]);        
+    },[selectedServiceCatalog, searchTerm,page]);        
             
     function  sortAndPage(newPage: Page) {
         setIsLoading(true);
@@ -56,7 +58,7 @@ window.onscroll = debounce(() => {
         if (isLoading) {
             return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(placeHolderRow)
         }
-        return services.filter((s:Service) => s.serviceCatalogId === (selectedClientTemplate? selectedClientTemplate.serviceCatalogId: -1)).map(service => renderRow(service,props.onSelect))
+        return services.filter((s:Service) => s.serviceCatalogId === (selectedServiceCatalog? selectedServiceCatalog.idValue: -1)).map(service => renderRow(service,props.onSelect))
     }
 
     function searchByTerm (searchTerm: string) {
@@ -80,34 +82,29 @@ window.onscroll = debounce(() => {
                 );
     }
     
-    function mapCLientToDropdownItems(): DropdownItemProps[] {
-        return props.clientTemplates.map((client: ClientTemplate, index:number) => {
-            return {key: client.name, value: index, text: client.name}
+    function mapCatalogToDropdownItems(): DropdownItemProps[] {
+        return props.serviceCatalogs.map((serviceCatalog: ServiceCatlog, index:number) => {
+            return {key: serviceCatalog.name, value: serviceCatalog.idValue, text: serviceCatalog.name}
         });
     }
 
     function updateClient(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-        const selected = props.clientTemplates[data.value as number];
-        setSelectedClientTemplate(selected);
+        const selected = props.serviceCatalogs.find(sc => sc.idValue === data.value as number);
+        props.onProductCatalogSelect(selectedServiceCatalog);
     }
 
-    if(!selectedClientTemplate){
+    
         return <React.Fragment>
             <Form.Dropdown id="client"
                                            selection
-                                           options={mapCLientToDropdownItems()}
-                                           value={selectedClientTemplate}
+                                           options={mapCatalogToDropdownItems()}
+                                           value={selectedServiceCatalog?.idValue}
                                            onChange={updateClient}
                                            
                             />
-        </React.Fragment>
-    }
-
-        return (
-            <React.Fragment>
                 <Table className="ui compact celled table selectable service-list" sortable >
                     <Table.Header>
-                        <Search onSearchChanged={searchByTerm} currentValue={searchTerm} onAdd={()=>props.onAdd(selectedClientTemplate)}
+                        <Search onSearchChanged={searchByTerm} currentValue={searchTerm} onAdd={props.onAdd}
                                 labelAdd={"Neuen Service"}
                                 searchFieldWidth={3}
                                 addButtondWidth={1}/>
@@ -132,8 +129,7 @@ window.onscroll = debounce(() => {
                     </Table.Body>
                 </Table>
             </React.Fragment>
-        )
-
+        
         }
 
 const renderRow = (service: Service, onSelect: (service:Service)=> void) =>{

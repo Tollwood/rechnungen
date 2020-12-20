@@ -47,7 +47,7 @@ class BillService(@Autowired val serviceResource: ServiceResource) {
             return emptyList()
         }
 
-        val distance = order.realEstate.distance;
+        val distance = order.distance?:order.realEstate.distance;
         if (distance in 21..30) {
             return listOf(this.getDistanceItem(order, "1B"))
         }
