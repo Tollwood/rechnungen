@@ -88,9 +88,9 @@ window.onscroll = debounce(() => {
         });
     }
 
-    function updateClient(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+    function updateCatalog(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
         const selected = props.serviceCatalogs.find(sc => sc.idValue === data.value as number);
-        props.onProductCatalogSelect(selectedServiceCatalog);
+        props.onProductCatalogSelect(selected);
     }
 
     
@@ -99,10 +99,10 @@ window.onscroll = debounce(() => {
                                            selection
                                            options={mapCatalogToDropdownItems()}
                                            value={selectedServiceCatalog?.idValue}
-                                           onChange={updateClient}
+                                           onChange={updateCatalog}
                                            
                             />
-                <Table className="ui compact celled table selectable service-list" sortable >
+                {selectedServiceCatalog && <Table className="ui compact celled table selectable service-list" sortable >
                     <Table.Header>
                         <Search onSearchChanged={searchByTerm} currentValue={searchTerm} onAdd={props.onAdd}
                                 labelAdd={"Neuen Service"}
@@ -127,7 +127,7 @@ window.onscroll = debounce(() => {
                     <Table.Body>
                         {renderRows()}
                     </Table.Body>
-                </Table>
+                </Table>}
             </React.Fragment>
         
         }

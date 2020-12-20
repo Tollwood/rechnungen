@@ -45,8 +45,7 @@ export function OrderAddButton(props: Props) {
             <Button primary content='Weiter'
                     onClick={() => saveAndConfimr(props.order, props.realEstates, true, props.onSuccess, props.onError)}
                     className={"save-bttn"}
-                    icon={Helper.getStatusIcon(Helper.nextStatus(props.order.status))}/>}
-            labelPosition={"right"}/>
+                    icon={Helper.getStatusIcon(Helper.nextStatus(props.order.status))}/>
         </Button.Group>
     </Button.Group>
 }

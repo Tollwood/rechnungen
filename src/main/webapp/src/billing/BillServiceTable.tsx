@@ -12,33 +12,33 @@ export default class BillServiceTable extends Component<{ data: any }, {}> {
         return (
             <Table data={this.props.data}>
                 <TableHeader includeLeftBorder={false} includeRightBorder={false} includeTopBorder={false}>
-                    <TableCell styles={[this.tableStyle,this.centerStyle]} weighting={0.15} includeRightBorder={false} includeLeftBorder={false}>
+                    <TableCell style={[this.tableStyle,this.centerStyle]} weighting={0.15} includeRightBorder={false} includeLeftBorder={false}>
                         Code
                     </TableCell>
-                    <TableCell styles={[this.tableStyle, this.centerStyle]} weighting={0.1}>
+                    <TableCell style={[this.tableStyle, this.centerStyle]} weighting={0.1}>
                         Menge
                     </TableCell>
-                    <TableCell styles={[this.tableStyle]} weighting={0.47}>
+                    <TableCell style={[this.tableStyle]} weighting={0.47}>
                         Leistung
                     </TableCell>
-                    <TableCell styles={[this.tableStyle, this.centerStyle]} weighting={0.14}>
+                    <TableCell style={[this.tableStyle, this.centerStyle]} weighting={0.14}>
                         EP
                     </TableCell>
-                    <TableCell styles={[this.tableStyle, this.centerStyle]} weighting={0.14}>
+                    <TableCell style={[this.tableStyle, this.centerStyle]} weighting={0.14}>
                     Summe
                     </TableCell>
                 </TableHeader>
 
                 <TableBody includeLeftBorder={false} includeRightBorder={false} includeTopBorder={false}>
-                    <DataTableCell styles={[this.tableStyle, this.centerStyle]} weighting={0.15} getContent={(r) => r.code}/>
-                    <DataTableCell styles={[this.tableStyle, this.centerStyle]} weighting={0.1} getContent={(r) => r.amount + ""}/>
-                    <DataTableCell styles={[this.tableStyle]} weighting={0.47} getContent={(r) => r.serviceName}/>
-                    <DataTableCell styles={[this.tableStyle, this.alignRightStyle]} weighting={0.14}
+                    <DataTableCell style={[this.tableStyle, this.centerStyle]} weighting={0.15} getContent={(r) => r.code}/>
+                    <DataTableCell style={[this.tableStyle, this.centerStyle]} weighting={0.1} getContent={(r) => r.amount + ""}/>
+                    <DataTableCell style={[this.tableStyle]} weighting={0.47} getContent={(r) => r.serviceName}/>
+                    <DataTableCell style={[this.tableStyle, this.alignRightStyle]} weighting={0.14}
                                    getContent={(r) => r.price.toLocaleString('de', {
                                        minimumFractionDigits: 2,
                                        maximumFractionDigits: 2
                                    }) +" €"}/>
-                    <DataTableCell styles={[this.tableStyle, this.alignRightStyle]} weighting={0.14} getContent={(r) => {
+                    <DataTableCell style={[this.tableStyle, this.alignRightStyle]} weighting={0.14} getContent={(r) => {
                         let billItem: BillItem = r;
                         return (billItem.price * billItem.amount).toLocaleString('de', {
                             minimumFractionDigits: 2,

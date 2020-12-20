@@ -6,7 +6,7 @@ export class Page {
     "sort": string = "";
     "direction": 'ascending' | 'descending' | undefined = 'ascending';
 
-    constructor(sort: string, size: number = 25) {
+    constructor(sort: string, size: number = 200) {
         this.sort = sort;
         this.size = size;
     }
