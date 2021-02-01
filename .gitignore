@@ -31,3 +31,7 @@ out/
 ### VS Code ###
 .vscode/
 **/node_modules
+
+server/src/**/*.js
+server/src/**/*.js.map
+server/build/**
