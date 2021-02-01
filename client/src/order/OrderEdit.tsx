@@ -25,6 +25,9 @@ import ServiceService from "../services/ServiceService";
 import EmployeeService from "../employees/EmployeeService";
 import UnsavedChangesModal from "../UnsavedChangesModal";
 import ClientTemplate from "../clientTemplate/ClientTemplate";
+import ServiceList from "../services/ServiceList";
+import ServicesOverview from "../services/ServicesOverview";
+import ServiceCatlog from "./ServiceCatalog";
 
 interface Props {
   onSave: () => void;
@@ -33,6 +36,7 @@ interface Props {
   order?: Order;
   company: Company;
   clientTemplates: ClientTemplate[];
+  serviceCatalogs: ServiceCatlog[];
 }
 
 const OrderEdit: React.FC<Props> = (props: Props) => {
@@ -83,13 +87,27 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
 
           <OrderAppointments handleOrderChange={handleOrderChange} order={order} errors={errors} />
           {order.status === "ORDER_EDIT" || order.status === "ORDER_EXECUTE" ? (
-            <ListOrderServices
-              order={order}
-              services={services}
-              onOrderItemsChanged={updateOrderServies}
-              onCatalogChanged={(serviceCatalogId: number) => handleOrderChange("serviceCatalogId", serviceCatalogId)}
-            />
+            <Grid.Row centered>
+              <Grid.Column width="8">
+                <ListOrderServices
+                  order={order}
+                  services={services}
+                  onOrderItemsChanged={updateOrderServies}
+                  onCatalogChanged={(serviceCatalogId: number) =>
+                    handleOrderChange("serviceCatalogId", serviceCatalogId)
+                  }
+                />
+              </Grid.Column>
+              <Grid.Column width="8" style={{ marginTop: "40px" }}>
+                <ServicesOverview
+                  asPriceList={true}
+                  serviceCatalogs={props.serviceCatalogs}
+                  selectedServiceCatalog={props.serviceCatalogs.find((sc) => sc.id === order.serviceCatalogId)}
+                />
+              </Grid.Column>
+            </Grid.Row>
           ) : null}
+
           <OrderKmPauschale handleOrderChange={handleOrderChange} order={order} errors={errors} />
           {order.status === "ORDER_BILL" ? (
             <BillDetails order={order} handleOrderChange={handleOrderChange} errors={errors} />

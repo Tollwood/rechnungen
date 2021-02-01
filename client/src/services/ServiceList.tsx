@@ -14,6 +14,7 @@ interface Props {
   onProductCatalogSelect: (serviceCatalog?: ServiceCatlog) => void;
   selectedServiceCatalog?: ServiceCatlog;
   serviceCatalogs: ServiceCatlog[];
+  asPriceList: boolean;
 }
 
 const ServiceList: React.FC<Props> = (props: Props) => {
@@ -54,7 +55,7 @@ const ServiceList: React.FC<Props> = (props: Props) => {
     }
     return services
       .filter((s: Service) => s.serviceCatalogId === (selectedServiceCatalog ? selectedServiceCatalog.id : -1))
-      .map((service) => renderRow(service, props.onSelect));
+      .map((service) => renderRow(props.asPriceList, service, props.onSelect));
   }
 
   function searchByTerm(searchTerm: string) {
@@ -75,13 +76,16 @@ const ServiceList: React.FC<Props> = (props: Props) => {
 
   return (
     <React.Fragment>
-      <Form.Dropdown
-        id="client"
-        selection
-        options={mapCatalogToDropdownItems()}
-        value={selectedServiceCatalog?.id}
-        onChange={updateCatalog}
-      />
+      {props.asPriceList && <h1>Preisliste</h1>}
+      {!props.asPriceList && (
+        <Form.Dropdown
+          id="client"
+          selection
+          options={mapCatalogToDropdownItems()}
+          value={selectedServiceCatalog?.id}
+          onChange={updateCatalog}
+        />
+      )}
       {selectedServiceCatalog && (
         <Table className="ui compact celled table selectable service-list" sortable>
           <Table.Header>
@@ -90,7 +94,7 @@ const ServiceList: React.FC<Props> = (props: Props) => {
               currentValue={searchTerm}
               onAdd={props.onAdd}
               labelAdd={"Neuen Service"}
-              searchFieldWidth={3}
+              searchFieldWidth={props.asPriceList ? 2 : 3}
               addButtondWidth={1}
             />
             <Table.Row>
@@ -114,7 +118,7 @@ const ServiceList: React.FC<Props> = (props: Props) => {
               >
                 Preis
               </Table.HeaderCell>
-              <Table.HeaderCell>Selektierbar</Table.HeaderCell>
+              {!props.asPriceList && <Table.HeaderCell>Selektierbar</Table.HeaderCell>}
             </Table.Row>
           </Table.Header>
           <Table.Body>{renderRows()}</Table.Body>
@@ -124,7 +128,7 @@ const ServiceList: React.FC<Props> = (props: Props) => {
   );
 };
 
-const renderRow = (service: Service, onSelect: (service: Service) => void) => {
+const renderRow = (asPriceList: boolean, service: Service, onSelect: (service: Service) => void) => {
   return (
     <Table.Row key={service.articleNumber} onClick={() => onSelect(service)}>
       <Table.Cell>{service.articleNumber}</Table.Cell>
@@ -135,7 +139,7 @@ const renderRow = (service: Service, onSelect: (service: Service) => void) => {
           maximumFractionDigits: 2,
         })}
       </Table.Cell>
-      <Table.Cell>{service.selectable ? <Icon name={"check"} /> : null}</Table.Cell>
+      {!asPriceList && <Table.Cell>{service.selectable ? <Icon name={"check"} /> : null}</Table.Cell>}
     </Table.Row>
   );
 };

@@ -5,10 +5,12 @@ import Company from "../employees/Company";
 import { useState } from "react";
 import ClientTemplate from "../clientTemplate/ClientTemplate";
 import Order from "./Order";
+import ServiceCatlog from "./ServiceCatalog";
 
 interface Props {
   company: Company;
   clientTemplates: ClientTemplate[];
+  serviceCatalogs: ServiceCatlog[];
 }
 
 const OrderOverview: React.FC<Props> = (props: Props) => {
@@ -32,6 +34,7 @@ const OrderOverview: React.FC<Props> = (props: Props) => {
         {!edit ? null : (
           <OrderEdit
             company={props.company}
+            serviceCatalogs={props.serviceCatalogs}
             clientTemplates={props.clientTemplates}
             order={selectedItem}
             onCancelEdit={stopEdit}

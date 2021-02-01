@@ -75,14 +75,17 @@ const App: React.FC = () => {
             <div id={"content-container"}>
               {activeContent === ContentType.EMPLOYEE ? <EmployeeOverview /> : null}
               {activeContent === ContentType.ORDER ? (
-                <OrderOverview company={company} clientTemplates={clients} />
+                <OrderOverview company={company} clientTemplates={clients} serviceCatalogs={productCatalogs} />
               ) : null}
               {activeContent === ContentType.BILL ? <h1>Rechnungen</h1> : null}
               {activeContent === ContentType.STATISTICS ? <StatisticOverview /> : null}
               {activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview /> : null}
-              {activeContent === ContentType.SERVICES ? <ServicesOverview serviceCatalogs={productCatalogs} /> : null}
+              {activeContent === ContentType.SERVICES ? (
+                <ServicesOverview asPriceList={false} serviceCatalogs={productCatalogs} />
+              ) : null}
               {activeContent === ContentType.ORDER_DETAILS ? (
                 <OrderEdit
+                  serviceCatalogs={productCatalogs}
                   company={company}
                   clientTemplates={clients}
                   onSave={closeOrder}

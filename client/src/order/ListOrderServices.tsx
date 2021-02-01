@@ -54,6 +54,16 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
         </td>
         <td>{serviceData.articleNumber}</td>
         <td>{serviceData.title}</td>
+        <td style={{ textAlign: "right" }}>
+          {serviceData.price.toLocaleString("de", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
+        </td>
+        <td style={{ textAlign: "right" }}>
+          {(serviceData.price * orderItem.amount).toLocaleString("de", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+          €
+        </td>
         <td>
           <Button color={"red"} onClick={() => removeOrderService(orderItem)}>
             <Icon name={"trash"} />
@@ -94,7 +104,7 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
         </Grid.Column>
 
         <Grid.Column computer={8} tablet={8} mobile={16}>
-          <h2>Dienstleistungen</h2>
+          <h1>Dienstleistungen</h1>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
@@ -105,7 +115,9 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
                 <Table.Row>
                   <Table.HeaderCell width={1}>Menge</Table.HeaderCell>
                   <Table.HeaderCell width={3}>Artikel Nr.</Table.HeaderCell>
-                  <Table.HeaderCell width={11}>Dienstleistung</Table.HeaderCell>
+                  <Table.HeaderCell width={7}>Dienstleistung</Table.HeaderCell>
+                  <Table.HeaderCell width={2}>Einzelpreis</Table.HeaderCell>
+                  <Table.HeaderCell width={2}>Gesamtpreis</Table.HeaderCell>
                   <Table.HeaderCell width={1}></Table.HeaderCell>
                 </Table.Row>
               </Table.Header>

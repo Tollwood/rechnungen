@@ -7,6 +7,8 @@ import ServiceCatlog from "../order/ServiceCatalog";
 
 interface Props {
   serviceCatalogs: ServiceCatlog[];
+  selectedServiceCatalog?: ServiceCatlog;
+  asPriceList: boolean;
 }
 
 const ServicesOverview: React.FC<Props> = (props: Props) => {
@@ -15,7 +17,8 @@ const ServicesOverview: React.FC<Props> = (props: Props) => {
 
   function handleAdd() {
     const service = new Service();
-    service.serviceCatalogId = selectedServiceCatlog!.id;
+    const sc = props.selectedServiceCatalog ? props.selectedServiceCatalog : selectedServiceCatlog;
+    service.serviceCatalogId = sc!.id;
     setSelectedItem(service);
   }
 
@@ -37,13 +40,14 @@ const ServicesOverview: React.FC<Props> = (props: Props) => {
         />
       ) : (
         <ServiceList
+          asPriceList={props.asPriceList}
           serviceCatalogs={props.serviceCatalogs}
           onAdd={handleAdd}
           onSelect={(service: Service) => {
             handleSelection(service);
           }}
           onProductCatalogSelect={setSelectedServiceCatlog}
-          selectedServiceCatalog={selectedServiceCatlog}
+          selectedServiceCatalog={props.selectedServiceCatalog ? props.selectedServiceCatalog : selectedServiceCatlog}
         />
       )}
     </div>
