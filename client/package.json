@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "@david.kucsai/react-pdf-table": "0.3.0",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/data-grid": "^4.0.0-alpha.18",
+    "@material-ui/icons": "^4.11.2",
     "@react-hook/debounce": "3.0.0",
     "@react-pdf/renderer": "1.6.11",
     "axios": "0.20.0",
@@ -11,6 +14,7 @@
     "react": "16.13.1",
     "react-alert": "7.0.2",
     "react-dom": "17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
     "recharts": "^2.0.0-beta.1",
     "semantic-ui": "2.4.2",
@@ -46,9 +50,10 @@
     "@types/jest": "22.2.3",
     "@types/node": "12.12.2",
     "@types/react": "16.8.24",
-    "@types/react-dom": "16.9.0",
-    "@types/recharts": "1.0.19",
     "@types/react-alert": "^5.2.0",
+    "@types/react-dom": "16.9.0",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/recharts": "1.0.19",
     "start-server-and-test": "^1.10.8"
   },
   "resolutions": {

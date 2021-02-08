@@ -1,11 +1,11 @@
 import * as React from "react";
-import OrderList from "./OrderList";
 import OrderEdit from "./OrderEdit";
 import Company from "../employees/Company";
 import { useState } from "react";
 import ClientTemplate from "../clientTemplate/ClientTemplate";
 import Order from "./Order";
 import ServiceCatlog from "./ServiceCatalog";
+import OrderListNew from "./Orders";
 
 interface Props {
   company: Company;
@@ -18,8 +18,8 @@ const OrderOverview: React.FC<Props> = (props: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
 
   const handleSelection = (selectedOrder?: Order) => {
-    setEdit(true);
     setSelectedItem(selectedOrder);
+    setEdit(true);
   };
 
   const stopEdit = () => {
@@ -28,22 +28,20 @@ const OrderOverview: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <React.Fragment>
-      <div className={"order-overview"}>
-        {edit ? null : <OrderList onAdd={() => setEdit(true)} onSelect={handleSelection} />}
-        {!edit ? null : (
-          <OrderEdit
-            company={props.company}
-            serviceCatalogs={props.serviceCatalogs}
-            clientTemplates={props.clientTemplates}
-            order={selectedItem}
-            onCancelEdit={stopEdit}
-            onSave={stopEdit}
-            onDelete={stopEdit}
-          />
-        )}
-      </div>
-    </React.Fragment>
+    <div className={"order-overview"}>
+      {edit ? null : <OrderListNew onSelect={handleSelection} />}
+      {!edit ? null : (
+        <OrderEdit
+          company={props.company}
+          serviceCatalogs={props.serviceCatalogs}
+          clientTemplates={props.clientTemplates}
+          order={selectedItem}
+          onCancelEdit={stopEdit}
+          onSave={stopEdit}
+          onDelete={stopEdit}
+        />
+      )}
+    </div>
   );
 };
 

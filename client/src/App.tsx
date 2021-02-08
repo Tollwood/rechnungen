@@ -2,13 +2,9 @@ import "./App.css";
 import React, { useState } from "react";
 import EmployeeOverview from "./employees/EmployeeOverview";
 import "semantic-ui/dist/semantic.min.css";
-import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
+
 import { ContentType } from "./start/ContentType";
-import AppHeader from "./Header";
-import OrderEdit from "./order/OrderEdit";
-import { Menu } from "./start/Menu";
-import RealEstateOverview from "./realestate/RealEstateOverview";
-import OrderOverview from "./order/OrderOverview";
+
 import API from "./API";
 import Company from "./employees/Company";
 import ServicesOverview from "./services/ServicesOverview";
@@ -18,6 +14,16 @@ import StatisticOverview from "./statistic/StatisticOverview";
 import Client from "./clientTemplate/ClientTemplate";
 import ProductCatalog from "./order/ServiceCatalog";
 import Order from "./order/Order";
+import useStyles from "./useStyle";
+import { Box, CssBaseline } from "@material-ui/core";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
+import Copyright from "./Copyright";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Dashboard from "./Dashboard";
+import OrderOverview from "./order/OrderOverview";
+import RealEstateOverview from "./realestate/RealEstateOverview";
+import Orders from "./order/Orders";
 
 interface AppState {
   activeOrder?: Link;
@@ -28,6 +34,15 @@ interface AppState {
 interface AppProps {}
 
 const App: React.FC = () => {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   const [activeContent, setActiveContent] = useState<ContentType>(ContentType.NONE);
   const [activeOrder, setActiveOrder] = useState<Order>();
   const [company, setCompany] = useState<Company>();
@@ -63,41 +78,36 @@ const App: React.FC = () => {
   }
   return (
     <BackendAlerts>
-      <React.Fragment>
-        <Grid centered padded>
-          <Grid.Row centered>
-            <Grid.Column computer={12} tablet={12} mobile={16}>
-              <AppHeader company={company} />
-            </Grid.Column>
-          </Grid.Row>
-          <Menu onMenuChanges={setActiveContent} activeContent={activeContent} />
-          <Grid.Column computer={12} tablet={12} mobile={16}>
-            <div id={"content-container"}>
-              {activeContent === ContentType.EMPLOYEE ? <EmployeeOverview /> : null}
-              {activeContent === ContentType.ORDER ? (
+      <div className={classes.root}>
+        <CssBaseline />
+        <Router>
+          <Header company={company} open={open} handleDrawerOpen={handleDrawerOpen} />
+          <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
+          <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <Switch>
+              <Route path="/orders">
                 <OrderOverview company={company} clientTemplates={clients} serviceCatalogs={productCatalogs} />
-              ) : null}
-              {activeContent === ContentType.BILL ? <h1>Rechnungen</h1> : null}
-              {activeContent === ContentType.STATISTICS ? <StatisticOverview /> : null}
-              {activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview /> : null}
-              {activeContent === ContentType.SERVICES ? (
+              </Route>
+              <Route path="/employees">
+                <EmployeeOverview />
+              </Route>
+              <Route path="/statistics">
+                <StatisticOverview />
+              </Route>
+              <Route path="/realestates">
+                <RealEstateOverview />
+              </Route>
+              <Route path="/products">
                 <ServicesOverview asPriceList={false} serviceCatalogs={productCatalogs} />
-              ) : null}
-              {activeContent === ContentType.ORDER_DETAILS ? (
-                <OrderEdit
-                  serviceCatalogs={productCatalogs}
-                  company={company}
-                  clientTemplates={clients}
-                  onSave={closeOrder}
-                  onCancelEdit={closeOrder}
-                  onDelete={closeOrder}
-                  order={activeOrder}
-                />
-              ) : null}
-            </div>
-          </Grid.Column>
-        </Grid>
-      </React.Fragment>
+              </Route>
+              <Route path="/">
+                <Dashboard />
+              </Route>
+            </Switch>
+          </main>
+        </Router>
+      </div>
     </BackendAlerts>
   );
 };

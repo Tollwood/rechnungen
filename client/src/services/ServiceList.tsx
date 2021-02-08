@@ -7,6 +7,7 @@ import API from "../API";
 import Search from "../order/Search";
 import { useEffect, useState } from "react";
 import ServiceCatlog from "../order/ServiceCatalog";
+import { useTheme } from "@material-ui/core";
 
 interface Props {
   onAdd: () => void;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const ServiceList: React.FC<Props> = (props: Props) => {
+  const theme = useTheme();
   const { selectedServiceCatalog } = props;
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [page, setPage] = useState<Page>(new Page("articleNumber", 200));
@@ -79,13 +81,16 @@ const ServiceList: React.FC<Props> = (props: Props) => {
     <React.Fragment>
       {props.asPriceList && <h1>Preisliste</h1>}
       {!props.asPriceList && (
-        <Form.Dropdown
-          id="client"
-          selection
-          options={mapCatalogToDropdownItems()}
-          value={selectedServiceCatalog?.id}
-          onChange={updateCatalog}
-        />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <h5 style={{ marginRight: theme.spacing(1) }}>Produktkatalog</h5>
+          <Form.Dropdown
+            id="client"
+            selection
+            options={mapCatalogToDropdownItems()}
+            value={selectedServiceCatalog?.id}
+            onChange={updateCatalog}
+          />
+        </div>
       )}
       {selectedServiceCatalog && (
         <Table className="ui compact celled table selectable service-list" sortable>

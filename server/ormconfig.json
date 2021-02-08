@@ -4,7 +4,7 @@
   "port": 5432,
   "username": "postgres",
   "password": "postgres",
-  "database": "timm_node",
+  "database": "timm",
   "synchronize": false,
   "logging": true,
   "entities": ["build/entity/**/*.js", "src/entity/**/*.ts", "src/entity/Client.ts"]

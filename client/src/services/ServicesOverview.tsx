@@ -5,19 +5,26 @@ import ServiceList from "./ServiceList";
 import { useState } from "react";
 import ServiceCatlog from "../order/ServiceCatalog";
 
+import { Paper } from "@material-ui/core";
+import { Container, Grid } from "semantic-ui-react";
+import useStyles from "../useStyle";
+
 interface Props {
   serviceCatalogs: ServiceCatlog[];
   selectedServiceCatalog?: ServiceCatlog;
   asPriceList: boolean;
 }
 
-const ServicesOverview: React.FC<Props> = (props: Props) => {
+const ServicesOverview: React.FC<Props> = ({ serviceCatalogs, selectedServiceCatalog, asPriceList }: Props) => {
+  const classes = useStyles();
   const [selectedItem, setSelectedItem] = useState<Service>();
-  const [selectedServiceCatlog, setSelectedServiceCatlog] = useState<ServiceCatlog>();
+  const [selectedServiceCatlog, setSelectedServiceCatlog] = useState<ServiceCatlog | undefined>(
+    selectedServiceCatalog || serviceCatalogs[0]
+  );
 
   function handleAdd() {
     const service = new Service();
-    const sc = props.selectedServiceCatalog ? props.selectedServiceCatalog : selectedServiceCatlog;
+    const sc = selectedServiceCatalog ? selectedServiceCatalog : selectedServiceCatlog;
     service.serviceCatalogId = sc!.id;
     setSelectedItem(service);
   }
@@ -30,27 +37,31 @@ const ServicesOverview: React.FC<Props> = (props: Props) => {
     setSelectedItem(undefined);
   }
   return (
-    <div className={"service-overview"}>
-      {selectedItem ? (
-        <ServiceEdit
-          service={selectedItem}
-          onCancelEdit={handleCancelEdit}
-          onSave={handleCancelEdit}
-          onDelete={handleCancelEdit}
-        />
-      ) : (
-        <ServiceList
-          asPriceList={props.asPriceList}
-          serviceCatalogs={props.serviceCatalogs}
-          onAdd={handleAdd}
-          onSelect={(service: Service) => {
-            handleSelection(service);
-          }}
-          onProductCatalogSelect={setSelectedServiceCatlog}
-          selectedServiceCatalog={props.selectedServiceCatalog ? props.selectedServiceCatalog : selectedServiceCatlog}
-        />
-      )}
-    </div>
+    <Container maxWidth="lg" className={classes.container}>
+      <Grid container spacing={3}>
+        <Paper className={classes.paper} style={{ height: "89vh", width: "100%" }}>
+          {selectedItem ? (
+            <ServiceEdit
+              service={selectedItem}
+              onCancelEdit={handleCancelEdit}
+              onSave={handleCancelEdit}
+              onDelete={handleCancelEdit}
+            />
+          ) : (
+            <ServiceList
+              asPriceList={asPriceList}
+              serviceCatalogs={serviceCatalogs}
+              onAdd={handleAdd}
+              onSelect={(service: Service) => {
+                handleSelection(service);
+              }}
+              onProductCatalogSelect={setSelectedServiceCatlog}
+              selectedServiceCatalog={selectedServiceCatalog ? selectedServiceCatalog : selectedServiceCatlog}
+            />
+          )}
+        </Paper>
+      </Grid>
+    </Container>
   );
 };
 export default ServicesOverview;

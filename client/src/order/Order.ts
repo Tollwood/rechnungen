@@ -34,3 +34,33 @@ export default class Order {
   client: Address = new Address();
   serviceCatalogId?: number;
 }
+
+export interface IOrder {
+  id: number;
+  orderId?: string;
+  utilisationUnit?: string;
+  name?: string;
+  location?: string;
+  phoneNumber?: string;
+  technician?: Employee;
+  realEstate?: RealEstate;
+  distance?: number;
+  taxRate: number;
+  firstAppointment?: string;
+  secondAppointment?: string;
+  smallOrder: boolean;
+  includeKmFee: boolean;
+  canceled: boolean;
+  status: OrderStatus;
+  prevStatus?: OrderStatus;
+  orderItems: OrderItem[];
+  billItems?: BillItem[];
+  billDate: string;
+  billNo: string;
+  paymentRecievedDate: string;
+  sum: number;
+  realEstateAddress?: Address;
+  clientName?: string;
+  client: Address;
+  serviceCatalogId?: number;
+}

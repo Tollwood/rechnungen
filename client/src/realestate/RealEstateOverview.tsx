@@ -3,49 +3,43 @@ import RealEstate from "./RealEstate";
 import RealEstateList from "./RealEstateList";
 import RealEstateEdit from "./RealEstateEdit";
 
-interface RealEstateOverviewState {
-    selectedItem: RealEstate,
-    edit: boolean,
-}
+import { Paper } from "@material-ui/core";
+import { Container, Grid } from "semantic-ui-react";
+import useStyles from "../useStyle";
 
-export default class RealEstateOverview extends React.Component<{}, RealEstateOverviewState> {
+const RealEstateOverview: React.FC = () => {
+  const classes = useStyles();
+  const [edit, setEdit] = React.useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = React.useState<RealEstate>(new RealEstate());
 
-    constructor(props: {}) {
-        super(props);
-        this.state = {
-            edit: false,
-            selectedItem: new RealEstate(),
-        };
-    }
+  return (
+    <Container maxWidth="xl" className={classes.container}>
+      <Grid container spacing={3}>
+        <Paper className={classes.paper} style={{ height: "89vh", width: "100%" }}>
+          <div className={"realEstate-overview"}>
+            {edit ? null : (
+              <RealEstateList
+                onAdd={() => setEdit(true)}
+                onSelect={(realEstate: RealEstate) => {
+                  setSelectedItem(realEstate);
+                  setEdit(true);
+                }}
+              />
+            )}
+            {edit && (
+              <RealEstateEdit
+                realEstate={selectedItem}
+                onChange={() => {
+                  setSelectedItem(new RealEstate());
+                  setEdit(false);
+                }}
+              />
+            )}
+          </div>
+        </Paper>
+      </Grid>
+    </Container>
+  );
+};
 
-    render() {
-        return (
-            <div className={"realEstate-overview"}>
-                {this.state.edit ? null :
-                    <RealEstateList onAdd={this.handleAdd.bind(this)}
-                                    onSelect={(realEstate: RealEstate) => {
-                                        this.handleSelection(realEstate)
-                                    }}
-                    />}
-                {!this.state.edit ? null :
-                    <RealEstateEdit realEstate={this.state.selectedItem}
-                                    onChange={this.handleChange.bind(this)}
-                    />}
-            </div>
-
-        );
-    }
-
-    private handleAdd() {
-        this.setState(Object.assign(this.state, {edit: true, selectedItem: new RealEstate()}))
-    }
-
-    private handleSelection(selectedItem: RealEstate) {
-        this.setState(Object.assign(this.state, {edit: true, selectedItem: selectedItem}))
-    }
-
-    private handleChange() {
-        this.setState(Object.assign(this.state, {edit: false, selectedItem: new RealEstate()}));
-    }
-}
-
+export default RealEstateOverview;

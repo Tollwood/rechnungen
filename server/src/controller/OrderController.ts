@@ -44,7 +44,17 @@ export default class OrderController {
       .take(size)
       .orderBy(`order.${sortCol}`, sortDir)
       .getManyAndCount();
-    response.send({ data: orders, page: { page: page, totalPages: Math.ceil(total / size) } });
+    response.send({
+      data: orders || [],
+      page: {
+        size: size,
+        totalElements: total,
+        number: page,
+        totalPages: Math.ceil(total / size),
+        sort: sortCol,
+        direction: sortDir,
+      },
+    });
   }
 
   static async delete(request: Request, response: Response) {
