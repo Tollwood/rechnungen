@@ -54,16 +54,6 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
         </td>
         <td>{serviceData.articleNumber}</td>
         <td>{serviceData.title}</td>
-        <td style={{ textAlign: "right" }}>
-          {serviceData.price.toLocaleString("de", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €
-        </td>
-        <td style={{ textAlign: "right" }}>
-          {(serviceData.price * orderItem.amount).toLocaleString("de", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
-          €
-        </td>
         <td>
           <Button color={"red"} onClick={() => removeOrderService(orderItem)}>
             <Icon name={"trash"} />
@@ -116,8 +106,6 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
                   <Table.HeaderCell width={1}>Menge</Table.HeaderCell>
                   <Table.HeaderCell width={3}>Artikel Nr.</Table.HeaderCell>
                   <Table.HeaderCell width={7}>Dienstleistung</Table.HeaderCell>
-                  <Table.HeaderCell width={2}>Einzelpreis</Table.HeaderCell>
-                  <Table.HeaderCell width={2}>Gesamtpreis</Table.HeaderCell>
                   <Table.HeaderCell width={1}></Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
