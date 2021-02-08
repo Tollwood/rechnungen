@@ -4,6 +4,7 @@ import ProductController from "./controller/ProductController";
 import OrderController from "./controller/OrderController";
 import EmployeeController from "./controller/EmployeeController";
 import RealEstateController from "./controller/RealEstateController";
+import StaticFilesController from "./controller/StaticFilesController";
 import { companyGetByIdAction } from "./controller/CompanyGetByIdAction";
 
 export const AppRoutes = [
@@ -101,5 +102,10 @@ export const AppRoutes = [
     path: "/api/company/:id",
     method: "get",
     action: companyGetByIdAction,
+  },
+  {
+    path: "/**",
+    method: "get",
+    action: StaticFilesController.serve,
   },
 ];

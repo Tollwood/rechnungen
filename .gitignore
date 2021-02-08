@@ -35,3 +35,4 @@ out/
 server/src/**/*.js
 server/src/**/*.js.map
 server/build/**
+server/src/public/**

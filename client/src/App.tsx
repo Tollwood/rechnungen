@@ -13,17 +13,14 @@ import BackendAlerts from "./BackendAlerts";
 import StatisticOverview from "./statistic/StatisticOverview";
 import Client from "./clientTemplate/ClientTemplate";
 import ProductCatalog from "./order/ServiceCatalog";
-import Order from "./order/Order";
 import useStyles from "./useStyle";
-import { Box, CssBaseline } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import Copyright from "./Copyright";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import OrderOverview from "./order/OrderOverview";
 import RealEstateOverview from "./realestate/RealEstateOverview";
-import Orders from "./order/Orders";
 
 interface AppState {
   activeOrder?: Link;
@@ -43,8 +40,6 @@ const App: React.FC = () => {
     setOpen(false);
   };
 
-  const [activeContent, setActiveContent] = useState<ContentType>(ContentType.NONE);
-  const [activeOrder, setActiveOrder] = useState<Order>();
   const [company, setCompany] = useState<Company>();
   const [clients, setClients] = useState<Client[]>([]);
   const [productCatalogs, setProductCatalogs] = useState<ProductCatalog[]>([]);
@@ -67,11 +62,6 @@ const App: React.FC = () => {
       .then((res) => (res.data.data === undefined ? [] : res.data.data))
       .then(setProductCatalogs);
   }, []);
-
-  const closeOrder = () => {
-    setActiveContent(ContentType.NONE);
-    setActiveOrder(undefined);
-  };
 
   if (!company || clients.length === 0) {
     return <div>Loading</div>;

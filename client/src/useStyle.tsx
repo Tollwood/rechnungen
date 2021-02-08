@@ -4,7 +4,6 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    fontSize: theme.typography.fontSize,
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -39,8 +38,6 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    alignItems: "center",
-    display: "flex",
   },
   drawerPaper: {
     position: "relative",

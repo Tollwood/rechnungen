@@ -20,6 +20,8 @@
   "scripts": {
     "start": "tsc && node build/index.js",
     "start-dev": "concurrently \"yarn run nodemon\"   \"yarn --cwd ./../client run start\"",
-    "nodemon": "nodemon"
+    "nodemon": "nodemon",
+    "copy:client": "cp -r ../client/build/ src/public/",
+    "build:client": "yarn --cwd ../client build && yarn copy:client"
   }
 }

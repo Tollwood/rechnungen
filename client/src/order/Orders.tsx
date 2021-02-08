@@ -25,9 +25,9 @@ interface Props {
 }
 const Orders: React.FC<Props> = ({ onSelect }: Props) => {
   const [orders, setOrders] = React.useState<IOrder[]>([]);
-  const [searchTerm, setSearchTerm] = React.useState<string>("");
+  const [searchTerm] = React.useState<string>("");
   const [page, setPage] = React.useState<Page>(new Page("orderId"));
-  const [statusFilter, setStatusFilter] = React.useState<string[]>([]);
+  const [statusFilter] = React.useState<string[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
   useEffect(() => {
@@ -40,6 +40,7 @@ const Orders: React.FC<Props> = ({ onSelect }: Props) => {
         return res.data.data;
       })
       .then((orders: IOrder[]) => setOrders(orders));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusFilter, page.number, searchTerm]);
 
   const classes = useStyles();
