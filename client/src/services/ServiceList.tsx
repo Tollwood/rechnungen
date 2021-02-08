@@ -41,6 +41,7 @@ const ServiceList: React.FC<Props> = (props: Props) => {
     if (selectedServiceCatalog) {
       search();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedServiceCatalog, searchTerm, page]);
 
   function sortAndPage(newPage: Page) {

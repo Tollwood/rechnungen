@@ -25,7 +25,6 @@ import ServiceService from "../services/ServiceService";
 import EmployeeService from "../employees/EmployeeService";
 import UnsavedChangesModal from "../UnsavedChangesModal";
 import ClientTemplate from "../clientTemplate/ClientTemplate";
-import ServiceList from "../services/ServiceList";
 import ServicesOverview from "../services/ServicesOverview";
 import ServiceCatlog from "./ServiceCatalog";
 

@@ -54,6 +54,7 @@ const OrderList: React.FC<OrderListProps> = (props: OrderListProps) => {
 
   React.useEffect(() => {
     search();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, statusFilter, page, activePage]);
 
   return (
