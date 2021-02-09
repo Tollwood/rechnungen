@@ -1,43 +1,45 @@
-import React, { Component } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "@react-pdf/renderer";
 import Bill from "./Bill";
-
-export default class BillTotal extends Component<{ bill: Bill }, {}> {
-  render(): React.ReactNode {
-    return (
-      <View wrap={false}>
-        <View style={[styles.row]}>
-          <Text style={[styles.column2, { marginLeft: 270, marginTop: 12 }]}>Nettobetrag</Text>
-          <Text style={[styles.column2, styles.sum, { marginTop: 12 }]}>{this.sumBill(1) + " €"}</Text>
-        </View>
-        <View style={[styles.row]}>
-          <Text style={[styles.column2, { marginLeft: 270, marginTop: 2 }]}>
-            zzgl. {this.props.bill.order.taxRate * 100}% Mehrwertsteuer
-          </Text>
-          <Text style={[styles.column2, styles.sum]}>{this.sumBill(this.props.bill.order.taxRate) + " €"}</Text>
-        </View>
-        <View style={[styles.row]}>
-          <Text style={[styles.column2, styles.bold, { marginLeft: 270, marginTop: 2 }]}>Total</Text>
-          <Text style={[styles.column2, styles.sum, styles.bold]}>
-            {console.log(this.props.bill.order.taxRate)}
-            {this.sumBill(1 + this.props.bill.order.taxRate) + " €"}
-          </Text>
-        </View>
-      </View>
-    );
-  }
-
-  sumBill(factor: number): String {
-    console.log(factor);
-    return (
-      this.props.bill.order.billItems!.map((billItem) => billItem.amount * billItem.price).reduce((a, b) => a + b, 0) *
-      factor
-    ).toLocaleString("de", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  }
+import BillItem from "./BillItem";
+interface Props {
+  bill: Bill;
 }
+
+const BillTotal: React.FC<Props> = ({ bill }: Props) => {
+  const wihthoutTax = sumBill(bill.order.billItems || [], 1);
+  const tax = sumBill(bill.order.billItems || [], bill.order.taxRate);
+
+  return (
+    <View wrap={false}>
+      <View style={[styles.row]}>
+        <Text style={[styles.column2, { marginLeft: 270, marginTop: 12 }]}>Nettobetrag</Text>
+        <Text style={[styles.column2, styles.sum, { marginTop: 12 }]}>{toEuroString(wihthoutTax)}</Text>
+      </View>
+      <View style={[styles.row]}>
+        <Text style={[styles.column2, { marginLeft: 270, marginTop: 2 }]}>
+          zzgl. {bill.order.taxRate * 100}% Mehrwertsteuer
+        </Text>
+        <Text style={[styles.column2, styles.sum]}>{toEuroString(tax)}</Text>
+      </View>
+      <View style={[styles.row]}>
+        <Text style={[styles.column2, styles.bold, { marginLeft: 270, marginTop: 2 }]}>Total</Text>
+        <Text style={[styles.column2, styles.sum, styles.bold]}>{toEuroString(wihthoutTax + tax)}</Text>
+      </View>
+    </View>
+  );
+};
+
+const sumBill = (billItems: BillItem[], factor: number): number => {
+  return billItems!.map((billItem) => billItem.amount * billItem.price).reduce((a, b) => a + b, 0) * factor;
+};
+
+const toEuroString = (number: number) => {
+  return `${number.toLocaleString("de", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })} €`;
+};
 
 // Create styles
 // @ts-ignore
@@ -59,3 +61,5 @@ const styles = StyleSheet.create({
     fontFamily: "Times-Bold",
   },
 });
+
+export default BillTotal;
