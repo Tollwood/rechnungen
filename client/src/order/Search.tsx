@@ -1,49 +1,52 @@
 import * as React from "react";
-import {Button, Input,  Table} from "semantic-ui-react";
-import { useDebounceCallback} from '@react-hook/debounce'
+import { TextField, InputAdornment, Grid, Paper, Button } from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import AddIcon from "@material-ui/icons/Add";
 import { useState } from "react";
+import useStyles from "../useStyle";
+import { useTheme } from "@material-ui/core";
 
 interface Props {
-    onSearchChanged: (searchTerm: string) => void
-    currentValue: string
-    onAdd: () => void
-    labelAdd : string
-    searchFieldWidth: number
-    addButtondWidth: number
+  onSearchChanged: (searchTerm: string) => void;
+  currentValue: string;
+  onAdd: () => void;
+  labelAdd: string;
+  searchFieldWidth: number;
+  addButtondWidth: number;
 }
 
-const Search: React.FC<Props> = (props:Props) => {
-
-    const [value,setValue] = useState<string>(props.currentValue);
-    const debounce = useDebounceCallback((value)=> props.onSearchChanged(value),500,false)
-
-    React.useEffect(()=>{
-        debounce(value);
-    },[value,debounce]);
-    
-    
-        return <React.Fragment>
-            <Table.Row>
-                <Table.HeaderCell colSpan={props.searchFieldWidth}>
-                    <Input className="search"
-                           icon='search'
-                           placeholder='Suchen ...'
-                           fluid
-                           value={value}
-                           onChange={(e,data) => setValue(data.value)}
-                    />
-                </Table.HeaderCell>
-                <Table.HeaderCell colSpan={props.addButtondWidth}>
-                    <Button floated={"right"} primary icon={{name: "add"}} label={props.labelAdd}
-                                          onClick={props.onAdd}
-                                          className={"add"}/>
-                </Table.HeaderCell>
-            </Table.Row>
-        </React.Fragment>;
-    
-
-    
-
-}
+const Search: React.FC<Props> = ({ labelAdd, onAdd, currentValue, onSearchChanged }: Props) => {
+  const [value, setValue] = useState<string>(currentValue);
+  const classes = useStyles();
+  const theme = useTheme();
+  return (
+    <Grid container justify="space-between" style={{ marginBottom: theme.spacing(3) }}>
+      <Grid item xs={12} md={2}>
+        <Paper className={classes.paper}>
+          <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+            {labelAdd}
+          </Button>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <Paper className={classes.paper}>
+          <TextField
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={(e) => (e.key === "Enter" ? onSearchChanged(value) : null)}
+            placeholder={"Suche"}
+            onBlur={() => onSearchChanged(value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Paper>
+      </Grid>
+    </Grid>
+  );
+};
 
 export default Search;

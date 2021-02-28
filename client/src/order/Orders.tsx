@@ -1,6 +1,14 @@
 import * as React from "react";
 
-import { DataGrid, ColDef, ValueGetterParams, CellParams, RowParams } from "@material-ui/data-grid";
+import {
+  DataGrid,
+  ColDef,
+  ValueGetterParams,
+  CellParams,
+  RowParams,
+  SortModel,
+  SortModelParams,
+} from "@material-ui/data-grid";
 import { Page } from "../common/Page";
 import API from "../API";
 import { PageService } from "../common/PageService";
@@ -11,6 +19,7 @@ import { Container, Grid, Paper, Typography } from "@material-ui/core";
 import { Address } from "../common/Address";
 
 import useStyles from "../useStyle";
+import Search from "./Search";
 const getRealEstateAddress = (order: Order): Address => {
   if (order.realEstateAddress?.street) {
     return order.realEstateAddress;
@@ -25,40 +34,86 @@ interface Props {
 }
 const Orders: React.FC<Props> = ({ onSelect }: Props) => {
   const [orders, setOrders] = React.useState<IOrder[]>([]);
-  const [searchTerm] = React.useState<string>("");
+  const [searchTerm, setSearchTerm] = React.useState<string>("");
   const [page, setPage] = React.useState<Page>(new Page("orderId"));
   const [statusFilter] = React.useState<string[]>([]);
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [sortModel, setSortModel] = React.useState<SortModel>([{ field: "orderId", sort: "asc" }]);
 
-  useEffect(() => {
-    const status = computeStatusParams(statusFilter);
-    setIsLoading(true);
-    API.get("/api/orders?term=" + searchTerm + status + "&" + PageService.getPageAndSortParams(page))
-      .then((res) => {
+  React.useEffect(() => {
+    let active = true;
+
+    (async () => {
+      setLoading(true);
+      console.log(sortModel);
+      const updatedPage = {
+        ...page,
+        sort: sortModel[0].field,
+        direction: sortModel[0].sort?.toUpperCase(),
+      } as Page;
+      setPage(updatedPage);
+
+      console.log(updatedPage);
+      const orders = await API.get(
+        "/api/orders?term=" + searchTerm + "&" + PageService.getPageAndSortParams(updatedPage)
+      ).then((res) => {
         setPage(res.data.page);
-        setIsLoading(false);
+        setLoading(false);
         return res.data.data;
-      })
-      .then((orders: IOrder[]) => setOrders(orders));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statusFilter, page.number, searchTerm]);
+      });
+      setOrders(orders);
+
+      if (!active) {
+        return;
+      }
+      // setOrders(orders);
+      setLoading(false);
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [sortModel, page.number, searchTerm]);
 
   const classes = useStyles();
 
+  function searchByTerm(searchTerm: string) {
+    setPage({ ...page, number: 0 });
+    setSearchTerm(searchTerm);
+  }
+
+  const handleSortModelChange = (params: SortModelParams) => {
+    if (params.sortModel !== sortModel) {
+      setSortModel(params.sortModel);
+    }
+  };
   return (
     <Container maxWidth="xl" className={classes.container}>
-      <Grid container spacing={3}>
+      <Grid container>
+        <Search
+          onSearchChanged={searchByTerm}
+          currentValue={searchTerm}
+          onAdd={() => {}}
+          labelAdd={"Neuen Auftrag"}
+          searchFieldWidth={6}
+          addButtondWidth={1}
+        />
+
         <Grid item xs={12}>
-          <Paper className={classes.paper} style={{ height: "89vh", width: "100%" }}>
+          <Paper className={classes.paper} style={{ height: "89vh" }}>
             <DataGrid
               rows={orders}
+              sortingOrder={["desc", "asc"]}
+              sortingMode="server"
+              sortModel={sortModel}
+              onSortModelChange={handleSortModelChange}
               columns={columns(classes)}
               pageSize={page.size}
               rowCount={page.totalElements}
               paginationMode="server"
               hideFooterSelectedRowCount
               disableColumnSelector
-              loading={isLoading}
+              loading={loading}
               showToolbar
               onRowClick={(param: RowParams) => {
                 console.log(param.row);
@@ -116,6 +171,7 @@ const columns = (classes: any): ColDef[] => {
 
     {
       field: "Nettoumsatz",
+      sortable: false,
       headerName: "Nettoumsatz",
       width: 160,
       type: "number",
@@ -132,6 +188,7 @@ const columns = (classes: any): ColDef[] => {
     },
     {
       field: "Bruttoumsatz",
+      sortable: false,
       headerName: "Bruttoumsatz",
       width: 160,
       type: "number",

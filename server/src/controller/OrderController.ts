@@ -9,7 +9,7 @@ export default class OrderController {
     const page = Number.parseInt((request.query.page as string) || "0");
     const size = Number.parseInt((request.query.size as string) || "10000");
     const sort: string[] = request.query.sort ? (request.query.sort as string).split(",") : ["", ""];
-    const sortDir: "ASC" | "DESC" = (sort[1] as "ASC" | "DESC") || "ASC";
+    const sortDir: "ASC" | "DESC" = sort[1].toUpperCase() as "ASC" | "DESC";
     const sortCol = sort[0];
     const term: string = (request.query.term as string) || "";
     let status: string[] = Object.values(OrderStatus);

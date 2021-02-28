@@ -5,17 +5,16 @@ export class PageService {
     let currentPage = "page=" + page.number;
     let size = "&size=" + page.size;
 
-    let sort = "&sort=" + page.sort + "," + page.direction;
+    let sort = `&sort=${page.sort},${page.direction || "asc"}`;
     return currentPage + size + sort;
   }
 
   public static sort(clickedColumn: string, page: Page, onPageChange: (page: Page) => void) {
     if (page.sort !== clickedColumn) {
-      onPageChange({ ...page, direction: "ASC", sort: clickedColumn });
+      onPageChange({ ...page, direction: "asc", sort: clickedColumn });
       return;
     }
 
-    let direction: "ASC" | "DESC" = page.direction === "ASC" ? "DESC" : "ASC";
-    onPageChange({ ...page, direction: direction });
+    onPageChange({ ...page, direction: page.direction === undefined ? page.direction : "asc" });
   }
 }
