@@ -23,13 +23,11 @@ export default class OrderService {
     }
     orderToSave.billItems = BillService.computeBillItems(orderToSave);
     if (order.id === undefined) {
-      console.log(orderToSave);
       API.post("/api/orders", orderToSave)
         .then((result) => result.data)
         .then(onSuccess)
         .catch((error) => ErrorMapper.map(error, onError));
     } else {
-      console.log(orderToSave);
       API.put(`/api/orders/${order.id}`, orderToSave)
         .then((result) => result.data)
         .then(onSuccess)
@@ -49,5 +47,8 @@ export default class OrderService {
     return API.get(`api/orders??term=&page=0&size=${100000}&sort=orderId,ASC`).then((res) =>
       res.data.data === undefined ? [] : res.data.data
     );
+  }
+  public static getOrderById(id: number): Promise<Order | undefined> {
+    return API.get(`api/orders/${id}`).then((res) => res.data);
   }
 }

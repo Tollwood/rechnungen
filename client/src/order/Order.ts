@@ -12,7 +12,7 @@ export default class Order {
   name?: string;
   location?: string;
   phoneNumber?: string;
-  technician?: Employee;
+  employee?: Employee;
   realEstate?: RealEstate;
   distance?: number;
   taxRate: number = 0.16;

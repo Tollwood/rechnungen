@@ -48,6 +48,7 @@ export default class OrderAppointments extends React.Component<OrderEditProps, {
             <label>Zweiter Termin</label>
             <DateInput
               dateFormat={"DD.MM.YYYY"}
+              localization="de"
               minDate={"01.01.1990"}
               hideMobileKeyboard={true}
               name="secondAppointment"

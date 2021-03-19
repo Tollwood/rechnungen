@@ -37,23 +37,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class BillFooter extends Component<{ technician?: Employee; company: Company }, {}> {
+export default class BillFooter extends Component<{ technician: Employee; company: Company }, {}> {
   render(): React.ReactNode {
-    var technician: Employee;
-    if (this.props.technician === undefined) {
-      technician = {
-        firstName: "FirstName",
-        lastName: "LastName",
-        taxIdent: "1234",
-        address: { street: "street", houseNumber: "4", zipCode: "25355", city: "Barmstedt" },
-        technicianId: "1",
-        email: "email",
-        phone: "phone",
-        bankDetails: { iban: "iban", bic: "bic", bankName: "bankName" },
-      };
-    } else {
-      technician = this.props.technician;
-    }
+    const technician = this.props.technician;
     return (
       <View style={[styles.row, styles.footer]} fixed>
         <View style={[styles.column3, { marginLeft: 10 }]}>

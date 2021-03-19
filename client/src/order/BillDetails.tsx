@@ -58,6 +58,7 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                 minDate={"01.01.1990"}
                 hideMobileKeyboard={true}
                 name="billDate"
+                localization="de"
                 placeholder="Rechnungsdatum wählen"
                 value={this.props.order.billDate ? this.props.order.billDate : ""}
                 iconPosition="left"

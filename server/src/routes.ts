@@ -43,6 +43,11 @@ export const AppRoutes = [
     action: OrderController.getAll,
   },
   {
+    path: "/api/orders/:id",
+    method: "get",
+    action: OrderController.getOne,
+  },
+  {
     path: "/api/orders",
     method: "post",
     action: OrderController.create,

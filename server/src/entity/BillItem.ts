@@ -5,7 +5,8 @@ import { Order } from "./Order";
 export default class BillItem {
   @Column({ primary: true })
   code: String;
-
+  @Column({ primary: true })
+  orderId: number;
   @Column()
   serviceName: String;
 
@@ -16,7 +17,6 @@ export default class BillItem {
   amount: number;
 
   @ManyToOne(() => Order, (order) => order.billItems, {
-    primary: true,
     eager: false,
   })
   order: Promise<Order>;

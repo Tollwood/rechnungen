@@ -56,30 +56,30 @@ export default class Billpdf extends Component<{ bill: Bill; company: Company },
           <View style={styles.text}>
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
               <Text>
-                {this.props.bill.order.technician ? this.props.bill.order.technician.firstName : ""}{" "}
-                {this.props.bill.order.technician ? this.props.bill.order.technician.lastName : ""}
+                {this.props.bill.order.employee ? this.props.bill.order.employee.firstName : ""}{" "}
+                {this.props.bill.order.employee ? this.props.bill.order.employee.lastName : ""}
               </Text>
               <Text>
-                {this.props.bill.order.technician
-                  ? this.props.bill.order.technician.address.city
+                {this.props.bill.order.employee
+                  ? this.props.bill.order.employee.address.city
                   : this.props.company.address.city}
                 , am {this.props.bill.billDate}
               </Text>
             </View>
             <Text>
-              {this.props.bill.order.technician
-                ? this.props.bill.order.technician.address.street
+              {this.props.bill.order.employee
+                ? this.props.bill.order.employee.address.street
                 : this.props.company.address.street}{" "}
-              {this.props.bill.order.technician
-                ? this.props.bill.order.technician.address.houseNumber
+              {this.props.bill.order.employee
+                ? this.props.bill.order.employee.address.houseNumber
                 : this.props.company.address.houseNumber}
             </Text>
             <Text>
-              {this.props.bill.order.technician
-                ? this.props.bill.order.technician.address.zipCode
+              {this.props.bill.order.employee
+                ? this.props.bill.order.employee.address.zipCode
                 : this.props.company.address.zipCode}{" "}
-              {this.props.bill.order.technician
-                ? this.props.bill.order.technician.address.city
+              {this.props.bill.order.employee
+                ? this.props.bill.order.employee.address.city
                 : this.props.company.address.city}
             </Text>
           </View>
@@ -97,7 +97,7 @@ export default class Billpdf extends Component<{ bill: Bill; company: Company },
               </Text>
               <Text style={[styles.column3]}>Auftrags-ID: {this.props.bill.order.orderId}</Text>
               <Text style={[styles.column3]}>
-                Monteur / AN: {this.props.bill.order.technician ? this.props.bill.order.technician.technicianId : ""}
+                Monteur / AN: {this.props.bill.order.employee ? this.props.bill.order.employee.technicianId : ""}
               </Text>
             </View>
             <View style={[styles.row]}>
@@ -125,8 +125,10 @@ export default class Billpdf extends Component<{ bill: Bill; company: Company },
           </View>
           <BillItems bill={this.props.bill} />
           <BillTotal bill={this.props.bill} />
-          <BillGreetings technician={this.props.bill.order.technician} />
-          <BillFooter technician={this.props.bill.order.technician} company={this.props.company} />
+          <BillGreetings technician={this.props.bill.order.employee} />
+          {this.props.bill.order.employee && (
+            <BillFooter technician={this.props.bill.order.employee} company={this.props.company} />
+          )}
         </Page>
       </Document>
     );

@@ -32,14 +32,14 @@ interface Props {
   onSave: () => void;
   onCancelEdit: () => void;
   onDelete: () => void;
-  order?: Order;
+  orderId?: number;
   company: Company;
   clientTemplates: ClientTemplate[];
   serviceCatalogs: ServiceCatlog[];
 }
 
 const OrderEdit: React.FC<Props> = (props: Props) => {
-  const [order, setOrder] = React.useState<Order>(props.order ? props.order : new Order());
+  const [order, setOrder] = React.useState<Order | undefined>(props.orderId ? undefined : new Order());
   const [initialState, setInitialState] = React.useState<Order>(new Order());
   const [technicians, setTechnicians] = React.useState<Employee[]>([]);
   const [services, setServices] = React.useState<Service[]>([]);
@@ -49,11 +49,33 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
   const [errors, setErrors] = React.useState<Map<string, string>>(new Map<string, string>());
 
   React.useEffect(() => {
+    if (props.orderId) {
+      OrderService.getOrderById(props.orderId).then((o) => {
+        if (o) {
+          const uniqueOrderItems = o.orderItems.reduce<OrderItem[]>((unique, current) => {
+            const x = unique.find((oi) => oi.product.articleNumber === current.product.articleNumber);
+            if (!x) {
+              return unique.concat([current]);
+            } else {
+              return unique;
+            }
+          }, []);
+          o.orderItems = uniqueOrderItems;
+        }
+        console.log(o);
+        setOrder(o);
+      });
+    }
+
     EmployeeService.getEmployees(setTechnicians);
     ServiceService.fetchServices(setServices);
     RealEstateService.fetchRealEstates(setRealEstates);
   }, []);
-  console.log(order);
+
+  if (order === undefined) {
+    return <div>loading</div>;
+  }
+
   return (
     <Segment>
       <Form autoComplete={"off"}>
@@ -108,10 +130,10 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
           ) : null}
 
           <OrderKmPauschale handleOrderChange={handleOrderChange} order={order} errors={errors} />
-          {order.status === "ORDER_BILL" ? (
+          {order.status === "ORDER_BILL" && (
             <BillDetails order={order} handleOrderChange={handleOrderChange} errors={errors} />
-          ) : null}
-          <BillButton company={props.company} order={order} services={services} />
+          )}
+          {order.status === "ORDER_BILL" && <BillButton company={props.company} order={order} services={services} />}
           <PaymentRecieved order={order} handleOrderChange={handleOrderChange} errors={errors} />
           <Grid.Row centered>
             <Grid.Column width={5} floated="left">
@@ -180,17 +202,17 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
   }
 
   function handleOrderChange(name: string, value: any) {
-    setOrder({ ...order, [name]: value });
+    setOrder({ ...order!, [name]: value });
     setErrors(ErrorMapper.removeError(errors, name));
   }
 
   function updateOrderServies(orderItems: OrderItem[]) {
-    setOrder({ ...order, orderItems: orderItems });
+    setOrder({ ...order!, orderItems: orderItems });
   }
 
   function onSuccessSave(savedOrder: Order) {
-    savedOrder.technician = order.technician;
-    savedOrder.realEstate = order.realEstate;
+    savedOrder.employee = order!.employee;
+    savedOrder.realEstate = order!.realEstate;
     setOrder(savedOrder);
     setInitialState(savedOrder);
   }

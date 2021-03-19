@@ -91,7 +91,7 @@ const App: React.FC = () => {
                   onSave={closeOrder}
                   onCancelEdit={closeOrder}
                   onDelete={closeOrder}
-                  order={activeOrder}
+                  orderId={activeOrder?.id}
                 />
               ) : null}
             </div>

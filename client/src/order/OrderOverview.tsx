@@ -36,7 +36,7 @@ const OrderOverview: React.FC<Props> = (props: Props) => {
             company={props.company}
             serviceCatalogs={props.serviceCatalogs}
             clientTemplates={props.clientTemplates}
-            order={selectedItem}
+            orderId={selectedItem?.id}
             onCancelEdit={stopEdit}
             onSave={stopEdit}
             onDelete={stopEdit}

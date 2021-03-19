@@ -69,7 +69,7 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
                 selection
                 search
                 options={mapTechnicianToDropdownItems(props.technicians)}
-                value={props.order.technician?.id}
+                value={props.order.employee?.id}
                 onChange={updateTechnician}
                 error={props.errors.get("technician") ? { content: props.errors.get("technician") } : null}
               />
@@ -213,8 +213,7 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
             <span style={{ fontWeight: "bold" }}>Monteuer:</span>
             <span>
               {" "}
-              {props.order.technician?.technicianId} {props.order.technician?.firstName}{" "}
-              {props.order.technician?.lastName}
+              {props.order.employee?.technicianId} {props.order.employee?.firstName} {props.order.employee?.lastName}
             </span>
           </Grid.Column>
         </Grid.Row>

@@ -25,7 +25,7 @@ export class Order {
   realEstate: RealEstate;
 
   @ManyToOne(() => Employee, (employee) => employee.orders, { eager: true })
-  technician: Employee;
+  employee: Employee;
 
   @Column()
   firstAppointment: String;
@@ -56,14 +56,14 @@ export class Order {
   })
   orderItems: OrderItem[];
 
-  @Column()
-  serviceCatalogId: number;
-
   @OneToMany(() => BillItem, (billItem) => billItem.order, {
     eager: true,
     cascade: true,
   })
   billItems: BillItem[];
+
+  @Column()
+  serviceCatalogId: number;
 
   @Column({
     type: "enum",

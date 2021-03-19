@@ -21,8 +21,6 @@ export default class OrderController {
     }
 
     const orderRepository = getManager().getRepository(Order);
-    const orderItemRepository = getManager().getRepository(OrderItem);
-    const billItemRepository = getManager().getRepository(BillItem);
 
     const [orders, total] = await orderRepository
       .createQueryBuilder("order")
@@ -36,7 +34,7 @@ export default class OrderController {
         );
       })
       .leftJoinAndSelect("order.realEstate", "realEstate")
-      .leftJoinAndSelect("order.technician", "technician")
+      .leftJoinAndSelect("order.employee", "employee")
       .leftJoinAndSelect("order.billItems", "billItems")
       .leftJoinAndSelect("order.orderItems", "orderItems")
       .leftJoinAndSelect("orderItems.product", "orderItemProduct")
@@ -44,7 +42,17 @@ export default class OrderController {
       .take(size)
       .orderBy(`order.${sortCol}`, sortDir)
       .getManyAndCount();
-    response.send({ data: orders, page: { page: page, totalPages: Math.ceil(total / size) } });
+    response.send({
+      data: orders,
+      page: { page: page, totalPages: Math.ceil(total / size) },
+    });
+  }
+
+  static async getOne(request: Request, response: Response) {
+    const id: string = request.params.id;
+    const orderRepository = getManager().getRepository(Order);
+    const order = await orderRepository.findOne(id);
+    response.send(order);
   }
 
   static async delete(request: Request, response: Response) {
@@ -70,7 +78,6 @@ export default class OrderController {
   static async update(request: Request, response: Response) {
     const repository = getManager().getRepository(Order);
     const order = request.body as Order;
-    await OrderController.deleteById(order.id);
     const updatedOrder = await repository.save(request.body);
     response.send(updatedOrder);
   }
