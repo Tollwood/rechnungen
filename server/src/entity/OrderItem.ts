@@ -16,4 +16,7 @@ export default class OrderItem {
     eager: false,
   })
   order: Promise<Order>;
+
+  @Column()
+  orderId: number;
 }

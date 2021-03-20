@@ -64,7 +64,6 @@ export default class OrderController {
     const repository = getManager().getRepository(Order);
 
     await getConnection().createQueryBuilder().delete().from(BillItem).where("orderId = :id", { id: id }).execute();
-
     await getConnection().createQueryBuilder().delete().from(OrderItem).where("orderId = :id", { id: id }).execute();
     await repository.delete(id);
   }
@@ -73,19 +72,35 @@ export default class OrderController {
     const repository = getManager().getRepository(Order);
     const order = await repository.save(request.body);
     const orderItemRepository = getManager().getRepository(OrderItem);
-    request.body.orderItems.map((oi) => ({ ...oi, order: order }));
-    orderItemRepository.save(request.body.orderItem);
+    const orderItems = request.body.orderItems.map((oi) => ({ ...oi, order: order, orderId: order.id }));
+    await orderItemRepository.save(orderItems);
 
     const billItemRepository = getManager().getRepository(BillItem);
-    request.body.billItems.map((oi) => ({ ...oi, order: order }));
-    billItemRepository.save(request.body.billItems);
+    const billItems = request.body.billItems.map((oi) => ({ ...oi, order: order, orderId: order.id }));
+    await billItemRepository.delete({ orderId: order.id });
+    await billItemRepository.save(billItems);
     response.send(order);
   }
 
   static async update(request: Request, response: Response) {
     const repository = getManager().getRepository(Order);
+    const orderItemRepository = getManager().getRepository(OrderItem);
+    const billItemRepository = getManager().getRepository(BillItem);
     const order = request.body as Order;
-    const updatedOrder = await repository.save(request.body);
-    response.send(updatedOrder);
+    // delete relations
+    await orderItemRepository.delete({ orderId: order.id });
+    await billItemRepository.delete({ orderId: order.id });
+
+    //update order
+    const updatedOrder = await repository.save(order);
+
+    //add relations
+    const orderItems = request.body.orderItems.map((oi) => ({ ...oi, order: updatedOrder, orderId: updatedOrder.id }));
+    await orderItemRepository.save(orderItems);
+
+    const billItems = request.body.billItems.map((oi) => ({ ...oi, order: updatedOrder, orderId: updatedOrder.id }));
+    await billItemRepository.save(billItems);
+
+    response.send(request.body);
   }
 }
