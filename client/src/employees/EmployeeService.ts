@@ -1,13 +1,8 @@
-import Link from "../common/Links";
 import API from "../API";
 import Employee from "./Employee";
 import ErrorMapper from "../ErrorMapper";
 
 export default class EmployeeService {
-  public static fetchCurrentTechnician(technicianLink: Link, onSuccess: (employee: Employee) => void) {
-    API.get(technicianLink.href).then((res) => onSuccess(res.data));
-  }
-
   public static getEmployees(onSuccess: (employees: Employee[]) => void) {
     API.get("/api/employees")
       .then((res) => res.data)

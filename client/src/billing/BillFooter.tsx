@@ -37,31 +37,31 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class BillFooter extends Component<{ technician: Employee; company: Company }, {}> {
+export default class BillFooter extends Component<{ employee: Employee; company: Company }, {}> {
   render(): React.ReactNode {
-    const technician = this.props.technician;
+    const employee = this.props.employee;
     return (
       <View style={[styles.row, styles.footer]} fixed>
         <View style={[styles.column3, { marginLeft: 10 }]}>
           <Text>
-            {technician.firstName} {technician.lastName}
+            {employee.firstName} {employee.lastName}
           </Text>
           <Text>
-            {technician.address.street} {technician.address.houseNumber}{" "}
+            {employee.address.street} {employee.address.houseNumber}{" "}
           </Text>
           <Text>
-            {technician.address.zipCode} {technician.address.city}
+            {employee.address.zipCode} {employee.address.city}
           </Text>
         </View>
         <View style={[styles.column3]}>
-          <Text>Tel.: {technician.phone}</Text>
-          <Text>Email: {technician.email}</Text>
-          <Text>Steuernummer: {technician.taxIdent}</Text>
+          <Text>Tel.: {employee.phone}</Text>
+          <Text>Email: {employee.email}</Text>
+          <Text>Steuernummer: {employee.taxIdent}</Text>
         </View>
         <View style={[styles.column3]}>
-          <Text>{technician.bankDetails.bankName}</Text>
-          <Text>IBAN {technician.bankDetails.iban}</Text>
-          <Text>BIC {technician.bankDetails.bic}</Text>
+          <Text>{employee.bankDetails.bankName}</Text>
+          <Text>IBAN {employee.bankDetails.iban}</Text>
+          <Text>BIC {employee.bankDetails.bic}</Text>
         </View>
         <Text
           style={styles.pageNumber}

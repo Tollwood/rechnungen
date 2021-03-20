@@ -16,7 +16,7 @@ interface OrderEditProps {
   handleOrderChange: (name: string, value: any) => void;
   updateClent: (clientTemplate: ClientTemplate) => void;
   updateRealEstate: (realEstate?: RealEstate) => void;
-  technicians: Employee[];
+  employees: Employee[];
   realEstates: RealEstate[];
   readOnly: boolean;
   errors: Map<string, string>;
@@ -65,13 +65,13 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
             <Form.Field>
               <label>Monteuer </label>
               <Form.Dropdown
-                id="technician"
+                id="employee"
                 selection
                 search
-                options={mapTechnicianToDropdownItems(props.technicians)}
+                options={mapEmployeeToDropdownItems(props.employees)}
                 value={props.order.employee?.id}
-                onChange={updateTechnician}
-                error={props.errors.get("technician") ? { content: props.errors.get("technician") } : null}
+                onChange={updateEmployee}
+                error={props.errors.get("employee") ? { content: props.errors.get("employee") } : null}
               />
             </Form.Field>
           </Grid.Column>
@@ -158,17 +158,17 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
     props.handleOrderChange("smallOrder", !props.order.smallOrder);
   }
 
-  function mapTechnicianToDropdownItems(employees: Employee[]): DropdownItemProps[] {
+  function mapEmployeeToDropdownItems(employees: Employee[]): DropdownItemProps[] {
     return employees.map((emp: Employee) => {
       let text = emp.technicianId + " " + emp.firstName + " " + emp.lastName;
       return { key: emp.technicianId, value: emp.id, text: text };
     });
   }
 
-  function updateTechnician(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+  function updateEmployee(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
     props.handleOrderChange(
-      "technician",
-      props.technicians.find((t) => t.id === data.value)
+      "employee",
+      props.employees.find((t) => t.id === data.value)
     );
   }
 

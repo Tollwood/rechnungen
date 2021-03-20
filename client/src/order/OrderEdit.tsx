@@ -41,7 +41,7 @@ interface Props {
 const OrderEdit: React.FC<Props> = (props: Props) => {
   const [order, setOrder] = React.useState<Order | undefined>(props.orderId ? undefined : new Order());
   const [initialState, setInitialState] = React.useState<Order>(new Order());
-  const [technicians, setTechnicians] = React.useState<Employee[]>([]);
+  const [employees, setEmployees] = React.useState<Employee[]>([]);
   const [services, setServices] = React.useState<Service[]>([]);
   const [realEstates, setRealEstates] = React.useState<RealEstate[]>([]);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
@@ -67,10 +67,10 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
       });
     }
 
-    EmployeeService.getEmployees(setTechnicians);
+    EmployeeService.getEmployees(setEmployees);
     ServiceService.fetchServices(setServices);
     RealEstateService.fetchRealEstates(setRealEstates);
-  }, []);
+  }, [props.orderId]);
 
   if (order === undefined) {
     return <div>loading</div>;
@@ -92,7 +92,7 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
             updateRealEstate={(realEstate?: RealEstate) =>
               setOrder({ ...order, realEstate: realEstate, realEstateAddress: realEstate?.address })
             }
-            technicians={technicians}
+            employees={employees}
             readOnly={order.status !== "ORDER_EDIT"}
             updateClent={(clientTemplate: ClientTemplate) => {
               console.log(clientTemplate);

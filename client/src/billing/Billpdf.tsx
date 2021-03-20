@@ -125,9 +125,9 @@ export default class Billpdf extends Component<{ bill: Bill; company: Company },
           </View>
           <BillItems bill={this.props.bill} />
           <BillTotal bill={this.props.bill} />
-          <BillGreetings technician={this.props.bill.order.employee} />
+          <BillGreetings employee={this.props.bill.order.employee} />
           {this.props.bill.order.employee && (
-            <BillFooter technician={this.props.bill.order.employee} company={this.props.company} />
+            <BillFooter employee={this.props.bill.order.employee} company={this.props.company} />
           )}
         </Page>
       </Document>
