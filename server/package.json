@@ -28,6 +28,6 @@
     "build:client": "yarn --cwd ../client build && yarn copy:client",
     "dev": "nodemon",
     "dist": "sh ./scripts/dist.sh",
-    "full-build": "install-all && yarn clean && yarn build"
+    "full-build": "yarn install-all && yarn clean && yarn build"
   }
 }
