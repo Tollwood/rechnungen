@@ -52,13 +52,13 @@ export class Order {
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
     eager: true,
-    cascade: true,
+    cascade: ["update", "remove", "soft-remove", "recover"],
   })
   orderItems: OrderItem[];
 
   @OneToMany(() => BillItem, (billItem) => billItem.order, {
     eager: true,
-    cascade: true,
+    cascade: ["update", "remove", "soft-remove", "recover"],
   })
   billItems: BillItem[];
 

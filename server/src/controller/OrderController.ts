@@ -72,6 +72,13 @@ export default class OrderController {
   static async create(request: Request, response: Response) {
     const repository = getManager().getRepository(Order);
     const order = await repository.save(request.body);
+    const orderItemRepository = getManager().getRepository(OrderItem);
+    request.body.orderItems.map((oi) => ({ ...oi, order: order }));
+    orderItemRepository.save(request.body.orderItem);
+
+    const billItemRepository = getManager().getRepository(BillItem);
+    request.body.billItems.map((oi) => ({ ...oi, order: order }));
+    billItemRepository.save(request.body.billItems);
     response.send(order);
   }
 
