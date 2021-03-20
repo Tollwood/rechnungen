@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import { AppRoutes } from "./routes";
+import * as path from "path";
 
 // create connection with database
 // note that it's not active database connection
@@ -22,6 +23,10 @@ createConnection()
           .then(() => next)
           .catch((err) => next(err));
       });
+    });
+    app.use(express.static(path.join(__dirname, "public")));
+    app.use((req, res, next) => {
+      res.sendFile(path.join(__dirname, "public", "index.html"));
     });
 
     // run app

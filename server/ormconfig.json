@@ -1,10 +1,10 @@
 {
   "type": "postgres",
-  "host": "localhost",
+  "host": "192.168.178.47",
   "port": 5432,
   "username": "postgres",
   "password": "postgres",
-  "database": "timm_node",
+  "database": "timm_backup",
   "synchronize": false,
   "logging": true,
   "entities": ["build/entity/**/*.js", "src/entity/**/*.ts", "src/entity/Client.ts"]

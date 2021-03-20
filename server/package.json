@@ -18,9 +18,16 @@
     "typeorm": "0.2.31"
   },
   "scripts": {
-    "start": "tsc && node build/index.js",
+    "start": "yarn run nodemon",
     "start-dev": "concurrently \"yarn run nodemon\"   \"yarn --cwd ./../client run start\"",
     "install-all": "concurrently \"yarn install\"   \"yarn --cwd ./../client install\"",
-    "nodemon": "nodemon"
+    "nodemon": "nodemon",
+    "clean": "rm -rf dist build client/build src/public/**",
+    "build": "tsc && yarn build:client",
+    "copy:client": "cp -r ../client/build/* src/public && cp -r ../client/build build/public ",
+    "build:client": "yarn --cwd ../client build && yarn copy:client",
+    "dev": "nodemon",
+    "dist": "sh ./scripts/dist.sh",
+    "full-build": "yarn clean && yarn build"
   }
 }
