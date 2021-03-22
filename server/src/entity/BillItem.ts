@@ -1,11 +1,14 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Order } from "./Order";
 
 @Entity()
 export default class BillItem {
-  @Column({ primary: true })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   code: String;
-  @Column({ primary: true })
+  @Column()
   orderId: number;
   @Column()
   serviceName: String;

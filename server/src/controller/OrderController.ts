@@ -87,6 +87,12 @@ export default class OrderController {
     const orderItemRepository = getManager().getRepository(OrderItem);
     const billItemRepository = getManager().getRepository(BillItem);
     const order = request.body as Order;
+
+    const currentOrder = repository.findOne(order.id);
+
+    const currentOrderItems = [...(await currentOrder).orderItems];
+    const currentBillItems = [...(await currentOrder).billItems];
+    console.log(currentBillItems);
     // delete relations
     await orderItemRepository.delete({ orderId: order.id });
     await billItemRepository.delete({ orderId: order.id });
@@ -95,12 +101,56 @@ export default class OrderController {
     const updatedOrder = await repository.save(order);
 
     //add relations
-    const orderItems = request.body.orderItems.map((oi) => ({ ...oi, order: updatedOrder, orderId: updatedOrder.id }));
-    await orderItemRepository.save(orderItems);
-
-    const billItems = request.body.billItems.map((oi) => ({ ...oi, order: updatedOrder, orderId: updatedOrder.id }));
-    await billItemRepository.save(billItems);
-
+    if (hasOrderItemsChanged(order.orderItems, currentOrderItems)) {
+      const orderItems = request.body.orderItems.map((oi) => ({
+        ...oi,
+        order: updatedOrder,
+        orderId: updatedOrder.id,
+      }));
+      await orderItemRepository.save(orderItems);
+    } else {
+      await orderItemRepository.save(currentOrderItems);
+      request.body.orderItems = currentOrderItems;
+    }
+    if (hasBilltemsChanged(order.billItems, currentBillItems)) {
+      const billItems = request.body.billItems.map((oi) => ({ ...oi, order: updatedOrder, orderId: updatedOrder.id }));
+      await billItemRepository.save(billItems);
+      console.log("billitems have changed and got updated");
+    } else {
+      await billItemRepository.save(currentBillItems);
+      request.body.billItems = currentBillItems;
+      console.log("billitems did not changed and got restored");
+    }
     response.send(request.body);
   }
 }
+
+const hasOrderItemsChanged = (updatedOrderItems: OrderItem[], currentOrderItems: OrderItem[]) => {
+  // length not equals -> true
+  if (updatedOrderItems.length !== currentOrderItems.length) {
+    return true;
+  }
+  // any item is not equal the other
+  const result = updatedOrderItems.filter(
+    (uoi) =>
+      currentOrderItems.find(
+        (coi) => coi.amount === uoi.amount && coi.product.articleNumber === uoi.product.articleNumber
+      ) !== undefined
+  );
+
+  return result.length === currentOrderItems.length ? false : true;
+};
+
+const hasBilltemsChanged = (updatedBillItems: BillItem[], currentBillItems: BillItem[]) => {
+  // length not equals -> true
+  if (updatedBillItems.length !== currentBillItems.length) {
+    console.log("billitems changed. Lenght is not equal");
+    return true;
+  }
+  // any item is not equal the other
+  const result = updatedBillItems.filter(
+    (uoi) => currentBillItems.find((coi) => coi.amount === uoi.amount && coi.code === uoi.code) !== undefined
+  );
+
+  return result.length === currentBillItems.length ? false : true;
+};
