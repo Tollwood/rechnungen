@@ -7,5 +7,9 @@
   "database": "timm_node",
   "synchronize": false,
   "logging": true,
-  "entities": ["build/entity/**/*.js", "src/entity/**/*.ts", "src/entity/Client.ts"]
+  "entities": ["build/entity/**/*.js", "src/entity/**/*.ts", "src/entity/Client.ts"],
+  "migrations": ["migration/*.ts"],
+  "cli": {
+    "migrationsDir": "migration"
+  }
 }

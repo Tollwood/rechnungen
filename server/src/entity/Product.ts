@@ -1,5 +1,3 @@
-import { table } from "console";
-
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import OrderItem from "./OrderItem";
 

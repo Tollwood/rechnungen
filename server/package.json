@@ -15,12 +15,13 @@
     "express": "^4.16.3",
     "mysql": "^2.15.0",
     "pg": "^8.5.1",
-    "typeorm": "0.2.31"
+    "typeorm": "0.2.41"
   },
   "scripts": {
     "start": "yarn run nodemon",
-    "start-dev": "concurrently \"yarn run nodemon\"   \"yarn --cwd ./../client run start\"",
+    "start-dev": "yarn migrate-db && concurrently \"yarn run nodemon\"   \"yarn --cwd ./../client run start\"",
     "install-all": "concurrently \"yarn install\"   \"yarn --cwd ./../client install\"",
+    "migrate-db": "node --loader ts-node/esm ./node_modules/typeorm/cli.js migration:run",
     "nodemon": "nodemon",
     "clean": "rm -rf dist build client/build src/public/**",
     "build": "tsc && yarn build:client",
