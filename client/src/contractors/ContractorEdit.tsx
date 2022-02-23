@@ -1,4 +1,4 @@
-import Employee from "./Employee";
+import Contractor from "./Contractor";
 import * as React from "react";
 import { ChangeEvent, useState } from "react";
 import { Form, Segment } from "semantic-ui-react";
@@ -8,31 +8,34 @@ import AddressInput from "../common/AddressInput";
 import BankInput from "../common/BankInput";
 import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
-import EmployeeService from "./EmployeeService";
+import ContractorService from "./ContractorService";
 
 interface Props {
   onSave: () => void;
   onCancelEdit: () => void;
-  employee: Employee;
+  contrator: Contractor;
 }
 
-export default function EmployeeEdit(props: Props) {
-  const [initialEmployee] = useState<Employee>(props.employee);
-  const [employee, setEmploye] = useState<Employee>(props.employee);
+export default function ContractorEdit(props: Props) {
+  const [initialContractor] = useState<Contractor>(props.contrator);
+  const [contractor, setContractor] = useState<Contractor>(props.contrator);
   const [errors, setErrors] = useState(new Map<string, string>());
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
-    setEmploye({ ...employee, [event.target.name]: event.target.value });
+    setContractor({ ...contractor, [event.target.name]: event.target.value });
     setErrors(ErrorMapper.removeError(errors, event.target.name));
   }
 
   function handleAddressChange(nameValue: NameValue) {
-    setEmploye({ ...employee, address: { ...employee.address, [nameValue.name]: nameValue.value } });
+    setContractor({ ...contractor, address: { ...contractor.address, [nameValue.name]: nameValue.value } });
     setErrors(ErrorMapper.removeError(errors, "address." + nameValue.name));
   }
 
   function handleBankDetailsChange(event: ChangeEvent<HTMLInputElement>) {
-    setEmploye({ ...employee, bankDetails: { ...employee.bankDetails, [event.target.name]: event.target.value } });
+    setContractor({
+      ...contractor,
+      bankDetails: { ...contractor.bankDetails, [event.target.name]: event.target.value },
+    });
     setErrors(ErrorMapper.removeError(errors, "address." + event.target.name));
   }
 
@@ -47,7 +50,7 @@ export default function EmployeeEdit(props: Props) {
                 <Form.Input
                   id="technicianId"
                   placeholder="Monteur"
-                  value={employee.technicianId}
+                  value={contractor.technicianId}
                   name="technicianId"
                   onChange={onChange}
                   error={errors.get("technicianId") ? { content: errors.get("technicianId") } : null}
@@ -62,7 +65,7 @@ export default function EmployeeEdit(props: Props) {
                 <Form.Input
                   id="firstName"
                   placeholder="Vorname"
-                  value={employee.firstName}
+                  value={contractor.firstName}
                   name="firstName"
                   onChange={onChange}
                   error={errors.get("firstName") ? { content: errors.get("firstName") } : null}
@@ -75,7 +78,7 @@ export default function EmployeeEdit(props: Props) {
                 <Form.Input
                   id="lastName"
                   placeholder="Nachname"
-                  value={employee.lastName}
+                  value={contractor.lastName}
                   name="lastName"
                   onChange={onChange}
                   error={errors.get("lastName") ? { content: errors.get("lastName") } : null}
@@ -90,7 +93,7 @@ export default function EmployeeEdit(props: Props) {
                 <Form.Input
                   id="email"
                   placeholder="Email"
-                  value={employee.email}
+                  value={contractor.email}
                   name="email"
                   onChange={onChange}
                   error={errors.get("email") ? { content: errors.get("email") } : null}
@@ -103,7 +106,7 @@ export default function EmployeeEdit(props: Props) {
                 <Form.Input
                   id="phone"
                   placeholder="Telefon"
-                  value={employee.phone}
+                  value={contractor.phone}
                   name="phone"
                   onChange={onChange}
                   error={errors.get("phone") ? { content: errors.get("phone") } : null}
@@ -118,7 +121,7 @@ export default function EmployeeEdit(props: Props) {
                 <Form.Input
                   id="taxtIdent"
                   placeholder="Steuernummer"
-                  value={employee.taxIdent}
+                  value={contractor.taxIdent}
                   name="taxIdent"
                   onChange={onChange}
                   error={errors.get("taxIdent") ? { content: errors.get("taxIdent") } : null}
@@ -132,7 +135,7 @@ export default function EmployeeEdit(props: Props) {
             </Grid.Column>
           </Grid.Row>
           <AddressInput
-            address={employee.address}
+            address={contractor.address}
             handleAddressChange={handleAddressChange}
             errors={ErrorMapper.childError(errors)}
           />
@@ -142,21 +145,21 @@ export default function EmployeeEdit(props: Props) {
             </Grid.Column>
           </Grid.Row>
           <BankInput
-            bankDetails={employee.bankDetails}
+            bankDetails={contractor.bankDetails}
             handleBankDetailsChange={handleBankDetailsChange}
             errors={ErrorMapper.childError(errors)}
           />
 
           <CUDButtons
-            onSave={EmployeeService.save}
-            name={"Mitarbeiter"}
-            object={employee}
-            initialState={initialEmployee}
+            onSave={ContractorService.save}
+            name={"Auftragnehmer"}
+            object={contractor}
+            initialState={initialContractor}
             onSuccess={props.onSave}
             onError={setErrors}
             onCancel={props.onCancelEdit}
-            onDelete={EmployeeService.delete}
-            canDelete={employee.id !== undefined}
+            onDelete={ContractorService.delete}
+            canDelete={contractor._id !== undefined}
           />
         </Grid>
       </Form>

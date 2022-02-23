@@ -6,7 +6,7 @@ import Order from "../order/Order";
 
 export default class RealEstateService {
   public static fetchRealEstates(onSuccess: (realEstates: RealEstate[]) => void) {
-    API.get("/api/realestates")
+    API.get("/api/real-estates")
       .then((res) => res.data)
       .then((data) => {
         onSuccess(data.data);
@@ -24,8 +24,8 @@ export default class RealEstateService {
     onSuccess: (realEstate: RealEstate) => void,
     onError: (errors: Map<string, string>) => void
   ) {
-    if (realEstate.id === undefined) {
-      API.post("/api/realestates", realEstate)
+    if (realEstate._id === undefined) {
+      API.post("/api/real-estates", realEstate)
         .then((result) => result.data)
         .then((data: any) => Object.assign(new RealEstate(), data))
         .then(onSuccess)
@@ -33,7 +33,7 @@ export default class RealEstateService {
           ErrorMapper.map(error, onError);
         });
     } else {
-      API.patch(`/api/realestates/${realEstate.id}`, realEstate)
+      API.put(`/api/real-estates/${realEstate._id}`, realEstate)
         .then((result) => result.data)
         .then((data: any) => Object.assign(new Order(), data))
         .then(onSuccess)
@@ -43,7 +43,7 @@ export default class RealEstateService {
 
   public static delete(realEstate: RealEstate, onSuccess: () => void, onError: (errors: Map<string, string>) => void) {
     // @ts-ignore
-    API.delete(`/api/realestates/${realEstate.id}`)
+    API.delete(`/api/real-estates/${realEstate._id}`)
       .then(onSuccess)
       .catch((error) => {
         ErrorMapper.map(error, onError);

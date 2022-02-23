@@ -33,7 +33,7 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
                 search
                 selection
                 options={this.mapRealestateToDropdownItems(this.props.realestates)}
-                value={this.props.selectedRealestate ? this.props.selectedRealestate.id : undefined}
+                value={this.props.selectedRealestate ? this.props.selectedRealestate._id : undefined}
                 onChange={this.updateRealEstate.bind(this)}
                 error={this.props.errors.get("realEstate") ? { content: this.props.errors.get("realEstate") } : null}
               />
@@ -74,12 +74,12 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
 
   private mapRealestateToDropdownItems(realEstates: RealEstate[]): DropdownItemProps[] {
     return realEstates.map((realEstate: RealEstate) => {
-      return { key: realEstate.name, value: realEstate.id, text: realEstate.name };
+      return { key: realEstate.name, value: realEstate._id, text: realEstate.name };
     });
   }
 
   private updateRealEstate(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
     const selectedId = data.value as number;
-    this.props.onValueChanged(this.props.realestates.find((r) => r.id === selectedId));
+    this.props.onValueChanged(this.props.realestates.find((r) => r._id === selectedId));
   }
 }

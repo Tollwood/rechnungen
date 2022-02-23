@@ -2,7 +2,7 @@ import OrderItem from "./OrderItem";
 import { OrderStatus } from "./OrderStatus";
 import BillItem from "../billing/BillItem";
 import { Address } from "../common/Address";
-import Employee from "../employees/Employee";
+import Contractor from "../contractors/Contractor";
 import RealEstate from "../realestate/RealEstate";
 
 export default class Order {
@@ -12,7 +12,7 @@ export default class Order {
   name?: string;
   location?: string;
   phoneNumber?: string;
-  employee?: Employee;
+  contractor?: Contractor;
   realEstate?: RealEstate;
   distance?: number;
   taxRate: number = 0.19;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "@react-pdf/renderer";
-import Employee from "../employees/Employee";
-import Company from "../employees/Company";
+import Contractor from "../contractors/Contractor";
+import Company from "../contractors/Company";
 
 // Create styles
 // @ts-ignore
@@ -37,31 +37,31 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class BillFooter extends Component<{ employee: Employee; company: Company }, {}> {
+export default class BillFooter extends Component<{ contractor: Contractor; company: Company }, {}> {
   render(): React.ReactNode {
-    const employee = this.props.employee;
+    const contractor = this.props.contractor;
     return (
       <View style={[styles.row, styles.footer]} fixed>
         <View style={[styles.column3, { marginLeft: 10 }]}>
           <Text>
-            {employee.firstName} {employee.lastName}
+            {contractor.firstName} {contractor.lastName}
           </Text>
           <Text>
-            {employee.address.street} {employee.address.houseNumber}{" "}
+            {contractor.address.street} {contractor.address.houseNumber}{" "}
           </Text>
           <Text>
-            {employee.address.zipCode} {employee.address.city}
+            {contractor.address.zipCode} {contractor.address.city}
           </Text>
         </View>
         <View style={[styles.column3]}>
-          <Text>Tel.: {employee.phone}</Text>
-          <Text>Email: {employee.email}</Text>
-          <Text>Steuernummer: {employee.taxIdent}</Text>
+          <Text>Tel.: {contractor.phone}</Text>
+          <Text>Email: {contractor.email}</Text>
+          <Text>Steuernummer: {contractor.taxIdent}</Text>
         </View>
         <View style={[styles.column3]}>
-          <Text>{employee.bankDetails.bankName}</Text>
-          <Text>IBAN {employee.bankDetails.iban}</Text>
-          <Text>BIC {employee.bankDetails.bic}</Text>
+          <Text>{contractor.bankDetails.bankName}</Text>
+          <Text>IBAN {contractor.bankDetails.iban}</Text>
+          <Text>BIC {contractor.bankDetails.bic}</Text>
         </View>
         <Text
           style={styles.pageNumber}

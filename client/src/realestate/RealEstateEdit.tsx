@@ -30,7 +30,7 @@ export default function RealEstateEdit(props: Props) {
 
   return (
     <Segment>
-      {realEstate.id === undefined ? <h1>Neue Liegenschaft</h1> : <h1>Liegenschaft Bearbeiten</h1>}
+      {realEstate._id === undefined ? <h1>Neue Liegenschaft</h1> : <h1>Liegenschaft Bearbeiten</h1>}
       <Form>
         <Grid>
           <Grid.Row>
@@ -70,7 +70,7 @@ export default function RealEstateEdit(props: Props) {
             onError={setErrors}
             onCancel={props.onChange}
             onDelete={RealEstateService.delete}
-            canDelete={realEstate.id !== undefined}
+            canDelete={realEstate._id !== undefined}
           />
         </Grid>
       </Form>

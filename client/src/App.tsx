@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState } from "react";
-import EmployeeOverview from "./employees/EmployeeOverview";
+import ContractorOverview from "./contractors/ContractorOverview";
 import "semantic-ui/dist/semantic.min.css";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import { ContentType } from "./start/ContentType";
@@ -10,13 +10,13 @@ import { Menu } from "./start/Menu";
 import RealEstateOverview from "./realestate/RealEstateOverview";
 import OrderOverview from "./order/OrderOverview";
 import API from "./API";
-import Company from "./employees/Company";
+import Company from "./contractors/Company";
 import ServicesOverview from "./services/ServicesOverview";
 import Link from "./common/Links";
 import BackendAlerts from "./BackendAlerts";
 import StatisticOverview from "./statistic/StatisticOverview";
 import Client from "./clientTemplate/ClientTemplate";
-import ProductCatalog from "./order/ServiceCatalog";
+import ServiceCatalog from "./order/ServiceCatalog";
 import Order from "./order/Order";
 
 interface AppState {
@@ -31,26 +31,27 @@ const App: React.FC = () => {
   const [activeContent, setActiveContent] = useState<ContentType>(ContentType.NONE);
   const [activeOrder, setActiveOrder] = useState<Order>();
   const [company, setCompany] = useState<Company>();
-  const [clients, setClients] = useState<Client[]>([]);
-  const [productCatalogs, setProductCatalogs] = useState<ProductCatalog[]>([]);
+  const [customers, setCustomers] = useState<Client[]>([]);
+  const [serviceCatalogs, setServiceCatalogs] = useState<ServiceCatalog[]>([]);
 
   React.useEffect(() => {
-    API.get("/api/company/1")
+    API.get("/api/companies/1")
       .then((result) => result.data)
       .then(setCompany);
   }, []);
 
   React.useEffect(() => {
-    API.get("/api/clients")
-
+    API.get("/api/customers")
       .then((res) => (res.data.data === undefined ? [] : res.data.data))
-      .then(setClients);
+      .then(setCustomers);
   }, []);
+
+  console.log(customers);
   React.useEffect(() => {
-    API.get("/api/product-catalogs")
+    API.get("/api/service-catalogs")
 
       .then((res) => (res.data.data === undefined ? [] : res.data.data))
-      .then(setProductCatalogs);
+      .then(setServiceCatalogs);
   }, []);
 
   const closeOrder = () => {
@@ -58,7 +59,7 @@ const App: React.FC = () => {
     setActiveOrder(undefined);
   };
 
-  if (!company || clients.length === 0) {
+  if (!company || customers.length === 0) {
     return <div>Loading</div>;
   }
   return (
@@ -73,21 +74,21 @@ const App: React.FC = () => {
           <Menu onMenuChanges={setActiveContent} activeContent={activeContent} />
           <Grid.Column computer={12} tablet={12} mobile={16}>
             <div id={"content-container"}>
-              {activeContent === ContentType.EMPLOYEE ? <EmployeeOverview /> : null}
+              {activeContent === ContentType.CONTRACTOR ? <ContractorOverview /> : null}
               {activeContent === ContentType.ORDER ? (
-                <OrderOverview company={company} clientTemplates={clients} serviceCatalogs={productCatalogs} />
+                <OrderOverview company={company} clientTemplates={customers} serviceCatalogs={serviceCatalogs} />
               ) : null}
               {activeContent === ContentType.BILL ? <h1>Rechnungen</h1> : null}
               {activeContent === ContentType.STATISTICS ? <StatisticOverview /> : null}
               {activeContent === ContentType.REAL_ESTATE ? <RealEstateOverview /> : null}
               {activeContent === ContentType.SERVICES ? (
-                <ServicesOverview asPriceList={false} serviceCatalogs={productCatalogs} />
+                <ServicesOverview asPriceList={false} serviceCatalogs={serviceCatalogs} />
               ) : null}
               {activeContent === ContentType.ORDER_DETAILS ? (
                 <OrderEdit
-                  serviceCatalogs={productCatalogs}
+                  serviceCatalogs={serviceCatalogs}
                   company={company}
-                  clientTemplates={clients}
+                  clientTemplates={customers}
                   onSave={closeOrder}
                   onCancelEdit={closeOrder}
                   onDelete={closeOrder}

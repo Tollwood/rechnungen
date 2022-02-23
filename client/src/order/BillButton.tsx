@@ -4,9 +4,9 @@ import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import BillService from "../billing/BillService";
 import { Button, Grid } from "semantic-ui-react";
 import Billpdf from "../billing/Billpdf";
-import Service from "./Product";
+import Service from "./Service";
 import Helper from "../common/Helper";
-import Company from "../employees/Company";
+import Company from "../contractors/Company";
 
 interface BillDetailsProps {
   order: Order;

@@ -1,11 +1,10 @@
 export enum ContentType {
-    ORDER,
-    ORDER_DETAILS,
-    BILL,
-    EMPLOYEE,
-    SERVICES,
-    NONE,
-    STATISTICS,
-    REAL_ESTATE
-
+  ORDER,
+  ORDER_DETAILS,
+  BILL,
+  CONTRACTOR,
+  SERVICES,
+  NONE,
+  STATISTICS,
+  REAL_ESTATE,
 }

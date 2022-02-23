@@ -1,7 +1,7 @@
 import * as React from "react";
 import OrderList from "./OrderList";
 import OrderEdit from "./OrderEdit";
-import Company from "../employees/Company";
+import Company from "../contractors/Company";
 import { useState } from "react";
 import ClientTemplate from "../clientTemplate/ClientTemplate";
 import Order from "./Order";

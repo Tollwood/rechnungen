@@ -1,5 +1,5 @@
 import * as React from "react";
-import Service from "../order/Product";
+import Service from "../order/Service";
 import ServiceEdit from "./ServiceEdit";
 import ServiceList from "./ServiceList";
 import { useState } from "react";
@@ -46,7 +46,7 @@ const ServicesOverview: React.FC<Props> = (props: Props) => {
           onSelect={(service: Service) => {
             handleSelection(service);
           }}
-          onProductCatalogSelect={setSelectedServiceCatlog}
+          onServiceCatalogSelect={setSelectedServiceCatlog}
           selectedServiceCatalog={props.selectedServiceCatalog ? props.selectedServiceCatalog : selectedServiceCatlog}
         />
       )}

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Checkbox, CheckboxProps, Form, Icon, Segment } from "semantic-ui-react";
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
-import Service from "../order/Product";
+import Service from "../order/Service";
 import ServiceService from "./ServiceService";
 import ErrorMapper from "../ErrorMapper";
 import { ChangeEvent } from "react";

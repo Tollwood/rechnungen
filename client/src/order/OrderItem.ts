@@ -1,8 +1,8 @@
 import Link from "../common/Links";
-import Service from "./Product";
+import Service from "./Service";
 
 export default interface OrderItem {
   id?: number;
   amount: number;
-  product: Service;
+  service: Service;
 }

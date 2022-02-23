@@ -25,10 +25,10 @@ export default class BillService {
 
     const billItemsFromOrderItems = order.orderItems.map((serviceOrder) => {
       return {
-        serviceName: serviceOrder.product.title,
+        serviceName: serviceOrder.service.title,
         amount: serviceOrder.amount,
-        code: serviceOrder.product.articleNumber,
-        price: serviceOrder.product.price,
+        code: serviceOrder.service.articleNumber,
+        price: serviceOrder.service.price,
         custom: true,
       } as BillItem;
     });

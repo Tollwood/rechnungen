@@ -148,17 +148,18 @@ export default class RealEstateList extends React.Component<Props, State> {
 
   private search(searchQuery: string, page: Page, append: boolean = false) {
     this.setState({ searchTerm: searchQuery, page: page });
-    API.get("api/realestates?term=" + searchQuery + "&" + PageService.getPageAndSortParams(page))
+    API.get("api/real-estates?term=" + searchQuery + "&" + PageService.getPageAndSortParams(page))
       .then((res) => {
         this.setState({
           page: Object.assign(this.state.page, { totalElements: res.data.page.totalElements }),
         });
+        console.log(res.data.data);
         return res.data.data === undefined ? [] : res.data.data;
       })
       .then((data: any[]) => data.map((value) => Object.assign(new RealEstate(), value)))
       .then((realEstates: RealEstate[]) =>
         this.setState({
-          realEstates: append ? this.state.realEstates.concat(realEstates) : realEstates,
+          realEstates,
           isLoading: false,
         })
       );

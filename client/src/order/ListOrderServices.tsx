@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ChangeEvent } from "react";
 import OrderItem from "./OrderItem";
-import Service from "./Product";
+import Service from "./Service";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 import { Button, Table, Grid, Form, DropdownProps } from "semantic-ui-react";
 import AddOrderService from "./AddOrderService";
@@ -21,8 +21,7 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
   // const [selectedServiceCatalogId,setSelectedServiceCatalogId] = React.useState<number>();
 
   React.useEffect(() => {
-    API.get("/api/product-catalogs")
-
+    API.get("/api/service-catalogs")
       .then((res) => (res.data.data === undefined ? [] : res.data.data))
       .then(setServiceCatalogs);
   }, []);
@@ -37,7 +36,7 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
   }
 
   function renderRow(orderItem: OrderItem) {
-    let serviceData = props.services.find((service) => service.id === orderItem.product.id);
+    let serviceData = props.services.find((service) => service.id === orderItem.service.id);
     if (!serviceData) {
       return null;
     }
@@ -82,9 +81,9 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
       <Grid.Row>
         <Grid.Column computer={6} tablet={6} mobile={8}>
           <Form.Field>
-            <label>Produktkatalog </label>
+            <label>Servicekatalog</label>
             <Form.Dropdown
-              id="product-catalog"
+              id="service-catalog"
               selection
               options={mapCatalogToDropdownItems()}
               value={props.order.serviceCatalogId}

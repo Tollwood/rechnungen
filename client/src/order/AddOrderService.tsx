@@ -2,30 +2,30 @@ import * as React from "react";
 import { useState } from "react";
 import OrderItem from "./OrderItem";
 import { ButtonProps, Dropdown, DropdownProps } from "semantic-ui-react";
-import Product from "./Product";
+import Service from "./Service";
 import Input from "semantic-ui-react/dist/commonjs/elements/Input";
 import Button from "semantic-ui-react/dist/commonjs/elements/Button";
 import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 
 interface AddOrderServiceProps {
-  services: Product[];
+  services: Service[];
   orderItems: OrderItem[];
   onOrderItemsChanged: (orderItems: OrderItem[]) => void;
 }
 
 const AddOrderService: React.FC<AddOrderServiceProps> = (props: AddOrderServiceProps) => {
   const [amount, setAmount] = useState<number>(0);
-  const [selectedProduct, setSelectedProduct] = useState<Product>();
+  const [selectedService, setSelectedService] = useState<Service>();
   const inputRef = React.useRef<Input>();
   const addService = (event: React.MouseEvent<HTMLButtonElement>, data: ButtonProps) => {
-    if (selectedProduct) {
+    if (selectedService) {
       const updatedOrderServices: OrderItem[] = [...props.orderItems];
       updatedOrderServices.push({
         amount: amount,
-        product: selectedProduct,
+        service: selectedService,
       });
       setAmount(0);
-      setSelectedProduct(undefined);
+      setSelectedService(undefined);
 
       inputRef.current?.focus();
       console.log(updatedOrderServices);
@@ -48,12 +48,12 @@ const AddOrderService: React.FC<AddOrderServiceProps> = (props: AddOrderServiceP
         <Dropdown
           fluid
           selection
-          value={selectedProduct?.articleNumber || ""}
+          value={selectedService?.articleNumber || ""}
           search
           openOnFocus={false}
           selectOnNavigation={false}
           options={computeAvailableServices(props.orderItems, props.services)}
-          onChange={(e, d) => selectService(d, props.services, setSelectedProduct)}
+          onChange={(e, d) => selectService(d, props.services, setSelectedService)}
           placeholder=""
           noResultsMessage=""
         />
@@ -63,11 +63,11 @@ const AddOrderService: React.FC<AddOrderServiceProps> = (props: AddOrderServiceP
           fluid
           selection
           search
-          value={selectedProduct?.articleNumber || ""}
+          value={selectedService?.articleNumber || ""}
           openOnFocus={false}
           selectOnNavigation={false}
           options={computeAvailableServicesByTitle(props.orderItems, props.services)}
-          onChange={(e, d) => selectService(d, props.services, setSelectedProduct)}
+          onChange={(e, d) => selectService(d, props.services, setSelectedService)}
           placeholder="Dienstleistung auswählen"
         />
       </td>
@@ -82,36 +82,36 @@ const AddOrderService: React.FC<AddOrderServiceProps> = (props: AddOrderServiceP
 
 const computeAvailableServices = (
   orderItems: OrderItem[],
-  services: Product[]
+  services: Service[]
 ): { key: string; value: string; text: string }[] => {
-  const existingServices: (number | undefined)[] = orderItems.map((os: OrderItem) => os.product.id);
+  const existingServices: (number | undefined)[] = orderItems.map((os: OrderItem) => os.service.id);
   return services
-    .filter((service: Product) => !existingServices.includes(service.id))
-    .filter((service: Product) => service.selectable)
-    .map((s: Product) => {
+    .filter((service: Service) => !existingServices.includes(service.id))
+    .filter((service: Service) => service.selectable)
+    .map((s: Service) => {
       return { key: s.articleNumber, value: s.articleNumber, text: s.articleNumber };
     });
 };
 
 const computeAvailableServicesByTitle = (
   orderItems: OrderItem[],
-  services: Product[]
+  services: Service[]
 ): { key: string; value: string; text: string }[] => {
-  const existingServices: (number | undefined)[] = orderItems.map((os: OrderItem) => os.product.id);
+  const existingServices: (number | undefined)[] = orderItems.map((os: OrderItem) => os.service.id);
   return services
-    .filter((service: Product) => !existingServices.includes(service.id))
-    .filter((service: Product) => service.selectable)
-    .map((s: Product) => {
+    .filter((service: Service) => !existingServices.includes(service.id))
+    .filter((service: Service) => service.selectable)
+    .map((s: Service) => {
       return { key: s.articleNumber, value: s.articleNumber, text: s.title };
     });
 };
 
 const selectService = (
   data: DropdownProps,
-  services: Product[],
-  setSelectedService: (s: Product | undefined) => void
+  services: Service[],
+  setSelectedService: (s: Service | undefined) => void
 ) => {
-  const selectedService = services.find((service: Product) => service.articleNumber === data.value);
+  const selectedService = services.find((service: Service) => service.articleNumber === data.value);
   setSelectedService(selectedService);
 };
 

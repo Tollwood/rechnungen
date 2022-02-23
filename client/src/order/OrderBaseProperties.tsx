@@ -2,7 +2,7 @@ import * as React from "react";
 import { ChangeEvent } from "react";
 import { Checkbox, DropdownItemProps, DropdownProps, Form, Grid } from "semantic-ui-react";
 import Order from "./Order";
-import Employee from "../employees/Employee";
+import Contractor from "../contractors/Contractor";
 import RealEstate from "../realestate/RealEstate";
 import AddressReadOnly from "./AddressReadOnly";
 import OrderIdInput from "./OrderIdInput";
@@ -16,7 +16,7 @@ interface OrderEditProps {
   handleOrderChange: (name: string, value: any) => void;
   updateClent: (clientTemplate: ClientTemplate) => void;
   updateRealEstate: (realEstate?: RealEstate) => void;
-  employees: Employee[];
+  contractors: Contractor[];
   realEstates: RealEstate[];
   readOnly: boolean;
   errors: Map<string, string>;
@@ -65,13 +65,13 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
             <Form.Field>
               <label>Monteuer </label>
               <Form.Dropdown
-                id="employee"
+                id="contractor"
                 selection
                 search
-                options={mapEmployeeToDropdownItems(props.employees)}
-                value={props.order.employee?.id}
-                onChange={updateEmployee}
-                error={props.errors.get("employee") ? { content: props.errors.get("employee") } : null}
+                options={mapContractorToDropdownItems(props.contractors)}
+                value={props.order.contractor?._id}
+                onChange={updateContractor}
+                error={props.errors.get("contractor") ? { content: props.errors.get("contractor") } : null}
               />
             </Form.Field>
           </Grid.Column>
@@ -158,17 +158,17 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
     props.handleOrderChange("smallOrder", !props.order.smallOrder);
   }
 
-  function mapEmployeeToDropdownItems(employees: Employee[]): DropdownItemProps[] {
-    return employees.map((emp: Employee) => {
+  function mapContractorToDropdownItems(contractors: Contractor[]): DropdownItemProps[] {
+    return contractors.map((emp: Contractor) => {
       let text = emp.technicianId + " " + emp.firstName + " " + emp.lastName;
-      return { key: emp.technicianId, value: emp.id, text: text };
+      return { key: emp.technicianId, value: emp._id, text: text };
     });
   }
 
-  function updateEmployee(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+  function updateContractor(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
     props.handleOrderChange(
-      "employee",
-      props.employees.find((t) => t.id === data.value)
+      "contractor",
+      props.contractors.find((t) => t._id === data.value)
     );
   }
 
@@ -213,7 +213,8 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
             <span style={{ fontWeight: "bold" }}>Monteuer:</span>
             <span>
               {" "}
-              {props.order.employee?.technicianId} {props.order.employee?.firstName} {props.order.employee?.lastName}
+              {props.order.contractor?.technicianId} {props.order.contractor?.firstName}{" "}
+              {props.order.contractor?.lastName}
             </span>
           </Grid.Column>
         </Grid.Row>

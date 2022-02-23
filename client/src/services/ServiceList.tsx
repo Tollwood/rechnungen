@@ -1,5 +1,5 @@
 import * as React from "react";
-import Service from "../order/Product";
+import Service from "../order/Service";
 import { DropdownItemProps, DropdownProps, Form, Icon, Placeholder, Table } from "semantic-ui-react";
 import { Page } from "../common/Page";
 import { PageService } from "../common/PageService";
@@ -11,7 +11,7 @@ import ServiceCatlog from "../order/ServiceCatalog";
 interface Props {
   onAdd: () => void;
   onSelect: (selectedService: Service) => void;
-  onProductCatalogSelect: (serviceCatalog?: ServiceCatlog) => void;
+  onServiceCatalogSelect: (serviceCatalog?: ServiceCatlog) => void;
   selectedServiceCatalog?: ServiceCatlog;
   serviceCatalogs: ServiceCatlog[];
   asPriceList: boolean;
@@ -26,7 +26,7 @@ const ServiceList: React.FC<Props> = (props: Props) => {
 
   function search() {
     setIsLoading(true);
-    API.get("/api/products/?term=" + searchTerm + "&" + PageService.getPageAndSortParams(page))
+    API.get("/api/services/?term=" + searchTerm + "&" + PageService.getPageAndSortParams(page))
       .then((res) => {
         return res.data.data === undefined ? [] : res.data.data;
       })
@@ -72,7 +72,7 @@ const ServiceList: React.FC<Props> = (props: Props) => {
 
   function updateCatalog(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
     const selected = props.serviceCatalogs.find((sc) => sc.id === (data.value as number));
-    props.onProductCatalogSelect(selected);
+    props.onServiceCatalogSelect(selected);
   }
 
   return (

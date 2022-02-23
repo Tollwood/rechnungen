@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Button, Form, Grid, Segment } from "semantic-ui-react";
 import Order from "./Order";
-import Employee from "../employees/Employee";
+import Contractor from "../contractors/Contractor";
 import OrderItem from "./OrderItem";
 import ListOrderServices from "./ListOrderServices";
 import RealEstate from "../realestate/RealEstate";
-import Service from "./Product";
+import Service from "./Service";
 import OrderBaseProperties from "./OrderBaseProperties";
 import OrderAppointments from "./OrderAppointments";
 import OrderStatusSteps from "./OrderStatusSteps";
@@ -15,14 +15,14 @@ import BillDetails from "./BillDetails";
 import BillButton from "./BillButton";
 import PaymentRecieved from "./PaymentRecieved";
 import OrderKmPauschale from "./OrderKmPauschale";
-import Company from "../employees/Company";
+import Company from "../contractors/Company";
 import ErrorMapper from "../ErrorMapper";
 import DeleteModal from "../DeleteModal";
 import { OrderAddButton } from "./OrderAddButton";
 import OrderService from "./OrderService";
 import RealEstateService from "../realestate/RealEstateService";
 import ServiceService from "../services/ServiceService";
-import EmployeeService from "../employees/EmployeeService";
+import ContractorService from "../contractors/ContractorService";
 import UnsavedChangesModal from "../UnsavedChangesModal";
 import ClientTemplate from "../clientTemplate/ClientTemplate";
 import ServicesOverview from "../services/ServicesOverview";
@@ -41,7 +41,7 @@ interface Props {
 const OrderEdit: React.FC<Props> = (props: Props) => {
   const [order, setOrder] = React.useState<Order | undefined>(props.orderId ? undefined : new Order());
   const [initialState, setInitialState] = React.useState<Order>(new Order());
-  const [employees, setEmployees] = React.useState<Employee[]>([]);
+  const [contractors, setContractors] = React.useState<Contractor[]>([]);
   const [services, setServices] = React.useState<Service[]>([]);
   const [realEstates, setRealEstates] = React.useState<RealEstate[]>([]);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
@@ -53,7 +53,7 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
       OrderService.getOrderById(props.orderId).then((o) => {
         if (o) {
           const uniqueOrderItems = o.orderItems.reduce<OrderItem[]>((unique, current) => {
-            const x = unique.find((oi) => oi.product.articleNumber === current.product.articleNumber);
+            const x = unique.find((oi) => oi.service.articleNumber === current.service.articleNumber);
             if (!x) {
               return unique.concat([current]);
             } else {
@@ -67,7 +67,7 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
       });
     }
 
-    EmployeeService.getEmployees(setEmployees);
+    ContractorService.getContractors(setContractors);
     ServiceService.fetchServices(setServices);
     RealEstateService.fetchRealEstates(setRealEstates);
   }, [props.orderId]);
@@ -92,7 +92,7 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
             updateRealEstate={(realEstate?: RealEstate) =>
               setOrder({ ...order, realEstate: realEstate, realEstateAddress: realEstate?.address })
             }
-            employees={employees}
+            contractors={contractors}
             readOnly={order.status !== "ORDER_EDIT"}
             updateClent={(clientTemplate: ClientTemplate) => {
               console.log(clientTemplate);
@@ -211,7 +211,7 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
   }
 
   function onSuccessSave(savedOrder: Order) {
-    savedOrder.employee = order!.employee;
+    savedOrder.contractor = order!.contractor;
     savedOrder.realEstate = order!.realEstate;
     setOrder(savedOrder);
     setInitialState(savedOrder);

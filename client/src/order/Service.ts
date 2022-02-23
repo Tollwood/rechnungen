@@ -1,4 +1,4 @@
-export default class Product {
+export default class Service {
   id?: number;
   articleNumber: string = "";
   title: string = "";

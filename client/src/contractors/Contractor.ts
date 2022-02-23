@@ -1,8 +1,8 @@
 import { Address } from "../common/Address";
 import BankDetails from "./BankDetails";
 
-export default class Employee {
-  id?: number;
+export default class Contractor {
+  _id?: string;
   firstName: string = "";
   lastName: string = "";
   taxIdent: string = "";
