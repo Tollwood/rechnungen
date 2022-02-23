@@ -1,1 +1,0 @@
-ALTER TABLE ORDER_TABLE ADD COLUMN prev_status varchar(255);

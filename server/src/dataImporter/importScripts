@@ -1,0 +1,21 @@
+ psql -d timm_node -f generate-mongo-services.sql > services.json
+ mongoimport --uri 'mongodb+srv://cluster0.tffhi.mongodb.net/timm?retryWrites=true&w=majority' \
+   --username=importer \
+   --password=IlODVLMGtF0ZYWIi \
+   --collection=services --jsonArray services.json
+
+
+psql -d timm_node -f generate-mongo-customers.sql > customers.json
+mongoimport --uri 'mongodb+srv://cluster0.tffhi.mongodb.net/timm?retryWrites=true&w=majority' \
+   --username=importer \
+   --password=IlODVLMGtF0ZYWIi \
+   --collection=customers --jsonArray customers.json
+
+psql -d timm_node -f generate-mongo-realEstates.sql > realEstates.json
+mongoimport --uri 'mongodb+srv://cluster0.tffhi.mongodb.net/timm?retryWrites=true&w=majority' \
+   --username=importer \
+   --password=IlODVLMGtF0ZYWIi \
+   --collection=realEstates --jsonArray realEstates.json
+
+
+

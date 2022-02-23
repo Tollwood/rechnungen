@@ -34,10 +34,10 @@ export default class OrderController {
         );
       })
       .leftJoinAndSelect("order.realEstate", "realEstate")
-      .leftJoinAndSelect("order.employee", "employee")
+      .leftJoinAndSelect("order.contractor", "contractor")
       .leftJoinAndSelect("order.billItems", "billItems")
       .leftJoinAndSelect("order.orderItems", "orderItems")
-      .leftJoinAndSelect("orderItems.product", "orderItemProduct")
+      .leftJoinAndSelect("orderItems.service", "orderItemService")
       .skip(page * size)
       .take(size)
       .orderBy(`order.${sortCol}`, sortDir)
@@ -134,7 +134,7 @@ const hasOrderItemsChanged = (updatedOrderItems: OrderItem[], currentOrderItems:
   const result = updatedOrderItems.filter(
     (uoi) =>
       currentOrderItems.find(
-        (coi) => coi.amount === uoi.amount && coi.product.articleNumber === uoi.product.articleNumber
+        (coi) => coi.amount === uoi.amount && coi.service.articleNumber === uoi.service.articleNumber
       ) !== undefined
   );
 

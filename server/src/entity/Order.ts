@@ -1,9 +1,11 @@
+import { ObjectId } from "mongodb";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, PrimaryColumn, Tree } from "typeorm";
 import { Address } from "./Address";
+import Bill from "./Bill";
 import BillItem from "./BillItem";
-import Employee from "./Employee";
+import Contractor from "./Contractor";
 import OrderItem from "./OrderItem";
-import { RealEstate } from "./RealEstate";
+import RealEstate from "./RealEstate";
 
 export enum OrderStatus {
   ORDER_EDIT = "ORDER_EDIT",
@@ -13,86 +15,36 @@ export enum OrderStatus {
   PAYMENT_RECIEVED = "PAYMENT_RECIEVED",
 }
 
-@Entity({ name: "order_table" })
-export class Order {
-  @PrimaryGeneratedColumn()
-  id: number;
+export default class Customer {
+  constructor(
+    public id: number,
+    public orderId: String,
+    public firstAppointment: String,
+    public secondAppointment?: String,
+    public utilisationUnit?: String,
+    public name?: String,
+    public location?: String,
+    public phoneNumber?: String,
+    public smallOrder: Boolean = false,
+    public status: OrderStatus = OrderStatus.ORDER_EDIT,
+    public prevStatus?: OrderStatus,
+    public serviceCatalogId: number,
+    public includeKmFee: Boolean = true,
+    public distance: number = 0,
+    public taxRate: number,
+    public canceled: Boolean = false,
+    public paymentRecievedDate?: String,
 
-  @Column({ nullable: true })
-  orderId: String;
+    public realEstate: RealEstate,
+    public contractor: Contractor,
+    public customer: Customer,
+    public bill: Bill,
+    public _id?: ObjectId) {}
+}
 
-  @ManyToOne(() => RealEstate, (realEstate) => realEstate.orders, { eager: true })
-  realEstate: RealEstate;
+  
 
-  @ManyToOne(() => Employee, (employee) => employee.orders, { eager: true })
-  employee: Employee;
-
-  @Column()
-  firstAppointment: String;
-
-  @Column({ nullable: true })
-  secondAppointment?: String;
-
-  @Column({ nullable: true })
-  utilisationUnit?: String;
-  @Column({ nullable: true })
-  name?: String;
-  @Column({ nullable: true })
-  location?: String;
-
-  @Column({ nullable: true })
-  phoneNumber?: String;
-  @Column()
-  smallOrder: Boolean = false;
-  @Column()
-  clientName: String;
-
-  @Column((type) => Address)
-  client: Address;
-
-  @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
-    eager: true,
-  })
   orderItems: OrderItem[];
-
-  @OneToMany(() => BillItem, (billItem) => billItem.order, {
-    eager: true,
-  })
-  billItems: BillItem[];
-
-  @Column()
-  serviceCatalogId: number;
-
-  @Column({
-    type: "enum",
-    enum: OrderStatus,
-    default: OrderStatus.ORDER_EDIT,
-  })
-  status: OrderStatus = OrderStatus.ORDER_EDIT;
-
-  @Column({
-    type: "enum",
-    enum: OrderStatus,
-    nullable: true,
-  })
-  prevStatus?: OrderStatus;
-
-  @Column()
-  includeKmFee: Boolean = true;
-
-  @Column({ nullable: true })
-  billNo?: String;
-  @Column({ nullable: true })
-  billDate?: String;
-  @Column({ nullable: true })
-  paymentRecievedDate?: String;
-  @Column()
-  distance: number = 0;
-  @Column({ type: "float" })
-  taxRate: number;
-  @Column()
-  canceled: Boolean = false;
-
-  @Column((type) => Address, { prefix: "realEstate" })
-  realEstateAddress?: Address;
+  
+  
 }

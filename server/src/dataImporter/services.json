@@ -1,0 +1,693 @@
+[
+  {
+    "id": 46,
+    "articleNumber": "1B",
+    "price": 7.5,
+    "title": "Anfahrt bis 30 km",
+    "selectable": false,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 47,
+    "articleNumber": "1C",
+    "price": 15,
+    "title": "Anfahrt bis 40 km",
+    "selectable": false,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 48,
+    "articleNumber": "1D",
+    "price": 22.5,
+    "title": "Anfahrt bis 50 km",
+    "selectable": false,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 49,
+    "articleNumber": "1E",
+    "price": 0.75,
+    "title": "Anfahrt über 50 km",
+    "selectable": false,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 2,
+    "articleNumber": "1F",
+    "price": 5,
+    "title": "Zuschlag Kleinauftrag",
+    "selectable": false,
+    "serviceCatalogId": 1
+  },
+  { "id": 6, "articleNumber": "2D", "price": 2.09, "title": "Abl. WMZ", "selectable": true, "serviceCatalogId": 1 },
+  {
+    "id": 26,
+    "articleNumber": "6A",
+    "price": 2.78,
+    "title": "Neuaufnahme WMZ",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 27,
+    "articleNumber": "6B",
+    "price": 1.39,
+    "title": "Neuaufnahme WZ",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 28,
+    "articleNumber": "6C",
+    "price": 1.74,
+    "title": "Neuaufnahme RM",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  { "id": 30, "articleNumber": "7B", "price": 1.39, "title": "FB Rmstar", "selectable": true, "serviceCatalogId": 1 },
+  { "id": 31, "articleNumber": "7C", "price": 1.22, "title": "FB HKV", "selectable": true, "serviceCatalogId": 1 },
+  { "id": 32, "articleNumber": "7D", "price": 1.22, "title": "FB  WZ", "selectable": true, "serviceCatalogId": 1 },
+  {
+    "id": 33,
+    "articleNumber": "7E",
+    "price": 5.71,
+    "title": "FB WMZ 0,6 - 2,5",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 36,
+    "articleNumber": "10C",
+    "price": 3,
+    "title": "Reparaturzuschlag DS",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 37,
+    "articleNumber": "10D",
+    "price": 1.39,
+    "title": "Foto Tauchhülse",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 40,
+    "articleNumber": "10H",
+    "price": 1.39,
+    "title": "Rosetten kürzen",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 41,
+    "articleNumber": "10I",
+    "price": 0.7,
+    "title": "Arbeitszeit / Minute",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 42,
+    "articleNumber": "10J",
+    "price": 5,
+    "title": "Montage Fernfühler",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 43,
+    "articleNumber": "10L",
+    "price": 13,
+    "title": "Reparaturzuschlag HKV bei HA",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 44,
+    "articleNumber": "10M",
+    "price": 13,
+    "title": "Reparaturzuschlag NM bei HA",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  { "id": 45, "articleNumber": "10P", "price": 1.39, "title": "Aufmass HK", "selectable": true, "serviceCatalogId": 1 },
+  {
+    "id": 3731,
+    "articleNumber": "99",
+    "price": -17.5,
+    "title": "Rückbuchung Grundgebühr",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 16,
+    "articleNumber": "5A",
+    "price": 1.54,
+    "title": "Austausch HKV Kapillare -->  tPlus/tStar",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 5844,
+    "articleNumber": "Fako Zuschlag",
+    "price": 7.5,
+    "title": "Zuschlag f. 23 KM Fahrstrecke",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 331,
+    "articleNumber": "1G",
+    "price": 0.75,
+    "title": "zus. Anfahrt (hin u. rück) wg. fehl. Material",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 671,
+    "articleNumber": "Mont. Reduz.",
+    "price": 1,
+    "title": "3/4\" x 1\" x 10 mm Reduzierung eingebaut",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 337,
+    "articleNumber": "Stopfen Oventrop",
+    "price": 1.5,
+    "title": "Demontage Kappe / Montage Stopfen Oventrop",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 643,
+    "articleNumber": "Mont. ZHZ",
+    "price": 1,
+    "title": "Zapfhahnverschraubung montiert",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 1,
+    "articleNumber": "1A",
+    "price": 17.5,
+    "title": "Liegenschaftspauschale",
+    "selectable": false,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 985,
+    "articleNumber": "10K",
+    "price": 1.39,
+    "title": "Aufnahme / Ausfüllen Erfassungsbogen WZ WMZ",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 1075,
+    "articleNumber": "Lage NE",
+    "price": 1,
+    "title": "Reihenfolge korrigiert (M. Brocks)",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 6796,
+    "articleNumber": "Mont. Verlängerung",
+    "price": 1,
+    "title": "KOAX Verl. 20 / 40 mm montiert",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 1161,
+    "articleNumber": "NM berechnet",
+    "price": 0,
+    "title": "Bohrlöcher nicht passend, andere Dübel",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 673,
+    "articleNumber": "Fako",
+    "price": 0.75,
+    "title": "2. Anfahrt notwendig, Pauschale bis 50 km",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  { "id": 5, "articleNumber": "2C", "price": 0.7, "title": "Abl. WZ", "selectable": true, "serviceCatalogId": 1 },
+  { "id": 7, "articleNumber": "2E", "price": 4.17, "title": "Auslesen  DS", "selectable": true, "serviceCatalogId": 1 },
+  { "id": 38, "articleNumber": "10E", "price": 1.39, "title": "Foto HK", "selectable": true, "serviceCatalogId": 1 },
+  {
+    "id": 39,
+    "articleNumber": "10F",
+    "price": 2.09,
+    "title": "tel. Bewertung HK",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 4,
+    "articleNumber": "2B",
+    "price": 0.53,
+    "title": "Abl.   HK tPlus / tStar",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 3,
+    "articleNumber": "2A",
+    "price": 0.7,
+    "title": "Abl. u. Tausch Kapillare",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  { "id": 8, "articleNumber": "3A", "price": 0.56, "title": "Prüfung RM", "selectable": true, "serviceCatalogId": 1 },
+  {
+    "id": 252,
+    "articleNumber": "3B",
+    "price": 4.17,
+    "title": "Auslesung DS",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 9,
+    "articleNumber": "4A",
+    "price": 2.57,
+    "title": "Montage HK  tPlus / tStar",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 251,
+    "articleNumber": "4T",
+    "price": 8.56,
+    "title": "Montage DS m. Grundplatte",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 34,
+    "articleNumber": "7F",
+    "price": 7.44,
+    "title": "FB WMZ ab 2,5 mit M-Bus Montage",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 35,
+    "articleNumber": "8A",
+    "price": 10.44,
+    "title": "RM Eilauftrag / Tausch bei HA",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 17,
+    "articleNumber": "5B",
+    "price": 1.73,
+    "title": "Austausch HKV  tPlus --> tPlus / tStar",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 18,
+    "articleNumber": "5C",
+    "price": 4.31,
+    "title": "Austausch HKV Fremd --> tPlus/tStar",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  { "id": 29, "articleNumber": "7A", "price": 4.38, "title": "FB DS", "selectable": true, "serviceCatalogId": 1 },
+  {
+    "id": 8246,
+    "articleNumber": "999",
+    "price": -17.5,
+    "title": "NE nicht angetroffen ",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 8517,
+    "articleNumber": "10Z",
+    "price": -22.94,
+    "title": "intern: RG Anpassung / Korrektur",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 7845,
+    "articleNumber": "KM",
+    "price": 0.75,
+    "title": "Kilometer  nach Rücksprache A. Albrecht ",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 9544,
+    "articleNumber": "....1",
+    "price": 8.5,
+    "title": "Montage Wasserzähler",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 9554,
+    "articleNumber": "....2",
+    "price": 50,
+    "title": "Grundgebühr bis 50km",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 9560,
+    "articleNumber": "....3",
+    "price": 25,
+    "title": "Grundgebühr bis 50 Kilometer ",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 9561,
+    "articleNumber": "....4",
+    "price": 50,
+    "title": "Grundgebühr bis 100 Kilometer ",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 10018,
+    "articleNumber": "Abl. HKV",
+    "price": 0.5,
+    "title": "Ablesungen",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 11004,
+    "articleNumber": "HKV mont.",
+    "price": 2.5,
+    "title": "HKV komplett montiert",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 11005,
+    "articleNumber": "Abl. WZ ",
+    "price": 0.5,
+    "title": "Ablesung Wasserzähler ",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 9900,
+    "articleNumber": "GG 25",
+    "price": 25,
+    "title": "Grundgebühr, Anfahrt bis 50 km",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 9901,
+    "articleNumber": "GG 50",
+    "price": 50,
+    "title": "Grundgebühr, Anfahrt  ab 50 - 100 km",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 10019,
+    "articleNumber": "AW",
+    "price": 6,
+    "title": "Arbeitswert 10 Minutem",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 9556,
+    "articleNumber": "WZ Montage",
+    "price": 8.5,
+    "title": "Montage Wasserzähler",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 9558,
+    "articleNumber": "WMZ bis QN 10",
+    "price": 23,
+    "title": "Montage WMZ bis 10QN",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 9557,
+    "articleNumber": "WMZ  bis QN 2,5",
+    "price": 13,
+    "title": "Montage WMZ bis 2,5 QN",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 9555,
+    "articleNumber": "GG 75",
+    "price": 75,
+    "title": "Grundgebühr ab 100km",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 11002,
+    "articleNumber": "RWM mont.",
+    "price": 4,
+    "title": "Rauchmelder Bohrmontage",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 11001,
+    "articleNumber": "RWM dem.",
+    "price": 2,
+    "title": "Rauchmelder demontiert",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 11003,
+    "articleNumber": "HKV dem.",
+    "price": 0.5,
+    "title": "Heizkostenverteiler demontiert",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 11006,
+    "articleNumber": "Ab. WMZ",
+    "price": 0.5,
+    "title": "Ablesung Wärmemengenzähler",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  {
+    "id": 11007,
+    "articleNumber": "5W",
+    "price": 4.38,
+    "title": "Austausch DS ohne Grundplatte",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 11008,
+    "articleNumber": "6D",
+    "price": 2.09,
+    "title": "Aufnahme HKV u. Aufmaß HK neu",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 10,
+    "articleNumber": "4C",
+    "price": 6.12,
+    "title": "Montage RM GenH / Ei650",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 11,
+    "articleNumber": "4D",
+    "price": 7.03,
+    "title": "Montage RM star",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 12,
+    "articleNumber": "4E",
+    "price": 9.39,
+    "title": "Montage WZ APZ",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 13,
+    "articleNumber": "4F",
+    "price": 9.39,
+    "title": "Montage WZ MK",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 14,
+    "articleNumber": "4L",
+    "price": 15.31,
+    "title": "Montage WMZ qn 0,6 -  qn 2,5",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 15,
+    "articleNumber": "4M",
+    "price": 22.26,
+    "title": "Montage WMZ ab qn 3,5",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 19,
+    "articleNumber": "5D",
+    "price": 2.78,
+    "title": "Austausch RM gleiches Modell",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 20,
+    "articleNumber": "5E",
+    "price": 4.38,
+    "title": "Austausch Fremd -->  RM GenH/Ei650",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 21,
+    "articleNumber": "5F",
+    "price": 6.12,
+    "title": "Austausch auf RM star",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 11009,
+    "articleNumber": "5G",
+    "price": 4.52,
+    "title": "AT RMstar auf RMstar o. Tausch Sockel",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 22,
+    "articleNumber": "5H",
+    "price": 9.39,
+    "title": "Austausch WZ APZ",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 23,
+    "articleNumber": "5I",
+    "price": 9.39,
+    "title": "Austausch WZ MK",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 24,
+    "articleNumber": "5O",
+    "price": 15.31,
+    "title": "AustauschWMZ qn 0,6 - qn 2,5",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 25,
+    "articleNumber": "5P",
+    "price": 22.26,
+    "title": "Austausch WMZ ab qn 3,5",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 11010,
+    "articleNumber": "10Q",
+    "price": 3.48,
+    "title": "Reklamation Gerät blauer Aufkleber",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 271,
+    "articleNumber": "10S",
+    "price": 1,
+    "title": "Demontage Altgerät",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 9553,
+    "articleNumber": "GG 1",
+    "price": 25,
+    "title": "Grundgebühr bis 50 km",
+    "selectable": true,
+    "serviceCatalogId": 2
+  },
+  { "id": 9541, "articleNumber": "Abl.", "price": 0.5, "title": "Ablesung", "selectable": true, "serviceCatalogId": 2 },
+  {
+    "id": 11014,
+    "articleNumber": "10R",
+    "price": 10.44,
+    "title": "Inst. Funkvernetzungsmodul RM",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 11016,
+    "articleNumber": "10T",
+    "price": 1.5,
+    "title": "Fehler F10 nicht fiunkend",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 11017,
+    "articleNumber": "10U",
+    "price": 2,
+    "title": "Fehler F10 funkend",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 11018,
+    "articleNumber": "10V",
+    "price": 0.7,
+    "title": "Batt. Demontage u. Abkleben",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 11019,
+    "articleNumber": "10W",
+    "price": 0.35,
+    "title": "Änderung HKV Bewertung",
+    "selectable": true,
+    "serviceCatalogId": 1
+  },
+  {
+    "id": 9006,
+    "articleNumber": "Batterien",
+    "price": 1.4,
+    "title": "ausgebaut und abgeklebt   (je 2 AZ)",
+    "selectable": true,
+    "serviceCatalogId": 1
+  }
+]

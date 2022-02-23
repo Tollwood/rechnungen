@@ -1,0 +1,1713 @@
+[
+  {
+    "id": 6409,
+    "name": "216/69921",
+    "distance": 97,
+    "address": { "street": "Strandallee", "city": "Pelzerhaken", "zipcode": "23730", "housenumber": "12 - 14" }
+  },
+  {
+    "id": 533,
+    "name": "238/60771",
+    "distance": 10,
+    "address": {
+      "street": "Kleine Gärtnerstr. / Mittelweg ",
+      "city": "Barmstedt",
+      "zipcode": "25355",
+      "housenumber": "35a-e/1-9"
+    }
+  },
+  {
+    "id": 8158,
+    "name": "636/19581",
+    "distance": 29,
+    "address": { "street": "Jochen-Klepper-Straße", "city": "Uetersen", "zipcode": "25436", "housenumber": "46" }
+  },
+  {
+    "id": 101,
+    "name": "111/30812",
+    "distance": 45,
+    "address": { "street": "Lohbuschstraße", "city": "Hamburg", "zipcode": "22765", "housenumber": "10" }
+  },
+  {
+    "id": 534,
+    "name": "111/21159",
+    "distance": 49,
+    "address": { "street": "Ehrenbergstraße", "city": "Hamburg", "zipcode": "22767", "housenumber": "46" }
+  },
+  {
+    "id": 109,
+    "name": "234/62010",
+    "distance": 0,
+    "address": { "street": "Finkenstieg", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "2" }
+  },
+  {
+    "id": 177,
+    "name": "111/52026",
+    "distance": 45,
+    "address": { "street": "Thedestraße", "city": "Hamburg", "zipcode": "22767", "housenumber": "63" }
+  },
+  {
+    "id": 163,
+    "name": "113/17409",
+    "distance": 42,
+    "address": { "street": "Reichsbahnstraße", "city": "Hamburg", "zipcode": "22525", "housenumber": "60-62" }
+  },
+  {
+    "id": 153,
+    "name": "111/55003",
+    "distance": 45,
+    "address": { "street": "Falckweg", "city": "Hamburg", "zipcode": "22605", "housenumber": "1" }
+  },
+  {
+    "id": 144,
+    "name": "121/46472",
+    "distance": 45,
+    "address": { "street": "Unzerstraße ", "city": "Hamburg", "zipcode": "22767", "housenumber": "5" }
+  },
+  {
+    "id": 188,
+    "name": "122/31334",
+    "distance": 47,
+    "address": { "street": "Schäferkampsallee", "city": "Hamburg", "zipcode": "20357", "housenumber": "42" }
+  },
+  {
+    "id": 201,
+    "name": "111/63978",
+    "distance": 46,
+    "address": { "street": "Goetheallee ", "city": "Hamburg", "zipcode": "22765", "housenumber": "5-7" }
+  },
+  {
+    "id": 207,
+    "name": "111/58855",
+    "distance": 49,
+    "address": { "street": "Holländische Reihe", "city": "Hamburg", "zipcode": "22765", "housenumber": "15" }
+  },
+  {
+    "id": 227,
+    "name": "124/81182",
+    "distance": 40,
+    "address": { "street": "Sellhopsweg", "city": "Hamburg", "zipcode": "22459", "housenumber": "3" }
+  },
+  {
+    "id": 535,
+    "name": "122/69259",
+    "distance": 44,
+    "address": { "street": "Tiedemannstraße", "city": "Hamburg", "zipcode": "22525", "housenumber": "14-16" }
+  },
+  {
+    "id": 536,
+    "name": "242/09241",
+    "distance": 18,
+    "address": { "street": "Landweg", "city": "Bad Bramstedt", "zipcode": "24576", "housenumber": "3" }
+  },
+  {
+    "id": 253,
+    "name": "112/01432",
+    "distance": 43,
+    "address": { "street": "Schmalenbrook", "city": "Hamburg", "zipcode": "22535", "housenumber": "1, 5-7" }
+  },
+  {
+    "id": 254,
+    "name": "112/03695",
+    "distance": 43,
+    "address": {
+      "street": "Nieland  / Büro HH Wohnen",
+      "city": "Hamburg",
+      "zipcode": "22525",
+      "housenumber": "44 u.a."
+    }
+  },
+  {
+    "id": 255,
+    "name": "112/19446",
+    "distance": 42,
+    "address": { "street": "Försterweg", "city": "Hamburg", "zipcode": "22525", "housenumber": "36-44" }
+  },
+  {
+    "id": 256,
+    "name": "113/19450",
+    "distance": 38,
+    "address": {
+      "street": "Pinneberger Chaussee",
+      "city": "Hamburg",
+      "zipcode": "22523",
+      "housenumber": "105-107 u.a."
+    }
+  },
+  {
+    "id": 257,
+    "name": "113/19453",
+    "distance": 37,
+    "address": {
+      "street": "Immenweide / Goldkäferweg",
+      "city": "Hamburg",
+      "zipcode": "22523",
+      "housenumber": "1-7 u.a."
+    }
+  },
+  {
+    "id": 258,
+    "name": "113/49160",
+    "distance": 35,
+    "address": { "street": "Grillenweg ", "city": "Hamburg", "zipcode": "22523", "housenumber": "38-40" }
+  },
+  {
+    "id": 259,
+    "name": "124/19430",
+    "distance": 36,
+    "address": { "street": "Rebenacker", "city": "Hamburg", "zipcode": "22523", "housenumber": "5-15" }
+  },
+  {
+    "id": 260,
+    "name": "124/19431",
+    "distance": 36,
+    "address": { "street": "Rebenacker ", "city": "Hamburg", "zipcode": "22523", "housenumber": "6-14" }
+  },
+  {
+    "id": 268,
+    "name": "112/79566",
+    "distance": 42,
+    "address": { "street": "Immenbusch", "city": "Hamburg", "zipcode": "22549", "housenumber": "45-55" }
+  },
+  {
+    "id": 282,
+    "name": "111/79007",
+    "distance": 46,
+    "address": { "street": "Goetheallee ", "city": "Hamburg", "zipcode": "22765", "housenumber": "17 u.a." }
+  },
+  {
+    "id": 311,
+    "name": "236/15770",
+    "distance": 28,
+    "address": { "street": "Behrs Tannen", "city": "Uetersen", "zipcode": "25436", "housenumber": "10" }
+  },
+  {
+    "id": 333,
+    "name": "534/81581",
+    "distance": 44,
+    "address": { "street": "Gilcherweg", "city": "Hamburg", "zipcode": "22393", "housenumber": "70" }
+  },
+  {
+    "id": 348,
+    "name": "122/50895",
+    "distance": 44,
+    "address": { "street": "Brunckhorstweg ", "city": "Hamburg", "zipcode": "22525", "housenumber": "33a" }
+  },
+  {
+    "id": 356,
+    "name": "122/53899",
+    "distance": 43,
+    "address": { "street": "Thusneldastraße", "city": "Hamburg", "zipcode": "22525", "housenumber": "2" }
+  },
+  {
+    "id": 362,
+    "name": "524/81182",
+    "distance": 42,
+    "address": { "street": "Sellhopsweg", "city": "Hamburg", "zipcode": "22459", "housenumber": "3" }
+  },
+  {
+    "id": 363,
+    "name": "121/39740",
+    "distance": 49,
+    "address": { "street": "Mattentwiete", "city": "Hamburg", "zipcode": "20457", "housenumber": "2" }
+  },
+  {
+    "id": 366,
+    "name": "542/22995",
+    "distance": 54,
+    "address": { "street": "Kattunbleiche", "city": "Hamburg", "zipcode": "22041", "housenumber": "6-8" }
+  },
+  {
+    "id": 368,
+    "name": "636/15750",
+    "distance": 28,
+    "address": { "street": "Herderstraße", "city": "Uetersen", "zipcode": "25436", "housenumber": "1" }
+  },
+  {
+    "id": 382,
+    "name": "636/14160",
+    "distance": 23,
+    "address": { "street": "Alsenstraße", "city": "Uetersen", "zipcode": "25436", "housenumber": "54" }
+  },
+  {
+    "id": 392,
+    "name": "636/15753",
+    "distance": 28,
+    "address": { "street": "Behrs Tannen", "city": "Uetersen", "zipcode": "25436", "housenumber": "4" }
+  },
+  {
+    "id": 400,
+    "name": "636/14161",
+    "distance": 28,
+    "address": { "street": "Alsensztraße ", "city": "Uetersen", "zipcode": "25436", "housenumber": "54a" }
+  },
+  {
+    "id": 428,
+    "name": "636/14627",
+    "distance": 28,
+    "address": { "street": "Schillerstraße", "city": "Uetersen", "zipcode": "25436", "housenumber": "4" }
+  },
+  {
+    "id": 437,
+    "name": "636/15749",
+    "distance": 28,
+    "address": { "street": "Schanzenstraße", "city": "Uetersen", "zipcode": "25436", "housenumber": "18" }
+  },
+  {
+    "id": 457,
+    "name": "636/19604",
+    "distance": 28,
+    "address": { "street": "Am alten Sportplatz", "city": "Uetersen", "zipcode": "25436", "housenumber": "4" }
+  },
+  {
+    "id": 476,
+    "name": "636/15069",
+    "distance": 28,
+    "address": { "street": "Am alten Sportplatz", "city": "Uetersen", "zipcode": "25436", "housenumber": "30" }
+  },
+  {
+    "id": 511,
+    "name": "112/76742",
+    "distance": 47,
+    "address": { "street": "Flurstraße", "city": "Hamburg", "zipcode": "22549", "housenumber": "221" }
+  },
+  {
+    "id": 518,
+    "name": "636/15752",
+    "distance": 28,
+    "address": { "street": "Fr.-Neelsen-St.", "city": "Uetersen", "zipcode": "25436", "housenumber": "2" }
+  },
+  {
+    "id": 519,
+    "name": "122/55367",
+    "distance": 45,
+    "address": { "street": "Rellinger Straße", "city": "Hamburg", "zipcode": "20257", "housenumber": "33" }
+  },
+  {
+    "id": 522,
+    "name": "634/14159",
+    "distance": 28,
+    "address": { "street": "Paul-Mischke-Allee", "city": "Uetersen", "zipcode": "25436", "housenumber": "9" }
+  },
+  {
+    "id": 523,
+    "name": "239/52686",
+    "distance": 24,
+    "address": { "street": "Kampstraße", "city": "Quickborn", "zipcode": "25451", "housenumber": "6A" }
+  },
+  {
+    "id": 524,
+    "name": "114/58990",
+    "distance": 44,
+    "address": { "street": "Blankeneser Hauptstraße", "city": "Hamburg", "zipcode": "22587", "housenumber": "37" }
+  },
+  {
+    "id": 525,
+    "name": "122/01122",
+    "distance": 46,
+    "address": {
+      "street": "Max-Brauer-Allee / Langenfelder Str.",
+      "city": "Hamburg",
+      "zipcode": "22769",
+      "housenumber": "253 / 1-3"
+    }
+  },
+  {
+    "id": 526,
+    "name": "121/73092",
+    "distance": 47,
+    "address": { "street": "Annenstraße", "city": "Hamburg", "zipcode": "20359", "housenumber": "37" }
+  },
+  {
+    "id": 528,
+    "name": "636/15063",
+    "distance": 27,
+    "address": { "street": "Schanzenstraße", "city": "Uetersen", "zipcode": "25436", "housenumber": "27" }
+  },
+  {
+    "id": 529,
+    "name": "636/16462",
+    "distance": 27,
+    "address": { "street": "Schanzenstraße", "city": "Uetersen", "zipcode": "25436", "housenumber": "28" }
+  },
+  {
+    "id": 530,
+    "name": "636/15062",
+    "distance": 27,
+    "address": { "street": "Schanzenstraße", "city": "Uetersen", "zipcode": "25436", "housenumber": "22" }
+  },
+  {
+    "id": 531,
+    "name": "636/15760",
+    "distance": 27,
+    "address": { "street": "Schillerstraße", "city": "Uetersen", "zipcode": "25436", "housenumber": "13" }
+  },
+  {
+    "id": 532,
+    "name": "112/19820",
+    "distance": 45,
+    "address": { "street": "Oeverseestraße", "city": "Hamburg", "zipcode": "22769", "housenumber": "3" }
+  },
+  {
+    "id": 607,
+    "name": "112/19432",
+    "distance": 45,
+    "address": { "street": "Ernst-Horn-Str.", "city": "Hamburg", "zipcode": "22525", "housenumber": "12d" }
+  },
+  {
+    "id": 667,
+    "name": "113/81556",
+    "distance": 40,
+    "address": { "street": "Sprützwiese ", "city": "Hamburg", "zipcode": "22547", "housenumber": "44" }
+  },
+  {
+    "id": 318,
+    "name": "688/67552",
+    "distance": 49,
+    "address": { "street": "Berliner Ring", "city": "Bad Oldesloe", "zipcode": "23843", "housenumber": "18-28" }
+  },
+  {
+    "id": 727,
+    "name": "237/17353",
+    "distance": 22,
+    "address": { "street": "Fröbelstraße", "city": "Elmshorn", "zipcode": "25337", "housenumber": "4" }
+  },
+  {
+    "id": 304,
+    "name": "111/23866",
+    "distance": 47,
+    "address": { "street": "Klopstockterrassee", "city": "Hamburg", "zipcode": "22765", "housenumber": "4" }
+  },
+  {
+    "id": 755,
+    "name": "122/20781",
+    "distance": 45,
+    "address": { "street": "Lindenallee", "city": "Hamburg", "zipcode": "20259", "housenumber": "20" }
+  },
+  {
+    "id": 774,
+    "name": "236/77302",
+    "distance": 32,
+    "address": { "street": "Lindenstraße", "city": "Pinneberg", "zipcode": "25421", "housenumber": "27" }
+  },
+  {
+    "id": 745,
+    "name": "236/15753",
+    "distance": 25,
+    "address": { "street": "Behrs Tannen  ", "city": "Uetersen", "zipcode": "25436", "housenumber": "4" }
+  },
+  {
+    "id": 825,
+    "name": "112/62455",
+    "distance": 40,
+    "address": { "street": "Bornheide", "city": "Hamburg", "zipcode": "22549", "housenumber": "80-82" }
+  },
+  {
+    "id": 763,
+    "name": "143/57739",
+    "distance": 60,
+    "address": { "street": "Tunnkoppelstieg", "city": "Hamburg", "zipcode": "22359", "housenumber": "17" }
+  },
+  {
+    "id": 788,
+    "name": "131/20738",
+    "distance": 48,
+    "address": { "street": "Heidberg", "city": "Hamburg", "zipcode": "22301", "housenumber": "19" }
+  },
+  {
+    "id": 837,
+    "name": "512/79569",
+    "distance": 40,
+    "address": { "street": "Glückstädter Weg", "city": "Hamburg", "zipcode": "22549", "housenumber": "59-73" }
+  },
+  {
+    "id": 841,
+    "name": "543/81238",
+    "distance": 62,
+    "address": { "street": "Hüllenkamp", "city": "Hamburg", "zipcode": "22149", "housenumber": "104-108" }
+  },
+  {
+    "id": 843,
+    "name": "633/80192",
+    "distance": 32,
+    "address": { "street": "Hofstraße", "city": "Hartenholm", "zipcode": "24628", "housenumber": "5" }
+  },
+  {
+    "id": 850,
+    "name": "242/81181",
+    "distance": 22,
+    "address": { "street": "Dorfstraße", "city": "Hasenmoor", "zipcode": "24640", "housenumber": "38" }
+  },
+  {
+    "id": 851,
+    "name": "242/78839",
+    "distance": 22,
+    "address": { "street": "Kieler Straße", "city": "Wiemersdorf", "zipcode": "24649", "housenumber": "75" }
+  },
+  {
+    "id": 853,
+    "name": "242/70431",
+    "distance": 15,
+    "address": { "street": "Herkamp", "city": "Hitzhusen", "zipcode": "24576", "housenumber": "9" }
+  },
+  {
+    "id": 854,
+    "name": "242/19985",
+    "distance": 21,
+    "address": { "street": "Hauptstraße", "city": "Fuhlendorf", "zipcode": "24649", "housenumber": "18" }
+  },
+  {
+    "id": 855,
+    "name": "242/14487",
+    "distance": 23,
+    "address": { "street": "Dorfstraße", "city": "Hasenmoor", "zipcode": "24640 ", "housenumber": "24" }
+  },
+  {
+    "id": 852,
+    "name": "242/76658",
+    "distance": 22,
+    "address": { "street": "Schafskamp", "city": "Schmalfeld", "zipcode": "24640", "housenumber": "1" }
+  },
+  {
+    "id": 521,
+    "name": "131/17703",
+    "distance": 54,
+    "address": { "street": "Krohnskamp", "city": "Hamburg", "zipcode": "22301", "housenumber": "83a" }
+  },
+  {
+    "id": 927,
+    "name": "112/81254",
+    "distance": 42,
+    "address": { "street": "Ernst-Horn-Straße", "city": "Hamburg", "zipcode": "22525", "housenumber": "27-41" }
+  },
+  {
+    "id": 849,
+    "name": "543/23842",
+    "distance": 50,
+    "address": { "street": "Berner Heerweg", "city": "Hamburg", "zipcode": "22159", "housenumber": "95" }
+  },
+  {
+    "id": 936,
+    "name": "122/50164",
+    "distance": 46,
+    "address": { "street": "Schäferkampsallee ", "city": "Hamburg", "zipcode": "20357", "housenumber": "42" }
+  },
+  {
+    "id": 940,
+    "name": "121/57740",
+    "distance": 47,
+    "address": { "street": "Unzerstraße ", "city": "Hamburg", "zipcode": "22767", "housenumber": "16" }
+  },
+  {
+    "id": 840,
+    "name": "070/08843",
+    "distance": 50,
+    "address": { "street": "Lange Reihe", "city": "Hamburg", "zipcode": "20099", "housenumber": "102" }
+  },
+  {
+    "id": 686,
+    "name": "624/81125",
+    "distance": 188,
+    "address": { "street": "Wolburgstraße", "city": "Timmendorf", "zipcode": "23669", "housenumber": "49" }
+  },
+  {
+    "id": 517,
+    "name": "124/20233",
+    "distance": 38,
+    "address": {
+      "street": "Holsteiner Chaussee",
+      "city": "Hamburg",
+      "zipcode": "22457",
+      "housenumber": "201 - 207 u.a."
+    }
+  },
+  {
+    "id": 217,
+    "name": "112/02814",
+    "distance": 42,
+    "address": { "street": "Försterweg ", "city": "Hamburg", "zipcode": "22525", "housenumber": "88" }
+  },
+  {
+    "id": 989,
+    "name": "112/52580",
+    "distance": 44,
+    "address": { "street": "Norburger Stieg", "city": "HAmburg", "zipcode": "22761", "housenumber": "3" }
+  },
+  {
+    "id": 3483,
+    "name": "112/81250",
+    "distance": 43,
+    "address": { "street": "Försterweg", "city": "Hamburg", "zipcode": "22525", "housenumber": "92" }
+  },
+  {
+    "id": 999,
+    "name": "114/67646",
+    "distance": 42,
+    "address": { "street": "Bramweg", "city": "Hamburg", "zipcode": "22589", "housenumber": "26 + 26a" }
+  },
+  {
+    "id": 1000,
+    "name": "114/48908",
+    "distance": 42,
+    "address": { "street": "Simrockstraße", "city": "Hamburg", "zipcode": "22589", "housenumber": "72" }
+  },
+  {
+    "id": 1011,
+    "name": "113/28194",
+    "distance": 43,
+    "address": { "street": "Volksparkstraße", "city": "Hamburg", "zipcode": "22525", "housenumber": "7-17" }
+  },
+  {
+    "id": 1013,
+    "name": "124/17477",
+    "distance": 36,
+    "address": { "street": "Grenzacker", "city": "Hamburg", "zipcode": "22523", "housenumber": "27" }
+  },
+  {
+    "id": 1017,
+    "name": "124/59245",
+    "distance": 40,
+    "address": { "street": "Peter-Timm-Straße", "city": "Hamburg", "zipcode": "22457", "housenumber": "49" }
+  },
+  {
+    "id": 1033,
+    "name": "112/03694",
+    "distance": 43,
+    "address": { "street": "Ernst-Horn-Straße", "city": "Hamburg", "zipcode": "22525", "housenumber": "8a" }
+  },
+  {
+    "id": 953,
+    "name": "Test",
+    "distance": 130,
+    "address": { "street": "Test", "city": "", "zipcode": "1Test", "housenumber": "1" }
+  },
+  {
+    "id": 3801,
+    "name": "216/04415",
+    "distance": 102,
+    "address": { "street": "Schützenstraße", "city": "Grömitz", "zipcode": "23743", "housenumber": "4" }
+  },
+  {
+    "id": 3763,
+    "name": "216/04414",
+    "distance": 102,
+    "address": { "street": "Schützenstraße", "city": "Grömitz", "zipcode": "23743", "housenumber": "6" }
+  },
+  {
+    "id": 4067,
+    "name": "131/21816",
+    "distance": 48,
+    "address": { "street": "Sierichstraße", "city": "Hamburg", "zipcode": "22299", "housenumber": "81" }
+  },
+  {
+    "id": 1038,
+    "name": "050/28057",
+    "distance": 22,
+    "address": { "street": "Hainholzer Damm", "city": "Elmshorn", "zipcode": "25337", "housenumber": "67 + 69" }
+  },
+  {
+    "id": 1037,
+    "name": "050/20920",
+    "distance": 22,
+    "address": { "street": "Hainholzer Damm ", "city": "Elmshorn", "zipcode": "25337", "housenumber": "63 + 65" }
+  },
+  {
+    "id": 1036,
+    "name": "050/71416",
+    "distance": 22,
+    "address": { "street": "Hainholzer Damm ", "city": "Elmshorn", "zipcode": "25337", "housenumber": "38-50" }
+  },
+  {
+    "id": 1054,
+    "name": "237/17146",
+    "distance": 21,
+    "address": { "street": "Hainholzer Damm", "city": "Elmshorn", "zipcode": "25337", "housenumber": "38-50" }
+  },
+  {
+    "id": 1058,
+    "name": "237/28057",
+    "distance": 21,
+    "address": { "street": "Hainholzer Damm", "city": "Elmshorn", "zipcode": "25337", "housenumber": "67 + 69" }
+  },
+  {
+    "id": 1059,
+    "name": "237/20920",
+    "distance": 21,
+    "address": { "street": "Hainholzer Damm", "city": "Elmshorn", "zipcode": "25337", "housenumber": "63 + 65" }
+  },
+  {
+    "id": 1078,
+    "name": "114/50592",
+    "distance": 46,
+    "address": { "street": "Hobökentwiete", "city": "Hamburg", "zipcode": "22559", "housenumber": "36 - 46" }
+  },
+  {
+    "id": 1130,
+    "name": "636/58169",
+    "distance": 27,
+    "address": { "street": "Theodor-Storm-Ring", "city": "Tornesch", "zipcode": "25436", "housenumber": "41-45" }
+  },
+  {
+    "id": 1158,
+    "name": "514/50592",
+    "distance": 46,
+    "address": { "street": "Hobökentwiete", "city": "Rissen", "zipcode": "22559", "housenumber": "36 - 46" }
+  },
+  {
+    "id": 1164,
+    "name": "133/57730",
+    "distance": 52,
+    "address": { "street": "Fuhlbsütteler Straße", "city": "Hamburg", "zipcode": "22337", "housenumber": "665 - 671" }
+  },
+  {
+    "id": 1165,
+    "name": "522/76655",
+    "distance": 48,
+    "address": { "street": "Gorch-Fock-Wall", "city": "Hamburg", "zipcode": "20354", "housenumber": "1a" }
+  },
+  {
+    "id": 1182,
+    "name": "688/60505",
+    "distance": 61,
+    "address": { "street": "Lindenkamp", "city": "Bad Oldesloe", "zipcode": "23842", "housenumber": "24 + 26" }
+  },
+  {
+    "id": 1198,
+    "name": "142/77188",
+    "distance": 62,
+    "address": { "street": "Gustav-Adolf-Straße ", "city": "Hamburg", "zipcode": "22043", "housenumber": "53 - 57" }
+  },
+  {
+    "id": 1203,
+    "name": "533/63035",
+    "distance": 49,
+    "address": { "street": "Dieselstraße", "city": "Hamburg", "zipcode": "22307", "housenumber": "70-78" }
+  },
+  {
+    "id": 1222,
+    "name": "637/80759",
+    "distance": 24,
+    "address": { "street": "Kaltenweide ", "city": "Elmshorn", "zipcode": "25355", "housenumber": "70a+b" }
+  },
+  {
+    "id": 1224,
+    "name": "133/57723",
+    "distance": 54,
+    "address": { "street": "Lorichstraße", "city": "Hamburg", "zipcode": "22307", "housenumber": "3-29a" }
+  },
+  {
+    "id": 1235,
+    "name": "123/30151",
+    "distance": 44,
+    "address": { "street": "Unnastraße", "city": "Hamburg", "zipcode": "20253", "housenumber": "53" }
+  },
+  {
+    "id": 1247,
+    "name": "142/19426",
+    "distance": 54,
+    "address": { "street": "Eitzensweg Wichernweg", "city": "Hamburg", "zipcode": "20537", "housenumber": "2 - 17" }
+  },
+  {
+    "id": 1339,
+    "name": "511/55390",
+    "distance": 47,
+    "address": { "street": "Gr. Brunnenstraße", "city": "Hamburg", "zipcode": "22763", "housenumber": "61-65 a+b" }
+  },
+  {
+    "id": 4159,
+    "name": "134/57738",
+    "distance": 50,
+    "address": { "street": "Hummelsbütteler Weg ", "city": "Hamburg", "zipcode": "22339", "housenumber": "31-33" }
+  },
+  {
+    "id": 1514,
+    "name": "133/57720",
+    "distance": 54,
+    "address": { "street": "Lambrechtsweg", "city": "Hamburg", "zipcode": "22309", "housenumber": "14-26" }
+  },
+  {
+    "id": 1561,
+    "name": "134/80262",
+    "distance": 48,
+    "address": { "street": "Diekmoorweg ", "city": "Hamburg", "zipcode": "22419", "housenumber": "34 - 42" }
+  },
+  {
+    "id": 1760,
+    "name": "133/19441",
+    "distance": 55,
+    "address": { "street": "Dieselstraße", "city": "Hamburg", "zipcode": "22307", "housenumber": "30 -38 u.a." }
+  },
+  {
+    "id": 1815,
+    "name": "133/57727",
+    "distance": 55,
+    "address": { "street": "Hermann-Kauffmann-Str.", "city": "Hamburg", "zipcode": "22307", "housenumber": "38 - 42" }
+  },
+  {
+    "id": 4330,
+    "name": "112/81252",
+    "distance": 45,
+    "address": { "street": "Försterweg", "city": "Hamburg", "zipcode": "22525", "housenumber": "90" }
+  },
+  {
+    "id": 1849,
+    "name": "635/23687",
+    "distance": 41,
+    "address": { "street": "Am Marktplatz", "city": "Wedel", "zipcode": "22880", "housenumber": "4 c + d" }
+  },
+  {
+    "id": 1899,
+    "name": "133/57733",
+    "distance": 55,
+    "address": { "street": "Gropiusring", "city": "Hamburg", "zipcode": "22309", "housenumber": "49 - 57" }
+  },
+  {
+    "id": 1913,
+    "name": "133/57742",
+    "distance": 54,
+    "address": { "street": "Gropiusring", "city": "Hamburg", "zipcode": "22309", "housenumber": "59 - 65" }
+  },
+  {
+    "id": 1939,
+    "name": "133/57845",
+    "distance": 54,
+    "address": { "street": "Erich-Ziegel-Ring", "city": "Hamburg", "zipcode": "22309", "housenumber": "54 - 58" }
+  },
+  {
+    "id": 1956,
+    "name": "123/57736",
+    "distance": 43,
+    "address": { "street": "Brehmweg ", "city": "Hamburg", "zipcode": "22537", "housenumber": "27 a+b" }
+  },
+  {
+    "id": 1982,
+    "name": "133/58601",
+    "distance": 54,
+    "address": { "street": "Hermann-Kauffmann-Straße", "city": "Hamburg", "zipcode": "22307", "housenumber": "30 - 36" }
+  },
+  {
+    "id": 2004,
+    "name": "133/58602",
+    "distance": 54,
+    "address": { "street": "Hermann-Kauffmann-Str.", "city": "Hamburg", "zipcode": "22307", "housenumber": "24 - 28a" }
+  },
+  {
+    "id": 2030,
+    "name": "124/35918",
+    "distance": 41,
+    "address": { "street": "Graf-Otto-Weg", "city": "Hamburg", "zipcode": "22457", "housenumber": "11 - 17" }
+  },
+  {
+    "id": 2056,
+    "name": "124/77301",
+    "distance": 40,
+    "address": { "street": "Peter-Timm-Straße", "city": "Hamburg", "zipcode": "22457", "housenumber": "35-47" }
+  },
+  {
+    "id": 2118,
+    "name": "132/24485",
+    "distance": 50,
+    "address": { "street": "Yvonne-Mewes-Weg", "city": "Hamburg", "zipcode": "22297", "housenumber": "20" }
+  },
+  {
+    "id": 2144,
+    "name": "132/24486",
+    "distance": 50,
+    "address": { "street": "Hindenburgstraße", "city": "Hamburg", "zipcode": "22297", "housenumber": "131" }
+  },
+  {
+    "id": 2170,
+    "name": "132/24488",
+    "distance": 50,
+    "address": { "street": "Moltrechtweg", "city": "Hamburg", "zipcode": "22297", "housenumber": "22" }
+  },
+  {
+    "id": 2196,
+    "name": "132/24487",
+    "distance": 50,
+    "address": { "street": "Moltrechtweg", "city": "Hamburg", "zipcode": "22297", "housenumber": "10" }
+  },
+  {
+    "id": 5431,
+    "name": "143/81238",
+    "distance": 64,
+    "address": { "street": "Hüllenkamp", "city": "Hamburg", "zipcode": "22149", "housenumber": "104-108" }
+  },
+  {
+    "id": 2230,
+    "name": "635/81108",
+    "distance": 40,
+    "address": { "street": "Hanna-Lucas-Straße", "city": "Wedel", "zipcode": "22880", "housenumber": "19" }
+  },
+  {
+    "id": 2314,
+    "name": "142/19427",
+    "distance": 54,
+    "address": { "street": "Wichernsweg", "city": "Hamburg", "zipcode": "20537", "housenumber": "19 - 29" }
+  },
+  {
+    "id": 976,
+    "name": "238/07881",
+    "distance": 10,
+    "address": { "street": "Kleine Gärtnerstraße", "city": "Barmstedt", "zipcode": "25355", "housenumber": "2" }
+  },
+  {
+    "id": 2465,
+    "name": "112/57842",
+    "distance": 42,
+    "address": { "street": "Försterweg", "city": "Hamburg", "zipcode": "22525", "housenumber": "56 - 80" }
+  },
+  {
+    "id": 2473,
+    "name": "133/55730",
+    "distance": 52,
+    "address": { "street": "Fuhlsbütteler Straße", "city": "Hamburg", "zipcode": "22337", "housenumber": "665 - 677" }
+  },
+  {
+    "id": 2525,
+    "name": "112/26592",
+    "distance": 42,
+    "address": { "street": "Försterweg", "city": "Hamburg", "zipcode": "22525", "housenumber": "1 - 9" }
+  },
+  {
+    "id": 2539,
+    "name": "133/57762",
+    "distance": 53,
+    "address": { "street": "Tischbeinstraße ", "city": "Hamburg", "zipcode": "22307", "housenumber": "11 - 19" }
+  },
+  {
+    "id": 2604,
+    "name": "143/23510",
+    "distance": 49,
+    "address": { "street": "Buchenring", "city": "Hamburg", "zipcode": "22359", "housenumber": "20-24 / 48-53" }
+  },
+  {
+    "id": 2660,
+    "name": "121/76897",
+    "distance": 50,
+    "address": {
+      "street": "Kobestraße / Shanghaiallee",
+      "city": "Hamburg",
+      "zipcode": "20457",
+      "housenumber": "1 / 21"
+    }
+  },
+  {
+    "id": 2697,
+    "name": "112/81251",
+    "distance": 42,
+    "address": { "street": "Försterweg", "city": "Hamburg", "zipcode": "22525", "housenumber": "86" }
+  },
+  {
+    "id": 2753,
+    "name": "132/57846",
+    "distance": 50,
+    "address": { "street": "Moltrechtweg u.a.", "city": "Hamburg", "zipcode": "22297", "housenumber": "6 - 8" }
+  },
+  {
+    "id": 2868,
+    "name": "141/19439",
+    "distance": 54,
+    "address": { "street": "Dimpfelweg", "city": "Hamburg", "zipcode": "20537", "housenumber": "16 - 26" }
+  },
+  {
+    "id": 2937,
+    "name": "141/57734",
+    "distance": 53,
+    "address": { "street": "Vierländer Damm", "city": "Hamburg", "zipcode": "20539", "housenumber": "34" }
+  },
+  {
+    "id": 2987,
+    "name": "133/58593",
+    "distance": 53,
+    "address": { "street": "Prechtsweg", "city": "Hamburg", "zipcode": "22309", "housenumber": "11 - 23" }
+  },
+  {
+    "id": 3128,
+    "name": "133/58595",
+    "distance": 53,
+    "address": { "street": "Lambrechtsweg", "city": "Hamburg", "zipcode": "22309", "housenumber": "13 - 21" }
+  },
+  {
+    "id": 3243,
+    "name": "143/57744",
+    "distance": 55,
+    "address": { "street": "Lohkoppel", "city": "Hamburg", "zipcode": "22179", "housenumber": "10  a - f" }
+  },
+  {
+    "id": 3300,
+    "name": "210/59391",
+    "distance": 74,
+    "address": { "street": "Jungmannstraße", "city": "Kiel", "zipcode": "24105", "housenumber": "61 - 63" }
+  },
+  {
+    "id": 3317,
+    "name": "124/19436",
+    "distance": 39,
+    "address": { "street": "Holsteiner Chaussee", "city": "Hamburg", "zipcode": "22457", "housenumber": "213" }
+  },
+  {
+    "id": 5796,
+    "name": "124/57189",
+    "distance": 44,
+    "address": { "street": "Tibarg", "city": "Hamburg", "zipcode": "22459", "housenumber": "53" }
+  },
+  {
+    "id": 5809,
+    "name": "237/67178",
+    "distance": 10,
+    "address": { "street": "Königstraße", "city": "Barmstedt", "zipcode": "25355", "housenumber": "2" }
+  },
+  {
+    "id": 5818,
+    "name": "111/60338",
+    "distance": 48,
+    "address": { "street": "Hohenesch", "city": "Hamburg", "zipcode": "22765", "housenumber": "26" }
+  },
+  {
+    "id": 5907,
+    "name": "133/57721",
+    "distance": 53,
+    "address": { "street": "Brüggemannsweg", "city": "Hamburg", "zipcode": "22309", "housenumber": "2-8" }
+  },
+  {
+    "id": 5982,
+    "name": "143/57747",
+    "distance": 62,
+    "address": { "street": "Meiendorfer Straße", "city": "Hamburg", "zipcode": "22145", "housenumber": "58 e-f" }
+  },
+  {
+    "id": 5996,
+    "name": "131/24207",
+    "distance": 54,
+    "address": { "street": "Wiesendamm", "city": "Hamburg", "zipcode": "22305", "housenumber": "39" }
+  },
+  {
+    "id": 6006,
+    "name": "113/57741",
+    "distance": 42,
+    "address": { "street": "Luruper Haupstraße", "city": "Hamburg", "zipcode": "22547", "housenumber": "67" }
+  },
+  {
+    "id": 6024,
+    "name": "142/59244",
+    "distance": 55,
+    "address": { "street": "Erika-Mann-Bogen", "city": "Hamburg", "zipcode": "22081", "housenumber": "5, 7 und 9" }
+  },
+  {
+    "id": 6054,
+    "name": "144/57731",
+    "distance": 62,
+    "address": { "street": "Georg-Blume-Straße", "city": "Horn", "zipcode": "22119", "housenumber": "10 - 18" }
+  },
+  {
+    "id": 6481,
+    "name": "131/77078",
+    "distance": 52,
+    "address": { "street": "Leo-Leistikow-Allee", "city": "Hamburg", "zipcode": "22081", "housenumber": "60 - 66" }
+  },
+  {
+    "id": 6558,
+    "name": "121/57737",
+    "distance": 48,
+    "address": { "street": "Neanderstraße", "city": "Hamburg", "zipcode": "20459", "housenumber": "16" }
+  },
+  {
+    "id": 6972,
+    "name": "131/81613",
+    "distance": 55,
+    "address": { "street": "Wiesendamm ", "city": "Hamburg", "zipcode": "22303", "housenumber": "154-156" }
+  },
+  {
+    "id": 6995,
+    "name": "131/81610",
+    "distance": 55,
+    "address": { "street": "Wiesendamm", "city": "Hamburg", "zipcode": "22303", "housenumber": "158 - 160" }
+  },
+  {
+    "id": 7611,
+    "name": "133/57728",
+    "distance": 55,
+    "address": {
+      "street": "Oldachstraße / Hermann-Kaufmann-Str.",
+      "city": "Hamburg",
+      "zipcode": "22307",
+      "housenumber": "17"
+    }
+  },
+  {
+    "id": 7724,
+    "name": "131/27438",
+    "distance": 97,
+    "address": { "street": "Herbert-Weichmann-Straße", "city": "Hamburg", "zipcode": "22085", "housenumber": "35" }
+  },
+  {
+    "id": 7840,
+    "name": "685/82472",
+    "distance": 75,
+    "address": { "street": "Sandhöhe", "city": "Reinbek", "zipcode": "21465", "housenumber": "2" }
+  },
+  {
+    "id": 7887,
+    "name": "543/81678",
+    "distance": 58,
+    "address": {
+      "street": "Berner Chaussee  /  Hohnerkamp ",
+      "city": "Hamburg",
+      "zipcode": "22175",
+      "housenumber": "43 - 53  /  1 - 3"
+    }
+  },
+  {
+    "id": 8002,
+    "name": "131/57735",
+    "distance": 49,
+    "address": { "street": "Himmelstraße", "city": "Hamburg", "zipcode": "22299", "housenumber": "24" }
+  },
+  {
+    "id": 8004,
+    "name": "234/79078",
+    "distance": 23,
+    "address": { "street": "Grashofstraße", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "47" }
+  },
+  {
+    "id": 8069,
+    "name": "533/81669",
+    "distance": 56,
+    "address": { "street": "Wellingsbütteler Weg", "city": "Hamburg", "zipcode": "22391", "housenumber": "42 - 46" }
+  },
+  {
+    "id": 8074,
+    "name": "639/82149",
+    "distance": 33,
+    "address": { "street": "Spann", "city": "Norderstedt", "zipcode": "22848", "housenumber": "2" }
+  },
+  {
+    "id": 8076,
+    "name": "2020A047205",
+    "distance": 49,
+    "address": { "street": "Brehmweg ", "city": "Hamburg", "zipcode": "22527", "housenumber": "27a" }
+  },
+  {
+    "id": 8072,
+    "name": "522/81078",
+    "distance": 51,
+    "address": { "street": "Oelckersallee", "city": "Hamburg", "zipcode": "22769", "housenumber": "34" }
+  },
+  {
+    "id": 527,
+    "name": "122/81078",
+    "distance": 51,
+    "address": { "street": "Oelckersallee", "city": "Hamburg", "zipcode": "22769", "housenumber": "34" }
+  },
+  {
+    "id": 8166,
+    "name": "111/67468",
+    "distance": 47,
+    "address": { "street": "Parkstraße", "city": "Hamburg", "zipcode": "22605", "housenumber": "22b" }
+  },
+  {
+    "id": 8176,
+    "name": "122/63898",
+    "distance": 49,
+    "address": { "street": "Moorkamp", "city": "Hamburg", "zipcode": "20357", "housenumber": "18 - 28" }
+  },
+  {
+    "id": 8180,
+    "name": "636/27222",
+    "distance": 28,
+    "address": { "street": "Jochen-Klepper-Straße ", "city": "Uetersen", "zipcode": "25436", "housenumber": "10" }
+  },
+  {
+    "id": 8183,
+    "name": "112/68493",
+    "distance": 45,
+    "address": { "street": "Wolffstraße", "city": "Hamburg", "zipcode": "22525", "housenumber": "2a" }
+  },
+  {
+    "id": 8185,
+    "name": "111/62817",
+    "distance": 45,
+    "address": { "street": "Friedensallee ", "city": "Hamburg", "zipcode": "22765", "housenumber": "286" }
+  },
+  {
+    "id": 8188,
+    "name": "112/46723",
+    "distance": 45,
+    "address": { "street": "Kieler Straße", "city": "Hamburg", "zipcode": "22525", "housenumber": "244" }
+  },
+  {
+    "id": 8189,
+    "name": "111/12438",
+    "distance": 48,
+    "address": { "street": "Esmarchstraße", "city": "Hamburg", "zipcode": "22767", "housenumber": "120" }
+  },
+  {
+    "id": 8191,
+    "name": "112/57048",
+    "distance": 45,
+    "address": { "street": "Brunckhorstweg", "city": "Hamburg", "zipcode": "22525", "housenumber": "38" }
+  },
+  {
+    "id": 8193,
+    "name": "112/21662",
+    "distance": 45,
+    "address": { "street": "Warnstedtstraße ", "city": "Hamburg", "zipcode": "22525", "housenumber": "33" }
+  },
+  {
+    "id": 8195,
+    "name": "239/57700",
+    "distance": 30,
+    "address": {
+      "street": "Dietrich-Bohnhoeffer-Straße",
+      "city": "Norderstedt",
+      "zipcode": "22844",
+      "housenumber": "69"
+    }
+  },
+  {
+    "id": 8200,
+    "name": "112/19445",
+    "distance": 45,
+    "address": { "street": "Försterweg ", "city": "Hamburg", "zipcode": "22525", "housenumber": "118a" }
+  },
+  {
+    "id": 8207,
+    "name": "113/57843",
+    "distance": 41,
+    "address": { "street": "Lüdersing", "city": "Hamburg", "zipcode": "22547", "housenumber": "129 - 137" }
+  },
+  {
+    "id": 8211,
+    "name": "112/81256",
+    "distance": 52,
+    "address": {
+      "street": "Nieland / Ernst-Horn-Str.",
+      "city": "Hamburg",
+      "zipcode": "22525",
+      "housenumber": "2 - 8 / 2 - 6"
+    }
+  },
+  {
+    "id": 8214,
+    "name": "511/51152",
+    "distance": 57,
+    "address": { "street": "Elbchaussee", "city": "Hamburg", "zipcode": "22765", "housenumber": "1" }
+  },
+  {
+    "id": 8390,
+    "name": "241/58961",
+    "distance": 21,
+    "address": { "street": "Schützenstraße ", "city": "Kellinghusen", "zipcode": "25548", "housenumber": "10" }
+  },
+  {
+    "id": 8445,
+    "name": "139/82149",
+    "distance": 33,
+    "address": { "street": "Spann", "city": "Norderstedt", "zipcode": "22848", "housenumber": "2" }
+  },
+  {
+    "id": 8456,
+    "name": "142/32290",
+    "distance": 60,
+    "address": { "street": "Lohhof", "city": "Hamburg", "zipcode": "20535", "housenumber": "30" }
+  },
+  {
+    "id": 8458,
+    "name": "531/80551",
+    "distance": 49,
+    "address": { "street": "Sierichstraße ", "city": "Hamburg", "zipcode": "22301", "housenumber": "52" }
+  },
+  {
+    "id": 991,
+    "name": "112/81253",
+    "distance": 44,
+    "address": { "street": "Ernst Horn Straße", "city": "Hamburg", "zipcode": "22525", "housenumber": "5 - 25c" }
+  },
+  {
+    "id": 9244,
+    "name": "234/61991",
+    "distance": 29,
+    "address": { "street": "Pommernring ", "city": "Kaltenirchen", "zipcode": "24568", "housenumber": "1,2,3" }
+  },
+  {
+    "id": 9246,
+    "name": "234/62004",
+    "distance": 27,
+    "address": { "street": "Im Abendfrieden", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "1,2,3," }
+  },
+  {
+    "id": 9248,
+    "name": "234/62017",
+    "distance": 29,
+    "address": { "street": "Oersdorfer Weg ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "12,14,16" }
+  },
+  {
+    "id": 9250,
+    "name": "234/62016",
+    "distance": 29,
+    "address": { "street": "Oersdorfer Weg ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "8,10" }
+  },
+  {
+    "id": 9252,
+    "name": "234/62018",
+    "distance": 29,
+    "address": { "street": "Gothaer Straße ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "1,3,5" }
+  },
+  {
+    "id": 9254,
+    "name": "234/62037",
+    "distance": 27,
+    "address": { "street": "Am Krankenhaus ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "3,5" }
+  },
+  {
+    "id": 9256,
+    "name": "234/62000",
+    "distance": 29,
+    "address": { "street": "Elbinger Weg ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "1,2" }
+  },
+  {
+    "id": 9258,
+    "name": "234/62013",
+    "distance": 26,
+    "address": { "street": "Kallieser Stieg", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "3,5,7,9,11" }
+  },
+  {
+    "id": 9260,
+    "name": "234/62003",
+    "distance": 26,
+    "address": {
+      "street": "Barmstedter Str. 35 + Kallieser Sieg 13",
+      "city": "Kaltenkirchen",
+      "zipcode": "24568",
+      "housenumber": ""
+    }
+  },
+  {
+    "id": 9262,
+    "name": "234/62008",
+    "distance": 27,
+    "address": { "street": "Holstenstraße", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "1+3" }
+  },
+  {
+    "id": 9264,
+    "name": "234/62028",
+    "distance": 28,
+    "address": { "street": "Rostocker Straße ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "35" }
+  },
+  {
+    "id": 9266,
+    "name": "234/62012",
+    "distance": 29,
+    "address": { "street": "Schützenstraße ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "23" }
+  },
+  {
+    "id": 9268,
+    "name": "234/62027",
+    "distance": 28,
+    "address": { "street": "Wiesenhofstraße ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "6" }
+  },
+  {
+    "id": 9270,
+    "name": "234/61990",
+    "distance": 29,
+    "address": { "street": "Ostpreußenring ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "1,2" }
+  },
+  {
+    "id": 9272,
+    "name": "234/62034",
+    "distance": 28,
+    "address": { "street": "Flottkamp", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "16,18,20" }
+  },
+  {
+    "id": 9274,
+    "name": "234/61993",
+    "distance": 29,
+    "address": { "street": "Oppelner Weg", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "1,2,3" }
+  },
+  {
+    "id": 9276,
+    "name": "234/61997",
+    "distance": 29,
+    "address": { "street": "Oppelner Weg ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "4,5,6" }
+  },
+  {
+    "id": 9278,
+    "name": "234/62019",
+    "distance": 0,
+    "address": { "street": "", "city": "", "zipcode": "", "housenumber": "" }
+  },
+  {
+    "id": 9281,
+    "name": "234/62024",
+    "distance": 29,
+    "address": { "street": "Eichenweg ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "12,14,16,18" }
+  },
+  {
+    "id": 9284,
+    "name": "234/62009",
+    "distance": 27,
+    "address": { "street": "Schäferstieg ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "2" }
+  },
+  {
+    "id": 9286,
+    "name": "234/62036",
+    "distance": 28,
+    "address": { "street": "Flottmoorring", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "54 a+b" }
+  },
+  {
+    "id": 9288,
+    "name": "234/62035",
+    "distance": 28,
+    "address": { "street": "Flottmoorring", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "52 a+b" }
+  },
+  {
+    "id": 9290,
+    "name": "050 234/62044",
+    "distance": 31,
+    "address": { "street": "Virchowring", "city": "Henstedt-Ulzburg", "zipcode": "24558", "housenumber": "60-64" }
+  },
+  {
+    "id": 9292,
+    "name": "050 234/62045",
+    "distance": 32,
+    "address": { "street": "Kleim-Sabiner-Str.", "city": "Henstedt-Ulzburg", "zipcode": "24558", "housenumber": "2,4" }
+  },
+  {
+    "id": 9294,
+    "name": "234/62046",
+    "distance": 34,
+    "address": { "street": "Pommernstraße ", "city": "Henstedt-Ulzburg", "zipcode": "24558", "housenumber": "22,24" }
+  },
+  {
+    "id": 9296,
+    "name": "234/63669",
+    "distance": 30,
+    "address": { "street": "Am Wasserwerk ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "41" }
+  },
+  {
+    "id": 9298,
+    "name": "050 234/62041",
+    "distance": 30,
+    "address": { "street": "Langer Kamo ", "city": "Henstedt-Ulzburg", "zipcode": "24558", "housenumber": "10,12,14" }
+  },
+  {
+    "id": 9301,
+    "name": "234/64892",
+    "distance": 28,
+    "address": { "street": "Am Wasserwerk ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "43-49" }
+  },
+  {
+    "id": 9303,
+    "name": "634/66490",
+    "distance": 30,
+    "address": { "street": "Kamper Weg ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "29 f-i" }
+  },
+  {
+    "id": 9305,
+    "name": "050 234/73229",
+    "distance": 32,
+    "address": { "street": "Karklohweg ", "city": "Kisdorf", "zipcode": "24629", "housenumber": "3" }
+  },
+  {
+    "id": 9307,
+    "name": "234/77924",
+    "distance": 29,
+    "address": { "street": "Schulstraße ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "5" }
+  },
+  {
+    "id": 9309,
+    "name": "234/61996",
+    "distance": 29,
+    "address": { "street": "Schmalfelderstraße", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "2a-c" }
+  },
+  {
+    "id": 9311,
+    "name": "234/61981",
+    "distance": 28,
+    "address": { "street": "Schmalfelder Straße ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "17" }
+  },
+  {
+    "id": 9313,
+    "name": "234/61995",
+    "distance": 29,
+    "address": { "street": "Stralsunder Weg", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "1,2" }
+  },
+  {
+    "id": 9315,
+    "name": "234/61998",
+    "distance": 29,
+    "address": { "street": "Stralsunder Weg", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "3,4,5" }
+  },
+  {
+    "id": 9317,
+    "name": "234/62047",
+    "distance": 30,
+    "address": { "street": "Lohering ", "city": "Henstedt-Ulzburg", "zipcode": "24558", "housenumber": "44, 46" }
+  },
+  {
+    "id": 9320,
+    "name": "234/68161",
+    "distance": 29,
+    "address": {
+      "street": "Wulfskamp ",
+      "city": "Kaltenkirchen",
+      "zipcode": "24568",
+      "housenumber": "30, 30a, 32, 32a"
+    }
+  },
+  {
+    "id": 9322,
+    "name": "050 234/62051",
+    "distance": 32,
+    "address": { "street": "Karklohweg ", "city": "Kisdorf", "zipcode": "24629", "housenumber": "1" }
+  },
+  {
+    "id": 9324,
+    "name": "234/63664",
+    "distance": 29,
+    "address": { "street": "Wulfskamp ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "25-27 + 29-31" }
+  },
+  {
+    "id": 9326,
+    "name": "234/63665",
+    "distance": 29,
+    "address": {
+      "street": "Wulfskamp",
+      "city": "Kaltenkirchen",
+      "zipcode": "24568",
+      "housenumber": "24+26+28+28a \"Haus Memel\""
+    }
+  },
+  {
+    "id": 9328,
+    "name": "234/62048",
+    "distance": 33,
+    "address": { "street": "Logentwiete ", "city": "Henstedt-Ulzburg", "zipcode": "24558", "housenumber": "18" }
+  },
+  {
+    "id": 9330,
+    "name": "234/61989",
+    "distance": 29,
+    "address": { "street": "Pommernring ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "4,5" }
+  },
+  {
+    "id": 9332,
+    "name": "234/61992",
+    "distance": 29,
+    "address": { "street": "Berliner Ring ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "3,4,5," }
+  },
+  {
+    "id": 9334,
+    "name": "234/61994",
+    "distance": 29,
+    "address": { "street": "Berliner Ring ", "city": "Kaltenkirchen", "zipcode": "24568", "housenumber": "6,7" }
+  },
+  {
+    "id": 9336,
+    "name": "235/82908",
+    "distance": 41,
+    "address": { "street": "Hanna-Lucas-Str.", "city": "Wedel", "zipcode": "22880", "housenumber": "7" }
+  },
+  {
+    "id": 9395,
+    "name": "124/17160",
+    "distance": 48,
+    "address": { "street": "Garstedter Weg", "city": "Niendorf ", "zipcode": "22453", "housenumber": "32-28" }
+  },
+  {
+    "id": 9427,
+    "name": "124/36724",
+    "distance": 47,
+    "address": { "street": "Kollaustraße", "city": "Niendorf ", "zipcode": "22453", "housenumber": "239 a+b" }
+  },
+  {
+    "id": 9475,
+    "name": "524/17161",
+    "distance": 47,
+    "address": { "street": "Paul-Sorge-Straße ", "city": "Niendorf", "zipcode": "22459", "housenumber": "11-13" }
+  },
+  {
+    "id": 9559,
+    "name": "2786",
+    "distance": 119,
+    "address": { "street": "Kirschenallee ", "city": "Kellenhusen", "zipcode": "23746", "housenumber": "6-14" }
+  },
+  {
+    "id": 9602,
+    "name": "623/83520",
+    "distance": 103,
+    "address": { "street": "Helldahl", "city": "Lübeck", "zipcode": "23570", "housenumber": "41 A+B" }
+  },
+  {
+    "id": 9604,
+    "name": "635/83576-C",
+    "distance": 42,
+    "address": { "street": "Klaus-Groth-Straße ", "city": "Hetlingen", "zipcode": "25491", "housenumber": "15" }
+  },
+  {
+    "id": 9660,
+    "name": "522/83056",
+    "distance": 42,
+    "address": { "street": "Eimsbütteler Straße ", "city": "Hamburg", "zipcode": "22769", "housenumber": "75" }
+  },
+  {
+    "id": 9902,
+    "name": "531/80898",
+    "distance": 49,
+    "address": { "street": "Peter-Marquard-Str. ", "city": "Hamburg", "zipcode": "22303", "housenumber": "4a - 6" }
+  },
+  {
+    "id": 9956,
+    "name": "DC 9115",
+    "distance": 49,
+    "address": {
+      "street": "Hummelsbutteler Haupstraße ",
+      "city": "Hamburg",
+      "zipcode": "22339",
+      "housenumber": "86-92"
+    }
+  },
+  {
+    "id": 10015,
+    "name": "DC 9101",
+    "distance": 37,
+    "address": { "street": "Halstenbeker Straße ", "city": "Hamburg", "zipcode": "22457", "housenumber": "37 a-p" }
+  },
+  {
+    "id": 11002,
+    "name": "2311",
+    "distance": 94,
+    "address": { "street": "Osterwisch ", "city": "Schönberg", "zipcode": "24217", "housenumber": "26-28" }
+  },
+  {
+    "id": 11001,
+    "name": "2571",
+    "distance": 94,
+    "address": { "street": "Osterwisch ", "city": "Schönberg", "zipcode": "24217", "housenumber": "20 - 24" }
+  },
+  {
+    "id": 11003,
+    "name": "123/62461",
+    "distance": 48,
+    "address": { "street": "Schrammsweg", "city": "Hamburg", "zipcode": "20249", "housenumber": "25 + 27" }
+  },
+  {
+    "id": 11004,
+    "name": "151/17549",
+    "distance": 60,
+    "address": { "street": "Jungnickelstraße", "city": "Hamburg", "zipcode": "21109", "housenumber": "21a+b" }
+  },
+  {
+    "id": 11005,
+    "name": "151/27643",
+    "distance": 60,
+    "address": { "street": "Buddestr. / Wehrmannstr.", "city": "Hamburg", "zipcode": "21109", "housenumber": "22 / 4" }
+  },
+  {
+    "id": 11006,
+    "name": "151/79060",
+    "distance": 60,
+    "address": { "street": "Am Inselpark", "city": "Hamburg", "zipcode": "21109", "housenumber": "11" }
+  },
+  {
+    "id": 11007,
+    "name": "151/79533",
+    "distance": 58,
+    "address": { "street": "Jenaer Str.", "city": "", "zipcode": "21107 Hamburg", "housenumber": "7" }
+  },
+  {
+    "id": 11008,
+    "name": "151/21203",
+    "distance": 58,
+    "address": { "street": "Weimarer Str.", "city": "Hamburg", "zipcode": "21107", "housenumber": "16" }
+  },
+  {
+    "id": 11009,
+    "name": "151/71821",
+    "distance": 0,
+    "address": { "street": "", "city": "", "zipcode": "", "housenumber": "" }
+  },
+  {
+    "id": 11010,
+    "name": "151/71812",
+    "distance": 65,
+    "address": { "street": "Winsener Str.", "city": "Hamburg", "zipcode": "21077", "housenumber": "183" }
+  },
+  {
+    "id": 11011,
+    "name": "151/53185",
+    "distance": 66,
+    "address": { "street": "Rönneburger Kirchweg", "city": "Hamburg", "zipcode": "21079", "housenumber": "32" }
+  },
+  {
+    "id": 11012,
+    "name": "151/64189",
+    "distance": 66,
+    "address": { "street": "Buchholzer Weg ", "city": "Hamburg", "zipcode": "21079", "housenumber": "1 + 1a" }
+  },
+  {
+    "id": 11013,
+    "name": "151/16220",
+    "distance": 70,
+    "address": { "street": "Rotbergkamp ", "city": "Hamburg", "zipcode": "21079", "housenumber": "8" }
+  },
+  {
+    "id": 7921,
+    "name": "143/31101",
+    "distance": 58,
+    "address": {
+      "street": "Kanadaweg / Schierenberg",
+      "city": "Hamburg",
+      "zipcode": "22145",
+      "housenumber": "7 + 9  /  79 + 81"
+    }
+  },
+  {
+    "id": 11014,
+    "name": "151/29410",
+    "distance": 60,
+    "address": { "street": "Vogelhüttendeich ", "city": "Hamburg", "zipcode": "21107", "housenumber": "80" }
+  },
+  {
+    "id": 11015,
+    "name": "235/11383",
+    "distance": 40,
+    "address": { "street": "Wiedestraße", "city": "Wedel", "zipcode": "22880", "housenumber": "9" }
+  },
+  {
+    "id": 11016,
+    "name": "3843",
+    "distance": 28,
+    "address": {
+      "street": "Schützenstr. / Königstr.",
+      "city": "Kaltenkirchen",
+      "zipcode": "24568",
+      "housenumber": "5-7 / 22-24"
+    }
+  },
+  {
+    "id": 11017,
+    "name": "4108",
+    "distance": 22,
+    "address": { "street": "Schröderskamp", "city": "Itzehoe", "zipcode": "25524", "housenumber": "23" }
+  },
+  {
+    "id": 11018,
+    "name": "2992",
+    "distance": 26,
+    "address": { "street": "Galgenweg", "city": "Henstedt-Ulzburg", "zipcode": "24558", "housenumber": "13" }
+  },
+  {
+    "id": 11019,
+    "name": "2702",
+    "distance": 26,
+    "address": { "street": "Galgenweg", "city": "Henstedt-Ulzburg", "zipcode": "24558", "housenumber": "11" }
+  },
+  {
+    "id": 11020,
+    "name": "635/83633",
+    "distance": 42,
+    "address": { "street": "Klaus-Groth-Straße", "city": "Hetlingen", "zipcode": "25491", "housenumber": "17" }
+  }
+]
