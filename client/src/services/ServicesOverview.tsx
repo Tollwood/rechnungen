@@ -13,12 +13,12 @@ interface Props {
 
 const ServicesOverview: React.FC<Props> = (props: Props) => {
   const [selectedItem, setSelectedItem] = useState<Service>();
-  const [selectedServiceCatlog, setSelectedServiceCatlog] = useState<ServiceCatlog>();
+  const [selectedServiceCatlog] = useState<ServiceCatlog>();
 
   function handleAdd() {
     const service = new Service();
     const sc = props.selectedServiceCatalog ? props.selectedServiceCatalog : selectedServiceCatlog;
-    service.serviceCatalogId = sc!.id;
+    service.serviceCatalogId = sc!._id;
     setSelectedItem(service);
   }
 
@@ -46,7 +46,6 @@ const ServicesOverview: React.FC<Props> = (props: Props) => {
           onSelect={(service: Service) => {
             handleSelection(service);
           }}
-          onServiceCatalogSelect={setSelectedServiceCatlog}
           selectedServiceCatalog={props.selectedServiceCatalog ? props.selectedServiceCatalog : selectedServiceCatlog}
         />
       )}

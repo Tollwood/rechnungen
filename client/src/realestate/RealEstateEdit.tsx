@@ -7,15 +7,25 @@ import AddressInput from "../common/AddressInput";
 import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
 import RealEstateService from "./RealEstateService";
+import { useNavigate, useParams } from "react-router-dom";
+import API from "../API";
 
-interface Props {
-  onChange: () => void;
-  realEstate: RealEstate;
-}
+const RealEstateEdit: React.FC = () => {
+  const navigate = useNavigate();
 
-export default function RealEstateEdit(props: Props) {
-  const [initialRealEstate] = useState<RealEstate>(props.realEstate);
-  const [realEstate, setRealEstate] = useState<RealEstate>(props.realEstate);
+  let { id } = useParams();
+  React.useEffect(() => {
+    if (id !== "new") {
+      API.get(`/api/real-estates/${id}`)
+        .then((result) => result.data)
+        .then((realEstate) => {
+          setRealEstate(realEstate);
+          setInitalState(realEstate);
+        });
+    }
+  }, [id]);
+  const [initialState, setInitalState] = useState<RealEstate>(new RealEstate());
+  const [realEstate, setRealEstate] = useState<RealEstate>(initialState);
   const [errors, setErrors] = useState(new Map<string, string>());
 
   function onChange(event: ChangeEvent<HTMLInputElement>) {
@@ -65,10 +75,10 @@ export default function RealEstateEdit(props: Props) {
             onSave={RealEstateService.save}
             name={"Liegenschaft"}
             object={realEstate}
-            initialState={initialRealEstate}
-            onSuccess={props.onChange}
+            initialState={initialState}
+            onSuccess={() => navigate("/real-estates")}
             onError={setErrors}
-            onCancel={props.onChange}
+            onCancel={() => navigate("/real-estates")}
             onDelete={RealEstateService.delete}
             canDelete={realEstate._id !== undefined}
           />
@@ -76,4 +86,6 @@ export default function RealEstateEdit(props: Props) {
       </Form>
     </Segment>
   );
-}
+};
+
+export default RealEstateEdit;

@@ -11,14 +11,13 @@ import ServiceCatlog from "../order/ServiceCatalog";
 interface Props {
   onAdd: () => void;
   onSelect: (selectedService: Service) => void;
-  onServiceCatalogSelect: (serviceCatalog?: ServiceCatlog) => void;
   selectedServiceCatalog?: ServiceCatlog;
   serviceCatalogs: ServiceCatlog[];
   asPriceList: boolean;
 }
 
-const ServiceList: React.FC<Props> = (props: Props) => {
-  const { selectedServiceCatalog } = props;
+const ServiceList: React.FC<Props> = ({ serviceCatalogs, asPriceList, onSelect, onAdd }: Props) => {
+  const [selectedServiceCatalog, setSelectedServiceCatalog] = useState<ServiceCatlog>(serviceCatalogs[0]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [page, setPage] = useState<Page>(new Page("articleNumber", 200));
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -26,7 +25,11 @@ const ServiceList: React.FC<Props> = (props: Props) => {
 
   function search() {
     setIsLoading(true);
-    API.get("/api/services/?term=" + searchTerm + "&" + PageService.getPageAndSortParams(page))
+    API.get(
+      `/api/service-catalogs/${
+        selectedServiceCatalog._id
+      }/services/?term=${searchTerm}&${PageService.getPageAndSortParams(page)}`
+    )
       .then((res) => {
         return res.data.data === undefined ? [] : res.data.data;
       })
@@ -55,8 +58,8 @@ const ServiceList: React.FC<Props> = (props: Props) => {
       return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(placeHolderRow);
     }
     return services
-      .filter((s: Service) => s.serviceCatalogId === (selectedServiceCatalog ? selectedServiceCatalog.id : -1))
-      .map((service) => renderRow(props.asPriceList, service, props.onSelect));
+      .filter((s: Service) => s.serviceCatalogId === (selectedServiceCatalog ? selectedServiceCatalog._id : ""))
+      .map((service) => renderRow(asPriceList, service, onSelect));
   }
 
   function searchByTerm(searchTerm: string) {
@@ -65,25 +68,25 @@ const ServiceList: React.FC<Props> = (props: Props) => {
   }
 
   function mapCatalogToDropdownItems(): DropdownItemProps[] {
-    return props.serviceCatalogs.map((serviceCatalog: ServiceCatlog, index: number) => {
-      return { key: serviceCatalog.name, value: serviceCatalog.id, text: serviceCatalog.name };
+    return serviceCatalogs.map((serviceCatalog: ServiceCatlog, index: number) => {
+      return { key: serviceCatalog.name, value: serviceCatalog._id, text: serviceCatalog.name };
     });
   }
 
   function updateCatalog(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
-    const selected = props.serviceCatalogs.find((sc) => sc.id === (data.value as number));
-    props.onServiceCatalogSelect(selected);
+    const selected = serviceCatalogs.find((sc) => sc._id === (data.value as string));
+    setSelectedServiceCatalog(selected!);
   }
 
   return (
     <React.Fragment>
-      {props.asPriceList && <h1>Preisliste</h1>}
-      {!props.asPriceList && (
+      {asPriceList && <h1>Preisliste</h1>}
+      {!asPriceList && (
         <Form.Dropdown
           id="client"
           selection
           options={mapCatalogToDropdownItems()}
-          value={selectedServiceCatalog?.id}
+          value={selectedServiceCatalog?._id}
           onChange={updateCatalog}
         />
       )}
@@ -93,9 +96,9 @@ const ServiceList: React.FC<Props> = (props: Props) => {
             <Search
               onSearchChanged={searchByTerm}
               currentValue={searchTerm}
-              onAdd={props.onAdd}
+              onAdd={onAdd}
               labelAdd={"Neuen Service"}
-              searchFieldWidth={props.asPriceList ? 2 : 3}
+              searchFieldWidth={asPriceList ? 2 : 3}
               addButtondWidth={1}
             />
             <Table.Row>
@@ -119,7 +122,7 @@ const ServiceList: React.FC<Props> = (props: Props) => {
               >
                 Preis
               </Table.HeaderCell>
-              {!props.asPriceList && <Table.HeaderCell>Selektierbar</Table.HeaderCell>}
+              {!asPriceList && <Table.HeaderCell>Selektierbar</Table.HeaderCell>}
             </Table.Row>
           </Table.Header>
           <Table.Body>{renderRows()}</Table.Body>
@@ -145,9 +148,9 @@ const renderRow = (asPriceList: boolean, service: Service, onSelect: (service: S
   );
 };
 
-const placeHolderRow = () => {
+const placeHolderRow = (index: number) => {
   return (
-    <Table.Row>
+    <Table.Row key={`serice-placeholder-${index}`}>
       <Table.Cell>
         <Placeholder>
           <Placeholder.Paragraph>

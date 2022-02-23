@@ -1,4 +1,4 @@
 export default interface ServiceCatlog {
-  id: number;
+  _id: string;
   name: string;
 }

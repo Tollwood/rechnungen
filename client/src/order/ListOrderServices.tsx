@@ -27,7 +27,7 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
   }, []);
   function mapCatalogToDropdownItems() {
     return serviceCatalogs.map((sc: ServiceCatlog) => {
-      return { key: sc.name, value: sc.id, text: sc.name };
+      return { key: sc.name, value: sc._id, text: sc.name };
     });
   }
   function updateServiceCatalog(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {

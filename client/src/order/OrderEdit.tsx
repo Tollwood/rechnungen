@@ -123,7 +123,7 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
                 <ServicesOverview
                   asPriceList={true}
                   serviceCatalogs={props.serviceCatalogs}
-                  selectedServiceCatalog={props.serviceCatalogs.find((sc) => sc.id === order.serviceCatalogId)}
+                  selectedServiceCatalog={props.serviceCatalogs.find((sc) => sc._id === order.serviceCatalogId)}
                 />
               </Grid.Column>
             </Grid.Row>

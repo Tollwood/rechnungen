@@ -15,7 +15,7 @@ export default class ContractorService {
         .then(onSuccess)
         .catch((errors) => ErrorMapper.map(errors, onError));
     } else {
-      API.patch(`/api/contrators/${contractor._id}`, contractor)
+      API.put(`/api/contractors/${contractor._id}`, contractor)
         .then(onSuccess)
         .catch((errors) => ErrorMapper.map(errors, onError));
     }

@@ -64,10 +64,13 @@ export class RouterFactory {
   addUpdateResource<T extends Document>(router: Router, collection: Collection<T>) {
     router.put("/:id", async (req: Request, res: Response) => {
       const id = req?.params?.id;
+      console.log(id);
 
       try {
         const updatedResource: T = req.body as T;
+        console.log(updatedResource);
         delete updatedResource._id;
+
         const query = { _id: new ObjectId(id) } as Filter<Document>;
         const result = await collection.updateOne(query, { $set: updatedResource });
 

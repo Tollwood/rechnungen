@@ -32,5 +32,5 @@ export default class Order {
   realEstateAddress?: Address = new Address();
   clientName?: string;
   client: Address = new Address();
-  serviceCatalogId?: number;
+  serviceCatalogId?: string;
 }
