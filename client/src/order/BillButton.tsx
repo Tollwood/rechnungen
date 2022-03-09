@@ -2,11 +2,11 @@ import * as React from "react";
 import Order from "./Order";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import BillService from "../billing/BillService";
-import { Button, Grid } from "semantic-ui-react";
 import Billpdf from "../billing/Billpdf";
 import Service from "./Service";
 import Helper from "../common/Helper";
 import Company from "../contractors/Company";
+import { Grid, Button } from "@mui/material";
 
 interface BillDetailsProps {
   order: Order;
@@ -34,8 +34,8 @@ export default class BillButton extends React.Component<BillDetailsProps, BillDe
     }
     return (
       <React.Fragment>
-        <Grid.Row>
-          <Grid.Column width={16}>
+        <Grid container>
+          {/* <Grid item xs={16}>
             {!this.state.renderPdf ? (
               <Button
                 icon={"newspaper outline"}
@@ -69,25 +69,24 @@ export default class BillButton extends React.Component<BillDetailsProps, BillDe
                 </PDFDownloadLink>
               </React.Fragment>
             ) : null}
-          </Grid.Column>
-        </Grid.Row>
-        {this.state.renderPdf ? this.renderPdf() : null}
+          </Grid> */}
+
+          {this.state.renderPdf ? this.renderPdf() : null}
+        </Grid>
       </React.Fragment>
     );
   }
 
   private renderPdf() {
     return (
-      <Grid.Row>
-        <Grid.Column width={16}>
-          <PDFViewer width={"100%"} height={"800px"}>
-            <Billpdf
-              company={this.props.company}
-              bill={BillService.createNewBill(this.props.order.billNo, this.props.order.billDate, this.props.order)}
-            />
-          </PDFViewer>
-        </Grid.Column>
-      </Grid.Row>
+      <Grid item xs={12}>
+        <PDFViewer width={"100%"} height={"800px"}>
+          <Billpdf
+            company={this.props.company}
+            bill={BillService.createNewBill(this.props.order.billNo, this.props.order.billDate, this.props.order)}
+          />
+        </PDFViewer>
+      </Grid>
     );
   }
 

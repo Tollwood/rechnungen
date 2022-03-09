@@ -2,8 +2,8 @@ import * as React from "react";
 import { ContentType } from "./ContentType";
 import { Content } from "./Content";
 import { MenuCard } from "./MenuCard";
-import { Card } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import { Paper } from "@mui/material";
 interface State {
   contents: Content[];
 }
@@ -18,13 +18,13 @@ const Menu: React.FC = () => {
     new Content(ContentType.SERVICES, "Servicekatalog", "sign language", "service-overview-card", "/services"),
   ];
   return (
-    <Card.Group itemsPerRow={2}>
+    <Paper>
       {contents.map((content: Content) => (
         <Link to={content.link} key={content.type}>
           <MenuCard content={content} />
         </Link>
       ))}
-    </Card.Group>
+    </Paper>
   );
 
   // } else if (this.state.contents.find((content: Content) => this.props.activeContent === content.type)) {

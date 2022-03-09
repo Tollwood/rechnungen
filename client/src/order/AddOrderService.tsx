@@ -1,11 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import OrderItem from "./OrderItem";
-import { ButtonProps, Dropdown, DropdownProps } from "semantic-ui-react";
 import Service from "./Service";
-import Input from "semantic-ui-react/dist/commonjs/elements/Input";
-import Button from "semantic-ui-react/dist/commonjs/elements/Button";
-import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
 
 interface AddOrderServiceProps {
   services: Service[];
@@ -16,8 +12,8 @@ interface AddOrderServiceProps {
 const AddOrderService: React.FC<AddOrderServiceProps> = (props: AddOrderServiceProps) => {
   const [amount, setAmount] = useState<number>(0);
   const [selectedService, setSelectedService] = useState<Service>();
-  const inputRef = React.useRef<Input>();
-  const addService = (event: React.MouseEvent<HTMLButtonElement>, data: ButtonProps) => {
+  const inputRef = React.useRef<any>();
+  const addService = (event: React.MouseEvent<HTMLButtonElement>, data: any) => {
     if (selectedService) {
       const updatedOrderServices: OrderItem[] = [...props.orderItems];
       updatedOrderServices.push({
@@ -35,7 +31,7 @@ const AddOrderService: React.FC<AddOrderServiceProps> = (props: AddOrderServiceP
 
   return (
     <tr>
-      <td>
+      {/* <td>
         <Input
           style={{ width: "80px" }}
           value={amount}
@@ -75,7 +71,7 @@ const AddOrderService: React.FC<AddOrderServiceProps> = (props: AddOrderServiceP
         <Button color={"green"} onClick={addService}>
           <Icon name={"add"} />
         </Button>
-      </td>
+      </td> */}
     </tr>
   );
 };
@@ -106,11 +102,7 @@ const computeAvailableServicesByTitle = (
     });
 };
 
-const selectService = (
-  data: DropdownProps,
-  services: Service[],
-  setSelectedService: (s: Service | undefined) => void
-) => {
+const selectService = (data: any, services: Service[], setSelectedService: (s: Service | undefined) => void) => {
   const selectedService = services.find((service: Service) => service.articleNumber === data.value);
   setSelectedService(selectedService);
 };

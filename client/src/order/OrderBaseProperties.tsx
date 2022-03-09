@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ChangeEvent } from "react";
-import { Checkbox, DropdownItemProps, DropdownProps, Form, Grid } from "semantic-ui-react";
 import Order from "./Order";
 import Contractor from "../contractors/Contractor";
 import RealEstate from "../realestate/RealEstate";
@@ -9,18 +8,18 @@ import OrderIdInput from "./OrderIdInput";
 import SelectRealEstate from "./SelectRealEstate";
 import Helper from "../common/Helper";
 import NameValue from "../common/NameValue";
-import ClientTemplate from "../clientTemplate/ClientTemplate";
+import Customer from "../customers/Customer";
 
 interface OrderEditProps {
   order: Order;
   handleOrderChange: (name: string, value: any) => void;
-  updateClent: (clientTemplate: ClientTemplate) => void;
+  updateClent: (clientTemplate: Customer) => void;
   updateRealEstate: (realEstate?: RealEstate) => void;
   contractors: Contractor[];
   realEstates: RealEstate[];
   readOnly: boolean;
   errors: Map<string, string>;
-  clientTemplates: ClientTemplate[];
+  clientTemplates: Customer[];
 }
 
 const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) => {
@@ -31,7 +30,7 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
 
     return (
       <React.Fragment>
-        <Grid.Row>
+        {/* <Grid.Row>
           <Grid.Column computer={4} tablet={4} mobile={8}>
             <Form.Field>
               <label>Auftrags-ID</label>
@@ -145,7 +144,7 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
               />
             </Form.Field>
           </Grid.Column>
-        </Grid.Row>
+        </Grid.Row> */}
       </React.Fragment>
     );
   }
@@ -158,27 +157,27 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
     props.handleOrderChange("smallOrder", !props.order.smallOrder);
   }
 
-  function mapContractorToDropdownItems(contractors: Contractor[]): DropdownItemProps[] {
+  function mapContractorToDropdownItems(contractors: Contractor[]): any[] {
     return contractors.map((emp: Contractor) => {
       let text = emp.technicianId + " " + emp.firstName + " " + emp.lastName;
       return { key: emp.technicianId, value: emp._id, text: text };
     });
   }
 
-  function updateContractor(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+  function updateContractor(event: React.SyntheticEvent<HTMLElement>, data: any) {
     props.handleOrderChange(
       "contractor",
       props.contractors.find((t) => t._id === data.value)
     );
   }
 
-  function mapCLientToDropdownItems(clients: ClientTemplate[]): DropdownItemProps[] {
-    return clients.map((client: ClientTemplate, index: number) => {
+  function mapCLientToDropdownItems(clients: Customer[]): any[] {
+    return clients.map((client: Customer, index: number) => {
       return { key: client.name, value: index, text: client.name };
     });
   }
 
-  function updateClient(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+  function updateClient(event: React.SyntheticEvent<HTMLElement>, data: any) {
     const clientTemplate = props.clientTemplates[data.value as number];
 
     props.updateClent(clientTemplate);
@@ -193,7 +192,7 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
   function renderReadOnly() {
     return (
       <React.Fragment>
-        <Grid.Row>
+        {/* <Grid.Row>
           <Grid.Column
             computer={props.order.smallOrder === true ? 4 : 8}
             tablet={props.order.smallOrder === true ? 4 : 8}
@@ -262,7 +261,7 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
               </Grid.Column>
             )}
           </Grid.Row>
-        ) : null}
+        ) : null} */}
       </React.Fragment>
     );
   }

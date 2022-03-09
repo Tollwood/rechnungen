@@ -1,74 +1,63 @@
-import Contractor from "./Contractor";
 import * as React from "react";
-import ContractorList from "./ContractorList";
-import ContractorEdit from "./ContractorEdit";
-import API from "../API";
+import { useNavigate, NavigateFunction } from "react-router-dom";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 
-interface ContractorOverviewState {
-  contractors: Contractor[];
-  selectedContractor: Contractor;
-  editContractor: boolean;
-  isLoading: boolean;
-}
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import OverviewPage from "./OverviewPage";
+import Contractor from "./Contractor";
 
-export default class ContractorOverview extends React.Component<{}, ContractorOverviewState> {
-  constructor(props: {}) {
-    super(props);
-    this.state = { contractors: [], editContractor: false, selectedContractor: new Contractor(), isLoading: true };
-  }
+const ContractorOverview: React.FC = () => {
+  const navigate = useNavigate();
+  return (
+    <OverviewPage
+      columns={getColumns(navigate)}
+      urlPath="/contractors"
+      apiPath="/api/contractors"
+      labelAdd="Auftragnehmer hinzufügen"
+    />
+  );
+};
 
-  componentDidMount(): void {
-    this.refresh();
-  }
+const getColumns = (navigate: NavigateFunction): GridColDef[] => {
+  return [
+    //     address: {street: "34234234", houseNumber: "234234", zipCode: "34234", city: "234234"}
+    // bankDetails: {bic: "234234", iban: "325234", bankName: "234234"}
+    // email: "234234"
+    // firstName: "Tobias"
+    // lastName: "Schlüter"
+    // phone: "2342342"
+    // taxIdent: "342342"
+    // technicianId: "1"
+    // _id: "6216c07b20f92da13df03362"
+    {
+      field: "technicanId",
+      headerName: "Kürzel",
+      flex: 1,
+      valueGetter: (value) => value.row.technicianId,
+    },
+    {
+      field: "firstName",
+      headerName: "Vorname",
+      width: 160,
+    },
+    {
+      field: "lastName",
+      headerName: "Nachname",
+      flex: 1,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 120,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams<Contractor>) => (
+        <IconButton aria-label="edit" size="small" onClick={() => navigate(`/contractors/${params.row._id}`)}>
+          <EditIcon fontSize="inherit" />
+        </IconButton>
+      ),
+    },
+  ] as GridColDef[];
+};
 
-  render() {
-    return (
-      <div className={"contractor-overview"}>
-        {this.state.editContractor ? null : (
-          <ContractorList
-            contractors={this.state.contractors}
-            onAddContractor={this.handleAddContractor.bind(this)}
-            onSelect={(contractor: Contractor) => {
-              this.handleSelectedContractor(contractor);
-            }}
-            isLoading={this.state.isLoading}
-          />
-        )}
-        {!this.state.editContractor ? null : (
-          <ContractorEdit
-            contrator={this.state.selectedContractor}
-            onCancelEdit={this.handleCancelEdit.bind(this)}
-            onSave={this.handleSavedContractor.bind(this)}
-          />
-        )}
-      </div>
-    );
-  }
-
-  private handleAddContractor() {
-    this.setState(Object.assign(this.state, { editContractor: true, selectedContractor: new Contractor() }));
-  }
-
-  private handleSelectedContractor(selectedContractor: Contractor) {
-    this.setState(Object.assign(this.state, { editContractor: true, selectedContractor: selectedContractor }));
-  }
-
-  private handleCancelEdit() {
-    this.setState(Object.assign(this.state, { editContractor: false, selectedContractor: new Contractor() }));
-  }
-
-  private handleSavedContractor() {
-    this.setState(Object.assign(this.state, { editContractor: false, selectedContractor: new Contractor() }));
-    this.refresh();
-  }
-
-  private refresh() {
-    this.setState({ isLoading: true });
-    API.get("/api/contractors")
-      .then((res) => {
-        return res.data;
-      })
-      .then((data) => this.setState({ contractors: data.data }))
-      .finally(() => this.setState({ isLoading: false }));
-  }
-}
+export default ContractorOverview;

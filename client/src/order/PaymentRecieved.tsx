@@ -1,7 +1,5 @@
 import * as React from "react";
 import Order from "./Order";
-import { DateInput } from "semantic-ui-calendar-react";
-import { Form, Grid } from "semantic-ui-react";
 
 interface BillDetailsProps {
   order: Order;
@@ -27,7 +25,7 @@ export default class PaymentRecieved extends React.Component<BillDetailsProps, {
   private edit() {
     return (
       <React.Fragment>
-        <Grid.Row>
+        {/* <Grid.Row>
           <Grid.Column computer={5} tablet={5} mobile={8}>
             <Form.Field>
               <label>Zahlung erhalten am: </label>
@@ -40,7 +38,7 @@ export default class PaymentRecieved extends React.Component<BillDetailsProps, {
                 placeholder="Zahlungseingang wählen"
                 value={this.props.order.paymentRecievedDate ? this.props.order.paymentRecievedDate : ""}
                 iconPosition="left"
-                onChange={(e, { name, value }) => this.props.handleOrderChange(name, value)}
+                // onChange={(e, { name, value }) => this.props.handleOrderChange(name, value)}
                 error={
                   this.props.errors.get("paymentRecievedDate")
                     ? { content: this.props.errors.get("paymentRecievedDate") }
@@ -49,21 +47,21 @@ export default class PaymentRecieved extends React.Component<BillDetailsProps, {
               />
             </Form.Field>
           </Grid.Column>
-        </Grid.Row>
+        </Grid.Row> */}
       </React.Fragment>
     );
   }
   private readOnly() {
     return (
       <React.Fragment>
-        <Grid.Row>
+        {/* <Grid.Row>
           <Grid.Column computer={5} tablet={5} mobile={8}>
             <Form.Field inline>
               <label>Zahlung erhalten am: </label>
               <span>{this.props.order.paymentRecievedDate}</span>
             </Form.Field>
           </Grid.Column>
-        </Grid.Row>
+        </Grid.Row> */}
       </React.Fragment>
     );
   }

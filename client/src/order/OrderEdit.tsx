@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button, Form, Grid, Segment } from "semantic-ui-react";
 import Order from "./Order";
 import Contractor from "../contractors/Contractor";
 import OrderItem from "./OrderItem";
@@ -24,7 +23,7 @@ import RealEstateService from "../realestate/RealEstateService";
 import ServiceService from "../services/ServiceService";
 import ContractorService from "../contractors/ContractorService";
 import UnsavedChangesModal from "../UnsavedChangesModal";
-import ClientTemplate from "../clientTemplate/ClientTemplate";
+import Customer from "../customers/Customer";
 import ServicesOverview from "../services/ServicesOverview";
 import ServiceCatlog from "./ServiceCatalog";
 
@@ -34,7 +33,7 @@ interface Props {
   onDelete: () => void;
   orderId?: number;
   company: Company;
-  clientTemplates: ClientTemplate[];
+  clientTemplates: Customer[];
   serviceCatalogs: ServiceCatlog[];
 }
 
@@ -77,123 +76,124 @@ const OrderEdit: React.FC<Props> = (props: Props) => {
   }
 
   return (
-    <Segment>
-      <Form autoComplete={"off"}>
-        <Grid>
-          <OrderStatusSteps
-            status={order.status}
-            statusChanged={(status: OrderStatus) => handleOrderChange("status", status)}
-          />
-          <OrderBaseProperties
-            order={order}
-            clientTemplates={props.clientTemplates}
-            handleOrderChange={handleOrderChange}
-            realEstates={realEstates}
-            updateRealEstate={(realEstate?: RealEstate) =>
-              setOrder({ ...order, realEstate: realEstate, realEstateAddress: realEstate?.address })
-            }
-            contractors={contractors}
-            readOnly={order.status !== "ORDER_EDIT"}
-            updateClent={(clientTemplate: ClientTemplate) => {
-              console.log(clientTemplate);
-              setOrder({
-                ...order,
-                clientName: clientTemplate.name,
-                client: clientTemplate,
-                serviceCatalogId: clientTemplate.serviceCatalogId,
-              });
-            }}
-            errors={errors}
-          />
+    // <Segment>
+    //   <Form autoComplete={"off"}>
+    //     <Grid>
+    //       <OrderStatusSteps
+    //         status={order.status}
+    //         statusChanged={(status: OrderStatus) => handleOrderChange("status", status)}
+    //       />
+    //       <OrderBaseProperties
+    //         order={order}
+    //         clientTemplates={props.clientTemplates}
+    //         handleOrderChange={handleOrderChange}
+    //         realEstates={realEstates}
+    //         updateRealEstate={(realEstate?: RealEstate) =>
+    //           setOrder({ ...order, realEstate: realEstate, realEstateAddress: realEstate?.address })
+    //         }
+    //         contractors={contractors}
+    //         readOnly={order.status !== "ORDER_EDIT"}
+    //         updateClent={(clientTemplate: ClientTemplate) => {
+    //           console.log(clientTemplate);
+    //           setOrder({
+    //             ...order,
+    //             clientName: clientTemplate.name,
+    //             client: clientTemplate,
+    //             serviceCatalogId: clientTemplate.serviceCatalogId,
+    //           });
+    //         }}
+    //         errors={errors}
+    //       />
 
-          <OrderAppointments handleOrderChange={handleOrderChange} order={order} errors={errors} />
-          {order.status === "ORDER_EDIT" || order.status === "ORDER_EXECUTE" ? (
-            <Grid.Row centered>
-              <Grid.Column width="8">
-                <ListOrderServices
-                  order={order}
-                  services={services}
-                  onOrderItemsChanged={updateOrderServies}
-                  onCatalogChanged={(serviceCatalogId: number) =>
-                    handleOrderChange("serviceCatalogId", serviceCatalogId)
-                  }
-                />
-              </Grid.Column>
-              <Grid.Column width="8" style={{ marginTop: "40px" }}>
-                <ServicesOverview
-                  asPriceList={true}
-                  serviceCatalogs={props.serviceCatalogs}
-                  selectedServiceCatalog={props.serviceCatalogs.find((sc) => sc._id === order.serviceCatalogId)}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          ) : null}
+    //       <OrderAppointments handleOrderChange={handleOrderChange} order={order} errors={errors} />
+    //       {order.status === "ORDER_EDIT" || order.status === "ORDER_EXECUTE" ? (
+    //         <Grid.Row centered>
+    //           <Grid.Column width="8">
+    //             <ListOrderServices
+    //               order={order}
+    //               services={services}
+    //               onOrderItemsChanged={updateOrderServies}
+    //               onCatalogChanged={(serviceCatalogId: number) =>
+    //                 handleOrderChange("serviceCatalogId", serviceCatalogId)
+    //               }
+    //             />
+    //           </Grid.Column>
+    //           <Grid.Column width="8" style={{ marginTop: "40px" }}>
+    //             <ServicesOverview
+    //               asPriceList={true}
+    //               serviceCatalogs={props.serviceCatalogs}
+    //               selectedServiceCatalog={props.serviceCatalogs.find((sc) => sc._id === order.serviceCatalogId)}
+    //             />
+    //           </Grid.Column>
+    //         </Grid.Row>
+    //       ) : null}
 
-          <OrderKmPauschale handleOrderChange={handleOrderChange} order={order} errors={errors} />
-          {order.status === "ORDER_BILL" && (
-            <BillDetails order={order} handleOrderChange={handleOrderChange} errors={errors} />
-          )}
-          {order.status === "ORDER_BILL" && <BillButton company={props.company} order={order} services={services} />}
-          <PaymentRecieved order={order} handleOrderChange={handleOrderChange} errors={errors} />
-          <Grid.Row centered>
-            <Grid.Column width={5} floated="left">
-              {order.status === Helper.nextStatus(order.status) ? null : (
-                <OrderAddButton
-                  order={order}
-                  realEstates={realEstates}
-                  onSuccess={onSuccessSave}
-                  onError={(errors: Map<string, string>) => {
-                    setErrors(errors);
-                  }}
-                />
-              )}
-            </Grid.Column>
-            <Grid.Column width={5}>
-              <Button
-                className={"cancel-bttn"}
-                content="Abbrechen"
-                icon="cancel"
-                labelPosition="left"
-                onClick={() => {
-                  if (initialState !== order) {
-                    setShowUnsavedChangesModal(true);
-                  } else {
-                    props.onCancelEdit();
-                  }
-                }}
-              />
-            </Grid.Column>
-            <Grid.Column width={5} floated="right">
-              {order.id !== undefined && order.status !== "PAYMENT_RECIEVED" && (
-                <Button
-                  className={"delete-bttn"}
-                  floated={"right"}
-                  color={"red"}
-                  content={"Löschen"}
-                  icon="trash"
-                  labelPosition="left"
-                  onClick={() => setShowDeleteModal(true)}
-                />
-              )}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Form>
-      <DeleteModal
-        objectToDelete={"Auftrag"}
-        show={showDeleteModal}
-        onSuccess={() => {
-          OrderService.delete(order, onDeleteSuccess);
-        }}
-        onClose={() => setShowDeleteModal(false)}
-      />
-      <UnsavedChangesModal
-        name={"Auftrag"}
-        show={showUnsavedChangesModal}
-        onSuccess={props.onCancelEdit}
-        onClose={() => setShowUnsavedChangesModal(false)}
-      />
-    </Segment>
+    //       <OrderKmPauschale handleOrderChange={handleOrderChange} order={order} errors={errors} />
+    //       {order.status === "ORDER_BILL" && (
+    //         <BillDetails order={order} handleOrderChange={handleOrderChange} errors={errors} />
+    //       )}
+    //       {order.status === "ORDER_BILL" && <BillButton company={props.company} order={order} services={services} />}
+    //       <PaymentRecieved order={order} handleOrderChange={handleOrderChange} errors={errors} />
+    //       <Grid.Row centered>
+    //         <Grid.Column width={5} floated="left">
+    //           {order.status === Helper.nextStatus(order.status) ? null : (
+    //             <OrderAddButton
+    //               order={order}
+    //               realEstates={realEstates}
+    //               onSuccess={onSuccessSave}
+    //               onError={(errors: Map<string, string>) => {
+    //                 setErrors(errors);
+    //               }}
+    //             />
+    //           )}
+    //         </Grid.Column>
+    //         <Grid.Column width={5}>
+    //           <Button
+    //             className={"cancel-bttn"}
+    //             content="Abbrechen"
+    //             icon="cancel"
+    //             labelPosition="left"
+    //             onClick={() => {
+    //               if (initialState !== order) {
+    //                 setShowUnsavedChangesModal(true);
+    //               } else {
+    //                 props.onCancelEdit();
+    //               }
+    //             }}
+    //           />
+    //         </Grid.Column>
+    //         <Grid.Column width={5} floated="right">
+    //           {order.id !== undefined && order.status !== "PAYMENT_RECIEVED" && (
+    //             <Button
+    //               className={"delete-bttn"}
+    //               floated={"right"}
+    //               color={"red"}
+    //               content={"Löschen"}
+    //               icon="trash"
+    //               labelPosition="left"
+    //               onClick={() => setShowDeleteModal(true)}
+    //             />
+    //           )}
+    //         </Grid.Column>
+    //       </Grid.Row>
+    //     </Grid>
+    //   </Form>
+    //   <DeleteModal
+    //     objectToDelete={"Auftrag"}
+    //     show={showDeleteModal}
+    //     onSuccess={() => {
+    //       OrderService.delete(order, onDeleteSuccess);
+    //     }}
+    //     onClose={() => setShowDeleteModal(false)}
+    //   />
+    //   <UnsavedChangesModal
+    //     name={"Auftrag"}
+    //     show={showUnsavedChangesModal}
+    //     onSuccess={props.onCancelEdit}
+    //     onClose={() => setShowUnsavedChangesModal(false)}
+    //   />
+    // </Segment>
+    <div></div>
   );
 
   function onDeleteSuccess() {

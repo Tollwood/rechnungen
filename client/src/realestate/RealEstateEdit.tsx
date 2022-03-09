@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ChangeEvent, useState } from "react";
-import { Form, FormInput, Grid, Segment } from "semantic-ui-react";
 import RealEstate from "./RealEstate";
 import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
@@ -39,52 +38,53 @@ const RealEstateEdit: React.FC = () => {
   }
 
   return (
-    <Segment>
-      {realEstate._id === undefined ? <h1>Neue Liegenschaft</h1> : <h1>Liegenschaft Bearbeiten</h1>}
-      <Form>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={8}>
-              <Form.Field>
-                <label>Bezeichnung</label>
-                <FormInput
-                  id="name"
-                  placeholder="Bezeichnung"
-                  value={realEstate.name}
-                  name="name"
-                  onChange={onChange}
-                  error={errors.get("name") ? { content: errors.get("name") } : null}
-                />
-              </Form.Field>
-            </Grid.Column>
-            <Grid.Column width={8}>
-              <Form.Field>
-                <label>Entfernung</label>
-                <input
-                  id="distance"
-                  placeholder="Entfernung"
-                  value={realEstate.distance}
-                  name="distance"
-                  onChange={onChange}
-                />
-              </Form.Field>
-            </Grid.Column>
-          </Grid.Row>
-          <AddressInput address={realEstate.address} handleAddressChange={handleAddressChange} errors={new Map()} />
-          <CUDButtons
-            onSave={RealEstateService.save}
-            name={"Liegenschaft"}
-            object={realEstate}
-            initialState={initialState}
-            onSuccess={() => navigate("/real-estates")}
-            onError={setErrors}
-            onCancel={() => navigate("/real-estates")}
-            onDelete={RealEstateService.delete}
-            canDelete={realEstate._id !== undefined}
-          />
-        </Grid>
-      </Form>
-    </Segment>
+    // <Segment>
+    //   {realEstate._id === undefined ? <h1>Neue Liegenschaft</h1> : <h1>Liegenschaft Bearbeiten</h1>}
+    //   <Form>
+    //     <Grid>
+    //       <Grid.Row>
+    //         <Grid.Column width={8}>
+    //           <Form.Field>
+    //             <label>Bezeichnung</label>
+    //             <FormInput
+    //               id="name"
+    //               placeholder="Bezeichnung"
+    //               value={realEstate.name}
+    //               name="name"
+    //               onChange={onChange}
+    //               error={errors.get("name") ? { content: errors.get("name") } : null}
+    //             />
+    //           </Form.Field>
+    //         </Grid.Column>
+    //         <Grid.Column width={8}>
+    //           <Form.Field>
+    //             <label>Entfernung</label>
+    //             <input
+    //               id="distance"
+    //               placeholder="Entfernung"
+    //               value={realEstate.distance}
+    //               name="distance"
+    //               onChange={onChange}
+    //             />
+    //           </Form.Field>
+    //         </Grid.Column>
+    //       </Grid.Row>
+    //       <AddressInput address={realEstate.address} handleAddressChange={handleAddressChange} errors={new Map()} />
+    //       <CUDButtons
+    //         onSave={RealEstateService.save}
+    //         name={"Liegenschaft"}
+    //         object={realEstate}
+    //         initialState={initialState}
+    //         onSuccess={() => navigate("/real-estates")}
+    //         onError={setErrors}
+    //         onCancel={() => navigate("/real-estates")}
+    //         onDelete={RealEstateService.delete}
+    //         canDelete={realEstate._id !== undefined}
+    //       />
+    //     </Grid>
+    //   </Form>
+    // </Segment>
+    <div></div>
   );
 };
 

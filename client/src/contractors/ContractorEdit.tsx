@@ -1,14 +1,13 @@
 import Contractor from "./Contractor";
 import * as React from "react";
 import { ChangeEvent, useState } from "react";
-import { Form, Segment } from "semantic-ui-react";
-import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
 import CUDButtons from "../common/CUDButtons";
 import AddressInput from "../common/AddressInput";
 import BankInput from "../common/BankInput";
 import ErrorMapper from "../ErrorMapper";
 import NameValue from "../common/NameValue";
 import ContractorService from "./ContractorService";
+import { Grid, Paper, TextField } from "@mui/material";
 
 interface Props {
   onSave: () => void;
@@ -40,67 +39,54 @@ export default function ContractorEdit(props: Props) {
   }
 
   return (
-    <Segment>
-      <Form>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={3}>
-              <Form.Field>
-                <label>Monteur</label>
-                <Form.Input
-                  id="technicianId"
-                  placeholder="Monteur"
-                  value={contractor.technicianId}
-                  name="technicianId"
-                  onChange={onChange}
-                  error={errors.get("technicianId") ? { content: errors.get("technicianId") } : null}
-                />
-              </Form.Field>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column width={8}>
-              <Form.Field>
-                <label>Vorname</label>
-                <Form.Input
-                  id="firstName"
-                  placeholder="Vorname"
-                  value={contractor.firstName}
-                  name="firstName"
-                  onChange={onChange}
-                  error={errors.get("firstName") ? { content: errors.get("firstName") } : null}
-                />
-              </Form.Field>
-            </Grid.Column>
-            <Grid.Column width={8}>
-              <Form.Field>
-                <label>Nachname</label>
-                <Form.Input
-                  id="lastName"
-                  placeholder="Nachname"
-                  value={contractor.lastName}
-                  name="lastName"
-                  onChange={onChange}
-                  error={errors.get("lastName") ? { content: errors.get("lastName") } : null}
-                />
-              </Form.Field>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column width={8}>
-              <Form.Field>
-                <label>Email</label>
-                <Form.Input
-                  id="email"
-                  placeholder="Email"
-                  value={contractor.email}
-                  name="email"
-                  onChange={onChange}
-                  error={errors.get("email") ? { content: errors.get("email") } : null}
-                />
-              </Form.Field>
-            </Grid.Column>
-            <Grid.Column width={8}>
+    <Paper>
+      <Grid container>
+        <Grid item>
+          <Grid xs={12}>
+            <TextField
+              id="technicianId"
+              label="Monteur"
+              placeholder="Monteur"
+              value={contractor.technicianId}
+              name="technicianId"
+              onChange={onChange}
+              //error={errors.get("technicianId") ? { content: errors.get("technicianId") } : null}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="firstName"
+              label="Vorname"
+              placeholder="Vorname"
+              value={contractor.firstName}
+              name="firstName"
+              onChange={onChange}
+              //error={errors.get("firstName") ? { content: errors.get("firstName") } : null}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="lastName"
+              label="Nachname"
+              placeholder="Nachname"
+              value={contractor.lastName}
+              name="lastName"
+              onChange={onChange}
+              // error={errors.get("lastName") ? { content: errors.get("lastName") } : null}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="email"
+              label="Email"
+              placeholder="Email"
+              value={contractor.email}
+              name="email"
+              onChange={onChange}
+              // error={errors.get("email") ? { content: errors.get("email") } : null}
+            />
+          </Grid>
+          {/* <Grid.Column width={8}>
               <Form.Field>
                 <label>Telefon</label>
                 <Form.Input
@@ -143,7 +129,7 @@ export default function ContractorEdit(props: Props) {
             <Grid.Column>
               <h4>Bankdaten</h4>
             </Grid.Column>
-          </Grid.Row>
+          </Grid.Row> */}
           <BankInput
             bankDetails={contractor.bankDetails}
             handleBankDetailsChange={handleBankDetailsChange}
@@ -162,7 +148,7 @@ export default function ContractorEdit(props: Props) {
             canDelete={contractor._id !== undefined}
           />
         </Grid>
-      </Form>
-    </Segment>
+      </Grid>
+    </Paper>
   );
 }

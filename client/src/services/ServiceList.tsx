@@ -1,6 +1,5 @@
 import * as React from "react";
 import Service from "../order/Service";
-import { DropdownItemProps, DropdownProps, Form, Icon, Placeholder, Table } from "semantic-ui-react";
 import { Page } from "../common/Page";
 import { PageService } from "../common/PageService";
 import API from "../API";
@@ -67,28 +66,31 @@ const ServiceList: React.FC<Props> = ({ serviceCatalogs, asPriceList, onSelect, 
     setSearchTerm(searchTerm);
   }
 
-  function mapCatalogToDropdownItems(): DropdownItemProps[] {
+  function mapCatalogToDropdownItems(): any[] {
     return serviceCatalogs.map((serviceCatalog: ServiceCatlog, index: number) => {
-      return { key: serviceCatalog.name, value: serviceCatalog._id, text: serviceCatalog.name };
+      return { key: serviceCatalog._id, value: serviceCatalog._id, text: serviceCatalog.name };
     });
   }
 
-  function updateCatalog(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+  function updateCatalog(event: React.SyntheticEvent<HTMLElement>, data: any) {
     const selected = serviceCatalogs.find((sc) => sc._id === (data.value as string));
     setSelectedServiceCatalog(selected!);
   }
 
   return (
     <React.Fragment>
-      {asPriceList && <h1>Preisliste</h1>}
+      {/* {asPriceList && <h1>Preisliste</h1>}
       {!asPriceList && (
-        <Form.Dropdown
-          id="client"
-          selection
-          options={mapCatalogToDropdownItems()}
-          value={selectedServiceCatalog?._id}
-          onChange={updateCatalog}
-        />
+        <h3>
+          Service Katalog
+          <Form.Dropdown
+            id="client"
+            selection
+            options={mapCatalogToDropdownItems()}
+            value={selectedServiceCatalog?._id}
+            onChange={updateCatalog}
+          />
+        </h3>
       )}
       {selectedServiceCatalog && (
         <Table className="ui compact celled table selectable service-list" sortable>
@@ -127,59 +129,61 @@ const ServiceList: React.FC<Props> = ({ serviceCatalogs, asPriceList, onSelect, 
           </Table.Header>
           <Table.Body>{renderRows()}</Table.Body>
         </Table>
-      )}
+      )} */}
     </React.Fragment>
   );
 };
 
 const renderRow = (asPriceList: boolean, service: Service, onSelect: (service: Service) => void) => {
   return (
-    <Table.Row key={service.articleNumber} onClick={() => onSelect(service)}>
-      <Table.Cell>{service.articleNumber}</Table.Cell>
-      <Table.Cell>{service.title}</Table.Cell>
-      <Table.Cell>
-        {service.price.toLocaleString("de", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })}
-      </Table.Cell>
-      {!asPriceList && <Table.Cell>{service.selectable ? <Icon name={"check"} /> : null}</Table.Cell>}
-    </Table.Row>
+    <div></div>
+    // <Table.Row key={service.articleNumber} onClick={() => onSelect(service)}>
+    //   <Table.Cell>{service.articleNumber}</Table.Cell>
+    //   <Table.Cell>{service.title}</Table.Cell>
+    //   <Table.Cell>
+    //     {service.price.toLocaleString("de", {
+    //       minimumFractionDigits: 2,
+    //       maximumFractionDigits: 2,
+    //     })}
+    //   </Table.Cell>
+    //   {!asPriceList && <Table.Cell>{service.selectable ? <Icon name={"check"} /> : null}</Table.Cell>}
+    // </Table.Row>
   );
 };
 
 const placeHolderRow = (index: number) => {
   return (
-    <Table.Row key={`serice-placeholder-${index}`}>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-    </Table.Row>
+    <div></div>
+    // <Table.Row key={`serice-placeholder-${index}`}>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    // </Table.Row>
   );
 };
 

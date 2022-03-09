@@ -1,9 +1,13 @@
 import * as React from "react";
 import Service from "../order/Service";
-import ServiceEdit from "./ServiceEdit";
-import ServiceList from "./ServiceList";
+import { GridColDef, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
+import { useNavigate, NavigateFunction } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import { Box } from "@mui/material";
 import { useState } from "react";
 import ServiceCatlog from "../order/ServiceCatalog";
+import OverviewPage from "../contractors/OverviewPage";
 
 interface Props {
   serviceCatalogs: ServiceCatlog[];
@@ -11,45 +15,65 @@ interface Props {
   asPriceList: boolean;
 }
 
-const ServicesOverview: React.FC<Props> = (props: Props) => {
-  const [selectedItem, setSelectedItem] = useState<Service>();
-  const [selectedServiceCatlog] = useState<ServiceCatlog>();
+const ServicesOverview: React.FC<Props> = ({ serviceCatalogs }) => {
+  const [selectedServiceCatalog, setSelectedServiceCatalog] = useState<ServiceCatlog>(serviceCatalogs[0]);
 
-  function handleAdd() {
-    const service = new Service();
-    const sc = props.selectedServiceCatalog ? props.selectedServiceCatalog : selectedServiceCatlog;
-    service.serviceCatalogId = sc!._id;
-    setSelectedItem(service);
-  }
+  React.useEffect(() => setSelectedServiceCatalog(serviceCatalogs[0]), [serviceCatalogs]);
+  const navigate = useNavigate();
 
-  function handleSelection(selectedItem: Service) {
-    setSelectedItem(selectedItem);
-  }
-
-  function handleCancelEdit() {
-    setSelectedItem(undefined);
-  }
   return (
-    <div className={"service-overview"}>
-      {selectedItem ? (
-        <ServiceEdit
-          service={selectedItem}
-          onCancelEdit={handleCancelEdit}
-          onSave={handleCancelEdit}
-          onDelete={handleCancelEdit}
-        />
-      ) : (
-        <ServiceList
-          asPriceList={props.asPriceList}
-          serviceCatalogs={props.serviceCatalogs}
-          onAdd={handleAdd}
-          onSelect={(service: Service) => {
-            handleSelection(service);
-          }}
-          selectedServiceCatalog={props.selectedServiceCatalog ? props.selectedServiceCatalog : selectedServiceCatlog}
+    <React.Fragment>
+      {selectedServiceCatalog && (
+        <OverviewPage
+          labelAdd="Service hinzufügen"
+          urlPath="/services"
+          apiPath={`/api/service-catalogs/${selectedServiceCatalog._id}/services`}
+          columns={getColumns(navigate)}
         />
       )}
-    </div>
+    </React.Fragment>
   );
+};
+
+const getColumns = (navigate: NavigateFunction): GridColDef[] => {
+  return [
+    {
+      field: "articleNumber",
+      headerName: "Artikelnummer",
+      flex: 1,
+    },
+    {
+      field: "title",
+      headerName: "Bezeichnung",
+      flex: 1,
+    },
+    {
+      field: "price",
+      headerName: "Preis",
+      flex: 1,
+      renderCell: (params: GridRenderCellParams<Service>) => (
+        <Box width={"100%"} textAlign={"end"} pr={2}>{`${params.row.price.toLocaleString("de", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })} €`}</Box>
+      ),
+    },
+    {
+      field: "selectable",
+      headerName: "Selektierbar",
+      flex: 1,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 120,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams<Service>) => (
+        <IconButton aria-label="edit" size="small" onClick={() => navigate(`/services/${params.row._id}`)}>
+          <EditIcon fontSize="inherit" />
+        </IconButton>
+      ),
+    },
+  ];
 };
 export default ServicesOverview;

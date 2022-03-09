@@ -1,34 +1,31 @@
 import * as React from "react";
-import {ChangeEvent} from "react";
-import {Checkbox, Form, Grid} from 'semantic-ui-react'
+import { ChangeEvent } from "react";
 import Order from "./Order";
 
 interface OrderKmPauschaleProps {
-    handleOrderChange: (name: string, value: any) => void
-    order: Order;
-    errors: Map<string, string>;
+  handleOrderChange: (name: string, value: any) => void;
+  order: Order;
+  errors: Map<string, string>;
 }
 
 export default class OrderKmPauschale extends React.Component<OrderKmPauschaleProps, {}> {
-
-    render() {
-        switch (this.props.order.status) {
-            case 'ORDER_EXECUTE':
-                return this.renderEditable();
-            case 'ORDER_BILL':
-            case 'ORDER_BILL_RECIEVED':
-            case 'PAYMENT_RECIEVED':
-                return this.renderReadOnly();
-            case 'ORDER_EDIT':
-                return null;
-        }
+  render() {
+    switch (this.props.order.status) {
+      case "ORDER_EXECUTE":
+        return this.renderEditable();
+      case "ORDER_BILL":
+      case "ORDER_BILL_RECIEVED":
+      case "PAYMENT_RECIEVED":
+        return this.renderReadOnly();
+      case "ORDER_EDIT":
+        return null;
     }
+  }
 
-    private renderEditable() {
-
-        return (
-            <React.Fragment>
-                <Grid.Row>
+  private renderEditable() {
+    return (
+      <React.Fragment>
+        {/* <Grid.Row>
                     <Grid.Column computer={8} tablet={8} mobile={16}>
                         <Checkbox toggle
                                   name={"includeKmFee"}
@@ -49,21 +46,27 @@ export default class OrderKmPauschale extends React.Component<OrderKmPauschalePr
                                         error={this.props.errors.get('distance') ? {content: this.props.errors.get('distance')} : null}
                             />
                     </Grid.Column>
-                </Grid.Row>
-            </React.Fragment>
-        );
-    }
+                </Grid.Row> */}
+      </React.Fragment>
+    );
+  }
 
-    private renderReadOnly() {
-        return <Grid.Row>
-            <Grid.Column width={8}>
-                {this.props.order.includeKmFee ? <label style={{"fontWeight": "bold"}}>Inkl. KM-Pauschale</label> :
-                    <label style={{"fontWeight": "bold"}}>Ohne KM-Pauschale</label>}
-            </Grid.Column>
-        </Grid.Row>;
-    }
+  private renderReadOnly() {
+    return (
+      //   <Grid.Row>
+      //     <Grid.Column width={8}>
+      //       {this.props.order.includeKmFee ? (
+      //         <label style={{ fontWeight: "bold" }}>Inkl. KM-Pauschale</label>
+      //       ) : (
+      //         <label style={{ fontWeight: "bold" }}>Ohne KM-Pauschale</label>
+      //       )}
+      //     </Grid.Column>
+      //   </Grid.Row>
+      <div></div>
+    );
+  }
 
-    handleOrderChange(event: ChangeEvent<HTMLInputElement>) {
-        this.props.handleOrderChange(event.target.name, event.target.value);
-    }
+  handleOrderChange(event: ChangeEvent<HTMLInputElement>) {
+    this.props.handleOrderChange(event.target.name, event.target.value);
+  }
 }

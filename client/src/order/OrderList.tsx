@@ -1,6 +1,5 @@
 import * as React from "react";
 import Helper from "../common/Helper";
-import { Dropdown, DropdownProps, Icon, Pagination, PaginationProps, Placeholder, Table } from "semantic-ui-react";
 import { Page } from "../common/Page";
 import { PageService } from "../common/PageService";
 import API from "../API";
@@ -48,7 +47,7 @@ const OrderList: React.FC<OrderListProps> = (props: OrderListProps) => {
       .then((orders: Order[]) => setOrders(orders));
   }
 
-  function handlePaginationChange(data: PaginationProps) {
+  function handlePaginationChange(data: any) {
     setActivePage(data.activePage as number);
   }
 
@@ -59,7 +58,7 @@ const OrderList: React.FC<OrderListProps> = (props: OrderListProps) => {
 
   return (
     <React.Fragment>
-      <Table className="order-list" sortable striped>
+      {/* <Table className="order-list" sortable striped>
         <Table.Header>
           <Search
             onSearchChanged={searchByTerm}
@@ -121,57 +120,58 @@ const OrderList: React.FC<OrderListProps> = (props: OrderListProps) => {
             totalPages={totalPages}
           />
         </Table.Footer>
-      </Table>
+      </Table> */}
     </React.Fragment>
   );
 
   function renderRow(order: Order) {
     return (
-      <Table.Row key={order.orderId} onClick={() => props.onSelect(order)}>
-        <Table.Cell>{order.orderId}</Table.Cell>
-        <Table.Cell>
-          <div>
-            <div>{order.realEstate!!.name}</div>
-          </div>
-        </Table.Cell>
-        <Table.Cell>
-          <div>
-            <div>
-              {getRealEstateAddress(order).street} {getRealEstateAddress(order).houseNumber}
-            </div>
-            <div>
-              {getRealEstateAddress(order).zipCode} {getRealEstateAddress(order).city}
-            </div>
-          </div>
-        </Table.Cell>
-        <Table.Cell>{order.name ? order.name : "-"}</Table.Cell>
-        <Table.Cell>
-          {order
-            .billItems!.map((s) => s.amount * s.price)
-            .reduce((a, b) => a + b, 0)
-            .toLocaleString("de", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-        </Table.Cell>
-        <Table.Cell>
-          {(
-            order.billItems!.map((s) => s.amount * s.price).reduce((a, b) => a + b, 0) *
-            (1 + order.taxRate)
-          ).toLocaleString("de", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
-        </Table.Cell>
-        <Table.Cell>{order.billNo ? order.billNo : "-"}</Table.Cell>
-        <Table.Cell>
-          <Icon
-            name={Helper.getStatusIcon(order.status)}
-            color={order.status === "PAYMENT_RECIEVED" ? "green" : "grey"}
-          />{" "}
-          {Helper.getStatusName(order.status)}
-        </Table.Cell>
-      </Table.Row>
+      // <Table.Row key={order.orderId} onClick={() => props.onSelect(order)}>
+      //   <Table.Cell>{order.orderId}</Table.Cell>
+      //   <Table.Cell>
+      //     <div>
+      //       <div>{order.realEstate!!.name}</div>
+      //     </div>
+      //   </Table.Cell>
+      //   <Table.Cell>
+      //     <div>
+      //       <div>
+      //         {getRealEstateAddress(order).street} {getRealEstateAddress(order).houseNumber}
+      //       </div>
+      //       <div>
+      //         {getRealEstateAddress(order).zipCode} {getRealEstateAddress(order).city}
+      //       </div>
+      //     </div>
+      //   </Table.Cell>
+      //   <Table.Cell>{order.name ? order.name : "-"}</Table.Cell>
+      //   <Table.Cell>
+      //     {order
+      //       .billItems!.map((s) => s.amount * s.price)
+      //       .reduce((a, b) => a + b, 0)
+      //       .toLocaleString("de", {
+      //         minimumFractionDigits: 2,
+      //         maximumFractionDigits: 2,
+      //       })}
+      //   </Table.Cell>
+      //   <Table.Cell>
+      //     {(
+      //       order.billItems!.map((s) => s.amount * s.price).reduce((a, b) => a + b, 0) *
+      //       (1 + order.taxRate)
+      //     ).toLocaleString("de", {
+      //       minimumFractionDigits: 2,
+      //       maximumFractionDigits: 2,
+      //     })}
+      //   </Table.Cell>
+      //   <Table.Cell>{order.billNo ? order.billNo : "-"}</Table.Cell>
+      //   <Table.Cell>
+      //     <Icon
+      //       name={Helper.getStatusIcon(order.status)}
+      //       color={order.status === "PAYMENT_RECIEVED" ? "green" : "grey"}
+      //     />{" "}
+      //     {Helper.getStatusName(order.status)}
+      //   </Table.Cell>
+      // </Table.Row>
+      <div></div>
     );
   }
 
@@ -196,7 +196,7 @@ const OrderList: React.FC<OrderListProps> = (props: OrderListProps) => {
     setPage(newPage);
   }
 
-  function updateStatusFilter(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+  function updateStatusFilter(event: React.SyntheticEvent<HTMLElement>, data: any) {
     filterByStatus(data.value as string[]);
   }
 
@@ -221,64 +221,65 @@ const OrderList: React.FC<OrderListProps> = (props: OrderListProps) => {
 
 const placeHolderRow = (index: number) => {
   return (
-    <Table.Row key={index}>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-      <Table.Cell>
-        <Placeholder>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
-      </Table.Cell>
-    </Table.Row>
+    // <Table.Row key={index}>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    //   <Table.Cell>
+    //     <Placeholder>
+    //       <Placeholder.Paragraph>
+    //         <Placeholder.Line />
+    //       </Placeholder.Paragraph>
+    //     </Placeholder>
+    //   </Table.Cell>
+    // </Table.Row>
+    <div></div>
   );
 };
 export default OrderList;

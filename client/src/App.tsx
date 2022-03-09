@@ -1,26 +1,18 @@
 import "./App.css";
 import React, { useState } from "react";
 import ContractorOverview from "./contractors/ContractorOverview";
-import "semantic-ui/dist/semantic.min.css";
-import Grid from "semantic-ui-react/dist/commonjs/collections/Grid";
-import { ContentType } from "./start/ContentType";
 import AppHeader from "./Header";
-import Menu from "./start/Menu";
 import RealEstateOverview from "./realestate/RealEstateOverview";
 import API from "./API";
 import Company from "./contractors/Company";
 import ServicesOverview from "./services/ServicesOverview";
-import BackendAlerts from "./BackendAlerts";
-import Client from "./clientTemplate/ClientTemplate";
+import Client from "./customers/Customer";
 import ServiceCatalog from "./order/ServiceCatalog";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RealEstateEdit from "./realestate/RealEstateEdit";
-interface AppState {
-  activeContent: ContentType;
-  company: Company;
-}
-
-interface AppProps {}
+import { SnackbarProvider } from "notistack";
+import { Grid } from "@mui/material";
+import OrderOverview from "./order/OrderOverview";
 
 const App: React.FC = () => {
   const [company, setCompany] = useState<Company>();
@@ -51,34 +43,29 @@ const App: React.FC = () => {
     return <div>Loading</div>;
   }
   return (
-    <BackendAlerts>
+    <SnackbarProvider maxSnack={3}>
       <Router>
-        <React.Fragment>
-          <Grid centered padded>
-            <Grid.Row centered>
-              <Grid.Column computer={12} tablet={12} mobile={16}>
-                <AppHeader company={company} />
-              </Grid.Column>
-            </Grid.Row>
-            <Menu />
-            <Grid.Row>
-              <Grid.Column computer={12} tablet={12} mobile={16} textAlign={"center"}>
-                <Routes>
-                  <Route path="/real-estates" element={<RealEstateOverview />}></Route>
-                  <Route path="/real-estates/:id" element={<RealEstateEdit />}></Route>
+        <AppHeader company={company} />
+        <Grid container pr={4} pl={4}>
+          <Grid item xs={12}>
+            <Routes>
+              <Route path="/real-estates" element={<RealEstateOverview />}></Route>
+              <Route path="/real-estates/:id" element={<RealEstateEdit />}></Route>
 
-                  <Route path="/contractors" element={<ContractorOverview />} />
-                  <Route
-                    path="/services"
-                    element={<ServicesOverview asPriceList={false} serviceCatalogs={serviceCatalogs} />}
-                  />
-                </Routes>
-              </Grid.Column>
-            </Grid.Row>
+              <Route path="/contractors" element={<ContractorOverview />} />
+              <Route
+                path="/orders"
+                element={<OrderOverview company={company} customers={customers} serviceCatalogs={serviceCatalogs} />}
+              />
+              <Route
+                path="/services"
+                element={<ServicesOverview asPriceList={false} serviceCatalogs={serviceCatalogs} />}
+              />
+            </Routes>
           </Grid>
-        </React.Fragment>
+        </Grid>
       </Router>
-    </BackendAlerts>
+    </SnackbarProvider>
   );
 };
 

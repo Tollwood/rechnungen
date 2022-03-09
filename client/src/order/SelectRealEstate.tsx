@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button, DropdownItemProps, DropdownProps, Form, Grid, Modal, Segment } from "semantic-ui-react";
 import RealEstate from "../realestate/RealEstate";
 import Order from "./Order";
 import AddressReadOnly from "./AddressReadOnly";
@@ -24,7 +23,7 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
   render() {
     return (
       <React.Fragment>
-        <Grid.Row>
+        {/* <Grid.Row>
           <Grid.Column computer={8} tablet={8} mobile={16}>
             <Form.Field>
               <label>Liegenschaft</label>
@@ -40,7 +39,7 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
             </Form.Field>
           </Grid.Column>
           {this.renderDetails()}
-        </Grid.Row>
+        </Grid.Row> */}
       </React.Fragment>
     );
   }
@@ -49,7 +48,7 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
     if (this.props.selectedRealestate == null) return;
     return (
       <React.Fragment>
-        <Grid.Column computer={7} tablet={7} mobile={15} style={{ marginTop: "23px" }}>
+        {/* <Grid.Column computer={7} tablet={7} mobile={15} style={{ marginTop: "23px" }}>
           <AddressReadOnly address={this.props.order.realEstateAddress} />
         </Grid.Column>
         <Grid.Column width={1} style={{ marginTop: "23px" }}>
@@ -66,19 +65,19 @@ export default class SelectRealEstate extends React.Component<SelectRealEstatePr
                 </Grid>
               </Segment>
             </Modal.Content>
-          </Modal>
-        </Grid.Column>
+          </Modal> */}
+        {/* </Grid.Column> */}
       </React.Fragment>
     );
   }
 
-  private mapRealestateToDropdownItems(realEstates: RealEstate[]): DropdownItemProps[] {
+  private mapRealestateToDropdownItems(realEstates: RealEstate[]): any[] {
     return realEstates.map((realEstate: RealEstate) => {
       return { key: realEstate.name, value: realEstate._id, text: realEstate.name };
     });
   }
 
-  private updateRealEstate(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+  private updateRealEstate(event: React.SyntheticEvent<HTMLElement>, data: any) {
     const selectedId = data.value as number;
     this.props.onValueChanged(this.props.realestates.find((r) => r._id === selectedId));
   }

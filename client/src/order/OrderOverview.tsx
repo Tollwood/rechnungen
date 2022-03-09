@@ -1,50 +1,87 @@
 import * as React from "react";
-import OrderList from "./OrderList";
-import OrderEdit from "./OrderEdit";
 import Company from "../contractors/Company";
-import { useState } from "react";
-import ClientTemplate from "../clientTemplate/ClientTemplate";
+import Customer from "../customers/Customer";
 import Order from "./Order";
 import ServiceCatlog from "./ServiceCatalog";
+import OverviewPage from "../contractors/OverviewPage";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { useNavigate, NavigateFunction } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface Props {
   company: Company;
-  clientTemplates: ClientTemplate[];
+  customers: Customer[];
   serviceCatalogs: ServiceCatlog[];
 }
 
 const OrderOverview: React.FC<Props> = (props: Props) => {
-  const [selectedItem, setSelectedItem] = useState<Order>();
-  const [edit, setEdit] = useState<boolean>(false);
-
-  const handleSelection = (selectedOrder?: Order) => {
-    setEdit(true);
-    setSelectedItem(selectedOrder);
-  };
-
-  const stopEdit = () => {
-    setEdit(false);
-    setSelectedItem(undefined);
-  };
-
+  const navigate = useNavigate();
   return (
-    <React.Fragment>
-      <div className={"order-overview"}>
-        {edit ? null : <OrderList onAdd={() => setEdit(true)} onSelect={handleSelection} />}
-        {!edit ? null : (
-          <OrderEdit
-            company={props.company}
-            serviceCatalogs={props.serviceCatalogs}
-            clientTemplates={props.clientTemplates}
-            orderId={selectedItem?.id}
-            onCancelEdit={stopEdit}
-            onSave={stopEdit}
-            onDelete={stopEdit}
-          />
-        )}
-      </div>
-    </React.Fragment>
+    <OverviewPage
+      columns={getColumns(navigate)}
+      labelAdd="Auftrag hinzufügen"
+      urlPath="/orders"
+      apiPath="/api/orders"
+    />
   );
 };
 
+const getColumns = (navigate: NavigateFunction): GridColDef[] => {
+  return [
+    {
+      field: "orderId",
+      headerName: "Auftrags-Id",
+      width: 160,
+    },
+    {
+      field: "realEstate.name",
+      headerName: "Liegenschaft",
+      width: 160,
+      valueGetter: (value) => value.row.realEstate.name,
+    },
+    // {
+    //   field: "orderId",
+    //   headerName: "Adresse",
+    //   width: 160,
+    // },
+    {
+      field: "name",
+      headerName: "Name",
+      width: 160,
+    },
+    // {
+    //   field: "orderId",
+    //   headerName: "Nettoumsatz",
+    //   width: 160,
+    // },
+    // {
+    //   field: "orderId",
+    //   headerName: "Bruttoumsatz",
+    //   width: 160,
+    // },
+    {
+      field: "bill.billNo",
+      headerName: "RG-Nummer",
+      width: 160,
+      valueGetter: (value) => value.row.bill.billNo,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 160,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 120,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams<Order>) => (
+        <IconButton aria-label="edit" size="small" onClick={() => navigate(`/orders/${params.row._id}`)}>
+          <EditIcon fontSize="inherit" />
+        </IconButton>
+      ),
+    },
+  ];
+};
 export default OrderOverview;

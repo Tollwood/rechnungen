@@ -1,9 +1,8 @@
 import * as React from "react";
 import { ChangeEvent } from "react";
 import Order from "./Order";
-import { DateInput } from "semantic-ui-calendar-react";
-import { Checkbox, Form, Grid } from "semantic-ui-react";
 import OrderTaxRate from "./OrderTaxRate";
+import { Grid, TextField } from "@mui/material";
 
 interface BillDetailsProps {
   order: Order;
@@ -36,22 +35,20 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
   render() {
     return (
       <React.Fragment>
-        <Grid.Row>
-          <Grid.Column computer={5} tablet={5} mobile={8}>
-            <Form.Field>
-              <label>Rechnungsnummer: </label>
-              <Form.Input
-                id="billNo"
-                placeholder="Rechungsnummer"
-                value={this.props.order.billNo ? this.props.order.billNo : ""}
-                name="billNo"
-                onChange={this.handleOrderChange.bind(this)}
-                error={this.props.errors.get("billNo") ? { content: this.props.errors.get("billNo") } : null}
-              />
-            </Form.Field>
-          </Grid.Column>
-          <Grid.Column computer={5} tablet={5} mobile={8}>
-            <Form.Field>
+        <Grid container>
+          <Grid item xs={12}>
+            <TextField
+              id="billNo"
+              label="Rechnungsnummer"
+              placeholder="Rechungsnummer"
+              value={this.props.order.billNo ? this.props.order.billNo : ""}
+              name="billNo"
+              onChange={this.handleOrderChange.bind(this)}
+              //error={this.props.errors.get("billNo") ? { content: this.props.errors.get("billNo") } : null}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            {/* <Form.Field>
               <label>Rechnungsdatum: </label>
               <DateInput
                 dateFormat={"DD.MM.YYYY"}
@@ -65,12 +62,11 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                 onChange={this.handleDateChange.bind(this)}
                 error={this.props.errors.get("billDate") ? { content: this.props.errors.get("billDate") } : null}
               />
-            </Form.Field>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column computer={5} tablet={5} mobile={8}>
-            <Form.Field>
+            </Form.Field> */}
+          </Grid>
+
+          <Grid item xs={12}>
+            {/* <Form.Field>
               <Checkbox
                 toggle
                 name={"stornieren"}
@@ -79,13 +75,14 @@ export default class BillDetails extends React.Component<BillDetailsProps, BillD
                 onChange={this.toggleCancel.bind(this)}
               />
             </Form.Field>
-          </Grid.Column>
-        </Grid.Row>
-        <OrderTaxRate
-          handleOrderChange={this.props.handleOrderChange.bind(this)}
-          order={this.props.order}
-          errors={this.props.errors}
-        />
+          </Grid.Column> */}
+          </Grid>
+          <OrderTaxRate
+            handleOrderChange={this.props.handleOrderChange.bind(this)}
+            order={this.props.order}
+            errors={this.props.errors}
+          />
+        </Grid>
       </React.Fragment>
     );
   }

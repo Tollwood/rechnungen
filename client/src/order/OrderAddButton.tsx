@@ -1,6 +1,5 @@
-import { Button } from "semantic-ui-react";
 import * as React from "react";
-import { useAlert } from "react-alert";
+import { useSnackbar } from "notistack";
 import RealEstate from "../realestate/RealEstate";
 import Order from "./Order";
 import OrderService from "./OrderService";
@@ -14,18 +13,18 @@ interface Props {
 }
 
 export function OrderAddButton(props: Props) {
-  const alert = useAlert();
+  const { enqueueSnackbar } = useSnackbar();
 
   function confirmSuccess(onSuccess: (order: Order) => void) {
     return (order: Order) => {
-      alert.success("Auftrag gespeichert", { timeout: 2000 });
+      enqueueSnackbar("Auftrag gespeichert", { variant: "success" });
       onSuccess(order);
     };
   }
 
   function confirmError(onError: (errors: Map<string, string>) => void) {
     return (errors: Map<string, string>) => {
-      alert.error("Auftrag konnte nicht gepeichert werden");
+      enqueueSnackbar("Auftrag konnte nicht gepeichert werden", { variant: "error" });
       onError(errors);
     };
   }
@@ -40,23 +39,24 @@ export function OrderAddButton(props: Props) {
   }
 
   return (
-    <Button.Group>
-      <Button.Group>
-        <Button
-          primary
-          content="Speichern"
-          onClick={() => saveAndConfimr(props.order, false, props.onSuccess, props.onError)}
-          className={"save-bttn"}
-        />
-        <Button.Or text="&" />
-        <Button
-          primary
-          content="Weiter"
-          onClick={() => saveAndConfimr(props.order, true, props.onSuccess, props.onError)}
-          className={"save-bttn"}
-          icon={Helper.getStatusIcon(Helper.nextStatus(props.order.status))}
-        />
-      </Button.Group>
-    </Button.Group>
+    // <Button.Group>
+    //   <Button.Group>
+    //     <Button
+    //       primary
+    //       content="Speichern"
+    //       onClick={() => saveAndConfimr(props.order, false, props.onSuccess, props.onError)}
+    //       className={"save-bttn"}
+    //     />
+    //     <Button.Or text="&" />
+    //     <Button
+    //       primary
+    //       content="Weiter"
+    //       onClick={() => saveAndConfimr(props.order, true, props.onSuccess, props.onError)}
+    //       className={"save-bttn"}
+    //       icon={Helper.getStatusIcon(Helper.nextStatus(props.order.status))}
+    //     />
+    //   </Button.Group>
+    // </Button.Group>
+    <div></div>
   );
 }

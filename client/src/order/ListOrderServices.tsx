@@ -2,8 +2,6 @@ import * as React from "react";
 import { ChangeEvent } from "react";
 import OrderItem from "./OrderItem";
 import Service from "./Service";
-import Icon from "semantic-ui-react/dist/commonjs/elements/Icon";
-import { Button, Table, Grid, Form, DropdownProps } from "semantic-ui-react";
 import AddOrderService from "./AddOrderService";
 import API from "../API";
 import ServiceCatlog from "./ServiceCatalog";
@@ -30,7 +28,7 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
       return { key: sc.name, value: sc._id, text: sc.name };
     });
   }
-  function updateServiceCatalog(event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) {
+  function updateServiceCatalog(event: React.SyntheticEvent<HTMLElement>, data: any) {
     // setSelectedServiceCatalogId(data.value as number);
     props.onCatalogChanged(data.value as number);
   }
@@ -54,9 +52,9 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
         <td>{serviceData.articleNumber}</td>
         <td>{serviceData.title}</td>
         <td>
-          <Button color={"red"} onClick={() => removeOrderService(orderItem)}>
+          {/* <Button color={"red"} onClick={() => removeOrderService(orderItem)}>
             <Icon name={"trash"} />
-          </Button>
+          </Button> */}
         </td>
       </tr>
     );
@@ -78,8 +76,8 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
 
   return (
     <React.Fragment>
-      <Grid.Row>
-        <Grid.Column computer={6} tablet={6} mobile={8}>
+      {/* <Grid.Row> */}
+      {/* <Grid.Column computer={6} tablet={6} mobile={8}>
           <Form.Field>
             <label>Servicekatalog</label>
             <Form.Dropdown
@@ -119,7 +117,7 @@ const ListOrderServices: React.FC<Props> = (props: Props) => {
             </Table>
           </div>
         </Grid.Column>
-      </Grid.Row>
+      </Grid.Row> */}
     </React.Fragment>
   );
 };
