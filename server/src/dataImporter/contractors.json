@@ -7,8 +7,8 @@
     "technicianId": "T82",
     "email": "0176 / 51 51 26 81",
     "phone": "timm1960@gmail.com",
-    "address": { "street": "Fasanenweg", "city": "Bokel", "zipcode": "25364", "housenumber": "30" },
-    "bankdetails": { "bic": "HYVEDEMM300", "iban": "DE45 2003 0000 0016 3761 13", "bankname": "Hypo-Vereinsbank HH" }
+    "address": { "street": "Fasanenweg", "city": "Bokel", "zipCode": "25364", "houseNumber": "30" },
+    "bankDetails": { "bic": "HYVEDEMM300", "iban": "DE45 2003 0000 0016 3761 13", "bankName": "Hypo-Vereinsbank HH" }
   },
   {
     "id": 3,
@@ -18,8 +18,8 @@
     "technicianId": "T85",
     "email": "anna.ti@web.de",
     "phone": "+49 173 890 63 29",
-    "address": { "street": "Spichernstraße", "city": "Kiel", "zipcode": "24116", "housenumber": "4" },
-    "bankdetails": { "bic": "COBADEFFXXX", "iban": "Commerzbank HH", "bankname": "DE07 2004 0000 0502 4484 00" }
+    "address": { "street": "Spichernstraße", "city": "Kiel", "zipCode": "24116", "houseNumber": "4" },
+    "bankDetails": { "bic": "COBADEFFXXX", "iban": "Commerzbank HH", "bankName": "DE07 2004 0000 0502 4484 00" }
   },
   {
     "id": 2,
@@ -29,7 +29,7 @@
     "technicianId": "T84",
     "email": "timm1960@gmail.com",
     "phone": "0176 / 51 51 26 81",
-    "address": { "street": "Fasanenweg", "city": "Bokel", "zipcode": "25364", "housenumber": "30" },
-    "bankdetails": { "bic": "GENODEF1PIN", "iban": "DE76 2219 1405 0040 0354 30", "bankname": "VR Bank in Holstein" }
+    "address": { "street": "Fasanenweg", "city": "Bokel", "zipCode": "25364", "houseNumber": "30" },
+    "bankDetails": { "bic": "GENODEF1PIN", "iban": "DE76 2219 1405 0040 0354 30", "bankName": "VR Bank in Holstein" }
   }
 ]

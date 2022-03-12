@@ -1,221 +1,350 @@
+import { useFormik } from "formik";
+import { useSnackbar } from "notistack";
 import * as React from "react";
-import Order from "./Order";
-import Contractor from "../contractors/Contractor";
-import OrderItem from "./OrderItem";
-import ListOrderServices from "./ListOrderServices";
-import RealEstate from "../realestate/RealEstate";
-import Service from "./Service";
-import OrderBaseProperties from "./OrderBaseProperties";
-import OrderAppointments from "./OrderAppointments";
-import OrderStatusSteps from "./OrderStatusSteps";
-import { OrderStatus } from "./OrderStatus";
-import Helper from "../common/Helper";
-import BillDetails from "./BillDetails";
-import BillButton from "./BillButton";
-import PaymentRecieved from "./PaymentRecieved";
-import OrderKmPauschale from "./OrderKmPauschale";
+import { useNavigate, useParams } from "react-router-dom";
+import API from "../API";
 import Company from "../contractors/Company";
-import ErrorMapper from "../ErrorMapper";
-import DeleteModal from "../DeleteModal";
-import { OrderAddButton } from "./OrderAddButton";
-import OrderService from "./OrderService";
-import RealEstateService from "../realestate/RealEstateService";
-import ServiceService from "../services/ServiceService";
-import ContractorService from "../contractors/ContractorService";
-import UnsavedChangesModal from "../UnsavedChangesModal";
 import Customer from "../customers/Customer";
-import ServicesOverview from "../services/ServicesOverview";
+import Order from "./Order";
 import ServiceCatlog from "./ServiceCatalog";
+import * as yup from "yup";
+import { Box, Button, Divider, FormControlLabel, Grid, Switch, TextField } from "@mui/material";
+import { DeepPartial } from "@tomysmith/deep-partial";
+import { DatePicker } from "@mui/lab";
+const validationSchema = yup.object({});
 
 interface Props {
-  onSave: () => void;
-  onCancelEdit: () => void;
-  onDelete: () => void;
-  orderId?: number;
   company: Company;
-  clientTemplates: Customer[];
+  customers: Customer[];
   serviceCatalogs: ServiceCatlog[];
 }
 
-const OrderEdit: React.FC<Props> = (props: Props) => {
-  const [order, setOrder] = React.useState<Order | undefined>(props.orderId ? undefined : new Order());
-  const [initialState, setInitialState] = React.useState<Order>(new Order());
-  const [contractors, setContractors] = React.useState<Contractor[]>([]);
-  const [services, setServices] = React.useState<Service[]>([]);
-  const [realEstates, setRealEstates] = React.useState<RealEstate[]>([]);
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [showUnsavedChangesModal, setShowUnsavedChangesModal] = React.useState<boolean>(false);
-  const [errors, setErrors] = React.useState<Map<string, string>>(new Map<string, string>());
+const OrderEdit: React.FC<Props> = ({ company, customers, serviceCatalogs }) => {
+  const [value, setValue] = React.useState<Date | null>(null);
+  const navigate = useNavigate();
+  let { id } = useParams();
+  const persisted = id !== "new";
+  const [loading, setLoading] = React.useState<boolean>(persisted);
+  const { enqueueSnackbar } = useSnackbar();
+  const navigateToOverviewPage = () => navigate("/orders");
+  const deleteItem = async () => {
+    try {
+      await API.delete(`/api/orders/${id}`);
+      enqueueSnackbar("Auftrag gelöscht", { variant: "success" });
+      navigateToOverviewPage();
+    } catch {
+      enqueueSnackbar("Auftrag konnte nicht gelöscht werden", { variant: "error" });
+    }
+  };
+  const saveItem = async (item: DeepPartial<Order>) => {
+    try {
+      await API.post("/api/orders", item);
+      enqueueSnackbar("Auftrag gespeichert", { variant: "success" });
+      navigateToOverviewPage();
+    } catch {
+      enqueueSnackbar("Auftrag konnte nicht gespeichert werden", { variant: "error" });
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      taxRate: 0.19,
+      smallOrder: false,
+      includeKmFee: true,
+      canceled: false,
+      status: "ORDER_EDIT",
+      firstAppointment: null,
+      secondAppointment: null,
+      orderItems: [],
+      billItems: [],
+    } as DeepPartial<Order>,
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      saveItem(values);
+    },
+  });
 
   React.useEffect(() => {
-    if (props.orderId) {
-      OrderService.getOrderById(props.orderId).then((o) => {
-        if (o) {
-          const uniqueOrderItems = o.orderItems.reduce<OrderItem[]>((unique, current) => {
-            const x = unique.find((oi) => oi.service.articleNumber === current.service.articleNumber);
-            if (!x) {
-              return unique.concat([current]);
-            } else {
-              return unique;
-            }
-          }, []);
-          o.orderItems = uniqueOrderItems;
-        }
-        console.log(o);
-        setOrder(o);
-      });
-    }
+    const fetchData = async () => {
+      if (persisted) {
+        const response = await API.get<Order>(`/api/orders/${id}`);
+        formik.setValues(response.data);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]);
 
-    ContractorService.getContractors(setContractors);
-    ServiceService.fetchServices(setServices);
-    RealEstateService.fetchRealEstates(setRealEstates);
-  }, [props.orderId]);
-
-  if (order === undefined) {
+  if (loading) {
     return <div>loading</div>;
   }
 
   return (
-    // <Segment>
-    //   <Form autoComplete={"off"}>
-    //     <Grid>
-    //       <OrderStatusSteps
-    //         status={order.status}
-    //         statusChanged={(status: OrderStatus) => handleOrderChange("status", status)}
-    //       />
-    //       <OrderBaseProperties
-    //         order={order}
-    //         clientTemplates={props.clientTemplates}
-    //         handleOrderChange={handleOrderChange}
-    //         realEstates={realEstates}
-    //         updateRealEstate={(realEstate?: RealEstate) =>
-    //           setOrder({ ...order, realEstate: realEstate, realEstateAddress: realEstate?.address })
-    //         }
-    //         contractors={contractors}
-    //         readOnly={order.status !== "ORDER_EDIT"}
-    //         updateClent={(clientTemplate: ClientTemplate) => {
-    //           console.log(clientTemplate);
-    //           setOrder({
-    //             ...order,
-    //             clientName: clientTemplate.name,
-    //             client: clientTemplate,
-    //             serviceCatalogId: clientTemplate.serviceCatalogId,
-    //           });
-    //         }}
-    //         errors={errors}
-    //       />
+    <form onSubmit={formik.handleSubmit}>
+      <Grid container p={2} pt={3} spacing={2}>
+        <Grid item xs={12}>
+          {persisted ? <h1>Liegenschaft Bearbeiten</h1> : <h1>Neue Liegenschaft</h1>}
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            id="orderId"
+            name="orderId"
+            label="Auftrags-ID"
+            disabled={formik.values._id !== undefined}
+            value={formik.values.orderId}
+            onChange={formik.handleChange}
+            error={formik.touched.orderId && Boolean(formik.errors.orderId)}
+            helperText={formik.touched.orderId && formik.errors.orderId}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            id="contractor"
+            name="contractor.lastName"
+            label="Auftragnehmer"
+            disabled
+            value={formik.values.contractor?.lastName}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            id="customer"
+            name="customer.name"
+            label="Auftraggeber"
+            disabled
+            value={formik.values.customer?.name}
+          />
+        </Grid>
 
-    //       <OrderAppointments handleOrderChange={handleOrderChange} order={order} errors={errors} />
-    //       {order.status === "ORDER_EDIT" || order.status === "ORDER_EXECUTE" ? (
-    //         <Grid.Row centered>
-    //           <Grid.Column width="8">
-    //             <ListOrderServices
-    //               order={order}
-    //               services={services}
-    //               onOrderItemsChanged={updateOrderServies}
-    //               onCatalogChanged={(serviceCatalogId: number) =>
-    //                 handleOrderChange("serviceCatalogId", serviceCatalogId)
-    //               }
-    //             />
-    //           </Grid.Column>
-    //           <Grid.Column width="8" style={{ marginTop: "40px" }}>
-    //             <ServicesOverview
-    //               asPriceList={true}
-    //               serviceCatalogs={props.serviceCatalogs}
-    //               selectedServiceCatalog={props.serviceCatalogs.find((sc) => sc._id === order.serviceCatalogId)}
-    //             />
-    //           </Grid.Column>
-    //         </Grid.Row>
-    //       ) : null}
+        <Grid item xs={4}>
+          <TextField fullWidth id="realestate" label="Liegenschaft" disabled value={formik.values.realEstate?.name} />
+        </Grid>
 
-    //       <OrderKmPauschale handleOrderChange={handleOrderChange} order={order} errors={errors} />
-    //       {order.status === "ORDER_BILL" && (
-    //         <BillDetails order={order} handleOrderChange={handleOrderChange} errors={errors} />
-    //       )}
-    //       {order.status === "ORDER_BILL" && <BillButton company={props.company} order={order} services={services} />}
-    //       <PaymentRecieved order={order} handleOrderChange={handleOrderChange} errors={errors} />
-    //       <Grid.Row centered>
-    //         <Grid.Column width={5} floated="left">
-    //           {order.status === Helper.nextStatus(order.status) ? null : (
-    //             <OrderAddButton
-    //               order={order}
-    //               realEstates={realEstates}
-    //               onSuccess={onSuccessSave}
-    //               onError={(errors: Map<string, string>) => {
-    //                 setErrors(errors);
-    //               }}
-    //             />
-    //           )}
-    //         </Grid.Column>
-    //         <Grid.Column width={5}>
-    //           <Button
-    //             className={"cancel-bttn"}
-    //             content="Abbrechen"
-    //             icon="cancel"
-    //             labelPosition="left"
-    //             onClick={() => {
-    //               if (initialState !== order) {
-    //                 setShowUnsavedChangesModal(true);
-    //               } else {
-    //                 props.onCancelEdit();
-    //               }
-    //             }}
-    //           />
-    //         </Grid.Column>
-    //         <Grid.Column width={5} floated="right">
-    //           {order.id !== undefined && order.status !== "PAYMENT_RECIEVED" && (
-    //             <Button
-    //               className={"delete-bttn"}
-    //               floated={"right"}
-    //               color={"red"}
-    //               content={"Löschen"}
-    //               icon="trash"
-    //               labelPosition="left"
-    //               onClick={() => setShowDeleteModal(true)}
-    //             />
-    //           )}
-    //         </Grid.Column>
-    //       </Grid.Row>
-    //     </Grid>
-    //   </Form>
-    //   <DeleteModal
-    //     objectToDelete={"Auftrag"}
-    //     show={showDeleteModal}
-    //     onSuccess={() => {
-    //       OrderService.delete(order, onDeleteSuccess);
-    //     }}
-    //     onClose={() => setShowDeleteModal(false)}
-    //   />
-    //   <UnsavedChangesModal
-    //     name={"Auftrag"}
-    //     show={showUnsavedChangesModal}
-    //     onSuccess={props.onCancelEdit}
-    //     onClose={() => setShowUnsavedChangesModal(false)}
-    //   />
-    // </Segment>
-    <div></div>
+        <Grid item xs={12}>
+          <FormControlLabel
+            control={<Switch name="smallOrder" checked={formik.values.smallOrder} onChange={formik.handleChange} />}
+            label="Kleinauftrag"
+          />
+        </Grid>
+
+        <Grid item xs={6} display="flex">
+          <TextField
+            fullWidth
+            id="distance"
+            name="distance"
+            label="Tatsächlich gefahrene KM"
+            value={formik.values.distance}
+            onChange={formik.handleChange}
+            error={formik.touched.distance && Boolean(formik.errors.distance)}
+            helperText={formik.touched.distance && formik.errors.distance}
+          />
+          <Box width="400px" ml={2} display="flex">
+            <FormControlLabel
+              control={
+                <Switch name="includeKmFee" checked={formik.values.includeKmFee} onChange={formik.handleChange} />
+              }
+              label="Km Pauschale anwenden"
+            />
+          </Box>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Divider variant="middle" />
+          <h3>Kontakt Details</h3>
+        </Grid>
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            id="contactDetails-utilisationUnit"
+            name="contactDetails.utilisationUnit"
+            label="Nutzungseinheit"
+            value={formik.values.contactDetails?.utilisationUnit}
+            onChange={formik.handleChange}
+            //error={formik.touched.contactDetails?.utilisationUnit && Boolean(formik.touched.contactDetails?.utilisationUnit)} getIn(form.errors, name) && getIn(form.touched, name)
+            // helperText={formik.touched.contactDetails?.utilisationUnit && formik.errors.contactDetails?utilisationUnit}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            id="contactDetails-name"
+            name="contactDetails.name"
+            label="Name"
+            value={formik.values.contactDetails?.name}
+            onChange={formik.handleChange}
+            //error={formik.touched.contactDetails?.utilisationUnit && Boolean(formik.touched.contactDetails?.utilisationUnit)} getIn(form.errors, name) && getIn(form.touched, name)
+            // helperText={formik.touched.contactDetails?.utilisationUnit && formik.errors.contactDetails?utilisationUnit}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            id="contactDetails-phoneNumber"
+            name="contactDetails.phoneNumber"
+            label="Telefonnummer"
+            value={formik.values.contactDetails?.phoneNumber}
+            onChange={formik.handleChange}
+            //error={formik.touched.contactDetails?.utilisationUnit && Boolean(formik.touched.contactDetails?.utilisationUnit)} getIn(form.errors, name) && getIn(form.touched, name)
+            // helperText={formik.touched.contactDetails?.utilisationUnit && formik.errors.contactDetails?utilisationUnit}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <TextField
+            fullWidth
+            id="contactDetails-location"
+            name="contactDetails.location"
+            label="Lage"
+            value={formik.values.contactDetails?.location}
+            onChange={formik.handleChange}
+            //error={formik.touched.contactDetails?.utilisationUnit && Boolean(formik.touched.contactDetails?.utilisationUnit)} getIn(form.errors, name) && getIn(form.touched, name)
+            // helperText={formik.touched.contactDetails?.utilisationUnit && formik.errors.contactDetails?utilisationUnit}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Divider variant="middle" />
+          <h3>Termine</h3>
+        </Grid>
+        <Grid item xs={6}>
+          <DatePicker
+            label="Ersttermin"
+            value={formik.values.firstAppointment}
+            onChange={(newValue) => {
+              formik.setFieldValue("firstAppointment", newValue);
+            }}
+            renderInput={(params) => <TextField {...params} id="firstAppointment" />}
+            inputFormat="dd.MM.yyyy"
+            mask="'__.__.____"
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <DatePicker
+            label="Zweittermin"
+            value={formik.values.secondAppointment}
+            onChange={(newValue) => {
+              formik.setFieldValue("secondAppointment", newValue);
+            }}
+            renderInput={(params) => <TextField {...params} id="secondAppointment" />}
+            inputFormat="dd.MM.yyyy"
+            mask="'__.__.____"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Divider variant="middle" />
+          <h3>Leistungen</h3>
+        </Grid>
+        <Grid item xs={12} display="flex" justifyContent={"space-evenly"}>
+          <Button variant="contained" color="primary" onClick={formik.submitForm}>
+            Speichern
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={navigateToOverviewPage}>
+            Abbrechen
+          </Button>
+          {persisted && (
+            <Button variant="outlined" color="error" onClick={deleteItem}>
+              Löschen
+            </Button>
+          )}
+        </Grid>
+        <Grid item xs={12}>
+          {JSON.stringify(formik.values)}
+        </Grid>
+      </Grid>
+    </form>
   );
+  // <Segment>
+  //   <Form autoComplete={"off"}>
+  //     <Grid>
 
-  function onDeleteSuccess() {
-    setShowDeleteModal(false);
-    props.onDelete();
-  }
+  //       {order.status === "ORDER_EDIT" || order.status === "ORDER_EXECUTE" ? (
+  //         <Grid.Row centered>
+  //           <Grid.Column width="8">
+  //             <ListOrderServices
+  //               order={order}
+  //               services={services}
+  //               onOrderItemsChanged={updateOrderServies}
+  //               onCatalogChanged={(serviceCatalogId: number) =>
+  //                 handleOrderChange("serviceCatalogId", serviceCatalogId)
+  //               }
+  //             />
+  //           </Grid.Column>
+  //           <Grid.Column width="8" style={{ marginTop: "40px" }}>
+  //             <ServicesOverview
+  //               asPriceList={true}
+  //               serviceCatalogs={serviceCatalogs}
+  //               selectedServiceCatalog={serviceCatalogs.find((sc) => sc._id === order.serviceCatalogId)}
+  //             />
+  //           </Grid.Column>
+  //         </Grid.Row>
+  //       ) : null}
 
-  function handleOrderChange(name: string, value: any) {
-    setOrder({ ...order!, [name]: value });
-    setErrors(ErrorMapper.removeError(errors, name));
-  }
-
-  function updateOrderServies(orderItems: OrderItem[]) {
-    setOrder({ ...order!, orderItems: orderItems });
-  }
-
-  function onSuccessSave(savedOrder: Order) {
-    savedOrder.contractor = order!.contractor;
-    savedOrder.realEstate = order!.realEstate;
-    setOrder(savedOrder);
-    setInitialState(savedOrder);
-  }
+  //       <OrderKmPauschale handleOrderChange={handleOrderChange} order={order} errors={errors} />
+  //       {order.status === "ORDER_BILL" && (
+  //         <BillDetails order={order} handleOrderChange={handleOrderChange} errors={errors} />
+  //       )}
+  //       {order.status === "ORDER_BILL" && <BillButton company={company} order={order} services={services} />}
+  //       <PaymentRecieved order={order} handleOrderChange={handleOrderChange} errors={errors} />
+  //       <Grid.Row centered>
+  //         <Grid.Column width={5} floated="left">
+  //           {order.status === Helper.nextStatus(order.status) ? null : (
+  //             <OrderAddButton
+  //               order={order}
+  //               realEstates={realEstates}
+  //               onSuccess={onSuccessSave}
+  //               onError={(errors: Map<string, string>) => {
+  //                 setErrors(errors);
+  //               }}
+  //             />
+  //           )}
+  //         </Grid.Column>
+  //         <Grid.Column width={5}>
+  //           <Button
+  //             className={"cancel-bttn"}
+  //             content="Abbrechen"
+  //             icon="cancel"
+  //             labelPosition="left"
+  //             onClick={() => {
+  //               if (initialState !== order) {
+  //                 setShowUnsavedChangesModal(true);
+  //               } else {
+  //                 onCancelEdit();
+  //               }
+  //             }}
+  //           />
+  //         </Grid.Column>
+  //         <Grid.Column width={5} floated="right">
+  //           {order.id !== undefined && order.status !== "PAYMENT_RECIEVED" && (
+  //             <Button
+  //               className={"delete-bttn"}
+  //               floated={"right"}
+  //               color={"red"}
+  //               content={"Löschen"}
+  //               icon="trash"
+  //               labelPosition="left"
+  //               onClick={() => setShowDeleteModal(true)}
+  //             />
+  //           )}
+  //         </Grid.Column>
+  //       </Grid.Row>
+  //     </Grid>
+  //   </Form>
+  //   <DeleteModal
+  //     objectToDelete={"Auftrag"}
+  //     show={showDeleteModal}
+  //     onSuccess={() => {
+  //       OrderService.delete(order, onDeleteSuccess);
+  //     }}
+  //     onClose={() => setShowDeleteModal(false)}
+  //   />
+  //   <UnsavedChangesModal
+  //     name={"Auftrag"}
+  //     show={showUnsavedChangesModal}
+  //     onSuccess={onCancelEdit}
+  //     onClose={() => setShowUnsavedChangesModal(false)}
+  //   />
+  // </Segment>
 };
 
 export default OrderEdit;

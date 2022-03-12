@@ -8,6 +8,7 @@ import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import Helper from "../common/Helper";
 
 interface Props {
   company: Company;
@@ -38,7 +39,7 @@ const getColumns = (navigate: NavigateFunction): GridColDef[] => {
       field: "realEstate.name",
       headerName: "Liegenschaft",
       width: 160,
-      valueGetter: (value) => value.row.realEstate.name,
+      valueGetter: (value) => value.row.realEstate?.name,
     },
     // {
     //   field: "orderId",
@@ -49,6 +50,7 @@ const getColumns = (navigate: NavigateFunction): GridColDef[] => {
       field: "name",
       headerName: "Name",
       width: 160,
+      valueGetter: (value) => value.row.contactDetails?.name,
     },
     // {
     //   field: "orderId",
@@ -64,12 +66,13 @@ const getColumns = (navigate: NavigateFunction): GridColDef[] => {
       field: "bill.billNo",
       headerName: "RG-Nummer",
       width: 160,
-      valueGetter: (value) => value.row.bill.billNo,
+      valueGetter: (value) => value.row.bill?.billNo,
     },
     {
       field: "status",
       headerName: "Status",
       width: 160,
+      valueGetter: (value) => Helper.getStatusName(value.row.status),
     },
     {
       field: "actions",

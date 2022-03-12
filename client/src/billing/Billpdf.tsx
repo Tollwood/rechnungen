@@ -85,9 +85,9 @@ export default class Billpdf extends Component<{ bill: Bill; company: Company },
           </View>
           <View style={styles.text}>
             <Text>An</Text>
-            <Text>{this.props.bill.order.clientName}</Text>
-            <Text>{`${this.props.bill.order.client.street} ${this.props.bill.order.client.houseNumber}`}</Text>
-            <Text>{`${this.props.bill.order.client.zipCode} ${this.props.bill.order.client.city}`}</Text>
+            <Text>{this.props.bill.order.customer?.name}</Text>
+            <Text>{`${this.props.bill.order.customer.street} ${this.props.bill.order.customer.houseNumber}`}</Text>
+            <Text>{`${this.props.bill.order.customer.zipCode} ${this.props.bill.order.customer.city}`}</Text>
           </View>
 
           <View style={styles.text}>
@@ -120,7 +120,7 @@ export default class Billpdf extends Component<{ bill: Bill; company: Company },
               </Text>
             </View>
 
-            {this.shouldRender(this.props.bill.order.utilisationUnit) ? this.renderUu() : null}
+            {this.shouldRender(this.props.bill.order.contactDetails?.utilisationUnit) ? this.renderUu() : null}
             {this.shouldRender(this.props.bill.order.firstAppointment) ? this.renderAppointments() : null}
           </View>
           <BillItems bill={this.props.bill} />
@@ -164,12 +164,12 @@ export default class Billpdf extends Component<{ bill: Bill; company: Company },
     return (
       <View style={styles.rowBelow}>
         <Text style={styles.column2}>
-          <Text style={styles.bold}>NE:</Text> {this.props.bill.order.utilisationUnit}
-          {this.props.bill.order.name ? " - " + this.props.bill.order.name : ""}
+          <Text style={styles.bold}>NE:</Text> {this.props.bill.order.contactDetails?.utilisationUnit}
+          {this.props.bill.order.customer.name ? " - " + this.props.bill.order.customer.name : ""}
         </Text>
-        {this.shouldRender(this.props.bill.order.location) ? (
+        {this.shouldRender(this.props.bill.order.contactDetails?.location) ? (
           <Text style={styles.column2}>
-            <Text style={styles.bold}>Lage:</Text> {this.props.bill.order.location}
+            <Text style={styles.bold}>Lage:</Text> {this.props.bill.order.contactDetails?.location}
           </Text>
         ) : null}
       </View>

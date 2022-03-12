@@ -4,11 +4,7 @@ SELECT array_to_json(array_agg(t))
 FROM (
   SELECT
 	orderT.id,
-	orderT.location,
-	orderT.name,
 	orderT."orderId",
-	orderT."phoneNumber",
-	orderT."utilisationUnit",
 	orderT."firstAppointment",
 	orderT."secondAppointment",
 	orderT."smallOrder",
@@ -25,7 +21,7 @@ FROM (
 									  )) AS a (name,address)) as customer,
   (SELECT row_to_json(e) FROM (VALUES ( emp.id, emp."firstName", emp."lastName",emp."taxIdent", emp."technicianId",emp.email, emp.phone,
 									  (SELECT row_to_json(address) FROM (SELECT * FROM(VALUES( emp.street, emp.city, emp."zipCode", emp."houseNumber")) as t(street, city, "zipCode", "houseNumber")) as address),
-									   (SELECT row_to_json(bankDetails) FROM (SELECT * FROM(VALUES( emp.bic, emp.iban, emp."bankName")) as t(bic,iban, "bankName")) as bankDetails)
+									   (SELECT row_to_json("bankDetails") FROM (SELECT * FROM(VALUES( emp.bic, emp.iban, emp."bankName")) as t(bic,iban, "bankName")) as "bankDetails")
 									  )) AS e (id,"firstName","lastName","taxIdent","technicianId",email,phone,address, "bankDetails")) as contractor,
 	  (SELECT row_to_json(a) FROM (VALUES ( 
 		  real.name,
@@ -36,7 +32,17 @@ FROM (
 	orderT."billDate",
 			  (select array_to_json(array_agg(t))
 					 FROM ( Select * from bill_item where "orderId" = orderT.id  ) as t) 
-									  )) AS a ("billNo","billDate","billItems")) as bill
+									  )) AS a ("billNo","billDate","billItems")) as bill,
+									  	  (SELECT row_to_json(a) FROM (VALUES ( 
+		    orderT.location,
+			orderT.name,
+			orderT."phoneNumber",
+			orderT."utilisationUnit",
+			  (select array_to_json(array_agg(t))
+					 FROM ( Select * from bill_item where "orderId" = orderT.id  ) as t) 
+									  )) AS a ("location","name","phoneNumber","utilisationUnit")) as "contactDetails"
+
+
 	
   FROM order_table orderT
 	inner join employee emp on orderT."employeeId" = emp.id

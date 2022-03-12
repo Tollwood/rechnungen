@@ -4,7 +4,7 @@ FROM (
 	real.id,
 	real.name,
 	real.distance,
-  (SELECT row_to_json(a) FROM (VALUES (real.street, real.city, real."zipCode", real."houseNumber")) AS a (street, city, zipCode,houseNumber)) as address
+  (SELECT row_to_json(a) FROM (VALUES (real.street, real.city, real."zipCode", real."houseNumber")) AS a (street, city, "zipCode","houseNumber")) as address
   FROM real_estate real
 ) t) TO STDOUT
 

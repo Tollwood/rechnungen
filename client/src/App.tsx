@@ -13,6 +13,9 @@ import RealEstateEdit from "./realestate/RealEstateEdit";
 import { SnackbarProvider } from "notistack";
 import { Grid } from "@mui/material";
 import OrderOverview from "./order/OrderOverview";
+import OrderEdit from "./order/OrderEdit";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
 const App: React.FC = () => {
   const [company, setCompany] = useState<Company>();
@@ -43,29 +46,35 @@ const App: React.FC = () => {
     return <div>Loading</div>;
   }
   return (
-    <SnackbarProvider maxSnack={3}>
-      <Router>
-        <AppHeader company={company} />
-        <Grid container pr={4} pl={4}>
-          <Grid item xs={12}>
-            <Routes>
-              <Route path="/real-estates" element={<RealEstateOverview />}></Route>
-              <Route path="/real-estates/:id" element={<RealEstateEdit />}></Route>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <SnackbarProvider maxSnack={3}>
+        <Router>
+          <AppHeader company={company} />
+          <Grid container pr={4} pl={4}>
+            <Grid item xs={12}>
+              <Routes>
+                <Route path="/real-estates" element={<RealEstateOverview />}></Route>
+                <Route path="/real-estates/:id" element={<RealEstateEdit />}></Route>
 
-              <Route path="/contractors" element={<ContractorOverview />} />
-              <Route
-                path="/orders"
-                element={<OrderOverview company={company} customers={customers} serviceCatalogs={serviceCatalogs} />}
-              />
-              <Route
-                path="/services"
-                element={<ServicesOverview asPriceList={false} serviceCatalogs={serviceCatalogs} />}
-              />
-            </Routes>
+                <Route path="/contractors" element={<ContractorOverview />} />
+                <Route
+                  path="/orders"
+                  element={<OrderOverview company={company} customers={customers} serviceCatalogs={serviceCatalogs} />}
+                />
+                <Route
+                  path="/orders/:id"
+                  element={<OrderEdit serviceCatalogs={serviceCatalogs} company={company} customers={customers} />}
+                ></Route>
+                <Route
+                  path="/services"
+                  element={<ServicesOverview asPriceList={false} serviceCatalogs={serviceCatalogs} />}
+                />
+              </Routes>
+            </Grid>
           </Grid>
-        </Grid>
-      </Router>
-    </SnackbarProvider>
+        </Router>
+      </SnackbarProvider>
+    </LocalizationProvider>
   );
 };
 

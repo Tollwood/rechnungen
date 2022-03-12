@@ -183,12 +183,6 @@ const OrderBaseProperties: React.FC<OrderEditProps> = (props: OrderEditProps) =>
     props.updateClent(clientTemplate);
   }
 
-  function handleAddressChange(nameValue: NameValue) {
-    const newAddress = { ...props.order.realEstateAddress, [nameValue.name]: nameValue.value };
-    props.handleOrderChange("realEstateAddress", newAddress);
-    //errors: ErrorMapper.removeError(this.state.errors, "address."+nameValue.name)
-  }
-
   function renderReadOnly() {
     return (
       <React.Fragment>

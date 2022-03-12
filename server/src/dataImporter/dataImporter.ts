@@ -74,7 +74,8 @@ connectToDatabase().then(async (connection) => {
   console.log(`importing orders`);
   const orders = await ordersFile.map((elem) => {
     elem._id = ObjectID(elem._id);
-
+    elem.firstAppointment = formatDate(elem.firstAppointment);
+    elem.secondAppointment = formatDate(elem.secondAppointment);
     collections.orders.insertOne(elem, function (err, res) {
       //collection
       if (err) throw err;
@@ -83,3 +84,18 @@ connectToDatabase().then(async (connection) => {
   });
   console.log(`importing orders completed`);
 });
+
+const formatDate = (dateString: string): Date | null => {
+  if (dateString === null || dateString === "" || dateString === undefined) {
+    return null;
+  }
+  const splitDate = dateString.split(".");
+  if (splitDate.length !== 3) {
+    console.log(dateString);
+    return null;
+  }
+  const year: number = splitDate[2].length == 2 ? Number("20" + splitDate[2]) : Number(splitDate[2]);
+  const month: number = Number(splitDate[1]);
+  const date: number = Number(splitDate[0]);
+  return new Date(year, month, date);
+};

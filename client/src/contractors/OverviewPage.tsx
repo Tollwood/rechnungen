@@ -1,29 +1,27 @@
-import * as React from "react";
-import Search from "../order/Search";
-import API from "../API";
-import { useNavigate, NavigateFunction } from "react-router-dom";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Grid } from "@mui/material";
-import { Address } from "../common/Address";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import Contractor from "./Contractor";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
+import API from "../API";
 import ListResponse from "../ListResponse";
+import Search from "../order/Search";
+import Contractor from "./Contractor";
 
 interface Props {
   columns: GridColDef[];
   apiPath: string;
   urlPath: string;
   labelAdd: string;
+  height?: string;
 }
-const OverviewPage: React.FC<Props> = ({ columns, apiPath, urlPath, labelAdd }) => {
+const OverviewPage: React.FC<Props> = ({ columns, apiPath, urlPath, labelAdd, height = "85vh" }) => {
   const search = (searchQuery: string) => {
     API.get<ListResponse<Contractor>>(`${apiPath}?term=${searchQuery}`).then((res) => setItems(res.data.data));
   };
   const [searchTerm, setSearchTerm] = React.useState<string>("");
   React.useEffect(() => {
     search(searchTerm);
-  }, [searchTerm]);
+  }, [searchTerm, apiPath]);
 
   const [items, setItems] = React.useState<Contractor[]>([]);
   const navigate = useNavigate();
@@ -42,15 +40,19 @@ const OverviewPage: React.FC<Props> = ({ columns, apiPath, urlPath, labelAdd }) 
           />
         </Grid>
         <Grid item xs={12}>
-          <div style={{ height: 800, width: "100%" }}>
-            <DataGrid
-              rows={items}
-              getRowId={(row) => row._id}
-              columns={columns}
-              rowsPerPageOptions={[20, 50, 100, 200, 500]}
-              checkboxSelection
-              disableSelectionOnClick
-            />
+          <div style={{ height: height, width: "100%" }}>
+            <div style={{ display: "flex", height: "100%" }}>
+              <div style={{ flexGrow: 1 }}>
+                <DataGrid
+                  rows={items}
+                  getRowId={(row) => row._id}
+                  columns={columns}
+                  rowsPerPageOptions={[20, 50, 100, 200, 500]}
+                  checkboxSelection
+                  disableSelectionOnClick
+                />
+              </div>
+            </div>
           </div>
         </Grid>
       </Grid>

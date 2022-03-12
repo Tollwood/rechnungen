@@ -1,13 +1,14 @@
-import * as React from "react";
-import Service from "../order/Service";
-import { GridColDef, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
-import { useNavigate, NavigateFunction } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import * as React from "react";
 import { useState } from "react";
-import ServiceCatlog from "../order/ServiceCatalog";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import OverviewPage from "../contractors/OverviewPage";
+import Service from "../order/Service";
+import ServiceCatlog from "../order/ServiceCatalog";
+import ServiceCatalogSelection from "./ServiceCatalogSelection";
 
 interface Props {
   serviceCatalogs: ServiceCatlog[];
@@ -16,15 +17,23 @@ interface Props {
 }
 
 const ServicesOverview: React.FC<Props> = ({ serviceCatalogs }) => {
-  const [selectedServiceCatalog, setSelectedServiceCatalog] = useState<ServiceCatlog>(serviceCatalogs[0]);
+  const [selectedServiceCatalog, setSelectedServiceCatalog] = useState<ServiceCatlog | null>(
+    serviceCatalogs.length > 0 ? serviceCatalogs[0] : null
+  );
 
   React.useEffect(() => setSelectedServiceCatalog(serviceCatalogs[0]), [serviceCatalogs]);
   const navigate = useNavigate();
 
   return (
     <React.Fragment>
+      <ServiceCatalogSelection
+        serviceCatalogs={serviceCatalogs}
+        value={selectedServiceCatalog}
+        onChange={setSelectedServiceCatalog}
+      />
       {selectedServiceCatalog && (
         <OverviewPage
+          height="80vh"
           labelAdd="Service hinzufügen"
           urlPath="/services"
           apiPath={`/api/service-catalogs/${selectedServiceCatalog._id}/services`}

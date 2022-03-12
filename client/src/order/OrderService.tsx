@@ -22,13 +22,13 @@ export default class OrderService {
       orderToSave.status = Helper.nextStatus(order.status);
     }
     orderToSave.billItems = BillService.computeBillItems(orderToSave);
-    if (order.id === undefined) {
+    if (order._id === undefined) {
       API.post("/api/orders", orderToSave)
         .then((result) => result.data)
         .then(onSuccess)
         .catch((error) => ErrorMapper.map(error, onError));
     } else {
-      API.put(`/api/orders/${order.id}`, orderToSave)
+      API.put(`/api/orders/${order._id}`, orderToSave)
         .then((result) => result.data)
         .then(onSuccess)
         .catch((error) => ErrorMapper.map(error, onError));
@@ -36,7 +36,7 @@ export default class OrderService {
   }
 
   public static delete(order: Order, onSuccess: () => void) {
-    API.delete(`/api/orders/${order.id}`).then(onSuccess);
+    API.delete(`/api/orders/${order._id}`).then(onSuccess);
   }
 
   public static getOrder(orderLink: Link, onSuccess: (order: Order) => void) {

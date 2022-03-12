@@ -53,7 +53,9 @@ export class RouterFactory {
         const resource = req.body as OptionalUnlessRequiredId<T>;
         const result = await collection.insertOne(resource);
 
-        result ? res.status(201).send(result) : res.status(500).send("Failed to create a new Entity.");
+        result
+          ? res.status(201).send({ _id: result.insertedId, ...resource })
+          : res.status(500).send("Failed to create a new Entity.");
       } catch (error) {
         console.error(error);
         res.status(400).send(error.message);

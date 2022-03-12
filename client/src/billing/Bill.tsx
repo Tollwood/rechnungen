@@ -13,9 +13,6 @@ export default class Bill {
   }
 
   getRealEstateAddress(): Address {
-    if (this.order.realEstateAddress != null) {
-      return this.order.realEstateAddress;
-    }
     if (this.order.realEstate?.address) {
       return this.order.realEstate.address;
     }

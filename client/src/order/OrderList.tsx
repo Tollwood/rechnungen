@@ -176,9 +176,6 @@ const OrderList: React.FC<OrderListProps> = (props: OrderListProps) => {
   }
 
   function getRealEstateAddress(order: Order): Address {
-    if (order.realEstateAddress?.street) {
-      return order.realEstateAddress;
-    }
     if (order.realEstate?.address.street) {
       return order.realEstate.address;
     }

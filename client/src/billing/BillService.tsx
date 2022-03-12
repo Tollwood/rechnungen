@@ -15,7 +15,7 @@ export default class BillService {
 
   static computeBillItems(order: Order): BillItem[] {
     let billItems: BillItem[] = [];
-    if (order.clientName === "BRUNATA Wärmemesser Hagen GmbH & Co KG") {
+    if (order.customer.name === "BRUNATA Wärmemesser Hagen GmbH & Co KG") {
       billItems.push(this.basePrice());
     }
     billItems.push(...this.addDistanceItem(order));
